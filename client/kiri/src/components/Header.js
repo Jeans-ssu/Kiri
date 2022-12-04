@@ -15,7 +15,7 @@ const Logo = styled.div`
   align-items: center;
   cursor: pointer;
   text-align: center;
-  margin-right: 300px;
+  margin-right: 200px;
 `;
 
 const TabMenu = styled.ul`
@@ -29,15 +29,21 @@ const TabMenu = styled.ul`
 
   list-style: none;
   margin-bottom: 7rem;
-  cursor: pointer;
   border-bottom: 0.1px solid rgb(0, 0, 0, 0.1);
 
   .submenu {
     margin-right: 100px;
+    cursor: pointer;
+    width: 80px;
+    text-align: center;
   }
 
   .focused {
     border-bottom: 5px solid #47da9c;
+  }
+
+  .search {
+    margin-top: 5px;
   }
 `;
 
@@ -61,6 +67,7 @@ const Login = styled.button`
 `;
 
 const Profile = styled.div`
+  align-items: flex-end;
   cursor: pointer;
 `;
 
@@ -93,7 +100,7 @@ export const Header = () => {
               </li>
             );
           })}
-          <FaSearch size="17" />
+          <FaSearch size="17" className="search"/>
           <Search placeholder="검색어를 입력하세요"></Search>
           <Login>로그인</Login>
           <Profile>
