@@ -1,0 +1,41 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+section {
+    flex: 1;
+}
+
+footer {
+    display: flex;
+    padding: 2rem;
+    font-size: 14px;
+    font-weight: 400;
+    background-color: #86DDB8;
+    height: 80px;
+    position: relative;
+}
+
+footer img {
+    margin-top: 5px;
+    padding-right: 10px;
+    border-right: solid 2px rgb(99, 99, 99);
+}
+
+footer p span {
+    display: inline-block;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+footer p span a {
+    text-decoration-line: none;
+    color:rgb(99, 99, 99);
+}
+
+footer p {
+    text-align: left;
+    color: rgb(99, 99, 99);
+}
