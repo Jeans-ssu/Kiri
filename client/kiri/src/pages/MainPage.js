@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
-const MainPageContainer = styled.div``;
+const MainPageContainer = styled.div`
+  color: ${({ theme }) => theme.colors.mainColor};
+`;
 
 const MainPage = () => {
   return (
