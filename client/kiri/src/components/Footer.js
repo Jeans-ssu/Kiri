@@ -11,5 +11,6 @@ export const Footer = () => {
             <span>Copyright @ Kiri</span>
         </p>
     </footer>
+    
   );
 };
