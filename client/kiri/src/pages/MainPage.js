@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
+import { Footer } from 'Components/Footer';
+
 
 const MainPageContainer = styled.div`
   color: ${({ theme }) => theme.colors.mainColor};

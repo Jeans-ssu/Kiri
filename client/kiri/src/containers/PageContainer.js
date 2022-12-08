@@ -1,5 +1,6 @@
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styles/theme';
+import { Footer } from 'Components/Footer';
 
 const PageContainerBox = styled.div`
   min-height: 100vh;
@@ -9,7 +10,7 @@ const PageContainerBox = styled.div`
 `;
 
 const ContentContainer = styled.div`
-  display: flex;
+  flex: 1;
   width: 100%;
   max-width: 1024px;
   min-width: 500px;
@@ -22,7 +23,7 @@ const PageContainer = ({ children, header, footer }) => {
       <ThemeProvider theme={theme}>
         {header === false ? null : <div>header</div>}
         <ContentContainer>{children}</ContentContainer>
-        {footer === false ? null : <div>footer</div>}
+        {footer === false ? null : <Footer />}
       </ThemeProvider>
     </PageContainerBox>
   );
