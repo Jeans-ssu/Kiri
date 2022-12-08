@@ -1,13 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import MainPage from './pages/MainPage';
-import NoMatchPage from './pages/NoMatchPage';
+import GlobalStyle from 'styles/Globalstyle';
+import MainPage from 'pages/MainPage';
+import NoMatchPage from 'pages/NoMatchPage';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <GlobalStyle />
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="*" element={<NoMatchPage />} />
