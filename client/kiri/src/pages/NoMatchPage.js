@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import PageContainer from '../components/PageContainer';
+import PageContainer from 'containers/PageContainer';
 
 const NoMatchPageContainer = styled.div``;
 

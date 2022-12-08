@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import GlobalStyle from './styles/Globalstyle';
-import MainPage from './pages/MainPage';
-import NoMatchPage from './pages/NoMatchPage';
+import GlobalStyle from 'styles/Globalstyle';
+import MainPage from 'pages/MainPage';
+import NoMatchPage from 'pages/NoMatchPage';
 
 function App() {
   return (

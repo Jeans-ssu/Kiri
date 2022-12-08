@@ -1,5 +1,5 @@
 import styled, { ThemeProvider } from 'styled-components';
-import theme from '../styles/theme';
+import theme from 'styles/theme';
 
 const PageContainerBox = styled.div`
   min-height: 100vh;
