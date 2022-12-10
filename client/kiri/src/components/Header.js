@@ -31,13 +31,6 @@ const TabMenu = styled.ul`
   margin-bottom: 7rem;
   border-bottom: 0.1px solid rgb(0, 0, 0, 0.1);
 
-  .submenu {
-    margin-right: 100px;
-    cursor: pointer;
-    width: 80px;
-    text-align: center;
-  }
-
   .focused {
     border-bottom: 5px solid #47da9c;
   }
@@ -45,7 +38,19 @@ const TabMenu = styled.ul`
   .search {
     margin-top: 5px;
   }
+
+  .hide {
+    border-bottom: none;
+  }
 `;
+
+const SubMenu = styled.li`
+  margin-right: 100px;
+  cursor: pointer;
+  width: 80px;
+  text-align: center;
+  border: none;
+`
 
 const Search = styled.input`
   background: #f5f5f5;
@@ -73,6 +78,7 @@ const Profile = styled.div`
 
 export const Header = () => {
   const [currentTab, setCurrentTab] = useState(0);
+  const [click, setClick] = useState(false);
 
   const menuArr = [
     { name: "캘린더" },
@@ -83,6 +89,7 @@ export const Header = () => {
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
+    setClick(true)
   };
 
   return (
@@ -92,12 +99,11 @@ export const Header = () => {
           <Logo>끼리끼리</Logo>
           {menuArr.map((el, idx) => {
             return (
-              <li
-                className={`submenu${currentTab === idx ? " focused" : ""}`}
-                onClick={() => selectMenuHandler(idx)}
-              >
+              <SubMenu 
+                className={`${currentTab === idx ? "focused" : ""} ${click ? "" : "hide"}`} 
+                onClick={() => selectMenuHandler(idx)}>
                 {el.name}
-              </li>
+              </SubMenu>
             );
           })}
           <FaSearch size="17" className="search"/>
