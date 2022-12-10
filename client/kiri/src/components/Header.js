@@ -3,6 +3,7 @@ import { FaSearch, FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
 
 const Main = styled.div`
+min-width: 1600px;
 position: relative
 justify-items: row;
 display: grid;
