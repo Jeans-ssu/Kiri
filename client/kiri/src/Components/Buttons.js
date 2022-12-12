@@ -6,7 +6,7 @@ const Button1Container = styled.button`
   font-size: ${(props) => props.fontSize || '14px'};
   border-radius: 6px;
   border: none;
-  color: ${({ theme }) => theme.colors.darkgray};
+  color: #4c695d;
   font-weight: 700;
   background-color: ${({ theme }) => theme.colors.green_2};
   &:hover {
@@ -27,7 +27,7 @@ const Button2Container = styled.button`
     cursor: pointer;
     background-color: ${({ theme }) => theme.colors.green_2};
     border: none;
-    color: ${({ theme }) => theme.colors.darkgray};
+    color: #4c695d;
   }
 `;
 
