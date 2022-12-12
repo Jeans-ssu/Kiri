@@ -2,7 +2,7 @@ const colors = {
   mainColor: '#47DA9C',
   green_1: '#86DDB8',
   green_2: '#BEEEDA',
-  green_3: '59B89D',
+  green_3: '#59B89D',
   dark: '#232627',
   darkgray: '#434343',
   gray: '#737373',
