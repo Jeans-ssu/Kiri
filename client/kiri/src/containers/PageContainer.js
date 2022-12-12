@@ -1,6 +1,6 @@
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styles/theme';
-import { Footer } from 'Components/Footer';
+import { Footer } from 'components/Footer';
 
 const PageContainerBox = styled.div`
   min-height: 100vh;
