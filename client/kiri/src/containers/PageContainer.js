@@ -13,7 +13,7 @@ const ContentContainer = styled.div`
   flex: 1;
   width: 100%;
   max-width: 1024px;
-  min-width: 500px;
+  min-width: 375px;
 `;
 
 //TODO: 헤더, 푸터 추가
