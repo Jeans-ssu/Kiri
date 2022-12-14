@@ -1,6 +1,7 @@
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styles/theme';
 import { Footer } from 'components/Footer';
+import { Header } from 'components/Header';
 
 const PageContainerBox = styled.div`
   min-height: 100vh;
@@ -21,7 +22,7 @@ const PageContainer = ({ children, header, footer }) => {
   return (
     <PageContainerBox>
       <ThemeProvider theme={theme}>
-        {header === false ? null : <div>header</div>}
+        {header === false ? null : <Header />}
         <ContentContainer>{children}</ContentContainer>
         {footer === false ? null : <Footer />}
       </ThemeProvider>
