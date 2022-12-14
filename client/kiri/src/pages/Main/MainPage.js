@@ -9,7 +9,7 @@ const MainPage = () => {
   return (
     <PageContainer header footer>
       <MainPageContainer>
-        <div>메인 페이지</div>
+        <div>메인</div>
       </MainPageContainer>
     </PageContainer>
   );

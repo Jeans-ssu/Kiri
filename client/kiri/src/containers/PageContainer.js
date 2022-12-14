@@ -8,6 +8,7 @@ const PageContainerBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #f2f2f2;
 `;
 
 const ContentContainer = styled.div`
@@ -15,6 +16,7 @@ const ContentContainer = styled.div`
   width: 100%;
   max-width: 1024px;
   min-width: 375px;
+  background-color: white;
 `;
 
 //TODO: 헤더, 푸터 추가
