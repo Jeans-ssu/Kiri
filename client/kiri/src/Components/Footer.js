@@ -3,17 +3,15 @@ import styled from 'styled-components';
 
 const Foot = styled.footer`
   display: flex;
-  padding: 2rem;
+  padding: 10px;
   font-size: 14px;
   font-weight: 400;
   background-color: #86ddb8;
   width: 100%;
-  height: 80px;
-  position: relative;
+  height: 70px;
 
   img {
     margin-left: 40px;
-    margin-top: 5px;
     padding-right: 10px;
     border-right: solid 2px rgb(99, 99, 99);
   }
