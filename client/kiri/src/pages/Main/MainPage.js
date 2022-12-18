@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
+import MainCarousel from './MainCarousel';
 
 const MainPageContainer = styled.div`
   color: ${({ theme }) => theme.colors.mainColor};
@@ -9,7 +10,7 @@ const MainPage = () => {
   return (
     <PageContainer header footer>
       <MainPageContainer>
-        <div>메인</div>
+        <MainCarousel />
       </MainPageContainer>
     </PageContainer>
   );
