@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 
 const data = [
   {
@@ -56,6 +57,9 @@ const MainContents = styled.div`
 
 const MainEvent = styled.div`
   width: 18%;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const EventImgContainer = styled.div`
@@ -65,11 +69,40 @@ const EventImgContainer = styled.div`
     aspect-ratio: 1 / 1;
     object-fit: cover;
   }
+  position: relative;
+  .fill,
+  .date {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    visibility: hidden;
+  }
+  .fill {
+    background-color: ${({ theme }) => theme.colors.dark};
+    opacity: 0.6;
+    z-index: 100;
+    height: 97%;
+  }
+  .date {
+    z-index: 150;
+    height: 100%;
+    text-align: center;
+    padding-top: 40%;
+    font-weight: 600;
+    font-size: 22px;
+  }
+  :hover {
+    .fill,
+    .date {
+      visibility: visible;
+    }
+  }
 `;
 
 const EventInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 5px;
   .title {
     color: ${({ theme }) => theme.colors.dark};
     font-weight: 600;
@@ -80,15 +113,26 @@ const EventInfoContainer = styled.div`
   }
 `;
 
+//TODO: 이벤트 D-DAY 계산
 const MainEvents = () => {
+  const navigate = useNavigate();
+
+  const handleOnClickEvent = (eventId) => {
+    navigate(`/event/${eventId}`);
+  };
   return (
     <MainEventsContainer>
       <MainHeader>요즘 학교 축제 어때요?</MainHeader>
       <MainContents>
         {data.map((el) => {
           return (
-            <MainEvent key={el.eventId}>
+            <MainEvent
+              key={el.eventId}
+              onClick={() => handleOnClickEvent(el.eventId)}
+            >
               <EventImgContainer>
+                <div className="fill"></div>
+                <div className="date">D-10</div>
                 <img
                   src={process.env.PUBLIC_URL + '/img/event_cover.jpeg'}
                   alt="event cover"
