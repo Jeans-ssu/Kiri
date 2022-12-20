@@ -56,7 +56,6 @@ const SlickSlider = styled.div`
 const EventContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
   &:hover {
     cursor: pointer;
   }
@@ -72,6 +71,34 @@ const EventImgContainer = styled.div`
     aspect-ratio: 7 / 10;
     object-fit: cover;
     padding: 10px;
+  }
+  position: relative;
+  .fill,
+  .date {
+    position: absolute;
+    top: 10;
+    width: 90%;
+    visibility: hidden;
+  }
+  .fill {
+    background-color: ${({ theme }) => theme.colors.dark};
+    opacity: 0.6;
+    z-index: 100;
+    height: 91%;
+  }
+  .date {
+    z-index: 150;
+    height: 100%;
+    text-align: center;
+    top: 45%;
+    font-weight: 600;
+    font-size: 22px;
+  }
+  :hover {
+    .fill,
+    .date {
+      visibility: visible;
+    }
   }
 `;
 
@@ -89,6 +116,7 @@ const EventInfoContainer = styled.div`
   }
 `;
 
+//TODO: D-day 날짜 계산
 const MainCarousel = () => {
   const settings = {
     dots: true,
@@ -115,6 +143,8 @@ const MainCarousel = () => {
                 onClick={() => handleOnClickEvent(el.eventId)}
               >
                 <EventImgContainer>
+                  <div className="fill" />
+                  <div className="date">D-10</div>
                   <img
                     src={process.env.PUBLIC_URL + '/img/event_cover.jpeg'}
                     alt="event cover"

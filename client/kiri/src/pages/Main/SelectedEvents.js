@@ -1,70 +1,81 @@
 import styled from 'styled-components';
 import { MainHeader } from './MainEvents';
-import { AiFillEye } from 'react-icons/ai';
+import { AiFillEye, AiFillHeart } from 'react-icons/ai';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
-const data = [
+export const eventsData = [
   {
     eventId: '1',
     title: 'event 1',
     host: 'someware',
-    view: '23',
+    view: 23,
+    like: 13,
   },
   {
     eventId: '2',
     title: 'event 2',
     host: 'someware',
-    view: '23',
+    view: 35,
+    like: 34,
   },
   {
     eventId: '3',
     title: 'event 3',
     host: 'someware',
-    view: '23',
+    view: 8,
+    like: 3,
   },
   {
     eventId: '4',
     title: 'event 4',
     host: 'someware',
-    view: '23',
+    view: 64,
+    like: 29,
   },
   {
     eventId: '5',
     title: 'event 5',
     host: 'someware',
-    view: '23',
+    view: 45,
+    like: 34,
   },
   {
     eventId: '6',
     title: 'event 6',
     host: 'someware',
-    view: '23',
+    view: 32,
+    like: 12,
   },
   {
     eventId: '7',
     title: 'event 7',
     host: 'someware',
-    view: '23',
+    view: 97,
+    like: 38,
   },
   {
     eventId: '8',
     title: 'event 8',
     host: 'someware',
-    view: '23',
+    view: 84,
+    like: 23,
   },
   {
     eventId: '9',
     title: 'event 9',
     host: 'someware',
-    view: '23',
+    view: 23,
+    like: 12,
   },
   {
     eventId: '10',
     title: 'event 10',
     host: 'someware',
-    view: '23',
+    view: 63,
+    like: 21,
   },
 ];
 
@@ -80,9 +91,10 @@ const MainContent = styled.div`
   width: 100%;
 `;
 
-const EventsHeader = styled.div`
+const EventsHeaderContainer = styled.div`
   width: 100%;
   display: flex;
+  background-color: ${({ theme }) => theme.colors.light};
   color: ${({ theme }) => theme.colors.darkgray};
   font-size: 14px;
   font-weight: 600;
@@ -94,35 +106,59 @@ const EventsHeader = styled.div`
     width: 20%;
   }
   .view {
-    width: 10%;
+    width: 5%;
     color: ${({ theme }) => theme.colors.mainColor};
+  }
+  .like {
+    width: 5%;
+    color: ${({ theme }) => theme.colors.purple};
   }
   padding: 5px 0 0;
   border-top: 2px solid ${({ theme }) => theme.colors.green_1};
   border-bottom: 2px solid ${({ theme }) => theme.colors.green_1};
 `;
 
-const EventsContent = styled.div`
+const EventsContentContainer = styled.div`
   display: flex;
   border-bottom: 1px solid ${({ theme }) => theme.colors.lightgray};
   padding: 4px 0;
+  div {
+    display: flex;
+    align-items: center;
+  }
   .title {
     width: 70%;
     padding: 0 12px;
     color: ${({ theme }) => theme.colors.darkgray};
+    box-sizing: border-box;
   }
   .host {
     width: 20%;
     text-align: center;
     color: ${({ theme }) => theme.colors.gray};
     font-size: 14px;
+    justify-content: center;
   }
   .view {
-    width: 10%;
+    width: 5%;
     text-align: center;
     color: ${({ theme }) => theme.colors.gray};
+    font-size: 13px;
+    justify-content: center;
+  }
+  .like {
+    width: 5%;
+    text-align: center;
     font-weight: 600;
     font-size: 13px;
+    justify-content: center;
+    color: ${({ theme }) => theme.colors.darkgray};
+  }
+  &:hover {
+    cursor: pointer;
+    .title {
+      color: ${({ theme }) => theme.colors.mainColor};
+    }
   }
 `;
 
@@ -134,12 +170,58 @@ const OpenBtnContainer = styled.div`
   button {
     background: none;
     border: none;
-    color: ${({ theme }) => theme.colors.darkgray};
+    color: ${({ theme }) => theme.colors.mainColor};
     :hover {
       cursor: pointer;
     }
   }
 `;
+
+export const EventsHeader = () => {
+  return (
+    <EventsHeaderContainer>
+      <div className="title">이벤트</div>
+      <div className="host">주최</div>
+      <div className="like">
+        <AiFillHeart size="18" />
+      </div>
+      <div className="view">
+        <AiFillEye size="18" />
+      </div>
+    </EventsHeaderContainer>
+  );
+};
+
+export const EventContent = ({ event }) => {
+  const navigate = useNavigate();
+
+  const handleClickEvent = () => {
+    navigate(`/event/${event.eventId}`);
+  };
+
+  return (
+    <EventsContentContainer onClick={handleClickEvent}>
+      <div className="title">{event.title}</div>
+      <div className="host">{event.host}</div>
+      <div className="like">{event.like}</div>
+      <div className="view">{event.view}</div>
+    </EventsContentContainer>
+  );
+};
+
+export const OpenBtn = ({ isOpen, setIsOpen }) => {
+  return (
+    <OpenBtnContainer>
+      <button onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? (
+          <IoIosArrowUp size="18" />
+        ) : (
+          <BsThreeDotsVertical size="16" />
+        )}
+      </button>
+    </OpenBtnContainer>
+  );
+};
 
 //TODO: 유저 닉네임, 관심분야 설정
 //TODO: 로그인 안했을 때 처리 -> 랜덤으로
@@ -153,43 +235,21 @@ const SelectedEvents = () => {
         <span className="green">IT</span> 분야 이벤트
       </MainHeader>
       <MainContent>
-        <EventsHeader>
-          <div className="title">이벤트</div>
-          <div className="host">주최</div>
-          <div className="view">
-            <AiFillEye size="18" />
-          </div>
-        </EventsHeader>
+        <EventsHeader />
         {isOpen ? (
           <>
-            {data?.map((el) => {
-              return (
-                <EventsContent key={el.eventId}>
-                  <div className="title">{el.title}</div>
-                  <div className="host">{el.host}</div>
-                  <div className="view">{el.view}</div>
-                </EventsContent>
-              );
+            {eventsData?.map((el) => {
+              return <EventContent key={el.eventId} event={el} />;
             })}
           </>
         ) : (
           <>
-            {data.slice(0, 5)?.map((el) => {
-              return (
-                <EventsContent key={el.eventId}>
-                  <div className="title">{el.title}</div>
-                  <div className="host">{el.host}</div>
-                  <div className="view">{el.view}</div>
-                </EventsContent>
-              );
+            {eventsData.slice(0, 5)?.map((el) => {
+              return <EventContent key={el.eventId} event={el} />;
             })}
           </>
         )}
-        <OpenBtnContainer>
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <IoIosArrowUp /> : <BsThreeDotsVertical />}
-          </button>
-        </OpenBtnContainer>
+        <OpenBtn isOpen={isOpen} setIsOpen={setIsOpen} />
       </MainContent>
     </SelectedEventsContainer>
   );
