@@ -53,6 +53,9 @@ export const MainHeader = styled.div`
   .green {
     color: ${({ theme }) => theme.colors.green_3};
   }
+  .yellow {
+    color: ${({ theme }) => theme.colors.yellow};
+  }
 `;
 
 const MainContents = styled.div`
