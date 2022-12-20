@@ -41,12 +41,18 @@ const MainEventsContainer = styled.div`
   margin-top: 50px;
 `;
 
-const MainHeader = styled.div`
+export const MainHeader = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.dark};
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 15px;
+  .purple {
+    color: ${({ theme }) => theme.colors.purple};
+  }
+  .green {
+    color: ${({ theme }) => theme.colors.green_3};
+  }
 `;
 
 const MainContents = styled.div`

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
 import MainCarousel from './MainCarousel';
 import MainEvents from './MainEvents';
+import SelectedEvents from './SelectedEvents';
 
 const MainPageContainer = styled.div`
   color: ${({ theme }) => theme.colors.mainColor};
@@ -16,6 +17,7 @@ const MainPage = () => {
       <MainPageContainer>
         <MainCarousel />
         <MainEvents />
+        <SelectedEvents />
       </MainPageContainer>
     </PageContainer>
   );
