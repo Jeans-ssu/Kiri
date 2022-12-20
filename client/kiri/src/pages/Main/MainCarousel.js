@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useNavigate } from 'react-router';
 
 const data = [
   {
@@ -55,7 +56,10 @@ const SlickSlider = styled.div`
 const EventContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 30px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const EventImgContainer = styled.div`
@@ -94,13 +98,22 @@ const MainCarousel = () => {
     slidesToScroll: 5,
   };
 
+  const navigate = useNavigate();
+
+  const handleOnClickEvent = (eventId) => {
+    navigate(`/event/${eventId}`);
+  };
+
   return (
     <CarouselContainer>
       <SlickSlider>
         <Slider {...settings}>
           {data?.map((el) => {
             return (
-              <EventContainer key={el.eventId}>
+              <EventContainer
+                key={el.eventId}
+                onClick={() => handleOnClickEvent(el.eventId)}
+              >
                 <EventImgContainer>
                   <img
                     src={process.env.PUBLIC_URL + '/img/event_cover.jpeg'}
