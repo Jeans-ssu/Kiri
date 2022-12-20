@@ -8,7 +8,8 @@ const Foot = styled.footer`
   font-weight: 400;
   background-color: #86ddb8;
   width: 100%;
-  height: 70px;
+  box-sizing: border-box;
+  height: 90px;
 
   img {
     margin-left: 40px;

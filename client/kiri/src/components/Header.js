@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Main = styled.div`
   display: flex;
@@ -17,9 +18,14 @@ const Logo = styled.div`
   align-items: center;
   cursor: pointer;
   text-align: center;
-  margin-right: 200px;
+  margin-left: 5px;
   white-space: nowrap;
   padding-bottom: 15px;
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.mainColor};
+    font-weight: 700;
+  }
 `;
 
 const TabMenu = styled.ul`
@@ -103,7 +109,9 @@ export const Header = () => {
     <>
       <Main>
         <TabMenu>
-          <Logo>끼리끼리</Logo>
+          <Logo>
+            <Link to="/">끼리끼리</Link>
+          </Logo>
           {menuArr.map((el, idx) => {
             return (
               <SubMenu
