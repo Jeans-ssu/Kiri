@@ -18,6 +18,7 @@ const ContentContainer = styled.div`
   min-width: 375px;
   background-color: white;
   margin: 20px 0;
+  padding: 40px 0;
 `;
 
 //TODO: 헤더, 푸터 추가
