@@ -82,6 +82,11 @@ const Login = styled.button`
   font-weight: bold;
   font-size: 16px;
   white-space: nowrap;
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.dark};
+    font-weight: 700;
+  }
 `;
 
 const Profile = styled.div`
@@ -127,7 +132,9 @@ export const Header = () => {
           })}
           <FaSearch size="17" className="search" />
           <Search placeholder="검색어를 입력하세요"></Search>
-          <Login>로그인</Login>
+          <Login>
+            <Link to="/signup">로그인</Link>
+          </Login>
           <Profile>
             <FaUserCircle size="27" color="black" />
           </Profile>
