@@ -6,7 +6,6 @@ import EventFieldPage from 'pages/Event/EventFieldPage';
 import SignupPage from 'pages/Signup/SignupPage';
 import SigninPage from 'pages/Signin/SigninPage';
 
-
 function App() {
   return (
     <div className="App">
