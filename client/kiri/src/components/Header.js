@@ -53,6 +53,12 @@ const TabMenu = styled.ul`
   .hide {
     border-bottom: none;
   }
+
+  .menulink {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.dark};
+    font-weight: 700;
+  }
 `;
 
 const SubMenu = styled.li`
@@ -105,6 +111,8 @@ export const Header = () => {
     { name: '게시요청' },
   ];
 
+  const menu = ['calendar', 'event', 'group', 'upload'];
+
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
     setClick(true);
@@ -119,15 +127,17 @@ export const Header = () => {
           </Logo>
           {menuArr.map((el, idx) => {
             return (
-              <SubMenu
-                key={idx}
-                className={`${currentTab === idx ? 'focused' : ''} ${
-                  click ? '' : 'hide'
-                }`}
-                onClick={() => selectMenuHandler(idx)}
-              >
-                {el.name}
-              </SubMenu>
+              <Link className="menulink" key={idx} to={`/` + `${menu[idx]}`}>
+                <SubMenu
+                  key={idx}
+                  className={`${currentTab === idx ? 'focused' : ''} ${
+                    click ? '' : 'hide'
+                  }`}
+                  onClick={() => selectMenuHandler(idx)}
+                >
+                  {el.name}
+                </SubMenu>
+              </Link>
             );
           })}
           <FaSearch size="17" className="search" />
