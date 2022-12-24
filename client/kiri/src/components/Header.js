@@ -133,7 +133,7 @@ export const Header = () => {
           <FaSearch size="17" className="search" />
           <Search placeholder="검색어를 입력하세요"></Search>
           <Login>
-            <Link to="/signup">로그인</Link>
+            <Link to="/signin">로그인</Link>
           </Login>
           <Profile>
             <FaUserCircle size="27" color="black" />

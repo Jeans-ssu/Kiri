@@ -4,6 +4,7 @@ import MainPage from 'pages/Main/MainPage';
 import NoMatchPage from 'pages/NoMatchPage';
 import EventFieldPage from 'pages/Event/EventFieldPage';
 import SignupPage from 'pages/Signup/SignupPage';
+import SigninPage from 'pages/Signin/SigninPage';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/signin" element={<SigninPage />} />
           <Route path="*" element={<NoMatchPage />} />
           <Route path="/event" element={<EventFieldPage />} />
         </Routes>
