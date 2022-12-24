@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { BsEyeFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
-const EventFieldPageContainer = styled.div`
-  /* color: ${({ theme }) => theme.colors.mainColor}; */
+const EventKeywordPageContainer = styled.div`
   h1 {
     color: black;
     padding-left: 30px;
@@ -45,13 +44,14 @@ const NavLi = styled.li`
 `;
 
 const field = [
-  'IT',
-  '경영/경제',
-  '자연과학',
-  '마케팅',
-  '인문사회',
-  '예술',
-  '공학',
+  '학교 축제',
+  '지역 축제',
+  '강연',
+  '봉사',
+  '서포터즈',
+  '공모전',
+  '동아리',
+  '기타',
 ];
 
 const EventListMain = styled.main`
@@ -157,8 +157,8 @@ const EventImg = styled.div`
 
 const pos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const EventFieldPage = () => {
-  const [currentTab, setCurrentTab] = useState(0);
+const EventKeywordPage = () => {
+  const [currentTab, setCurrentTab] = useState(1);
   const [currentNav, setCurrentNav] = useState(0);
   const [click, setClick] = useState(false);
 
@@ -173,10 +173,9 @@ const EventFieldPage = () => {
   };
 
   const eventlink = ['', '/keyword'];
-
   return (
     <PageContainer header footer>
-      <EventFieldPageContainer>
+      <EventKeywordPageContainer>
         <h1>대학생을 위한 분야별 이벤트</h1>
         <FilterTab>
           {filter.map((el, idx) => {
@@ -236,9 +235,9 @@ const EventFieldPage = () => {
             ))}
           </EventListMain>
         </div>
-      </EventFieldPageContainer>
+      </EventKeywordPageContainer>
     </PageContainer>
   );
 };
 
-export default EventFieldPage;
+export default EventKeywordPage;
