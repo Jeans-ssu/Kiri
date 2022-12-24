@@ -84,7 +84,7 @@ const EventImgContainer = styled.div`
     background-color: ${({ theme }) => theme.colors.dark};
     opacity: 0.6;
     z-index: 100;
-    height: 91%;
+    height: 92%;
   }
   .date {
     z-index: 150;
