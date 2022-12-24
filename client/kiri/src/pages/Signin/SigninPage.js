@@ -1,33 +1,34 @@
 import PageContainer from 'containers/PageContainer';
 import styled from 'styled-components';
-import SignupInputs from './SignupInputs';
+import SigninInputs from './SigninInputs';
 
-const SignupPageContainer = styled.div`
+const SigninPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const SignupHeader = styled.div`
+const SigninHeader = styled.div`
   color: ${({ theme }) => theme.colors.darkgray};
   font-size: 28px;
   font-weight: 700;
   .green {
     color: ${({ theme }) => theme.colors.mainColor};
   }
+  margin: 30px 0;
 `;
 
-const SignupPage = () => {
+const SigninPage = () => {
   return (
     <PageContainer header footer={false}>
-      <SignupPageContainer>
-        <SignupHeader>
-          <span className="green">끼리끼리</span> 회원가입
-        </SignupHeader>
-        <SignupInputs />
-      </SignupPageContainer>
+      <SigninPageContainer>
+        <SigninHeader>
+          <span className="green">끼리끼리</span> 로그인
+        </SigninHeader>
+        <SigninInputs />
+      </SigninPageContainer>
     </PageContainer>
   );
 };
 
-export default SignupPage;
+export default SigninPage;

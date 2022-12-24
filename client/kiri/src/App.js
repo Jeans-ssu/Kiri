@@ -3,6 +3,7 @@ import GlobalStyle from 'styles/Globalstyle';
 import MainPage from 'pages/Main/MainPage';
 import NoMatchPage from 'pages/NoMatchPage';
 import SignupPage from 'pages/Signup/SignupPage';
+import SigninPage from 'pages/Signin/SigninPage';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/signin" element={<SigninPage />} />
           <Route path="*" element={<NoMatchPage />} />
         </Routes>
       </BrowserRouter>

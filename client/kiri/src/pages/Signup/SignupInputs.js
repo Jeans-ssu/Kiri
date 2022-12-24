@@ -6,13 +6,13 @@ const SignupInputsContainer = styled.div`
   margin-top: 30px;
 `;
 
-const InputContainer = styled.div`
+export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
 `;
 
-const InputHeader = styled.div`
+export const InputHeader = styled.div`
   color: ${({ theme }) => theme.colors.dark};
   font-size: 14px;
   margin-bottom: 5px;
@@ -27,7 +27,7 @@ const InputHeader = styled.div`
   }
 `;
 
-const SignupInput = styled.input`
+export const SignupInput = styled.input`
   box-sizing: border-box;
   width: 400px;
   height: 40px;
@@ -54,7 +54,7 @@ const SelectInput = styled.select`
   }
 `;
 
-const SubmitBtn = styled.button`
+export const SubmitBtn = styled.button`
   width: 200px;
   height: 40px;
   border-radius: 40px;
@@ -64,8 +64,7 @@ const SubmitBtn = styled.button`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.light};
   font-size: 15px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
-    0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   &:hover {
     cursor: pointer;
     background-color: #44cf95;
@@ -81,7 +80,7 @@ const InitialState = {
   Vpassword: '',
 };
 
-const checkEmail = (email) => {
+export const checkEmail = (email) => {
   var check =
     /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
   return check.test(email);
