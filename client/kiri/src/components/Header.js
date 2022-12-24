@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Main = styled.div`
-min-width: 1600px;
-position: relative
-justify-items: row;
-display: grid;
+  display: flex;
+  width: 100%;
+  height: 55px;
+  position: relative;
+  background-color: white;
 `;
 
 const Logo = styled.div`
@@ -16,7 +18,14 @@ const Logo = styled.div`
   align-items: center;
   cursor: pointer;
   text-align: center;
-  margin-right: 200px;
+  margin-left: 5px;
+  white-space: nowrap;
+  padding-bottom: 15px;
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.mainColor};
+    font-weight: 700;
+  }
 `;
 
 const TabMenu = styled.ul`
@@ -27,10 +36,11 @@ const TabMenu = styled.ul`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  width: 100%;
+  height: 40px;
 
   list-style: none;
-  margin-bottom: 7rem;
-  border-bottom: 0.1px solid rgb(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgb(0, 0, 0, 0.1);
 
   .focused {
     border-bottom: 5px solid #47da9c;
@@ -51,6 +61,7 @@ const SubMenu = styled.li`
   width: 80px;
   text-align: center;
   border: none;
+  white-space: nowrap;
 `;
 
 const Search = styled.input`
@@ -70,6 +81,12 @@ const Login = styled.button`
   cursor: pointer;
   font-weight: bold;
   font-size: 16px;
+  white-space: nowrap;
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.dark};
+    font-weight: 700;
+  }
 `;
 
 const Profile = styled.div`
@@ -97,7 +114,9 @@ export const Header = () => {
     <>
       <Main>
         <TabMenu>
-          <Logo>끼리끼리</Logo>
+          <Logo>
+            <Link to="/">끼리끼리</Link>
+          </Logo>
           {menuArr.map((el, idx) => {
             return (
               <SubMenu
@@ -113,7 +132,9 @@ export const Header = () => {
           })}
           <FaSearch size="17" className="search" />
           <Search placeholder="검색어를 입력하세요"></Search>
-          <Login>로그인</Login>
+          <Login>
+            <Link to="/signup">로그인</Link>
+          </Login>
           <Profile>
             <FaUserCircle size="27" color="black" />
           </Profile>
