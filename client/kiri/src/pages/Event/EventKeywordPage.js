@@ -9,6 +9,7 @@ const EventKeywordPageContainer = styled.div`
     color: black;
     padding-left: 30px;
     margin-bottom: 0;
+    margin-top: 0;
   }
 
   .flex {
