@@ -10,6 +10,7 @@ const colors = {
   light: '#f5f5f5',
   purple: '#9B90E6',
   yellow: '#FFCF70',
+  red: '#FF6B6B',
 };
 
 const theme = {
