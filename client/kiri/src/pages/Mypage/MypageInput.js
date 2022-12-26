@@ -13,10 +13,14 @@ const MypageInputWrapper = styled.div`
     font-weight: 700;
     width: 80px;
   }
-  .value,
-  .input {
+  .value {
     font-weight: 400;
     width: 400px;
+  }
+  .input {
+    width: 75%;
+    font-weight: 400;
+    display: flex;
   }
 `;
 
@@ -36,7 +40,7 @@ const EditBtn = styled.button`
 `;
 
 const SaveBtn = styled.button`
-  width: 37px;
+  width: 60px;
   height: 25px;
   background-color: ${({ theme }) => theme.colors.mainColor};
   border: none;
@@ -46,6 +50,7 @@ const SaveBtn = styled.button`
   border-radius: 3px;
   &:hover {
     cursor: pointer;
+    background-color: #44cf95;
   }
   &.hide {
     display: none;
