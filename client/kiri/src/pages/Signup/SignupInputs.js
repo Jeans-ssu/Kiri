@@ -43,6 +43,16 @@ export const SignupInput = styled.input`
   }
 `;
 
+const InputMsg = styled.div`
+  padding-top: 5px;
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.red};
+  display: none;
+  &.show {
+    display: block;
+  }
+`;
+
 const SelectInput = styled.select`
   width: 400px;
   height: 40px;
@@ -86,10 +96,18 @@ export const checkEmail = (email) => {
   return check.test(email);
 };
 
+const checkExistEmail = (email) => {
+  //TODO: axios 요청으로 변경
+  //임시 - 랜덤으로 return
+  if (email.length % 2 === 0) return true;
+  else return false;
+};
+
 const SignupInputs = () => {
   const [userInput, setUserInput] = useState(InitialState); //닉네임, 이메일, 비밀번호 input
   const { nickName, email, password, Vpassword } = userInput;
   const [interest, setInterest] = useState('None'); //관심분야 select
+  const [existEmail, setExistEmail] = useState(false);
 
   const [validation, setValidation] = useState({
     nickName: false,
@@ -124,10 +142,22 @@ const SignupInputs = () => {
           email: false,
         });
       } else {
-        setValidation({
-          ...validation,
-          email: true,
-        });
+        //이메일 형식이 올바른 경우 -> 이메일 중복 검사
+        if (checkExistEmail(value)) {
+          //이미 존재하는 경우
+          setExistEmail(true);
+          setValidation({
+            ...validation,
+            email: false,
+          });
+        } else {
+          //사용가능한 경우
+          setExistEmail(false);
+          setValidation({
+            ...validation,
+            email: true,
+          });
+        }
       }
     }
     if (name === 'Vpassword') {
@@ -186,6 +216,9 @@ const SignupInputs = () => {
             onChange={handleChangeInput}
             className={validation.email ? 'validate' : null}
           />
+          <InputMsg className={existEmail ? 'show' : null}>
+            이미 존재하는 이메일입니다.
+          </InputMsg>
         </InputContainer>
         <InputContainer>
           <InputHeader>
