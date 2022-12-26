@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { BsExclamationCircle } from 'react-icons/bs';
+import { AiFillEye } from 'react-icons/ai';
 
 const MypageInputWrapper = styled.div`
   height: 20px;
@@ -33,6 +34,15 @@ const MypageInputWrapper = styled.div`
     &.notValid {
       visibility: visible;
     }
+  }
+`;
+
+const ViewPasswordBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.gray};
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -132,7 +142,8 @@ const checkIsValid = (type, value) => {
 const MypageInput = ({ type, userInfo, setUserInfo }) => {
   const [isEditmode, setIsEditmode] = useState(false);
   const [editvalue, setEditvalue] = useState(userInfo[type]);
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(true); //유효한지 여부
+  const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
 
   const handleClickEditBtn = () => {
     setIsEditmode(!isEditmode);
@@ -155,6 +166,7 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
       setEditvalue(userInfo[type]);
     }
     setIsValid(true);
+    setIsViewMode(false);
     setIsEditmode(!isEditmode);
   };
 
@@ -179,13 +191,26 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
             </SelectInput>
           ) : (
             <EditInput
-              type={type === 'password' ? 'password' : 'text'}
+              type={
+                type === 'password' && isViewMode === false
+                  ? 'password'
+                  : 'text'
+              }
               value={editvalue}
               onChange={handleChangeEditvalue}
               className={isValid ? null : 'notValid'}
             />
           )}
           <BsExclamationCircle className={isValid ? null : 'notValid'} />
+          {type === 'password' ? (
+            <ViewPasswordBtn
+              onClick={() => {
+                setIsViewMode(!isViewMode);
+              }}
+            >
+              <AiFillEye />
+            </ViewPasswordBtn>
+          ) : null}
         </div>
       ) : type === 'password' ? (
         <div className="value">{userInfo[type].replace(/./g, '●')}</div>
