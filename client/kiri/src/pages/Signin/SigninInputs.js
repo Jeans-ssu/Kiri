@@ -9,6 +9,8 @@ import {
   SubmitBtn,
 } from 'pages/Signup/SignupInputs';
 import { BsCheck, BsArrowRightShort } from 'react-icons/bs';
+import { AiFillEye } from 'react-icons/ai';
+import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 
 const SigninInputsContainer = styled.div`
   margin-top: 30px;
@@ -38,6 +40,11 @@ const MoveToSignupBtn = styled.button`
   }
 `;
 
+const ViewPasswordBtn_ = styled(ViewPasswordBtn)`
+  position: absolute;
+  right: 0;
+`;
+
 const InitialState = {
   email: '',
   password: '',
@@ -51,6 +58,7 @@ const SigninInputs = () => {
     email: false,
     password: false,
   });
+  const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
 
   const navigate = useNavigate();
 
@@ -106,7 +114,10 @@ const SigninInputs = () => {
         <InputContainer>
           <InputHeader>
             이메일
-            <BsCheck className={validation.email ? 'validate' : null} />
+            <BsCheck
+              id="check"
+              className={validation.email ? 'validate' : null}
+            />
           </InputHeader>
           <SigninInput
             name="email"
@@ -120,11 +131,21 @@ const SigninInputs = () => {
         <InputContainer>
           <InputHeader>
             비밀번호
-            <BsCheck className={validation.password ? 'validate' : null} />
+            <BsCheck
+              id="check"
+              className={validation.password ? 'validate' : null}
+            />
+            <ViewPasswordBtn_
+              onClick={() => {
+                setIsViewMode(!isViewMode);
+              }}
+            >
+              <AiFillEye />
+            </ViewPasswordBtn_>
           </InputHeader>
           <SigninInput
             name="password"
-            type="password"
+            type={isViewMode ? 'text' : 'password'}
             value={password}
             onChange={handleChangeInput}
             className={validation.password ? 'validate' : null}

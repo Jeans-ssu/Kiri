@@ -37,7 +37,7 @@ const MypageInputWrapper = styled.div`
   }
 `;
 
-const ViewPasswordBtn = styled.button`
+export const ViewPasswordBtn = styled.button`
   background-color: transparent;
   border: none;
   color: ${({ theme }) => theme.colors.gray};
