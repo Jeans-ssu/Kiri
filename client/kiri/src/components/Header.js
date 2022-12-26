@@ -146,7 +146,9 @@ export const Header = () => {
             <Link to="/signin">로그인</Link>
           </Login>
           <Profile>
-            <FaUserCircle size="27" color="black" />
+            <Link to="/mypage">
+              <FaUserCircle size="27" color="black" />
+            </Link>
           </Profile>
         </TabMenu>
       </Main>
