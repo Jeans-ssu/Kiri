@@ -73,7 +73,7 @@ export const SubmitBtn = styled.button`
   border-radius: 40px;
   border: none;
   background-color: ${({ theme }) => theme.colors.mainColor};
-  margin-top: 40px;
+  margin-top: 50px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.light};
   font-size: 15px;
