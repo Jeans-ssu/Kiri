@@ -6,6 +6,7 @@ import EventFieldPage from 'pages/Event/EventFieldPage';
 import EventKeywordPage from 'pages/Event/EventKeywordPage';
 import SignupPage from 'pages/Signup/SignupPage';
 import SigninPage from 'pages/Signin/SigninPage';
+import Mypage from 'pages/Mypage/Mypage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/signin" element={<SigninPage />} />
           <Route path="*" element={<NoMatchPage />} />
           <Route path="/event" element={<EventFieldPage />} />
+          <Route path="/mypage" element={<Mypage />} />
           <Route path="/event/keyword" element={<EventKeywordPage />} />
         </Routes>
       </BrowserRouter>

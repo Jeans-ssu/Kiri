@@ -19,7 +19,7 @@ const SignupHeader = styled.div`
 
 const SignupPage = () => {
   return (
-    <PageContainer header footer={false}>
+    <PageContainer header footer={false} margin_bottom={false}>
       <SignupPageContainer>
         <SignupHeader>
           <span className="green">끼리끼리</span> 회원가입

@@ -20,7 +20,7 @@ const SigninHeader = styled.div`
 
 const SigninPage = () => {
   return (
-    <PageContainer header footer={false}>
+    <PageContainer header footer={false} margin_bottom={false}>
       <SigninPageContainer>
         <SigninHeader>
           <span className="green">끼리끼리</span> 로그인
