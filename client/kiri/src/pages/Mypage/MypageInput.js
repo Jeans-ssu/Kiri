@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { BsExclamationCircle } from 'react-icons/bs';
 
 const MypageInputWrapper = styled.div`
   height: 20px;
@@ -21,6 +22,17 @@ const MypageInputWrapper = styled.div`
     width: 75%;
     font-weight: 400;
     display: flex;
+    position: relative;
+    align-items: center;
+  }
+  .input > svg {
+    color: ${({ theme }) => theme.colors.red};
+    position: absolute;
+    right: 10%;
+    visibility: hidden;
+    &.notValid {
+      visibility: visible;
+    }
   }
 `;
 
@@ -35,7 +47,7 @@ const EditBtn = styled.button`
     cursor: pointer;
   }
   &.hide {
-    display: none;
+    visibility: hidden;
   }
 `;
 
@@ -61,12 +73,15 @@ const EditInput = styled.input`
   width: 90%;
   height: 20px;
   border: none;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.mainColor};
   font-size: 16px;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.darkgray};
   &:focus {
     outline: none;
+  }
+  &.notValid {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.red};
   }
 `;
 
@@ -99,10 +114,25 @@ const types = {
   interest: '관심분야',
 };
 
+//TODO: 유효성 조건 맞게 수정
+//유효성 검사 함수
+const checkIsValid = (type, value) => {
+  if (type === 'nickName') {
+    if (value.length >= 3 && value.length <= 15) return true;
+    else return false;
+  }
+  if (type === 'password') {
+    if (value.length >= 3 && value.length <= 15) return true;
+    else return false;
+  }
+  return true;
+};
+
 //TODO: 유효성 검사
 const MypageInput = ({ type, userInfo, setUserInfo }) => {
   const [isEditmode, setIsEditmode] = useState(false);
   const [editvalue, setEditvalue] = useState(userInfo[type]);
+  const [isValid, setIsValid] = useState(true);
 
   const handleClickEditBtn = () => {
     setIsEditmode(!isEditmode);
@@ -110,6 +140,8 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
 
   const handleChangeEditvalue = (e) => {
     setEditvalue(e.target.value);
+    if (checkIsValid(type, editvalue)) setIsValid(true);
+    else setIsValid(false);
   };
 
   const handleChangeInterestSelect = (e) => {
@@ -117,8 +149,12 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
   };
 
   const handleClickSaveBtn = () => {
-    setUserInfo({ ...userInfo, [type]: editvalue });
-    setEditvalue(editvalue);
+    if (isValid) {
+      setUserInfo({ ...userInfo, [type]: editvalue });
+    } else {
+      setEditvalue(userInfo[type]);
+    }
+    setIsValid(true);
     setIsEditmode(!isEditmode);
   };
 
@@ -146,8 +182,10 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
               type={type === 'password' ? 'password' : 'text'}
               value={editvalue}
               onChange={handleChangeEditvalue}
+              className={isValid ? null : 'notValid'}
             />
           )}
+          <BsExclamationCircle className={isValid ? null : 'notValid'} />
         </div>
       ) : type === 'password' ? (
         <div className="value">{userInfo[type].replace(/./g, '●')}</div>
