@@ -214,7 +214,7 @@ const SignupInputs = () => {
           />
         </InputContainer>
         <InputHeader>관심분야</InputHeader>
-        <SelectInput onChange={handleChangeInterest} valus={interest}>
+        <SelectInput onChange={handleChangeInterest} value={interest}>
           <option value="None">선택안함</option>
           <option value="IT">IT</option>
           <option value="Business">경영/경제</option>
