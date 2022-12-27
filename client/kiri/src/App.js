@@ -4,6 +4,7 @@ import MainPage from 'pages/Main/MainPage';
 import NoMatchPage from 'pages/NoMatchPage';
 import EventFieldPage from 'pages/Event/EventFieldPage';
 import EventKeywordPage from 'pages/Event/EventKeywordPage';
+import EventInfoPage from 'pages/Event/EventInfoPage';
 import SignupPage from 'pages/Signup/SignupPage';
 import SigninPage from 'pages/Signin/SigninPage';
 import Mypage from 'pages/Mypage/Mypage';
@@ -17,10 +18,11 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/signin" element={<SigninPage />} />
+          <Route path="/mypage" element={<Mypage />} />
           <Route path="*" element={<NoMatchPage />} />
           <Route path="/event" element={<EventFieldPage />} />
-          <Route path="/mypage" element={<Mypage />} />
           <Route path="/event/keyword" element={<EventKeywordPage />} />
+          <Route path="/event/eventid" element={<EventInfoPage />} />
         </Routes>
       </BrowserRouter>
     </div>
