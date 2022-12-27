@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { BsCheck } from 'react-icons/bs';
+import { AiFillEye } from 'react-icons/ai';
+import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 
 const SignupInputsContainer = styled.div`
   margin-top: 30px;
@@ -17,7 +19,8 @@ export const InputHeader = styled.div`
   font-size: 14px;
   margin-bottom: 5px;
   display: flex;
-  svg {
+  position: relative;
+  svg#check {
     margin-left: 5px;
     visibility: hidden;
     fill: ${({ theme }) => theme.colors.mainColor};
@@ -70,7 +73,7 @@ export const SubmitBtn = styled.button`
   border-radius: 40px;
   border: none;
   background-color: ${({ theme }) => theme.colors.mainColor};
-  margin-top: 40px;
+  margin-top: 50px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.light};
   font-size: 15px;
@@ -81,6 +84,11 @@ export const SubmitBtn = styled.button`
     transform: translateY(-3px);
     transition: all 0.3s;
   }
+`;
+
+const ViewPasswordBtn_ = styled(ViewPasswordBtn)`
+  position: absolute;
+  right: 0;
 `;
 
 const InitialState = {
@@ -107,7 +115,9 @@ const SignupInputs = () => {
   const [userInput, setUserInput] = useState(InitialState); //닉네임, 이메일, 비밀번호 input
   const { nickName, email, password, Vpassword } = userInput;
   const [interest, setInterest] = useState('None'); //관심분야 select
-  const [existEmail, setExistEmail] = useState(false);
+  const [existEmail, setExistEmail] = useState(false); //이미 존재하는 이메일인지 확인
+  const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
+  const [isViewMode_, setIsViewMode_] = useState(false); //비밀번호 확인 보기 모드
 
   const [validation, setValidation] = useState({
     nickName: false,
@@ -194,7 +204,10 @@ const SignupInputs = () => {
         <InputContainer>
           <InputHeader>
             닉네임
-            <BsCheck className={validation.nickName ? 'validate' : null} />
+            <BsCheck
+              id="check"
+              className={validation.nickName ? 'validate' : null}
+            />
           </InputHeader>
           <SignupInput
             name="nickName"
@@ -207,7 +220,10 @@ const SignupInputs = () => {
         <InputContainer>
           <InputHeader>
             이메일
-            <BsCheck className={validation.email ? 'validate' : null} />
+            <BsCheck
+              id="check"
+              className={validation.email ? 'validate' : null}
+            />
           </InputHeader>
           <SignupInput
             name="email"
@@ -223,11 +239,21 @@ const SignupInputs = () => {
         <InputContainer>
           <InputHeader>
             비밀번호
-            <BsCheck className={validation.password ? 'validate' : null} />
+            <BsCheck
+              id="check"
+              className={validation.password ? 'validate' : null}
+            />
+            <ViewPasswordBtn_
+              onClick={() => {
+                setIsViewMode(!isViewMode);
+              }}
+            >
+              <AiFillEye />
+            </ViewPasswordBtn_>
           </InputHeader>
           <SignupInput
             name="password"
-            type="password"
+            type={isViewMode ? 'text' : 'password'}
             value={password}
             onChange={handleChangeInput}
             className={validation.password ? 'validate' : null}
@@ -236,11 +262,21 @@ const SignupInputs = () => {
         <InputContainer>
           <InputHeader>
             비밀번호 확인
-            <BsCheck className={validation.password ? 'validate' : null} />
+            <BsCheck
+              id="check"
+              className={validation.password ? 'validate' : null}
+            />
+            <ViewPasswordBtn_
+              onClick={() => {
+                setIsViewMode_(!isViewMode_);
+              }}
+            >
+              <AiFillEye />
+            </ViewPasswordBtn_>
           </InputHeader>
           <SignupInput
             name="Vpassword"
-            type="password"
+            type={isViewMode_ ? 'text' : 'password'}
             value={Vpassword}
             onChange={handleChangeInput}
             className={validation.password ? 'validate' : null}

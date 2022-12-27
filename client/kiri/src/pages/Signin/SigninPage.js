@@ -15,7 +15,7 @@ const SigninHeader = styled.div`
   .green {
     color: ${({ theme }) => theme.colors.mainColor};
   }
-  margin: 30px 0;
+  margin: 40px 0;
 `;
 
 const SigninPage = () => {
