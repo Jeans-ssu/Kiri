@@ -70,9 +70,20 @@ const SubMenu = styled.li`
   white-space: nowrap;
 `;
 
+const Searchdiv = styled.div`
+  .searchicon {
+    position: absolute;
+    margin-left: 12px;
+    margin-top: 7px;
+  }
+`;
+
 const Search = styled.input`
   background: #f5f5f5;
   border: none;
+  border-radius: 3px;
+  padding: 7.8px 9.1px 7.8px 32px;
+
   margin-left: 5px;
   margin-bottom: 14px;
   display: flex;
