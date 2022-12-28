@@ -71,10 +71,12 @@ const SubMenu = styled.li`
 `;
 
 const Searchdiv = styled.div`
+  display: flex;
+
   .searchicon {
     position: absolute;
     margin-left: 12px;
-    margin-top: 7px;
+    margin-top: 4px;
   }
 `;
 
@@ -151,8 +153,10 @@ export const Header = () => {
               </Link>
             );
           })}
-          <FaSearch size="17" className="search" />
-          <Search placeholder="검색어를 입력하세요"></Search>
+          <Searchdiv>
+            <FaSearch size="17" className="searchicon" />
+            <Search placeholder="검색어를 입력하세요"></Search>
+          </Searchdiv>
           <Login>
             <Link to="/signin">로그인</Link>
           </Login>
