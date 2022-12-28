@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { FaSearch, FaUserCircle } from "react-icons/fa";
-import styled from "styled-components";
+import { useState } from 'react';
+import { FaSearch, FaUserCircle } from 'react-icons/fa';
+import styled from 'styled-components';
 
 const Main = styled.div`
 min-width: 1600px;
 position: relative
 justify-items: row;
 display: grid;
-`
+`;
 
 const Logo = styled.div`
   display: flex;
@@ -51,11 +51,22 @@ const SubMenu = styled.li`
   width: 80px;
   text-align: center;
   border: none;
-`
+`;
+
+const Searchdiv = styled.div`
+  .searchicon {
+    position: absolute;
+    margin-left: 12px;
+    margin-top: 7px;
+  }
+`;
 
 const Search = styled.input`
   background: #f5f5f5;
   border: none;
+  border-radius: 3px;
+  padding: 7.8px 9.1px 7.8px 32px;
+
   margin-left: 5px;
   margin-bottom: 14px;
   display: flex;
@@ -82,15 +93,15 @@ export const Header = () => {
   const [click, setClick] = useState(false);
 
   const menuArr = [
-    { name: "캘린더" },
-    { name: "이벤트" },
-    { name: "그룹" },
-    { name: "게시요청" },
+    { name: '캘린더' },
+    { name: '이벤트' },
+    { name: '그룹' },
+    { name: '게시요청' },
   ];
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
-    setClick(true)
+    setClick(true);
   };
 
   return (
@@ -100,15 +111,20 @@ export const Header = () => {
           <Logo>끼리끼리</Logo>
           {menuArr.map((el, idx) => {
             return (
-              <SubMenu 
-                className={`${currentTab === idx ? "focused" : ""} ${click ? "" : "hide"}`} 
-                onClick={() => selectMenuHandler(idx)}>
+              <SubMenu
+                className={`${currentTab === idx ? 'focused' : ''} ${
+                  click ? '' : 'hide'
+                }`}
+                onClick={() => selectMenuHandler(idx)}
+              >
                 {el.name}
               </SubMenu>
             );
           })}
-          <FaSearch size="17" className="search"/>
-          <Search placeholder="검색어를 입력하세요"></Search>
+          <Searchdiv>
+            <FaSearch size="17" className="searchicon" />
+            <Search placeholder="검색어를 입력하세요"></Search>
+          </Searchdiv>
           <Login>로그인</Login>
           <Profile>
             <FaUserCircle size="27" color="black" />
