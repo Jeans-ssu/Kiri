@@ -32,12 +32,13 @@ const EventSharediv = styled.div`
   display: flex;
   align-items: center;
   margin-left: 20px;
+  cursor: pointer;
 `;
 
 const EventBookmarkdiv = styled.div`
   display: flex;
   align-items: center;
-
+  cursor: pointer;
   margin-left: auto;
 `;
 
