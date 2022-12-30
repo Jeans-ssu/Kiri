@@ -162,7 +162,5 @@ const SigninInputs = () => {
     </>
   );
 };
-//test
-//test2
 
 export default SigninInputs;

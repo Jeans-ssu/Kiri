@@ -25,7 +25,7 @@ export const InputHeader = styled.div`
     visibility: hidden;
     fill: ${({ theme }) => theme.colors.mainColor};
   }
-  svg.validate {
+  svg#check.validate {
     visibility: visible;
   }
 `;
@@ -125,6 +125,8 @@ const SignupInputs = () => {
     password: false,
   }); //닉네임, 이메일, 비밀번호 유효성
 
+  const checkNickName = /^[가-힣a-zA-Z0-9]{2,10}$/;
+
   //TODO: 닉네임 조건 유효성 검사
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -133,7 +135,7 @@ const SignupInputs = () => {
       [name]: value,
     });
     if (name === 'nickName') {
-      if (value.length > 0 && value.length < 10) {
+      if (checkNickName.test(value)) {
         setValidation({
           ...validation,
           nickName: true,
