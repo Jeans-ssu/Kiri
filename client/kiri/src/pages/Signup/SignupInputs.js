@@ -114,7 +114,7 @@ const checkExistEmail = (email) => {
 const SignupInputs = () => {
   const [userInput, setUserInput] = useState(InitialState); //닉네임, 이메일, 비밀번호 input
   const { nickName, email, password, Vpassword } = userInput;
-  const [interest, setInterest] = useState('None'); //관심분야 select
+  const [interest, setInterest] = useState('IT'); //관심분야 select
   const [existEmail, setExistEmail] = useState(false); //이미 존재하는 이메일인지 확인
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
   const [isViewMode_, setIsViewMode_] = useState(false); //비밀번호 확인 보기 모드
@@ -301,7 +301,6 @@ const SignupInputs = () => {
         </InputContainer>
         <InputHeader>관심분야</InputHeader>
         <SelectInput onChange={handleChangeInterest} value={interest}>
-          <option value="None">선택안함</option>
           <option value="IT">IT</option>
           <option value="Business">경영/경제</option>
           <option value="Science">자연과학</option>
@@ -309,6 +308,7 @@ const SignupInputs = () => {
           <option value="Humanities">인문사회</option>
           <option value="Art">예술</option>
           <option value="Engineering">공학</option>
+          <option value="Etc">기타</option>
         </SelectInput>
       </SignupInputsContainer>
       <SubmitBtn onClick={handleClickSubmitBtn}>회원가입</SubmitBtn>
