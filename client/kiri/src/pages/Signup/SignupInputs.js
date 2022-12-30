@@ -123,9 +123,11 @@ const SignupInputs = () => {
     nickName: false,
     email: false,
     password: false,
+    Vpassword: false,
   }); //닉네임, 이메일, 비밀번호 유효성
 
   const checkNickName = /^[가-힣a-zA-Z0-9]{2,10}$/;
+  const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
 
   //TODO: 닉네임 조건 유효성 검사
   const handleChangeInput = (e) => {
@@ -172,16 +174,29 @@ const SignupInputs = () => {
         }
       }
     }
-    if (name === 'Vpassword') {
-      if (userInput.password !== value) {
+    if (name === 'password') {
+      if (checkPassword.test(value)) {
         setValidation({
           ...validation,
-          password: false,
+          password: true,
         });
       } else {
         setValidation({
           ...validation,
-          password: true,
+          password: false,
+        });
+      }
+    }
+    if (name === 'Vpassword') {
+      if (userInput.password !== value) {
+        setValidation({
+          ...validation,
+          Vpassword: false,
+        });
+      } else {
+        setValidation({
+          ...validation,
+          Vpassword: true,
         });
       }
     }
@@ -266,7 +281,7 @@ const SignupInputs = () => {
             비밀번호 확인
             <BsCheck
               id="check"
-              className={validation.password ? 'validate' : null}
+              className={validation.Vpassword ? 'validate' : null}
             />
             <ViewPasswordBtn_
               onClick={() => {
