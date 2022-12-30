@@ -62,6 +62,8 @@ const SigninInputs = () => {
 
   const navigate = useNavigate();
 
+  const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
+
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
     setUserInput({
@@ -82,7 +84,7 @@ const SigninInputs = () => {
       }
     }
     if (name === 'password') {
-      if (value.length > 2) {
+      if (checkPassword.test(value)) {
         setValidation({
           ...validation,
           password: true,
