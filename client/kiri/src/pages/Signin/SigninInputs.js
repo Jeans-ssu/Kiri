@@ -50,7 +50,6 @@ const InitialState = {
   password: '',
 };
 
-//TODO: password 유효성 검사 수정
 const SigninInputs = () => {
   const [userInput, setUserInput] = useState(InitialState);
   const { email, password } = userInput;
@@ -61,6 +60,8 @@ const SigninInputs = () => {
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
 
   const navigate = useNavigate();
+
+  const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -82,7 +83,7 @@ const SigninInputs = () => {
       }
     }
     if (name === 'password') {
-      if (value.length > 2) {
+      if (checkPassword.test(value)) {
         setValidation({
           ...validation,
           password: true,
@@ -162,7 +163,5 @@ const SigninInputs = () => {
     </>
   );
 };
-//test
-//test2
 
 export default SigninInputs;

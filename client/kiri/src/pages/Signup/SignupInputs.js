@@ -25,7 +25,7 @@ export const InputHeader = styled.div`
     visibility: hidden;
     fill: ${({ theme }) => theme.colors.mainColor};
   }
-  svg.validate {
+  svg#check.validate {
     visibility: visible;
   }
 `;
@@ -114,7 +114,7 @@ const checkExistEmail = (email) => {
 const SignupInputs = () => {
   const [userInput, setUserInput] = useState(InitialState); //닉네임, 이메일, 비밀번호 input
   const { nickName, email, password, Vpassword } = userInput;
-  const [interest, setInterest] = useState('None'); //관심분야 select
+  const [interest, setInterest] = useState('IT'); //관심분야 select
   const [existEmail, setExistEmail] = useState(false); //이미 존재하는 이메일인지 확인
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
   const [isViewMode_, setIsViewMode_] = useState(false); //비밀번호 확인 보기 모드
@@ -123,9 +123,12 @@ const SignupInputs = () => {
     nickName: false,
     email: false,
     password: false,
+    Vpassword: false,
   }); //닉네임, 이메일, 비밀번호 유효성
 
-  //TODO: 닉네임 조건 유효성 검사
+  const checkNickName = /^[가-힣a-zA-Z0-9]{2,10}$/;
+  const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
+
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
     setUserInput({
@@ -133,7 +136,7 @@ const SignupInputs = () => {
       [name]: value,
     });
     if (name === 'nickName') {
-      if (value.length > 0 && value.length < 10) {
+      if (checkNickName.test(value)) {
         setValidation({
           ...validation,
           nickName: true,
@@ -170,16 +173,29 @@ const SignupInputs = () => {
         }
       }
     }
-    if (name === 'Vpassword') {
-      if (userInput.password !== value) {
+    if (name === 'password') {
+      if (checkPassword.test(value)) {
         setValidation({
           ...validation,
-          password: false,
+          password: true,
         });
       } else {
         setValidation({
           ...validation,
-          password: true,
+          password: false,
+        });
+      }
+    }
+    if (name === 'Vpassword') {
+      if (userInput.password !== value) {
+        setValidation({
+          ...validation,
+          Vpassword: false,
+        });
+      } else {
+        setValidation({
+          ...validation,
+          Vpassword: true,
         });
       }
     }
@@ -264,7 +280,7 @@ const SignupInputs = () => {
             비밀번호 확인
             <BsCheck
               id="check"
-              className={validation.password ? 'validate' : null}
+              className={validation.Vpassword ? 'validate' : null}
             />
             <ViewPasswordBtn_
               onClick={() => {
@@ -284,7 +300,6 @@ const SignupInputs = () => {
         </InputContainer>
         <InputHeader>관심분야</InputHeader>
         <SelectInput onChange={handleChangeInterest} value={interest}>
-          <option value="None">선택안함</option>
           <option value="IT">IT</option>
           <option value="Business">경영/경제</option>
           <option value="Science">자연과학</option>
@@ -292,6 +307,7 @@ const SignupInputs = () => {
           <option value="Humanities">인문사회</option>
           <option value="Art">예술</option>
           <option value="Engineering">공학</option>
+          <option value="Etc">기타</option>
         </SelectInput>
       </SignupInputsContainer>
       <SubmitBtn onClick={handleClickSubmitBtn}>회원가입</SubmitBtn>
