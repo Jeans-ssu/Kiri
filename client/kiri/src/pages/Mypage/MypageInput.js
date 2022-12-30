@@ -107,7 +107,7 @@ const SelectInput = styled.select`
 `;
 
 const interestTypes = {
-  None: '선택안함',
+  Etc: '기타',
   IT: 'IT',
   Business: '경영/경제',
   Science: '자연과학',
@@ -124,15 +124,17 @@ const types = {
   interest: '관심분야',
 };
 
-//TODO: 유효성 조건 맞게 수정
 //유효성 검사 함수
 const checkIsValid = (type, value) => {
+  const checkNickName = /^[가-힣a-zA-Z0-9]{2,10}$/;
+  const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
+
   if (type === 'nickName') {
-    if (value.length >= 3 && value.length <= 15) return true;
+    if (checkNickName.test(value)) return true;
     else return false;
   }
   if (type === 'password') {
-    if (value.length >= 3 && value.length <= 15) return true;
+    if (checkPassword.test(value)) return true;
     else return false;
   }
   return true;
@@ -180,7 +182,6 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
               value={editvalue}
               onChange={handleChangeInterestSelect}
             >
-              <option value="None">선택안함</option>
               <option value="IT">IT</option>
               <option value="Business">경영/경제</option>
               <option value="Science">자연과학</option>
@@ -188,6 +189,7 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
               <option value="Humanities">인문사회</option>
               <option value="Art">예술</option>
               <option value="Engineering">공학</option>
+              <option value="Etc">기타</option>
             </SelectInput>
           ) : (
             <EditInput

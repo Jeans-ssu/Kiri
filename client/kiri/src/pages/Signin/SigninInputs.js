@@ -50,7 +50,6 @@ const InitialState = {
   password: '',
 };
 
-//TODO: password 유효성 검사 수정
 const SigninInputs = () => {
   const [userInput, setUserInput] = useState(InitialState);
   const { email, password } = userInput;

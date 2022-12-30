@@ -33,7 +33,7 @@ const MypageInputs = () => {
   const [userInfo, setUserInfo] = useState({
     nickName: '김뀨뀨',
     email: 'abcd@email.com',
-    password: '1234',
+    password: 'password123',
     interest: 'IT',
   });
 

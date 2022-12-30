@@ -129,7 +129,6 @@ const SignupInputs = () => {
   const checkNickName = /^[가-힣a-zA-Z0-9]{2,10}$/;
   const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
 
-  //TODO: 닉네임 조건 유효성 검사
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
     setUserInput({
