@@ -29,8 +29,8 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Scrap> scrapList;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Image> imageList;
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private List<Image> imageList; // 문제
 
     private String title; // 글 제목
 
@@ -40,7 +40,7 @@ public class Post {
 
     private String category; // 글 카테고리 (동아리, 스터디,..)
 
-    private String field_event; // 글 분야 (IT, 공학)
+    private String field; // 글 분야 (IT, 공학)
 
     private String organizer; // 주최자
 
