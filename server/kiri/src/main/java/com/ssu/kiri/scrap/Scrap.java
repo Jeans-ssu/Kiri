@@ -28,6 +28,7 @@ public class Scrap {
     private Post post;
 
     private LocalDateTime startScrapTime;
+
     private LocalDateTime endScrapTime;
 
 

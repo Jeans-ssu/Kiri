@@ -29,7 +29,7 @@ public class Member {
 
     private String nickname;
 
-    private String interest;
+    private String interest; // 사용자의 관심분야
 
 
     //===== 생성자 =====//
