@@ -4,6 +4,7 @@ package com.ssu.kiri.post;
 import com.ssu.kiri.image.Image;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.scrap.Scrap;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +26,10 @@ public class Post {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post")
     private List<Scrap> scrapList;
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post")
     private List<Image> imageList; // 문제
 
     private String title; // 글 제목
@@ -45,5 +45,19 @@ public class Post {
     private String organizer; // 주최자
 
 
+    //===== 연관관계 편의 메서드 =====//
+
+    public void changeMember(Member member) {
+        this.member = member;
+        member.getPostList().add(this);
+    }
+
+
+    //===== 생성자 =====//
+
+    public Post(Member member, String title) {
+        this.member = member;
+        this.title = title;
+    }
 
 }
