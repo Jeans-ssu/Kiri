@@ -124,7 +124,7 @@ export const Header = () => {
     { name: '게시요청' },
   ];
 
-  const menu = ['calendar', 'event', 'group', 'upload'];
+  const menu = ['calendar', 'event', 'group', 'event/write'];
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
