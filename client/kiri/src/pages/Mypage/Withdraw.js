@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import WithdrawlModal from 'components/WithdrawlModal';
+import { useState } from 'react';
 
 const WithdrawWrapper = styled.div`
   display: flex;
@@ -37,13 +39,29 @@ const WitdhdrawBtn = styled.button`
   }
 `;
 
-//TODO: 탈퇴하기 모달
 const Withdraw = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleWithdraw = () => {
+    console.log('탈퇴!');
+  };
+
   return (
     <WithdrawWrapper>
       <div className="wrapper">
         <div className="type">회원탈퇴</div>
-        <WitdhdrawBtn>탈퇴하기</WitdhdrawBtn>
+        <WithdrawlModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          handleWithdraw={handleWithdraw}
+        />
+        <WitdhdrawBtn
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+        >
+          탈퇴하기
+        </WitdhdrawBtn>
       </div>
       <div className="info">
         탈퇴시 작성하신 게시물이 모두 삭제되며 복구되지 않습니다.
