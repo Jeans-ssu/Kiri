@@ -17,15 +17,17 @@ const TitleHeader = styled.div`
 `;
 
 const TitleInput = styled.input`
+  box-sizing: border-box;
   width: 100%;
   height: 38px;
   background-color: ${({ theme }) => theme.colors.light};
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 3px;
   padding: 0 10px;
-  &:active,
+  outline: none;
+  font-size: 16px;
   &:focus {
-    outline: none;
+    border: 1px solid ${({ theme }) => theme.colors.mainColor};
   }
 `;
 
