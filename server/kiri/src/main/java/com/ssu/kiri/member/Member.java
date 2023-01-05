@@ -27,10 +27,11 @@ public class Member {
 
     private String password;
 
-    private String nickname;
+    private String username; // 닉네임 . nickname -> username
 
     private String interest; // 사용자의 관심분야
 
+    private String role; // 시큐리티 권한 추가
 
     //===== 생성자 =====//
 
