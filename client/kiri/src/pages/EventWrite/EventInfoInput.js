@@ -21,7 +21,7 @@ const InfoHeader = styled.div`
 `;
 const InfoTextInput = styled.input`
   box-sizing: border-box;
-  width: 40%;
+  width: 300px;
   height: 30px;
   background-color: ${({ theme }) => theme.colors.light};
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
@@ -30,6 +30,10 @@ const InfoTextInput = styled.input`
   outline: none;
   &:focus {
     border: 1px solid ${({ theme }) => theme.colors.mainColor};
+  }
+  &.smallSize {
+    width: 140px;
+    margin-right: 20px;
   }
 `;
 const InfoSelectInput = styled.select`
@@ -45,39 +49,64 @@ const InfoSelectInput = styled.select`
   }
 `;
 
-const EventInfoInput = () => {
+const EventInfoInput = ({ info, setInfo }) => {
+  const handleChangeInput = (e, target) => {
+    setInfo({
+      ...info,
+      [target]: e.target.value,
+    });
+  };
+
   return (
     <EventInfoInputContainer>
       <InfoContainer>
         <InfoHeader>
           주최/단체 <span className="green">*</span>
         </InfoHeader>
-        <InfoTextInput />
+        <InfoTextInput
+          type="text"
+          value={info.host}
+          onChange={(e) => handleChangeInput(e, 'host')}
+        />
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>연락처</InfoHeader>
-        <InfoTextInput />
+        <InfoTextInput
+          type="tel"
+          value={info.tel}
+          onChange={(e) => handleChangeInput(e, 'tel')}
+        />
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>
           구분 <span className="green">*</span>
         </InfoHeader>
-        <InfoSelectInput>
-          <option>동아리</option>
-          <option>공모전</option>
-          <option>봉사</option>
-          <option>강연</option>
-          <option>서포터즈</option>
-          <option>학교축제</option>
-          <option>지역축제</option>
-          <option>기타</option>
+        <InfoSelectInput
+          value={info.type}
+          onChange={(e) => {
+            handleChangeInput(e, 'type');
+          }}
+        >
+          <option value="Circle">동아리</option>
+          <option value="Contest">공모전</option>
+          <option value="Volunteer">봉사</option>
+          <option value="lecture">강연</option>
+          <option value="Supporters">서포터즈</option>
+          <option value="SchoolFestival">학교축제</option>
+          <option value="LocalFestival">지역축제</option>
+          <option value="Etc">기타</option>
         </InfoSelectInput>
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>
           분야 <span className="green">*</span>
         </InfoHeader>
-        <InfoSelectInput>
+        <InfoSelectInput
+          value={info.field}
+          onChange={(e) => {
+            handleChangeInput(e, 'field');
+          }}
+        >
           <option value="IT">IT</option>
           <option value="Business">경영/경제</option>
           <option value="Science">자연과학</option>
@@ -92,15 +121,41 @@ const EventInfoInput = () => {
         <InfoHeader>
           날짜 <span className="green">*</span>
         </InfoHeader>
-        <InfoTextInput />
+        <InfoTextInput
+          type="date"
+          className="smallSize"
+          value={info.startDate}
+          onChange={(e) => handleChangeInput(e, 'startDate')}
+        />
+        <InfoTextInput
+          type="date"
+          className="smallSize"
+          value={info.endDate}
+          onChange={(e) => handleChangeInput(e, 'endDate')}
+        />
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>시간</InfoHeader>
-        <InfoTextInput />
+        <InfoTextInput
+          type="time"
+          className="smallSize"
+          value={info.startTime}
+          onChange={(e) => handleChangeInput(e, 'startTime')}
+        />
+        <InfoTextInput
+          type="time"
+          className="smallSize"
+          value={info.endTime}
+          onChange={(e) => handleChangeInput(e, 'endTime')}
+        />
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>장소</InfoHeader>
-        <InfoTextInput />
+        <InfoTextInput
+          type="text"
+          value={info.location}
+          onChange={(e) => handleChangeInput(e, 'location')}
+        />
       </InfoContainer>
     </EventInfoInputContainer>
   );

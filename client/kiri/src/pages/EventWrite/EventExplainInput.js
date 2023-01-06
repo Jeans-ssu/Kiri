@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const EventExplainInputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 15px;
 `;
 
 const ExplainHeader = styled.div`
@@ -30,13 +31,17 @@ const ExplainInput = styled.textarea`
   }
 `;
 
-const EventExplainInput = () => {
+const EventExplainInput = ({ explain, setExplain }) => {
+  const handleChangeInput = (e) => {
+    setExplain(e.target.value);
+  };
+
   return (
     <EventExplainInputContainer>
       <ExplainHeader>
         설명 <span className="green">*</span>
       </ExplainHeader>
-      <ExplainInput type="text" />
+      <ExplainInput type="text" value={explain} onChange={handleChangeInput} />
     </EventExplainInputContainer>
   );
 };

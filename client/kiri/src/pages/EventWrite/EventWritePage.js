@@ -4,31 +4,66 @@ import styled from 'styled-components';
 import EventTitleInput from './EventTitleInput';
 import EventInfoInput from './EventInfoInput';
 import EventExplainInput from './EventExplainInput';
+import EventEtcInput from './EventEtcInput';
 
 const EventWritePageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0px 50px;
+  padding: 0px 60px;
+`;
+
+const BtnContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+`;
+const WriteBtn = styled.button`
+  width: 150px;
+  height: 40px;
+  background-color: ${({ theme }) => theme.colors.mainColor};
+  border: none;
+  border-radius: 40px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  &:hover {
+    cursor: pointer;
+    background-color: #44cf95;
+  }
 `;
 
 const EventWritePage = () => {
   const [title, setTitle] = useState('');
   const [info, setInfo] = useState({
     host: '',
-    type: '',
-    field: '',
-    date: '',
-    time: '',
+    tel: '',
+    type: 'Circle',
+    field: 'IT',
+    startDate: '',
+    endDate: '',
+    startTime: '',
+    endTime: '',
     location: '',
   });
   const [explain, setExplain] = useState('');
+  const [link, setLink] = useState('');
+
+  const handleClickWriteBtn = () => {
+    console.log('글 작성', { title, ...info, explain, link });
+  };
 
   return (
-    <PageContainer header footer>
+    <PageContainer header footer margin_bottom={false}>
       <EventWritePageContainer>
         <EventTitleInput title={title} setTitle={setTitle} />
         <EventInfoInput info={info} setInfo={setInfo} />
         <EventExplainInput explain={explain} setExplain={setExplain} />
+        <EventEtcInput link={link} setLink={setLink} />
+        <BtnContainer>
+          <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
+        </BtnContainer>
       </EventWritePageContainer>
     </PageContainer>
   );
