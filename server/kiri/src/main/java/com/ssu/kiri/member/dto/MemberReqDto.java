@@ -2,6 +2,8 @@ package com.ssu.kiri.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +13,9 @@ public class MemberReqDto {
 
     // 회원 가입
     @Getter
+    @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class PostMemberReqDto {
 
         @NotBlank
