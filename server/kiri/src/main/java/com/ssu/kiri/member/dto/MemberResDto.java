@@ -14,9 +14,7 @@ public class MemberResDto {
 
     // 회원 가입 후
     @Getter
-    @Setter
     @AllArgsConstructor
-    @NoArgsConstructor
     public static class PostMemberResDto {
 
         private Long id;

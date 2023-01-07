@@ -14,3 +14,4 @@ public interface MemberMapper {
     // 회원가입 후 반환할 객체
     MemberResDto.PostMemberResDto postResMember(Member member);
 }
+

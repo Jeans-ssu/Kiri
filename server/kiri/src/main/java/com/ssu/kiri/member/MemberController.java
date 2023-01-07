@@ -20,7 +20,7 @@ public class MemberController {
 
 
     @PostMapping("/auth/signup")
-    public ResponseEntity postMember(@RequestBody @Valid MemberReqDto.PostMemberReqDto postDto) {
+    public ResponseEntity postMember(@Valid @RequestBody MemberReqDto.PostMemberReqDto postDto) {
         Member member = memberMapper.postToMember(postDto);
         Member savedMember = memberService.postMember(member);
 

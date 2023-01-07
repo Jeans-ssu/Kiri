@@ -1,19 +1,16 @@
 package com.ssu.kiri.member.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class MemberReqDto {
 
     // 회원 가입
     @Getter
-    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PostMemberReqDto {
@@ -25,6 +22,7 @@ public class MemberReqDto {
         @NotBlank
         @Pattern(regexp = "[0-9a-zA-Z]{8,16}")
         private String password;
+
 
         @NotBlank
         @Pattern(regexp = "[0-9a-zA-Z]{8,16}")

@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // @Secured 활성화, @PreAuthorize, @PostAuthorize 활성화
 public class SecurityConfig {
 
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
