@@ -49,6 +49,7 @@ const EventWritePage = () => {
   });
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
+  const [img, setImg] = useState(new FormData());
 
   const handleClickWriteBtn = () => {
     console.log('글 작성', { title, ...info, explain, link });
@@ -60,7 +61,12 @@ const EventWritePage = () => {
         <EventTitleInput title={title} setTitle={setTitle} />
         <EventInfoInput info={info} setInfo={setInfo} />
         <EventExplainInput explain={explain} setExplain={setExplain} />
-        <EventEtcInput link={link} setLink={setLink} />
+        <EventEtcInput
+          link={link}
+          setLink={setLink}
+          img={img}
+          setImg={setImg}
+        />
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
         </BtnContainer>
