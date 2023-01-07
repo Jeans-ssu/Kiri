@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useRef } from 'react';
 
 const EventEtcInputContainer = styled.div`
   display: flex;
@@ -24,23 +25,32 @@ const LinkInput = styled.input`
   outline: none;
 `;
 
-const ImgUploadBtn = styled.button`
-  width: 100px;
-  height: 30px;
-  background-color: white;
-  border: 1px solid ${({ theme }) => theme.colors.mainColor};
-  border-radius: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.mainColor};
-  &:hover {
-    cursor: pointer;
+const ImgInput = styled.input`
+  &::file-selector-button {
+    width: 90px;
+    height: 30px;
+    background-color: white;
+    border: 1px solid ${({ theme }) => theme.colors.mainColor};
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 5px;
+    color: ${({ theme }) => theme.colors.mainColor};
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
 
-const EventEtcInput = ({ link, setLink }) => {
+const EventEtcInput = ({ link, setLink, img, setImg }) => {
   const handleChangeInput = (e) => {
     setLink(e.target.value);
+  };
+
+  const fileInput = useRef(null);
+
+  const handleChangeImgInput = (e) => {
+    setImg({ ...img, image: e.target.files[0] });
   };
 
   return (
@@ -51,7 +61,13 @@ const EventEtcInput = ({ link, setLink }) => {
       </EtcContainer>
       <EtcContainer>
         <EtcHeader>이미지</EtcHeader>
-        <ImgUploadBtn>파일 선택</ImgUploadBtn>
+        <ImgInput
+          type="file"
+          name="file"
+          accept="image/*"
+          ref={fileInput}
+          onChange={handleChangeImgInput}
+        />
       </EtcContainer>
     </EventEtcInputContainer>
   );
