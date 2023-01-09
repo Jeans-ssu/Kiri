@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+// http://localhost:8080/login 시 동작 안함 => formLogin().disable() 때문.
+//직접 PrincipalDetailsService 를 방문하는 필터를 만들어줘야 한다. -> JwtAuthenticationFilter
 
 // Security Session => Authentication => UserDetails => User 정보
 // 위 과정 중 Authentication 에 해당.
@@ -26,6 +28,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     // Security Session(Authentication(내부 UserDetails))
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println(" PrincipalDetailsService loadUserByUsername 실행!!");
         Optional<Member> byEmail = memberRepository.findByEmail(email);
         // byEmail != null
         if(byEmail.isPresent()) {

@@ -30,5 +30,18 @@ public class MemberReqDto {
 
     }
 
+    // 로그인
+//    @Data
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class LoginReqDto {
+
+        private String email;
+        private String password;
+
+    }
+
 
 }

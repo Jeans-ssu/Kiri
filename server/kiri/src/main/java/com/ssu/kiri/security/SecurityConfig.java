@@ -1,6 +1,10 @@
 package com.ssu.kiri.security;
 
 import com.ssu.kiri.config.WebMvcConfig;
+import com.ssu.kiri.member.MemberRepository;
+import com.ssu.kiri.security.jwt.JwtAuthenticationFilter;
+import com.ssu.kiri.security.jwt.JwtAuthorizationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,8 +21,10 @@ import javax.servlet.http.HttpServlet;
 @Configuration // 해당 클래스를 IoC 컨테이너에 등록
 @EnableWebSecurity // 시큐리티 활성화 -> 기본 스프링 필터체인에 등록
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // @Secured 활성화, @PreAuthorize, @PostAuthorize 활성화
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final MemberRepository memberRepository;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -34,12 +40,16 @@ public class SecurityConfig {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-//                .apply(new MyCustomDsl()) // 커스텀 필터 등록
-//                .and()
+                .apply(new MyCustomDsl()) // 커스텀 필터 등록
+                .and()
 
                 .authorizeRequests(authorize -> authorize
 
-                        .antMatchers("/api/posts/**","/calender/**","/logout/**").hasRole("USER")
+//                        .antMatchers("/logout","/extra/**","/member/**")
+//                        .access("hasRole('USER')")
+
+                        .antMatchers("/api/posts/**","/calender/**","/extra/**","/member/**")
+                        .authenticated()
 
                         .anyRequest() // 나머지 req들은 인증없이 허용
                         .permitAll()
@@ -56,8 +66,9 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
             // 필터 만들기
-//            builder.addFilter(new JwtAuthenticationFilter(authenticationManager))
-//                    .addFilter(new authenticationManager, userRepository)
+            builder.addFilter(new JwtAuthenticationFilter(authenticationManager))
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository));
+
 
         }
     }

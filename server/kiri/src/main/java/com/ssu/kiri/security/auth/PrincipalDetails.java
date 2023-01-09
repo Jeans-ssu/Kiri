@@ -1,6 +1,7 @@
 package com.ssu.kiri.security.auth;
 
 import com.ssu.kiri.member.Member;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,7 +13,7 @@ import java.util.Collection;
 // Authentication 안에 User 정보 필요
 // User 오브젝트 타입 => UserDetails
 // Security Session => Authentication => UserDetails => User 정보
-
+@Data
 public class PrincipalDetails implements UserDetails {
 
     private Member member; // composition
