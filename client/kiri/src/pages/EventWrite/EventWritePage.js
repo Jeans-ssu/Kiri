@@ -52,7 +52,14 @@ const EventWritePage = () => {
   const [img, setImg] = useState(new FormData());
 
   const handleClickWriteBtn = () => {
-    console.log('글 작성', { title, ...info, explain, link });
+    const blob = new Blob([JSON.stringify({ title, ...info, explain, link })], {
+      type: 'application/json',
+    });
+    const formData = new FormData();
+    formData.append('data', blob);
+    formData.append('img', img.image);
+    //console.log('글 작성', { title, ...info, explain, link });
+    //axios POST - body에 formData
   };
 
   return (
