@@ -3,6 +3,7 @@ package com.ssu.kiri.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.security.auth.PrincipalDetails;
@@ -51,6 +52,20 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // JWT 토큰을 검증해서 정상적인 사용자인지 확인
         String jwtToken = request.getHeader(JwtProperties.HEADER_STRING)
                 .replace(JwtProperties.TOKEN_PREFIX,"");
+
+        System.out.println("jwtToken = " + jwtToken);
+
+        // 로그아웃 시 TokenExpiredException 에러 처리
+//        String email;
+//        try {
+//            email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build()
+//                    .verify(jwtToken).getClaim("email").asString();
+//        }catch (TokenExpiredException e) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+
+
 
         String email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build()
                 .verify(jwtToken).getClaim("email").asString();

@@ -2,6 +2,7 @@ package com.ssu.kiri.security;
 
 import com.ssu.kiri.config.WebMvcConfig;
 import com.ssu.kiri.member.MemberRepository;
+import com.ssu.kiri.security.handler.MemberLogoutHandler;
 import com.ssu.kiri.security.jwt.JwtAuthenticationFilter;
 import com.ssu.kiri.security.jwt.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Configuration // 해당 클래스를 IoC 컨테이너에 등록
 @EnableWebSecurity // 시큐리티 활성화 -> 기본 스프링 필터체인에 등록
@@ -41,6 +49,12 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .apply(new MyCustomDsl()) // 커스텀 필터 등록
+//                .and()
+//                .logout()
+////                .logoutSuccessUrl("/login")
+//                .addLogoutHandler(new MemberLogoutHandler())
+
+
                 .and()
 
                 .authorizeRequests(authorize -> authorize
