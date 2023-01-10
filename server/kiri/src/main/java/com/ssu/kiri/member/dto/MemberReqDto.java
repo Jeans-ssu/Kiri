@@ -16,6 +16,10 @@ public class MemberReqDto {
     public static class PostMemberReqDto {
 
         @NotBlank
+        @Pattern(regexp = "[a-zA-Zㄱ-ㅎ가-힣]{2,10}")
+        private String username;
+
+        @NotBlank
         @Email
         private String email;
 
@@ -27,6 +31,9 @@ public class MemberReqDto {
         @NotBlank
         @Pattern(regexp = "[0-9a-zA-Z]{8,16}")
         private String passwordVal;
+
+        @NotBlank
+        private String interest;
 
     }
 
