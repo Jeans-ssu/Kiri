@@ -52,9 +52,9 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .apply(new MyCustomDsl()) // 커스텀 필터 등록
-//                .and()
-//                .logout()
-////                .logoutSuccessUrl("/login")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/login")
 //                .addLogoutHandler(new MemberLogoutHandler())
 
 
