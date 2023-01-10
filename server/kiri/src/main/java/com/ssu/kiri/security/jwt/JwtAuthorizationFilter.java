@@ -19,6 +19,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 // 시큐리티가 가지고 있는 filter 중 BasicAuthenticationFilter 라는 것이 있다.
@@ -27,10 +29,13 @@ import java.util.Optional;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private MemberRepository memberRepository;
+    // =============== jwt 만료일자 추가 ==================
+    private JwtTokenProvider jwtTokenProvider;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider) {
         super(authenticationManager);
         this.memberRepository = memberRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
 
     }
 
@@ -58,17 +63,25 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // 로그아웃 시 TokenExpiredException 에러 처리
 //        String email;
 //        try {
+
 //            email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build()
 //                    .verify(jwtToken).getClaim("email").asString();
+
 //        }catch (TokenExpiredException e) {
 //            chain.doFilter(request, response);
 //            return;
 //        }
 
+        // 현재시간과 JWT 만료시간 체크
+        System.out.println("now = "+ LocalDateTime.now());
+        System.out.println("JWT.getExpiresAt() = " + JWT.decode(jwtToken).getExpiresAt());
 
-
-        String email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build()
-                .verify(jwtToken).getClaim("email").asString();
+        String email = null;
+        if(jwtTokenProvider.validationToken(jwtToken)) {
+            email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build()
+                    .verify(jwtToken).getClaim("email").asString();
+            System.out.println("email = " + email);
+        }
 
         // email 이 제대로 들어왔으면, 서명이 정상적으로 동작한 것.
         if(email != null) {

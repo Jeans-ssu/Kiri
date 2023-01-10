@@ -5,6 +5,7 @@ import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.security.handler.MemberLogoutHandler;
 import com.ssu.kiri.security.jwt.JwtAuthenticationFilter;
 import com.ssu.kiri.security.jwt.JwtAuthorizationFilter;
+import com.ssu.kiri.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +34,8 @@ import javax.servlet.http.HttpSession;
 public class SecurityConfig {
 
     private final MemberRepository memberRepository;
+    // =============== jwt 만료일자 추가 ==================
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -81,8 +84,8 @@ public class SecurityConfig {
 
             // 필터 만들기
             builder.addFilter(new JwtAuthenticationFilter(authenticationManager))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository));
-
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository, jwtTokenProvider));
+            // =============== jwt 만료일자 추가 ==================
 
         }
     }
