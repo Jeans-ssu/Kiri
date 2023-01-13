@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 import { MainHeader } from './MainEvents';
 import { AiFillEye, AiFillHeart } from 'react-icons/ai';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { IoIosArrowUp } from 'react-icons/io';
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export const eventsData = [
@@ -107,7 +104,7 @@ const EventsHeaderContainer = styled.div`
   }
   .view {
     width: 5%;
-    color: ${({ theme }) => theme.colors.mainColor};
+    color: ${({ theme }) => theme.colors.gray};
   }
   .like {
     width: 5%;
@@ -162,21 +159,6 @@ const EventsContentContainer = styled.div`
   }
 `;
 
-const OpenBtnContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 5px 0;
-  button {
-    background: none;
-    border: none;
-    color: ${({ theme }) => theme.colors.mainColor};
-    :hover {
-      cursor: pointer;
-    }
-  }
-`;
-
 export const EventsHeader = () => {
   return (
     <EventsHeaderContainer>
@@ -209,25 +191,9 @@ export const EventContent = ({ event }) => {
   );
 };
 
-export const OpenBtn = ({ isOpen, setIsOpen }) => {
-  return (
-    <OpenBtnContainer>
-      <button onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? (
-          <IoIosArrowUp size="18" />
-        ) : (
-          <BsThreeDotsVertical size="16" />
-        )}
-      </button>
-    </OpenBtnContainer>
-  );
-};
-
 //TODO: 유저 닉네임, 관심분야 설정
 //TODO: 로그인 안했을 때 처리 -> 랜덤으로
 const SelectedEvents = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <SelectedEventsContainer>
       <MainHeader>
@@ -236,20 +202,9 @@ const SelectedEvents = () => {
       </MainHeader>
       <MainContent>
         <EventsHeader />
-        {isOpen ? (
-          <>
-            {eventsData?.map((el) => {
-              return <EventContent key={el.eventId} event={el} />;
-            })}
-          </>
-        ) : (
-          <>
-            {eventsData.slice(0, 5)?.map((el) => {
-              return <EventContent key={el.eventId} event={el} />;
-            })}
-          </>
-        )}
-        <OpenBtn isOpen={isOpen} setIsOpen={setIsOpen} />
+        {eventsData?.map((el) => {
+          return <EventContent key={el.eventId} event={el} />;
+        })}
       </MainContent>
     </SelectedEventsContainer>
   );

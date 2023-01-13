@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MainHeader } from './MainEvents';
-import {
-  EventsHeader,
-  EventContent,
-  OpenBtn,
-  eventsData,
-} from './SelectedEvents';
+import { EventsHeader, EventContent, eventsData } from './SelectedEvents';
 
 const BestEventsContainer = styled.div`
   width: 90%;
@@ -21,7 +16,6 @@ const MainContent = styled.div`
 `;
 
 const BestEvents = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -39,20 +33,9 @@ const BestEvents = () => {
       </MainHeader>
       <MainContent>
         <EventsHeader />
-        {isOpen ? (
-          <>
-            {data?.map((el) => {
-              return <EventContent key={el.eventId} event={el} />;
-            })}
-          </>
-        ) : (
-          <>
-            {data.slice(0, 5)?.map((el) => {
-              return <EventContent key={el.eventId} event={el} />;
-            })}
-          </>
-        )}
-        <OpenBtn isOpen={isOpen} setIsOpen={setIsOpen} />
+        {data?.map((el) => {
+          return <EventContent key={el.eventId} event={el} />;
+        })}
       </MainContent>
     </BestEventsContainer>
   );
