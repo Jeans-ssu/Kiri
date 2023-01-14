@@ -18,9 +18,9 @@ const Logo = styled.div`
   align-items: center;
   cursor: pointer;
   text-align: center;
-  margin-left: 5px;
   white-space: nowrap;
   padding-bottom: 15px;
+  margin-right: 100px;
   a {
     text-decoration: none;
     color: ${({ theme }) => theme.colors.mainColor};
@@ -43,7 +43,7 @@ const TabMenu = styled.ul`
   border-bottom: 1px solid rgb(0, 0, 0, 0.1);
 
   .focused {
-    border-bottom: 5px solid #47da9c;
+    border-bottom: 5px solid ${({ theme }) => theme.colors.mainColor};
   }
 
   .search {
@@ -58,16 +58,21 @@ const TabMenu = styled.ul`
     text-decoration: none;
     color: ${({ theme }) => theme.colors.dark};
     font-weight: 700;
+    display: flex;
+    justify-content: center;
+    text-align: center;
   }
 `;
 
-const SubMenu = styled.li`
+const SubMenu = styled.div`
   margin-right: 100px;
   cursor: pointer;
   width: 80px;
   text-align: center;
   border: none;
   white-space: nowrap;
+  display: flex;
+  justify-content: center;
 `;
 
 const Searchdiv = styled.div`
@@ -114,17 +119,16 @@ const Profile = styled.div`
 `;
 
 export const Header = () => {
-  const [currentTab, setCurrentTab] = useState(0);
+  const [currentTab, setCurrentTab] = useState(-1);
   const [click, setClick] = useState(false);
 
   const menuArr = [
     { name: '캘린더' },
     { name: '이벤트' },
-    { name: '그룹' },
     { name: '게시요청' },
   ];
 
-  const menu = ['calendar', 'event', 'group', 'event/write'];
+  const menu = ['calendar', 'event', 'event/write'];
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
@@ -150,6 +154,9 @@ export const Header = () => {
                 >
                   {el.name}
                 </SubMenu>
+                {currentTab === idx ? (
+                  <div className="line" key={idx}></div>
+                ) : null}
               </Link>
             );
           })}
