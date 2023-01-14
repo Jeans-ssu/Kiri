@@ -91,6 +91,12 @@ const ViewPasswordBtn_ = styled(ViewPasswordBtn)`
   right: 0;
 `;
 
+const ValidationMsg = styled.div`
+  font-size: 11px;
+  color: ${({ theme }) => theme.colors.gray};
+  margin-top: 5px;
+`;
+
 const InitialState = {
   nickName: '',
   email: '',
@@ -126,8 +132,8 @@ const SignupInputs = () => {
     Vpassword: false,
   }); //닉네임, 이메일, 비밀번호 유효성
 
-  const checkNickName = /^[가-힣a-zA-Z0-9]{2,10}$/;
-  const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
+  const checkNickName = /^[가-힣a-zA-Z0-9]{2,10}$/; //한글,영문,숫자 2-10글자
+  const checkPassword = /^[a-zA-Z0-9]{8,16}$/; //영문,숫자 8-16글자
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -274,6 +280,7 @@ const SignupInputs = () => {
             onChange={handleChangeInput}
             className={validation.password ? 'validate' : null}
           />
+          <ValidationMsg>영문,숫자 8-16글자</ValidationMsg>
         </InputContainer>
         <InputContainer>
           <InputHeader>

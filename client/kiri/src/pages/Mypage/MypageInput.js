@@ -19,8 +19,10 @@ const MypageInputWrapper = styled.div`
     font-weight: 400;
     width: 400px;
   }
-  .input {
+  .conatiner {
     width: 75%;
+  }
+  .input {
     font-weight: 400;
     display: flex;
     position: relative;
@@ -106,6 +108,16 @@ const SelectInput = styled.select`
   }
 `;
 
+const ValidationMsg = styled.div`
+  font-size: 11px;
+  color: ${({ theme }) => theme.colors.gray};
+  margin-top: 5px;
+  display: none;
+  &.password {
+    display: block;
+  }
+`;
+
 const interestTypes = {
   Etc: '기타',
   IT: 'IT',
@@ -176,43 +188,46 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
     <MypageInputWrapper>
       <div className="type">{types[type]}</div>
       {isEditmode ? (
-        <div className="input">
-          {type === 'interest' ? (
-            <SelectInput
-              value={editvalue}
-              onChange={handleChangeInterestSelect}
-            >
-              <option value="IT">IT</option>
-              <option value="Business">경영/경제</option>
-              <option value="Science">자연과학</option>
-              <option value="Marketing">마케팅/홍보</option>
-              <option value="Humanities">인문사회</option>
-              <option value="Art">예술</option>
-              <option value="Engineering">공학</option>
-              <option value="Etc">기타</option>
-            </SelectInput>
-          ) : (
-            <EditInput
-              type={
-                type === 'password' && isViewMode === false
-                  ? 'password'
-                  : 'text'
-              }
-              value={editvalue}
-              onChange={handleChangeEditvalue}
-              className={isValid ? null : 'notValid'}
-            />
-          )}
-          <BsExclamationCircle className={isValid ? null : 'notValid'} />
-          {type === 'password' ? (
-            <ViewPasswordBtn
-              onClick={() => {
-                setIsViewMode(!isViewMode);
-              }}
-            >
-              <AiFillEye />
-            </ViewPasswordBtn>
-          ) : null}
+        <div className="conatiner">
+          <div className="input">
+            {type === 'interest' ? (
+              <SelectInput
+                value={editvalue}
+                onChange={handleChangeInterestSelect}
+              >
+                <option value="IT">IT</option>
+                <option value="Business">경영/경제</option>
+                <option value="Science">자연과학</option>
+                <option value="Marketing">마케팅/홍보</option>
+                <option value="Humanities">인문사회</option>
+                <option value="Art">예술</option>
+                <option value="Engineering">공학</option>
+                <option value="Etc">기타</option>
+              </SelectInput>
+            ) : (
+              <EditInput
+                type={
+                  type === 'password' && isViewMode === false
+                    ? 'password'
+                    : 'text'
+                }
+                value={editvalue}
+                onChange={handleChangeEditvalue}
+                className={isValid ? null : 'notValid'}
+              />
+            )}
+            <BsExclamationCircle className={isValid ? null : 'notValid'} />
+            {type === 'password' ? (
+              <ViewPasswordBtn
+                onClick={() => {
+                  setIsViewMode(!isViewMode);
+                }}
+              >
+                <AiFillEye />
+              </ViewPasswordBtn>
+            ) : null}
+          </div>
+          <ValidationMsg className={type}>영문,숫자 8-16글자</ValidationMsg>
         </div>
       ) : type === 'password' ? (
         <div className="value">{userInfo[type].replace(/./g, '●')}</div>

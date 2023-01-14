@@ -51,7 +51,7 @@ export const MainHeader = styled.div`
     color: ${({ theme }) => theme.colors.purple};
   }
   .green {
-    color: ${({ theme }) => theme.colors.green_3};
+    color: ${({ theme }) => theme.colors.mainColor};
   }
   .yellow {
     color: ${({ theme }) => theme.colors.yellow};
