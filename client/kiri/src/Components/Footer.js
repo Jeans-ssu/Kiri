@@ -6,20 +6,23 @@ const Foot = styled.footer`
   padding: 10px;
   font-size: 14px;
   font-weight: 400;
-  background-color: #86ddb8;
+  background-color: ${({ theme }) => theme.colors.darkgray};
+
   width: 100%;
   box-sizing: border-box;
-  height: 90px;
+  height: 100px;
 
   img {
     margin-left: 40px;
     padding-right: 10px;
-    border-right: solid 2px rgb(99, 99, 99);
+    padding-top: 10px;
+    margin-bottom: 10px;
+    border-right: solid 2px ${({ theme }) => theme.colors.green_1};
   }
 
   p {
     text-align: left;
-    color: rgb(99, 99, 99);
+    color: ${({ theme }) => theme.colors.green_1};
   }
 
   p span {
@@ -30,7 +33,7 @@ const Foot = styled.footer`
 
   p span a {
     text-decoration-line: none;
-    color: rgb(99, 99, 99);
+    color: ${({ theme }) => theme.colors.green_1};
   }
 `;
 
@@ -39,7 +42,7 @@ export const Footer = () => {
     <Foot>
       <img
         id="logo"
-        src={`${process.env.PUBLIC_URL}/kiri_logo.png`}
+        src={`${process.env.PUBLIC_URL}/kiri_logo_white.png`}
         width="70"
         height="70"
         alt="logo"
