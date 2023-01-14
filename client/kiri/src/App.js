@@ -5,6 +5,7 @@ import NoMatchPage from 'pages/NoMatchPage';
 import EventFieldPage from 'pages/Event/EventFieldPage';
 import EventKeywordPage from 'pages/Event/EventKeywordPage';
 import EventInfoPage from 'pages/Event/EventInfoPage';
+import EventSearchPage from 'pages/Event/EventSearchPage';
 import SignupPage from 'pages/Signup/SignupPage';
 import SigninPage from 'pages/Signin/SigninPage';
 import Mypage from 'pages/Mypage/Mypage';
@@ -24,6 +25,7 @@ function App() {
           <Route path="/event" element={<EventFieldPage />} />
           <Route path="/event/keyword" element={<EventKeywordPage />} />
           <Route path="/event/eventid" element={<EventInfoPage />} />
+          <Route path="/event/search" element={<EventSearchPage />} />
           <Route path="/event/write" element={<EventWritePage />} />
         </Routes>
       </BrowserRouter>
