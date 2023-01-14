@@ -9,7 +9,6 @@ const EventSearchPage = () => {
     <PageContainer header footer>
       <EventKeywordPageContainer>
         <h1>&apos;해커톤&apos; 검색 결과</h1>
-        <h4 className="titlesearch">(제목에서 검색한 결과입니다)</h4>
         <EventListMain>
           {pos.map((el) => (
             <EventContainer key={el}>
