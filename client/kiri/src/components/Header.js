@@ -73,6 +73,7 @@ const SubMenu = styled.div`
   white-space: nowrap;
   display: flex;
   justify-content: center;
+  padding-top: 4px;
 `;
 
 const Searchdiv = styled.div`
@@ -82,6 +83,9 @@ const Searchdiv = styled.div`
     position: absolute;
     margin-left: 12px;
     margin-top: 4px;
+  }
+  svg {
+    fill: ${({ theme }) => theme.colors.darkgray};
   }
 `;
 
@@ -94,6 +98,11 @@ const Search = styled.input`
   margin-left: 5px;
   margin-bottom: 14px;
   display: flex;
+  &:active,
+  &:focus {
+    outline: none;
+  }
+  font-size: 12px;
 `;
 
 const Login = styled.button`
@@ -116,6 +125,9 @@ const Login = styled.button`
 const Profile = styled.div`
   align-items: flex-end;
   cursor: pointer;
+  svg {
+    fill: ${({ theme }) => theme.colors.dark};
+  }
 `;
 
 export const Header = () => {

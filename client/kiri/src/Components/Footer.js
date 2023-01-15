@@ -17,7 +17,7 @@ const Foot = styled.footer`
     padding-right: 10px;
     padding-top: 10px;
     margin-bottom: 10px;
-    border-right: solid 2px ${({ theme }) => theme.colors.green_1};
+    border-right: solid 1px ${({ theme }) => theme.colors.green_1};
   }
 
   p {
@@ -28,7 +28,8 @@ const Foot = styled.footer`
   p span {
     display: inline-block;
     margin-left: 20px;
-    font-weight: bold;
+    font-weight: light;
+    font-size: 11px;
   }
 
   p span a {
