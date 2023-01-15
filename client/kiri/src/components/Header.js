@@ -134,11 +134,7 @@ export const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
   const [click, setClick] = useState(false);
 
-  const menuArr = [
-    { name: '캘린더' },
-    { name: '이벤트' },
-    { name: '게시요청' },
-  ];
+  const menuArr = [{ name: '캘린더' }, { name: '이벤트' }, { name: '글쓰기' }];
 
   const menu = ['calendar', 'event', 'event/write'];
 
