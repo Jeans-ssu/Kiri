@@ -24,7 +24,7 @@ function App() {
           <Route path="*" element={<NoMatchPage />} />
           <Route path="/event" element={<EventFieldPage />} />
           <Route path="/event/keyword" element={<EventKeywordPage />} />
-          <Route path="/event/eventid" element={<EventInfoPage />} />
+          <Route path="/event/:eventId" element={<EventInfoPage />} />
           <Route path="/event/search" element={<EventSearchPage />} />
           <Route path="/event/write" element={<EventWritePage />} />
         </Routes>
