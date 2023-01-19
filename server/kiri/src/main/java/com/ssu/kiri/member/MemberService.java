@@ -5,9 +5,13 @@ import com.ssu.kiri.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional // commit 하면 지우기
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -25,11 +29,27 @@ public class MemberService {
         return savedMember;
     }
 
-    // 로그인
-    public void loginMember() {
-
+    // 개인 정보 찾아오기
+    public Member findMember(Long id) {
+        Optional<Member> findMember = memberRepository.findById(id);
+        return findMember.get();
     }
 
+
+    // 개인 정보 수정하기
+    public Member updateMember(Member member, Long id) {
+
+        String rawPassword = member.getPassword();
+        String encPassword = passwordEncoder.encode(rawPassword);
+
+        Optional<Member> updateMember = memberRepository.findById(id)
+                .map(m -> {
+                    m.updateMyMember(member.getEmail(), encPassword, member.getUsername(), member.getInterest());
+                    return memberRepository.save(m);
+                });
+
+        return updateMember.get();
+    }
 
 
 }

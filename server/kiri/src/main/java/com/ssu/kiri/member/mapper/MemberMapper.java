@@ -13,5 +13,16 @@ public interface MemberMapper {
 
     // 회원가입 후 반환할 객체
     MemberResDto.PostMemberResDto postResMember(Member member);
+
+
+    // myPage Member -> MemberResDto.findDto
+    MemberResDto.findDto toFindDto(Member member);
+
+    // myPage updateDto -> Member
+    Member updateToM(MemberReqDto.updateDto updateDto);
+
+    // myPage Member -> updateDto
+    MemberResDto.updateDto toUpdateDto(Member member);
+
 }
 
