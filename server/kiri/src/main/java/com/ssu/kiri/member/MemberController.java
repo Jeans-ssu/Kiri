@@ -28,17 +28,7 @@ public class MemberController {
         return ResponseEntity.ok(memberMapper.postResMember(savedMember));
     }
 
-    // user 권한만 접근가능
-    @GetMapping("/member/2")
-    public String user() {
-        return "member/2";
-    }
 
-    // 인증이 필요한 접근
-    @GetMapping("/calender/3")
-    public String calender() {
-        return "/calender/3";
-    }
 
 
 }
