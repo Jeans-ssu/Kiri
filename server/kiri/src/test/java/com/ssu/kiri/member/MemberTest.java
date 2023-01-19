@@ -1,10 +1,17 @@
 package com.ssu.kiri.member;
 
 import com.ssu.kiri.image.Image;
+import com.ssu.kiri.infra.WithAccount;
 import com.ssu.kiri.post.Post;
 import com.ssu.kiri.scrap.Scrap;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,8 +19,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
+
 
 @SpringBootTest
 @Transactional
@@ -22,6 +33,65 @@ class MemberTest {
 
     @PersistenceContext
     EntityManager em;
+
+    @Autowired MemberService memberService;
+    @Autowired MemberRepository memberRepository;
+
+
+    @AfterEach
+    void afterEach() {
+        memberRepository.deleteAll();
+    }
+
+    /**
+     * username : creamyy
+     * email : creamyy@aaa.com
+     * password : abcdefgh1234
+     * interest = 기타
+     */
+    @DisplayName("개인 정보 수정 테스트")
+    @WithAccount("creamyyy")
+    @Test
+    void updateMyMember() throws Exception {
+        //given
+        Member member = memberRepository.findByEmail("creamyyy@aaa.com").get();
+        Long id = member.getId();
+        String beforePassword = member.getPassword();
+
+        String changePassword = "aaaaaaa444";
+        member.changePassword(changePassword);
+
+        //when
+        Member afterMember = memberService.updateMember(member, id);
+
+        //then
+        assertThat(beforePassword).isNotEqualTo(afterMember.getPassword());
+        System.out.println("==========================================================================");
+        System.out.println("beforePassword = " + beforePassword);
+        System.out.println("afterMember.password = " + afterMember.getPassword());
+
+    }
+
+
+    // 개인 정보 조회 테스트 코드
+    @WithMockUser
+    @Test
+    public void getMyMember() {
+
+        //given
+        Optional<Member> member = memberRepository.findById(1L);
+        Long id = member.get().getId();
+
+        //when
+        Member findMember = memberService.findMember(id);
+
+        //then
+        assertThat(findMember).isEqualTo(member.get());
+        assertThat(findMember.getId()).isEqualTo(member.get().getId());
+
+
+    }
+
 
     @Test
     public void testEntity() {
@@ -65,6 +135,9 @@ class MemberTest {
 
 
     }
+
+
+
 
 
 

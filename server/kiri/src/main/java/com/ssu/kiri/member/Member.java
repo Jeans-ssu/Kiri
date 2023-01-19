@@ -56,4 +56,8 @@ public class Member {
         this.password = encPassword;
         this.interest = interest;
     }
+
+    public void changePassword(String changePassword) {
+        this.password = changePassword;
+    }
 }
