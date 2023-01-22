@@ -1,8 +1,77 @@
 import { useState } from 'react';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
+export const Header = () => {
+  const [currentTab, setCurrentTab] = useState(-1);
+  const [click, setClick] = useState(false);
+  const navigate = useNavigate();
+
+  const menuArr = [
+    { name: '캘린더' },
+    { name: '이벤트' },
+    { name: '게시요청' },
+  ];
+
+  const menu = ['calendar', 'event', 'event/write'];
+
+  const selectMenuHandler = (index) => {
+    setCurrentTab(index);
+    setClick(true);
+  };
+
+  return (
+    <>
+      <Main>
+        <TabMenu>
+          <Logo>
+            <Link to="/">끼리끼리</Link>
+          </Logo>
+          {menuArr.map((el, idx) => {
+            return (
+              <Link className="menulink" key={idx} to={`/` + `${menu[idx]}`}>
+                <SubMenu
+                  key={idx}
+                  className={`${currentTab === idx ? 'focused' : ''} ${
+                    click ? '' : 'hide'
+                  }`}
+                  onClick={() => selectMenuHandler(idx)}
+                >
+                  {el.name}
+                </SubMenu>
+                {currentTab === idx ? (
+                  <div className="line" key={idx}></div>
+                ) : null}
+              </Link>
+            );
+          })}
+          <Searchdiv>
+            <FaSearch size="17" className="searchicon" />
+            <SearchInput
+              type="text"
+              id="text"
+              onKeyPress={() => {
+                if (event.keyCode === 13) {
+                  navigate('/event/search');
+                }
+              }}
+              placeholder="검색어를 입력하세요"
+            ></SearchInput>
+          </Searchdiv>
+          <Login>
+            <Link to="/signin">로그인</Link>
+          </Login>
+          <Profile>
+            <Link to="/mypage">
+              <FaUserCircle size="27" color="black" />
+            </Link>
+          </Profile>
+        </TabMenu>
+      </Main>
+    </>
+  );
+};
 const Main = styled.div`
   display: flex;
   width: 100%;
@@ -89,7 +158,7 @@ const Searchdiv = styled.div`
   }
 `;
 
-const Search = styled.input`
+const SearchInput = styled.input`
   background: #f5f5f5;
   border: none;
   border-radius: 3px;
@@ -129,59 +198,3 @@ const Profile = styled.div`
     fill: ${({ theme }) => theme.colors.dark};
   }
 `;
-
-export const Header = () => {
-  const [currentTab, setCurrentTab] = useState(-1);
-  const [click, setClick] = useState(false);
-
-  const menuArr = [{ name: '캘린더' }, { name: '이벤트' }, { name: '글쓰기' }];
-
-  const menu = ['calendar', 'event', 'event/write'];
-
-  const selectMenuHandler = (index) => {
-    setCurrentTab(index);
-    setClick(true);
-  };
-
-  return (
-    <>
-      <Main>
-        <TabMenu>
-          <Logo>
-            <Link to="/">끼리끼리</Link>
-          </Logo>
-          {menuArr.map((el, idx) => {
-            return (
-              <Link className="menulink" key={idx} to={`/` + `${menu[idx]}`}>
-                <SubMenu
-                  key={idx}
-                  className={`${currentTab === idx ? 'focused' : ''} ${
-                    click ? '' : 'hide'
-                  }`}
-                  onClick={() => selectMenuHandler(idx)}
-                >
-                  {el.name}
-                </SubMenu>
-                {currentTab === idx ? (
-                  <div className="line" key={idx}></div>
-                ) : null}
-              </Link>
-            );
-          })}
-          <Searchdiv>
-            <FaSearch size="17" className="searchicon" />
-            <Search placeholder="검색어를 입력하세요"></Search>
-          </Searchdiv>
-          <Login>
-            <Link to="/signin">로그인</Link>
-          </Login>
-          <Profile>
-            <Link to="/mypage">
-              <FaUserCircle size="27" color="black" />
-            </Link>
-          </Profile>
-        </TabMenu>
-      </Main>
-    </>
-  );
-};
