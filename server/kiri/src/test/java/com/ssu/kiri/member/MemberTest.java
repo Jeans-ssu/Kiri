@@ -44,7 +44,7 @@ class MemberTest {
     }
 
     /**
-     * username : creamyy
+     * username : creamyyy
      * email : creamyy@aaa.com
      * password : abcdefgh1234
      * interest = 기타
@@ -74,20 +74,22 @@ class MemberTest {
 
 
     // 개인 정보 조회 테스트 코드
-    @WithMockUser
+//    @WithMockUser
+    @DisplayName("개인 정보 조회 테스트")
+    @WithAccount("creamyyy")
     @Test
-    public void getMyMember() {
+    public void getMyMember() throws Exception {
 
         //given
-        Optional<Member> member = memberRepository.findById(1L);
-        Long id = member.get().getId();
+        Member member = memberRepository.findByEmail("creamyyy@aaa.com").get();
+        Long id = member.getId();
 
         //when
         Member findMember = memberService.findMember(id);
 
         //then
-        assertThat(findMember).isEqualTo(member.get());
-        assertThat(findMember.getId()).isEqualTo(member.get().getId());
+        assertThat(findMember).isEqualTo(member);
+        assertThat(findMember.getId()).isEqualTo(member.getId());
 
 
     }

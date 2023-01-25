@@ -32,7 +32,12 @@ public class MemberService {
     // 개인 정보 찾아오기
     public Member findMember(Long id) {
         Optional<Member> findMember = memberRepository.findById(id);
-        return findMember.get();
+        if(findMember.isPresent()) {
+            return findMember.get();
+        }else {
+            throw new RuntimeException("개인정보를 찾을 수 없습니다.");
+        }
+//        return findMember.get();
     }
 
 
@@ -42,13 +47,22 @@ public class MemberService {
         String rawPassword = member.getPassword();
         String encPassword = passwordEncoder.encode(rawPassword);
 
-        Optional<Member> updateMember = memberRepository.findById(id)
-                .map(m -> {
-                    m.updateMyMember(member.getEmail(), encPassword, member.getUsername(), member.getInterest());
-                    return memberRepository.save(m);
-                });
+        Optional<Member> updateMember = memberRepository.findById(id);
+        if(updateMember.isPresent()) {
+            Member findMember = updateMember.get();
+            findMember.updateMyMember(member.getEmail(), encPassword, member.getUsername(), member.getInterest());
+            Member resultMember = memberRepository.save(findMember);
+            return resultMember;
+        } else {
+            throw new RuntimeException("개인정보를 수정할 수 없습니다.");
+        }
 
-        return updateMember.get();
+//                .map(m -> {
+//                    m.updateMyMember(member.getEmail(), encPassword, member.getUsername(), member.getInterest());
+//                    return memberRepository.save(m);
+//                });
+
+//        return updateMember.get();
     }
 
 
