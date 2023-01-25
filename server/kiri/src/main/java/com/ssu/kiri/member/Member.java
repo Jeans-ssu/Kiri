@@ -50,5 +50,14 @@ public class Member {
         return this;
     }
 
+    public void updateMyMember(String email, String encPassword, String username, String interest) {
+        this.email = email;
+        this.username = username;
+        this.password = encPassword;
+        this.interest = interest;
+    }
 
+    public void changePassword(String changePassword) {
+        this.password = changePassword;
+    }
 }

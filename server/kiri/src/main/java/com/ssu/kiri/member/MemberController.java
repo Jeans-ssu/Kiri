@@ -2,13 +2,13 @@ package com.ssu.kiri.member;
 
 import com.ssu.kiri.member.dto.MemberReqDto;
 import com.ssu.kiri.member.mapper.MemberMapper;
+import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -28,17 +28,39 @@ public class MemberController {
         return ResponseEntity.ok(memberMapper.postResMember(savedMember));
     }
 
-    // user 권한만 접근가능
-    @GetMapping("/member/2")
-    public String user() {
-        return "member/2";
+    // /member/{member-id}
+    // myPage 조회 - 개인 정보 조회
+    @GetMapping("/member")
+    public ResponseEntity getMyMember( //@PathVariable("member-id") Long member_id
+                                        ) {
+
+        // SecurityContextHolder/Authentication/Principal 내의 세션에서 유저 찾아오기
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+        Long id = member.getId();
+//        System.out.println("findMember = " + findMember);
+//        System.out.println("findMember.email = " + findMember.getEmail());
+
+        Member findMember = memberService.findMember(id);
+
+        return ResponseEntity.ok(memberMapper.toFindDto(findMember));
     }
 
-    // 인증이 필요한 접근
-    @GetMapping("/calender/3")
-    public String calender() {
-        return "/calender/3";
+    // myPage 수정 - 개인 정보 수정
+    @PostMapping("/member")
+    public ResponseEntity updateMyMember(//@PathVariable("member-id") Long member_id,
+                                         @Valid @RequestBody MemberReqDto.updateDto updateDto) {
+
+        Member member = memberMapper.updateToM(updateDto);
+
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long id = principalDetails.getMember().getId();
+
+        memberService.updateMember(member, id);
+
+        return ResponseEntity.ok(memberMapper.toUpdateDto(member));
     }
+
 
 
 }

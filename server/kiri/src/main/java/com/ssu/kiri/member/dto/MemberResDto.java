@@ -1,10 +1,7 @@
 package com.ssu.kiri.member.dto;
 
 import com.ssu.kiri.member.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -26,6 +23,27 @@ public class MemberResDto {
         }
 
     }
+
+    @Data
+    @AllArgsConstructor
+    public static class findDto {
+        private Long id;
+        private String email;
+        private String password;
+        private String interest;
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    public static class updateDto {
+        private Long id;
+        private String email;
+        private String password;
+        private String interest;
+    }
+
+
 
 
 
