@@ -28,10 +28,11 @@ public class MemberController {
         return ResponseEntity.ok(memberMapper.postResMember(savedMember));
     }
 
-
+    // /member/{member-id}
     // myPage 조회 - 개인 정보 조회
-    @GetMapping("/member/{member-id}")
-    public ResponseEntity getMyMember(@PathVariable("member-id") Long member_id) {
+    @GetMapping("/member")
+    public ResponseEntity getMyMember( //@PathVariable("member-id") Long member_id
+                                        ) {
 
         // SecurityContextHolder/Authentication/Principal 내의 세션에서 유저 찾아오기
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -46,8 +47,8 @@ public class MemberController {
     }
 
     // myPage 수정 - 개인 정보 수정
-    @PostMapping("/member/{member-id}")
-    public ResponseEntity updateMyMember(@PathVariable("member-id") Long member_id,
+    @PostMapping("/member")
+    public ResponseEntity updateMyMember(//@PathVariable("member-id") Long member_id,
                                          @Valid @RequestBody MemberReqDto.updateDto updateDto) {
 
         Member member = memberMapper.updateToM(updateDto);
