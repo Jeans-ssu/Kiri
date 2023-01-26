@@ -4,15 +4,15 @@ package com.ssu.kiri.post;
 import com.ssu.kiri.image.Image;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.scrap.Scrap;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -43,6 +43,14 @@ public class Post {
     private String field; // 글 분야 (IT, 공학)
 
     private String organizer; // 주최자
+
+
+
+    // 추가
+    private String link; // 참고링크
+    private String place; // 장소
+    private LocalDateTime startPostTime;
+    private LocalDateTime finishPostTime;
 
 
     //===== 연관관계 편의 메서드 =====//
