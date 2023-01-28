@@ -10,6 +10,7 @@ import SignupPage from 'pages/Signup/SignupPage';
 import SigninPage from 'pages/Signin/SigninPage';
 import Mypage from 'pages/Mypage/Mypage';
 import EventWritePage from 'pages/EventWrite/EventWritePage';
+import ReduxPage from 'pages/reduxPage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/event/:eventId" element={<EventInfoPage />} />
           <Route path="/event/search" element={<EventSearchPage />} />
           <Route path="/event/write" element={<EventWritePage />} />
+          <Route path="/redux" element={<ReduxPage />} />
         </Routes>
       </BrowserRouter>
     </div>
