@@ -46,6 +46,7 @@ public class PostService {
         Member member = principalDetails.getMember();
         post.changeMember(member);
 
+
         Post savedPost = postRepository.save(post);
         return savedPost;
     }
