@@ -51,5 +51,20 @@ public class PostService {
         return savedPost;
     }
 
+    public Post updatePost(Post post, Long id) {
+        // update 를 해줘야 함. 그런데 member 의 내용은 바뀌지 않음. 수정은 인증된 사용자만 할 수 있으므로.
+
+        Optional<Post> optPost = postRepository.findById(id);
+        if(optPost.isEmpty()) {
+            throw new RuntimeException("해당 포스트를 찾을 수 없습니다.");
+        }
+        Post findPost = optPost.get();
+        findPost.updatePost(post,id);
+        postRepository.save(findPost);
+        // imageService.updateImage(); // image 따로 변경해주기..
+
+        return findPost;
+    }
+
 
 }

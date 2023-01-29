@@ -68,4 +68,17 @@ public class Post {
         this.title = title;
     }
 
+
+    public void updatePost(Post post, Long id) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.category = post.getCategory();
+        this.field = post.getField();
+        this.link = post.getLink();
+        this.place = post.getPlace();
+//        this.imageList = post.getImageList();
+        this.startPostTime = post.getStartPostTime();
+        this.finishPostTime = post.getFinishPostTime();
+    }
 }

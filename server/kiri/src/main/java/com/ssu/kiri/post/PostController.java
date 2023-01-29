@@ -45,6 +45,15 @@ public class PostController {
         return ResponseEntity.ok(savedPostDto);
     }
 
+    @PostMapping("/api/posts/{post-id}")
+    public ResponseEntity updatePost(@PathVariable("post-id") Long post_id,
+                                     @Valid @RequestBody PostReqDto.savePost savePost) {
+        Post post = postMapper.saveToPost(savePost);
+        Post result = postService.updatePost(post, post_id);
+
+        return ResponseEntity.ok(result);
+    }
+
 
 
 
