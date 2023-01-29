@@ -6,8 +6,8 @@ import authReducer from './modules/authSlice';
 
 const persistConfig = {
   key: 'root',
-  storage,
-  whitelist: ['auth'],
+  storage, //local Storage에 저장
+  whitelist: ['auth'], //auth Reducer만 저장
 };
 
 export const rootReducer = combineReducers({
@@ -25,4 +25,5 @@ export const store = configureStore({
     }),
 });
 
+//src/index.js에서 PersistGate 사용을 위한 persistor
 export const persistor = persistStore(store);
