@@ -6,6 +6,7 @@ import com.ssu.kiri.post.dto.PostResDto;
 import com.ssu.kiri.post.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,7 @@ public class PostController {
         return ResponseEntity.ok(savedPostDto);
     }
 
+    // 게시글 수정
     @PostMapping("/api/posts/{post-id}")
     public ResponseEntity updatePost(@PathVariable("post-id") Long post_id,
                                      @Valid @RequestBody PostReqDto.savePost savePost) {
@@ -52,6 +54,14 @@ public class PostController {
         Post result = postService.updatePost(post, post_id);
 
         return ResponseEntity.ok(result);
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/api/posts/{post-id}")
+    public ResponseEntity deletePost(@PathVariable("post-id") Long post_id) {
+        postService.deletePost(post_id);
+
+        return new ResponseEntity("게시글 삭제 완료", HttpStatus.NO_CONTENT); // 응답바디 무시
     }
 
 

@@ -67,4 +67,9 @@ public class PostService {
     }
 
 
+    public void deletePost(Long id) {
+        postRepository.delete(
+                postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 포스트를 삭제할 수 없습니다."))
+        );
+    }
 }
