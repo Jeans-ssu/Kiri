@@ -130,7 +130,7 @@ const Profile = styled.div`
   }
 `;
 
-export const Header = () => {
+const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
   const [click, setClick] = useState(false);
 
@@ -185,3 +185,5 @@ export const Header = () => {
     </>
   );
 };
+
+export default Header;
