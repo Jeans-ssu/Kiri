@@ -4,6 +4,7 @@ const initialState = {
   isLogin: false,
   nickName: '',
   email: '',
+  interest: '',
 };
 
 export const authSlice = createSlice({
