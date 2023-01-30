@@ -38,7 +38,7 @@ const Foot = styled.footer`
   }
 `;
 
-export const Footer = () => {
+const Footer = () => {
   return (
     <Foot>
       <img
@@ -67,3 +67,5 @@ export const Footer = () => {
     </Foot>
   );
 };
+
+export default Footer;
