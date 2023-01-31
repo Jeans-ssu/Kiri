@@ -238,6 +238,7 @@ const SignupInputs = () => {
             onChange={handleChangeInput}
             className={validation.nickName ? 'validate' : null}
           />
+          <ValidationMsg>한글,영문 2-10글자</ValidationMsg>
         </InputContainer>
         <InputContainer>
           <InputHeader>
