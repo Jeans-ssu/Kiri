@@ -4,7 +4,7 @@ import { BsCheck } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 import axios from '../../api/axios';
-import { useNavigate } from 'react-router';
+import { SignupSuccessModal, SignupFailModal } from 'components/SignupModal';
 
 const SignupInputsContainer = styled.div`
   margin-top: 30px;
@@ -106,6 +106,13 @@ const InitialState = {
   Vpassword: '',
 };
 
+const ValidationInitialState = {
+  nickName: false,
+  email: false,
+  password: false,
+  Vpassword: false,
+};
+
 export const checkEmail = (email) => {
   var check =
     /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -127,12 +134,11 @@ const SignupInputs = () => {
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
   const [isViewMode_, setIsViewMode_] = useState(false); //비밀번호 확인 보기 모드
 
-  const [validation, setValidation] = useState({
-    nickName: false,
-    email: false,
-    password: false,
-    Vpassword: false,
-  }); //닉네임, 이메일, 비밀번호 유효성
+  //회원가입 후 성공/실패 모달
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
+
+  const [validation, setValidation] = useState(ValidationInitialState); //닉네임, 이메일, 비밀번호 유효성
 
   const checkNickName = /^[가-힣a-zA-Z]{2,10}$/; //한글,영문,숫자 2-10글자
   const checkPassword = /^[a-zA-Z0-9]{8,16}$/; //영문,숫자 8-16글자
@@ -213,8 +219,6 @@ const SignupInputs = () => {
     setInterest(e.target.value);
   };
 
-  const navigate = useNavigate();
-
   const handleClickSubmitBtn = () => {
     if (!Object.values(validation).includes(false)) {
       axios
@@ -226,9 +230,16 @@ const SignupInputs = () => {
           interest,
         })
         .then(() => {
-          navigate('/signin');
+          setUserInput(InitialState);
+          setValidation(ValidationInitialState);
+          setIsSuccess(true);
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+          console.error(error);
+          setUserInput(InitialState);
+          setValidation(ValidationInitialState);
+          setIsFailed(true);
+        });
     }
   };
 
@@ -331,6 +342,8 @@ const SignupInputs = () => {
         </SelectInput>
       </SignupInputsContainer>
       <SubmitBtn onClick={handleClickSubmitBtn}>회원가입</SubmitBtn>
+      <SignupSuccessModal isOpen={isSuccess} setIsOpen={setIsSuccess} />
+      <SignupFailModal isOpen={isFailed} setIsOpen={setIsFailed} />
     </>
   );
 };
