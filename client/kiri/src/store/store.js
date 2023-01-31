@@ -11,16 +11,18 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import userReducer from './modules/userSlice';
 import authReducer from './modules/authSlice';
 
 const persistConfig = {
   key: 'root',
   storage, //local Storage에 저장
-  whitelist: ['auth'], //auth Reducer만 저장
+  whitelist: ['auth', 'user'], //auth Reducer만 저장
 };
 
 export const rootReducer = combineReducers({
   counter: counterReducer,
+  user: userReducer,
   auth: authReducer,
 });
 
