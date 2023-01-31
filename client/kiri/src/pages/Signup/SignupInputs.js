@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { BsCheck } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
+import axios from '../../api/axios';
+import { useNavigate } from 'react-router';
 
 const SignupInputsContainer = styled.div`
   margin-top: 30px;
@@ -211,12 +213,22 @@ const SignupInputs = () => {
     setInterest(e.target.value);
   };
 
+  const navigate = useNavigate();
+
   const handleClickSubmitBtn = () => {
     if (!Object.values(validation).includes(false)) {
-      console.log('회원가입!', {
-        ...userInput,
-        interest,
-      });
+      axios
+        .post('/auth/signup', {
+          username: userInput.nickName,
+          email: userInput.email,
+          password: userInput.password,
+          passwordVal: userInput.Vpassword,
+          interest,
+        })
+        .then(() => {
+          navigate('/signin');
+        })
+        .catch((error) => console.error(error));
     }
   };
 
