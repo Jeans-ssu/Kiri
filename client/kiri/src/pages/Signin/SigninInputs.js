@@ -11,6 +11,9 @@ import {
 import { BsCheck, BsArrowRightShort } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
+import axios from '../../api/axios';
+//import { useDispatch } from 'react-redux';
+//import { SET_TOKEN } from 'store/modules/authSlice';
 
 const SigninInputsContainer = styled.div`
   margin-top: 30px;
@@ -60,6 +63,7 @@ const SigninInputs = () => {
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
 
   const navigate = useNavigate();
+  //const dispatch = useDispatch();
 
   const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
 
@@ -99,9 +103,17 @@ const SigninInputs = () => {
 
   const handleClickSigninBtn = () => {
     if (!Object.values(validation).includes(false)) {
-      console.log('로그인!', {
-        ...userInput,
-      });
+      axios
+        .post('/login', {
+          ...userInput,
+        })
+        .then((res) => {
+          console.log(res.headers);
+          //dispatch(SET_TOKEN(res.headers));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
 
