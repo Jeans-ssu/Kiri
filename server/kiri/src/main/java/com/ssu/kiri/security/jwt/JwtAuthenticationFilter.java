@@ -2,10 +2,8 @@ package com.ssu.kiri.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssu.kiri.member.Member;
-import com.ssu.kiri.member.dto.MemberReqDto;
+import com.ssu.kiri.member.dto.request.LoginReqDto;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,10 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Date;
 
@@ -57,10 +53,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //            }
 
         ObjectMapper om = new ObjectMapper(); // json 데이터를 파싱해줌
-        MemberReqDto.LoginReqDto loginReqDto = null;
+        LoginReqDto loginReqDto = null;
         try {
             // MemberReqDto.LoginReqDto 에 @Data 또는 @ToString 걸어야 함 -> 아니면 null포인터 예외 발생!!
-            loginReqDto = om.readValue(request.getInputStream(), MemberReqDto.LoginReqDto.class);
+            loginReqDto = om.readValue(request.getInputStream(), LoginReqDto.class);
 
             // 2
 

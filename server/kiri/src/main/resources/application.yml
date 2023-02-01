@@ -16,6 +16,14 @@ spring:
 #        show_sql: true
         format_sql: true
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+      max-request-size: 10MB
+
 logging:
   level:
     org.hibernate.SQL: debug
+
+

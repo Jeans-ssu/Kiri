@@ -1,11 +1,10 @@
 package com.ssu.kiri.post;
 
 
-import com.ssu.kiri.post.dto.PostReqDto;
-import com.ssu.kiri.post.dto.PostResDto;
-import com.ssu.kiri.post.mapper.PostMapper;
+import com.ssu.kiri.post.dto.request.SavePost;
+import com.ssu.kiri.post.dto.response.DetailPost;
+import com.ssu.kiri.post.dto.response.SaveResPost;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ import javax.validation.Valid;
 public class PostController {
 
     private final PostService postService;
-    private final PostMapper postMapper;
 
     // home 화면
     @GetMapping("/home")
@@ -30,30 +28,57 @@ public class PostController {
     @GetMapping("/posts/read/{post-id}")
     public ResponseEntity detailPost(@PathVariable("post-id") Long post_id) {
         Post post = postService.detailPost(post_id);
-        return ResponseEntity.ok(postMapper.toPostResDto(post));
+
+        return ResponseEntity.ok(DetailPost.of(post));
     }
 
     // 게시글 등록
     @PostMapping("/api/posts")
-    public ResponseEntity savePost(@Valid @RequestBody PostReqDto.savePost savePost) {
+    public ResponseEntity savePost(@Valid @RequestBody SavePost savePost) {
 
-        Post post = postMapper.saveToPost(savePost);
+//        Post post = postMapper.saveToPost(savePost);
+        Post post = Post.builder()
+                .title(savePost.getTitle())
+                .scrap_count(savePost.getScrap_count())
+                .content(savePost.getContent())
+                .category(savePost.getCategory())
+                .field(savePost.getField())
+                .organizer(savePost.getOrganizer())
+                .link(savePost.getLink())
+                .place(savePost.getPlace())
+                .startPostTime(savePost.getStartPostTime())
+                .finishPostTime(savePost.getFinishPostTime())
+                .build();
+
         Post savedPost = postService.savePost(post);
-        PostResDto.savePost savedPostDto = postMapper.postToSave(savedPost);
-        savedPostDto.setPost_id(savedPost.getId());
-        savedPostDto.setMember_id(savedPost.getMember().getId());
+//        PostResDto.savePost savedPostDto = postMapper.postToSave(savedPost);
+        SaveResPost resultPost = SaveResPost.of(savedPost);
 
-        return ResponseEntity.ok(savedPostDto);
+//        savedPostDto.setPost_id(savedPost.getId());
+        resultPost.setMember_id(savedPost.getMember().getId());
+
+        return ResponseEntity.ok(resultPost);
     }
 
     // 게시글 수정
     @PostMapping("/api/posts/{post-id}")
-    public ResponseEntity updatePost(@PathVariable("post-id") Long post_id,
-                                     @Valid @RequestBody PostReqDto.savePost savePost) {
-        Post post = postMapper.saveToPost(savePost);
-        Post result = postService.updatePost(post, post_id);
+    public ResponseEntity<?> updatePost(@PathVariable("post-id") Long post_id,
+                                     @Valid @RequestBody SavePost savePost) {
+//        Post post = postMapper.saveToPost(savePost);
+        Post post = Post.builder()
+                .title(savePost.getTitle())
+                .scrap_count(savePost.getScrap_count())
+                .content(savePost.getContent())
+                .category(savePost.getCategory())
+                .field(savePost.getField())
+                .organizer(savePost.getOrganizer())
+                .link(savePost.getLink())
+                .place(savePost.getPlace())
+                .startPostTime(savePost.getStartPostTime())
+                .finishPostTime(savePost.getFinishPostTime())
+                .build();
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(postService.updatePost(post, post_id));
     }
 
     // 게시글 삭제

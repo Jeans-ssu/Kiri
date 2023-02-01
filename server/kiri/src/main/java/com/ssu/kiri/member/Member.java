@@ -5,12 +5,12 @@ import com.ssu.kiri.scrap.Scrap;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Builder
+
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
@@ -19,10 +19,10 @@ public class Member {
     private Long id;
 
     @OneToMany(mappedBy = "member")
-    private List<Scrap> scrapList;
+    private List<Scrap> scrapList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
-    private List<Post> postList;
+    private List<Post> postList = new ArrayList<Post>();
 
 
     private String email;
@@ -34,6 +34,15 @@ public class Member {
     private String interest; // 사용자의 관심분야
 
     private String role; // 시큐리티 권한 추가, USER
+
+    //======builder======//
+    @Builder
+    public Member(String username, String password, String email, String interest) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.interest = interest;
+    }
 
     //===== 생성자 =====//
 

@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.Optional;
 
 // 시큐리티가 가지고 있는 filter 중 BasicAuthenticationFilter 라는 것이 있다.
-// 권한이나 인증이 필요한 특정 주소를 요청했을때 위 필터를 무조건 타게 되어 있다.
+// 모든 주소는 이 필터를 탄다. 그리고 jwt가 있는지 검증하고 그에 따라 인가를 준다.
 // 만약 권한이나 인증이 필요한 주소가 아니면 이 필터를 안탄다.
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 

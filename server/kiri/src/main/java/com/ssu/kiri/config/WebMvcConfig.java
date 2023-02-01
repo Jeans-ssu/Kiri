@@ -14,6 +14,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedMethods("*") // 허용할 HTTP METHOD
                 .allowedOriginPatterns("*") // 허용할 출처
                 .allowCredentials(true) // 쿠키 인증 요청 허용
-                .exposedHeaders("*"); // 반환하고싶은 헤더값
+                .allowedHeaders("*")
+                .exposedHeaders("Authorization"); // 반환하고싶은 헤더값
     }
 }

@@ -17,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +50,7 @@ class PostServiceTest {
 
         Post post = Post.builder()
                 .title("봄봄")
-                .member(member)
+//                .member(member)
                 .content("내용내용내용내용")
                 .category("공모전")
                 .field("IT")
@@ -56,6 +58,7 @@ class PostServiceTest {
                 .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
+        post.createPost(member);
         em.persist(post);
     }
 
@@ -63,6 +66,17 @@ class PostServiceTest {
     void afterEach() {
         postRepository.deleteAll();
         memberRepository.deleteAll();
+    }
+
+    @Test
+    public void testFiles() throws Exception {
+        //given
+        System.out.println("File's AbsolutePath = " + new File("").getAbsolutePath());
+        System.out.println("File.separator = " + File.separator);
+        //when
+
+        //then
+
     }
 
 
@@ -86,14 +100,50 @@ class PostServiceTest {
 
 
     // 게시글 등록 테스트
+    @WithAccount("creamyyy")
     @DisplayName("게시글 등록")
     @Test
     public void savePost() throws Exception {
         //given
+        Optional<Member> optMember = memberRepository.findByEmail("creamyyy@aaa.com");
+        if(optMember.isEmpty()) {
+            throw new RuntimeException("해당 이메일을 가진 멤버를 찾을 수 없습니다.");
+        }
+        Member member2 = optMember.get();
+
+        System.out.println("======================================================");
+        System.out.println("member2.getUsername() = " + member2.getUsername());
+
+//        Post post2 = new Post();
+//        Post newPost = post2.createPostTest("가을이 오면", "눈부신 아침햇살에 비친 그대의 미소가 아름다워요", "지역 축제", "IT",
+//                "주최자는 나야 둘이 될 수 없어", LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+//                LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+
+        Post post2 = Post.builder()
+                .title("가을이 오면")
+//                .member(member2)
+                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
+                .category("지역 축제")
+                .field("IT")
+                .organizer("주최자는 나야 둘이 될 수 없어")
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+//        em.persist(post2);
+
 
         //when
+        Post savedPost = postService.savePost(post2);
+
+//        Post newPost = Post.saveMember(member2, post2);
+//        Post savedPost = postRepository.save(newPost);
 
         //then
+//
+//        assertThat(savedPost.getTitle()).isEqualTo(post2.getTitle());
+//        assertThat(savedPost.getMember().getUsername()).isEqualTo("creamyyy");
+//        assertThat(savedPost.getTitle()).isEqualTo("가을이 오면");
 
     }
 
