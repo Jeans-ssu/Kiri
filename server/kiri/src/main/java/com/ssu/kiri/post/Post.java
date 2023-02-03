@@ -113,8 +113,8 @@ public class Post {
     }
 
 
-    public void updatePost(Post post, Long id) {
-        this.id = post.getId();
+    public void updatePost(Post post) {
+//        this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.category = post.getCategory();

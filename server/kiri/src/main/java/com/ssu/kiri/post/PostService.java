@@ -72,13 +72,13 @@ public class PostService {
             throw new RuntimeException("해당 포스트를 찾을 수 없습니다.");
         }
         Post findPost = optPost.get();
-        findPost.updatePost(post,id);
+//        findPost.updatePost(post,id);
+        findPost.updatePost(post);
         Post savedPost = postRepository.save(findPost);
+
+
         // imageService.updateImage(); // image 따로 변경해주기..
 
-//        List<String> imgUrlList = imageService.findUrlByPostId(id);
-
-//        return new MultipleResponseDto(savedPost, imgUrlList);
         return savedPost;
     }
 

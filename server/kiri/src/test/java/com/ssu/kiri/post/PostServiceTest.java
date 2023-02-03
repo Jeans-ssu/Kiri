@@ -136,19 +136,91 @@ class PostServiceTest {
         //when
         Post savedPost = postService.savePost(post2);
 
-//        Post newPost = Post.saveMember(member2, post2);
-//        Post savedPost = postRepository.save(newPost);
 
         //then
 //
-//        assertThat(savedPost.getTitle()).isEqualTo(post2.getTitle());
-//        assertThat(savedPost.getMember().getUsername()).isEqualTo("creamyyy");
-//        assertThat(savedPost.getTitle()).isEqualTo("가을이 오면");
+        assertThat(savedPost.getTitle()).isEqualTo(post2.getTitle());
+        assertThat(savedPost.getMember().getUsername()).isEqualTo("creamyyy");
+        assertThat(savedPost.getTitle()).isEqualTo("가을이 오면");
 
     }
 
 
+    @WithAccount("creamyyy")
+    @DisplayName("게시글 수정")
+    @Test
+    public void updatePost() throws Exception {
+        //given
+        // creamyyy 가 post 등록.
+        Post post2 = Post.builder()
+                .title("가을이 오면")
+                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
+                .category("지역 축제")
+                .field("IT")
+                .organizer("주최자는 나야 둘이 될 수 없어")
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
 
+        // 기존 post 저장
+        Post savedPost = postService.savePost(post2);
+
+        Long savedPostId = savedPost.getId();
+        System.out.println("savedPostId = " + savedPostId);
+
+        // 업데이트할 newPost 생성
+        Post newPost = Post.builder()
+                .title("혜안")
+                .content("혜안져스 라이어 게임")
+                .category("지역 축제")
+                .field("IT")
+                .organizer("주최자는 나야 둘이 될 수 없어")
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+
+
+        //when
+        Post updatePost = postService.updatePost(newPost, savedPostId);
+
+        //then
+        assertThat(updatePost.getTitle()).isEqualTo("혜안");
+        assertThat(updatePost.getId()).isEqualTo(savedPostId);
+        assertThat(updatePost.getMember().getUsername()).isEqualTo("creamyyy");
+
+
+    }
+
+
+    @WithAccount("creamyyy")
+    @DisplayName("게시글 삭제")
+    @Test
+    public void deletePost() throws Exception {
+        //given
+        // creamyyy 가 post 등록.
+        Post post2 = Post.builder()
+                .title("가을이 오면")
+                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
+                .category("지역 축제")
+                .field("IT")
+                .organizer("주최자는 나야 둘이 될 수 없어")
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+
+        // 기존 post 저장
+        Post savedPost = postService.savePost(post2);
+
+
+        //when
+        Long post_id = savedPost.getId();
+        postService.deletePost(post_id);
+
+        //then
+        Optional<Post> deletePost = postRepository.findById(post_id);
+        assertThat(deletePost).isEqualTo(Optional.empty());
+
+    }
 
 
 
