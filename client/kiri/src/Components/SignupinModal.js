@@ -146,4 +146,30 @@ const SignupFailModal = ({ isOpen, setIsOpen }) => {
   );
 };
 
-export { SignupSuccessModal, SignupFailModal };
+const SigninFailModal = ({
+  isOpen,
+  setIsOpen,
+  message = '로그인에 실패했습니다 :(',
+}) => {
+  const openModalHandler = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <ModalContainer>
+      {isOpen ? (
+        <ModalBackdrop onClick={openModalHandler}>
+          <ModalView className="fail" onClick={(e) => e.stopPropagation()}>
+            <ModalHeader>
+              <div className="fail">로그인 실패</div>
+              <IoMdClose onClick={openModalHandler} />
+            </ModalHeader>
+            <ModalContent className="fail">{message}</ModalContent>
+          </ModalView>
+        </ModalBackdrop>
+      ) : null}
+    </ModalContainer>
+  );
+};
+
+export { SignupSuccessModal, SignupFailModal, SigninFailModal };

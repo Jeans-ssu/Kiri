@@ -4,7 +4,7 @@ import { BsCheck } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 import axios from '../../api/axios';
-import { SignupSuccessModal, SignupFailModal } from 'components/SignupModal';
+import { SignupSuccessModal, SignupFailModal } from 'components/SignupinModal';
 
 const SignupInputsContainer = styled.div`
   margin-top: 30px;

@@ -15,6 +15,7 @@ import axios from '../../api/axios';
 import { useDispatch } from 'react-redux';
 import { SET_TOKEN } from 'store/modules/authSlice';
 import { SET_USER } from 'store/modules/userSlice';
+import { SigninFailModal } from 'components/SignupinModal';
 
 const SigninInputsContainer = styled.div`
   margin-top: 30px;
@@ -62,6 +63,10 @@ const SigninInputs = () => {
     password: false,
   });
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
+
+  //로그인 실패 모달
+  const [isOpen, setIsOpen] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -129,7 +134,12 @@ const SigninInputs = () => {
           navigate('/');
         })
         .catch((error) => {
-          console.error(error);
+          if (error.response.status === 401) {
+            setErrMsg('이메일 또는 비밀번호가 틀렸습니다.');
+          } else {
+            setErrMsg('로그인에 실패했습니다 :(');
+          }
+          setIsOpen(true);
         });
     }
   };
@@ -189,6 +199,7 @@ const SigninInputs = () => {
         </BtnContainer>
       </SigninInputsContainer>
       <SigninBtn onClick={handleClickSigninBtn}>로그인</SigninBtn>
+      <SigninFailModal isOpen={isOpen} setIsOpen={setIsOpen} message={errMsg} />
     </>
   );
 };
