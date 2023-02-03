@@ -2,6 +2,8 @@ package com.ssu.kiri.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssu.kiri.infra.WithAccount;
+import com.ssu.kiri.member.dto.request.LoginReqDto;
+import com.ssu.kiri.member.dto.request.PostMemberReqDto;
 import com.ssu.kiri.member.dto.request.UpdateDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +26,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Rollback(false)
+//@Rollback(false)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
@@ -37,6 +39,8 @@ class MemberControllerTest {
     private MockMvc mockMvc;
 
     @Autowired MemberRepository memberRepository;
+    @Autowired MemberService memberService;
+
 
     @BeforeEach
     public void setup() {
@@ -56,6 +60,67 @@ class MemberControllerTest {
 //        mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
 //    }
 
+    @DisplayName("회원가입 테스트")
+    @Test
+    public void postMember() throws Exception {
+        //given
+        PostMemberReqDto postMemberReqDto = new PostMemberReqDto();
+        postMemberReqDto.setEmail("love5@aaa.com");
+        postMemberReqDto.setUsername("ddddd");
+        postMemberReqDto.setPassword("ddddd55555");
+        postMemberReqDto.setPasswordVal("ddddd55555");
+        postMemberReqDto.setInterest("IT");
+
+        //when
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/auth/signup") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(postMemberReqDto))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
+        //then
+
+    }
+
+
+    @DisplayName("로그인 테스트")
+    @Test
+    public void loginMember() throws Exception {
+        //given
+
+        // 회원가입 실행
+        Member member = Member.builder()
+                .username("ddddd")
+                .email("ddd@ddd.com")
+                .password("ddddd55555")
+                .interest("IT")
+                .build();
+
+        Member postMember = memberService.postMember(member);
+
+        // 로그인 정보 생성성
+        LoginReqDto loginReqDto = new LoginReqDto(postMember.getEmail(), postMember.getPassword());
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/login") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(loginReqDto))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+
+
     @WithAccount("creamyyyy")
     @DisplayName("개인 정보 조회 테스트")
     @Test
@@ -71,6 +136,34 @@ class MemberControllerTest {
 
 
     }
+
+    @DisplayName("이메일 중복 체크 테스트")
+    @Test
+    public void checkEmailDuplicate() throws Exception {
+        //given
+        // 회원가입 실행
+        Member member = Member.builder()
+                .username("ddddd")
+                .email("ddd@ddd.com")
+                .password("ddddd55555")
+                .interest("IT")
+                .build();
+
+        Member postMember = memberService.postMember(member);
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/auth/{email}/exist", member.getEmail()) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+
 
     /**
      * String email = username + "@aaa.com";
