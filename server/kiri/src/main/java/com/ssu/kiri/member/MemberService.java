@@ -64,4 +64,8 @@ public class MemberService {
     }
 
 
+    // email 중복 체크
+    public boolean checkEmailDuplicate(String email) {
+        return memberRepository.existsByEmail(email);
+    }
 }

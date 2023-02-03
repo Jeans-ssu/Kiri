@@ -8,8 +8,11 @@ import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -76,6 +79,11 @@ public class MemberController {
         return ResponseEntity.ok(FindAndUpdateDto.of(updateMember));
     }
 
+    @PostMapping("/auth/{email}/exist")
+    public ResponseEntity checkEmailDuplicate(@PathVariable String email) {
+        boolean isCheck = memberService.checkEmailDuplicate(email);
+        return ResponseEntity.ok(isCheck);
+    }
 
 
 }

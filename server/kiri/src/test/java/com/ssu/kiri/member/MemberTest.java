@@ -94,6 +94,30 @@ class MemberTest {
 
     }
 
+    @DisplayName("이메일 중복 체크 테스트")
+    @Test
+    public void checkEmailDuplicate() throws Exception {
+        //given
+
+        // Member 회원가입
+        Member member = Member.builder()
+                .email("ddd@ddd.com")
+                .username("ddd")
+                .password("ddddddddd")
+                .interest("IT")
+                .build();
+
+        Member savedMember = memberService.postMember(member);
+
+        //when
+        boolean isCheck = memberService.checkEmailDuplicate("ddd@ddd.com");
+
+        //then
+        assertThat(isCheck).isEqualTo(true);
+
+    }
+
+
 
     @Test
     public void testEntity() {
