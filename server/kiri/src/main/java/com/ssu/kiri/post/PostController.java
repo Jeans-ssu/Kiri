@@ -78,7 +78,8 @@ public class PostController {
                 .finishPostTime(savePost.getFinishPostTime())
                 .build();
 
-        return ResponseEntity.ok(postService.updatePost(post, post_id));
+        Post resultPost = postService.updatePost(post, post_id);
+        return ResponseEntity.ok(resultPost);
     }
 
     // 게시글 삭제

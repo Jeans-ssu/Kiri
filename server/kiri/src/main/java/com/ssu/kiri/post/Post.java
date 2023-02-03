@@ -1,6 +1,7 @@
 package com.ssu.kiri.post;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssu.kiri.image.Image;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.scrap.Scrap;
@@ -49,6 +50,7 @@ public class Post {
     // 추가
     private String link; // 참고링크
     private String place; // 장소
+
     private LocalDateTime startPostTime;
     private LocalDateTime finishPostTime;
 

@@ -1,5 +1,6 @@
 package com.ssu.kiri.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssu.kiri.post.Post;
 import com.ssu.kiri.scrap.Scrap;
 import lombok.*;
@@ -21,6 +22,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Scrap> scrapList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Post> postList = new ArrayList<Post>();
 
