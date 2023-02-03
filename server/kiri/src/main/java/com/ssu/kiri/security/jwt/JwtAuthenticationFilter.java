@@ -3,7 +3,9 @@ package com.ssu.kiri.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.dto.request.LoginReqDto;
+import com.ssu.kiri.member.dto.response.LoginResDto;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -109,6 +111,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+
+        Member member = principalDetails.getMember();
+        LoginResDto loginResDto = LoginResDto.of(member);
+
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        new ObjectMapper().writeValue(response.getOutputStream(), loginResDto);
 
     }
 }

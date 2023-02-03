@@ -56,6 +56,28 @@ class MemberControllerTest {
 //        mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
 //    }
 
+    @Test
+    public void postMember() throws Exception {
+        //given
+
+        //when
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/member") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(objectMapper.writeValueAsString(updateDto))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
+        //then
+
+    }
+
+
+
     @WithAccount("creamyyyy")
     @DisplayName("개인 정보 조회 테스트")
     @Test
