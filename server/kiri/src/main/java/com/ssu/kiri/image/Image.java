@@ -1,12 +1,10 @@
 package com.ssu.kiri.image;
 
 import com.ssu.kiri.post.Post;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+
 
 @Entity
 @Getter
@@ -21,9 +19,16 @@ public class Image {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    private String location; // 사진 찍은 위치
-    private String caption; // 사진 설명
+    private String imgUrl; // 파일 url
+    private String filename; // 파일 이름
     private String postImage; // 포스팅 사진 경로 + 이름
+
+
+    //======builder=======//
+    @Builder
+    public Image(String filename) {
+        this.filename = filename;
+    }
 
 
     //===== 연관관계 편의 메서드 =====//
@@ -40,6 +45,10 @@ public class Image {
         this.post = post;
     }
 
+    public Image(String origFileName, String filePath) {
+        this.filename = origFileName;
+        this.imgUrl = filePath;
+    }
 
 
 }

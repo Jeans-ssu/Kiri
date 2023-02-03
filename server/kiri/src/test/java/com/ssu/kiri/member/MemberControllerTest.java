@@ -2,36 +2,25 @@ package com.ssu.kiri.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssu.kiri.infra.WithAccount;
-import com.ssu.kiri.member.dto.MemberReqDto;
-import org.aspectj.lang.annotation.Before;
+import com.ssu.kiri.member.dto.request.UpdateDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,7 +83,7 @@ class MemberControllerTest {
     @Test
     void updateMyMember() throws Exception {
 
-        MemberReqDto.updateDto updateDto = new MemberReqDto.updateDto();
+        UpdateDto updateDto = new UpdateDto();
         updateDto.setUsername("creamyyyy");
         updateDto.setEmail("creamyyyy@aaa.com");
         updateDto.setInterest("IT");

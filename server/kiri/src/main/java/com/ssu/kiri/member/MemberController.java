@@ -1,13 +1,13 @@
 package com.ssu.kiri.member;
 
-import com.ssu.kiri.member.dto.MemberReqDto;
-import com.ssu.kiri.member.mapper.MemberMapper;
+import com.ssu.kiri.member.dto.request.PostMemberReqDto;
+import com.ssu.kiri.member.dto.request.UpdateDto;
+import com.ssu.kiri.member.dto.response.PostMemberResDto;
+import com.ssu.kiri.member.dto.response.FindAndUpdateDto;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,15 +17,22 @@ import javax.validation.Valid;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberMapper memberMapper;
 
 
     @PostMapping("/auth/signup")
-    public ResponseEntity postMember(@Valid @RequestBody MemberReqDto.PostMemberReqDto postDto) {
-        Member member = memberMapper.postToMember(postDto);
+    public ResponseEntity postMember(@Valid @RequestBody PostMemberReqDto postDto) {
+
+        Member member = Member.builder()
+                .email(postDto.getEmail())
+                .username(postDto.getUsername())
+                .password(postDto.getPassword())
+                .interest(postDto.getInterest())
+                .build();
+
+//        Member member = memberMapper.postToMember(postDto);
         Member savedMember = memberService.postMember(member);
 
-        return ResponseEntity.ok(memberMapper.postResMember(savedMember));
+        return ResponseEntity.ok(PostMemberResDto.of(savedMember));
     }
 
     // /member/{member-id}
@@ -43,22 +50,30 @@ public class MemberController {
 
         Member findMember = memberService.findMember(id);
 
-        return ResponseEntity.ok(memberMapper.toFindDto(findMember));
+//        return ResponseEntity.ok(memberMapper.toFindDto(findMember));
+        return ResponseEntity.ok(FindAndUpdateDto.of(findMember));
     }
 
     // myPage 수정 - 개인 정보 수정
     @PostMapping("/member")
     public ResponseEntity updateMyMember(//@PathVariable("member-id") Long member_id,
-                                         @Valid @RequestBody MemberReqDto.updateDto updateDto) {
+                                         @Valid @RequestBody UpdateDto updateDto) {
 
-        Member member = memberMapper.updateToM(updateDto);
+//        Member member = memberMapper.updateToM(updateDto);
+        Member member = Member.builder()
+                .email(updateDto.getEmail())
+                .password(updateDto.getPassword())
+                .username(updateDto.getUsername())
+                .interest(updateDto.getInterest())
+                .build();
+
 
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long id = principalDetails.getMember().getId();
 
-        memberService.updateMember(member, id);
+        Member updateMember = memberService.updateMember(member, id);
 
-        return ResponseEntity.ok(memberMapper.toUpdateDto(member));
+        return ResponseEntity.ok(FindAndUpdateDto.of(updateMember));
     }
 
 

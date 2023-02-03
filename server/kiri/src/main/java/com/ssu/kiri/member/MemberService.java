@@ -1,7 +1,5 @@
 package com.ssu.kiri.member;
 
-import com.ssu.kiri.member.dto.MemberResDto;
-import com.ssu.kiri.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

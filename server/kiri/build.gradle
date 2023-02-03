@@ -1,7 +1,16 @@
+
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
 plugins {
  id 'java'
  id 'org.springframework.boot' version '2.7.7'
  id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	//querydsl 추가
+ id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.ssu'
@@ -24,9 +33,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+	//querydsl 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
 	// Cannot resolve class 'Driver' mysql 에러
 	// https://mvnrepository.com/artifact/mysql/mysql-connector-java
-	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.27'
+	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
 	//	쿼리 파라미터 로그 남기기
@@ -38,6 +51,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.auth0/java-jwt
 	implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.1'
 
+	// 파일 처리 관련 의존성 주입
+	implementation 'commons-io:commons-io:2.6'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -58,3 +73,25 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+//querydsl 추가 끝
