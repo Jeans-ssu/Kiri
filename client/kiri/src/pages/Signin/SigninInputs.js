@@ -12,8 +12,9 @@ import { BsCheck, BsArrowRightShort } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 import axios from '../../api/axios';
-//import { useDispatch } from 'react-redux';
-//import { SET_TOKEN } from 'store/modules/authSlice';
+import { useDispatch } from 'react-redux';
+import { SET_TOKEN } from 'store/modules/authSlice';
+import { SET_USER } from 'store/modules/userSlice';
 
 const SigninInputsContainer = styled.div`
   margin-top: 30px;
@@ -63,7 +64,7 @@ const SigninInputs = () => {
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
 
   const navigate = useNavigate();
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
 
@@ -101,6 +102,7 @@ const SigninInputs = () => {
     }
   };
 
+  //로그인 api 호출
   const handleClickSigninBtn = () => {
     if (!Object.values(validation).includes(false)) {
       axios
@@ -108,8 +110,23 @@ const SigninInputs = () => {
           ...userInput,
         })
         .then((res) => {
-          console.log(res.headers);
-          //dispatch(SET_TOKEN(res.headers));
+          //로그인 성공
+          //axios 헤더에 Access Token 추가
+          axios.defaults.headers.common['Authorization'] =
+            res.headers.get('Authorization');
+          //redux에 Access Token 저장
+          dispatch(SET_TOKEN(res.headers.get('Authorization')));
+          //redux에 유저 정보 저장
+          //TODO: response로 온 응답으로 수장
+          dispatch(
+            SET_USER({
+              nickName: 'nickName',
+              email: userInput.email,
+              interest: 'IT',
+            })
+          );
+          //메인페이지로 이동
+          navigate('/');
         })
         .catch((error) => {
           console.error(error);
