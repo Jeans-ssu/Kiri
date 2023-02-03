@@ -12,9 +12,10 @@ public class PostMemberResDto {
     private Long id;
     private String email;
     private String password;
+    private String interest;
 
     public static PostMemberResDto of(Member member) {
-        return new PostMemberResDto(member.getId(), member.getEmail(), member.getPassword());
+        return new PostMemberResDto(member.getId(), member.getEmail(), member.getPassword(), member.getInterest());
     }
 
 }

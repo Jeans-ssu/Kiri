@@ -3,12 +3,14 @@ package com.ssu.kiri.member.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 // 회원 가입
+@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
