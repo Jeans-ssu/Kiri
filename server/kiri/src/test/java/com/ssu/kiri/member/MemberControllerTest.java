@@ -88,6 +88,38 @@ class MemberControllerTest {
     }
 
 
+    @DisplayName("로그인 테스트")
+    @Test
+    public void loginMember() throws Exception {
+        //given
+
+        // 회원가입 실행
+        Member member = Member.builder()
+                .username("ddddd")
+                .email("ddd@ddd.com")
+                .password("ddddd55555")
+                .interest("IT")
+                .build();
+
+        Member postMember = memberService.postMember(member);
+
+        // 로그인 정보 생성성
+        LoginReqDto loginReqDto = new LoginReqDto(postMember.getEmail(), postMember.getPassword());
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/login") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(loginReqDto))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+
 
     @WithAccount("creamyyyy")
     @DisplayName("개인 정보 조회 테스트")
