@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectIsLogin } from 'store/modules/userSlice';
 
 const Main = styled.div`
   display: flex;
@@ -138,6 +140,9 @@ const Header = () => {
 
   const menu = ['calendar', 'event', 'event/write'];
 
+  const isLogin = useSelector(selectIsLogin);
+  console.log(isLogin);
+
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
     setClick(true);
@@ -173,7 +178,11 @@ const Header = () => {
             <Search placeholder="검색어를 입력하세요"></Search>
           </Searchdiv>
           <Login>
-            <Link to="/signin">로그인</Link>
+            {isLogin ? (
+              <Link to="/mypage">로그아웃</Link>
+            ) : (
+              <Link to="/signin">로그인</Link>
+            )}
           </Login>
           <Profile>
             <Link to="/mypage">
