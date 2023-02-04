@@ -2,11 +2,15 @@ import { useState } from 'react';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectIsLogin } from 'store/modules/userSlice';
 
 export const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
   const [click, setClick] = useState(false);
   const navigate = useNavigate();
+
+  const isLogin = useSelector(selectIsLogin);
 
   const menuArr = [
     { name: '캘린더' },
@@ -60,12 +64,22 @@ export const Header = () => {
             ></SearchInput>
           </Searchdiv>
           <Login>
-            <Link to="/signin">로그인</Link>
+            {isLogin ? (
+              <Link to="/signin">로그아웃</Link>
+            ) : (
+              <Link to="/signin">로그인</Link>
+            )}
           </Login>
           <Profile>
-            <Link to="/mypage">
-              <FaUserCircle size="27" color="black" />
-            </Link>
+            {isLogin ? (
+              <Link to="/signin">
+                <FaUserCircle size="27" color="black" />
+              </Link>
+            ) : (
+              <Link to="/mypage">
+                <FaUserCircle size="27" color="black" />
+              </Link>
+            )}
           </Profile>
         </TabMenu>
       </Main>
