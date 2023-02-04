@@ -15,7 +15,7 @@ import axios from '../../api/axios';
 import { useDispatch } from 'react-redux';
 import { SET_TOKEN } from 'store/modules/authSlice';
 import { SET_USER } from 'store/modules/userSlice';
-import { SigninFailModal } from 'components_/SignupinModal';
+import { SigninFailModal } from 'components/SignupinModal';
 
 const SigninInputsContainer = styled.div`
   margin-top: 30px;
