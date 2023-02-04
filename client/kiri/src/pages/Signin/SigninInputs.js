@@ -122,12 +122,11 @@ const SigninInputs = () => {
           //redux에 Access Token 저장
           dispatch(SET_TOKEN(res.headers.get('Authorization')));
           //redux에 유저 정보 저장
-          //TODO: response로 온 응답으로 수장
           dispatch(
             SET_USER({
-              nickName: 'nickName',
-              email: userInput.email,
-              interest: 'IT',
+              nickName: res.data.username,
+              email: res.data.email,
+              interest: res.data.interest,
             })
           );
           //메인페이지로 이동

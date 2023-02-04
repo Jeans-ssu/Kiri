@@ -27,4 +27,6 @@ export const authSlice = createSlice({
 
 export const { SET_TOKEN, DELETE_TOKEN } = authSlice.actions;
 
+export const selectAccessToken = (state) => state.auth.accessToken;
+
 export default authSlice.reducer;

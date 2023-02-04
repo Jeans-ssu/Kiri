@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import MypageInput from './MypageInput';
 import Withdraw from './Withdraw';
+import { useSelector } from 'react-redux';
+import { selectUserInfo } from 'store/modules/userSlice';
+import { selectAccessToken } from 'store/modules/authSlice';
+import axios from '../../api/axios';
 
 const MypageInputsContainer = styled.div``;
 
@@ -30,15 +34,32 @@ const EditInfoBtn = styled.button`
 `;
 
 const MypageInputs = () => {
+  const userInfo_ = useSelector(selectUserInfo);
+  const accessToken = useSelector(selectAccessToken);
+
+  //TODO: 비밀번호 수정기능 추가
   const [userInfo, setUserInfo] = useState({
-    nickName: '김뀨뀨',
-    email: 'abcd@email.com',
-    password: 'password123',
-    interest: 'IT',
+    nickName: userInfo_.nickName,
+    email: userInfo_.email,
+    password: 'password1234',
+    interest: userInfo_.interest,
   });
 
   const handleClickEditInfoBtn = () => {
     console.log('수정', userInfo);
+    axios.defaults.headers.common['Authorization'] = accessToken;
+    axios
+      .post('/member', {
+        username: userInfo.nickName,
+        email: userInfo.email,
+        password: userInfo.password,
+        interest: userInfo.interest,
+      })
+      .then((res) => {
+        //TODO: 닉네임 필요, redux에 회원정보 수정
+        console.log(res.data);
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -65,7 +86,7 @@ const MypageInputs = () => {
       />
       <Withdraw />
       <BtnWrapper>
-        <EditInfoBtn onClick={handleClickEditInfoBtn}>수정하기</EditInfoBtn>
+        <EditInfoBtn onClick={handleClickEditInfoBtn}>저장하기</EditInfoBtn>
       </BtnWrapper>
     </MypageInputsContainer>
   );

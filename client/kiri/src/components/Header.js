@@ -211,7 +211,6 @@ const Header = () => {
   const menu = ['calendar', 'event', 'event/write'];
 
   const isLogin = useSelector(selectIsLogin);
-  console.log(isLogin);
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
@@ -249,7 +248,7 @@ const Header = () => {
           </Searchdiv>
           <Login>
             {isLogin ? (
-              <Link to="/mypage">로그아웃</Link>
+              <Link to="/signin">로그아웃</Link>
             ) : (
               <Link to="/signin">로그인</Link>
             )}
