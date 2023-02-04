@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import WithdrawlModal from '../../components/WithdrawlModal';
+import WithdrawlModal from '../../components_/WithdrawlModal';
 import { useState } from 'react';
 
 const WithdrawWrapper = styled.div`
