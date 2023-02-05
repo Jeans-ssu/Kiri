@@ -120,10 +120,8 @@ export const checkEmail = (email) => {
 };
 
 const checkExistEmail = (email) => {
-  //TODO: axios 요청으로 변경
-  //임시 - 랜덤으로 return
-  if (email.length % 2 === 0) return true;
-  else return false;
+  const promise = axios.post(`/auth/${email}/exist`).then((res) => res.data);
+  return promise;
 };
 
 const SignupInputs = () => {
@@ -170,21 +168,31 @@ const SignupInputs = () => {
         });
       } else {
         //이메일 형식이 올바른 경우 -> 이메일 중복 검사
-        if (checkExistEmail(value)) {
-          //이미 존재하는 경우
-          setExistEmail(true);
-          setValidation({
-            ...validation,
-            email: false,
+        checkExistEmail(value)
+          .then((data) => {
+            if (data) {
+              //이미 존재하는 경우
+              setExistEmail(true);
+              setValidation({
+                ...validation,
+                email: false,
+              });
+            } else {
+              //사용가능한 경우
+              setExistEmail(false);
+              setValidation({
+                ...validation,
+                email: true,
+              });
+            }
+          })
+          .catch(() => {
+            setExistEmail(true);
+            setValidation({
+              ...validation,
+              email: false,
+            });
           });
-        } else {
-          //사용가능한 경우
-          setExistEmail(false);
-          setValidation({
-            ...validation,
-            email: true,
-          });
-        }
       }
     }
     if (name === 'password') {

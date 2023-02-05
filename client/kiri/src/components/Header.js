@@ -72,11 +72,11 @@ export const Header = () => {
           </Login>
           <Profile>
             {isLogin ? (
-              <Link to="/signin">
+              <Link to="/mypage">
                 <FaUserCircle size="27" color="black" />
               </Link>
             ) : (
-              <Link to="/mypage">
+              <Link to="/signin">
                 <FaUserCircle size="27" color="black" />
               </Link>
             )}
