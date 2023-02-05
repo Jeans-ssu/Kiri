@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 public class FindAndUpdateDto {
     private Long id;
     private String email;
+    private String username;
     private String password;
     private String interest;
 
     public static FindAndUpdateDto of(Member member) {
-        return new FindAndUpdateDto(member.getId(), member.getEmail(), member.getPassword(), member.getInterest());
+        return new FindAndUpdateDto(member.getId(), member.getEmail(), member.getUsername(), member.getPassword(), member.getInterest());
     }
 }

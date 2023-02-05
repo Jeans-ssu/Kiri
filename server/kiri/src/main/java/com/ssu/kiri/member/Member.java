@@ -33,7 +33,7 @@ public class Member {
 
     private String username; // 닉네임 . nickname -> username
 
-    private String interest; // 사용자의 관심분야
+    private String interest; // 사용자의 관심분야 -> 삭제
 
     private String role; // 시큐리티 권한 추가, USER
 
@@ -61,6 +61,7 @@ public class Member {
         return this;
     }
 
+    // 개인 정보 수정
     public void updateMyMember(String email, String encPassword, String username, String interest) {
         this.email = email;
         this.username = username;
