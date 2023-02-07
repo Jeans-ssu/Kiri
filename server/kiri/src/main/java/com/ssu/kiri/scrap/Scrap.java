@@ -2,10 +2,8 @@ package com.ssu.kiri.scrap;
 
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.post.Post;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.ssu.kiri.scrap.dto.ScrapReqAdd;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -51,6 +49,24 @@ public class Scrap {
         this.post = post;
     }
 
+    //===== builder =====//
+    @Builder
+    public Scrap(LocalDateTime startScrapTime, LocalDateTime endScrapTime) {
+        this.startScrapTime = startScrapTime;
+        this.endScrapTime = endScrapTime;
+    }
+
+    //=====좋아요 했을때 scrap 과 member, scrap 과 post 관계 설정 ======//
+    // 연관관계 편의 메서드 호출
+    public static Scrap updateMemberAndPostWithScrap(Member member, Post post, ScrapReqAdd request) {
+        Scrap scrap = new Scrap();
+        scrap.changeMember(member);
+        scrap.changePost(post);
+        scrap.startScrapTime = request.getStartScrapTime();
+        scrap.endScrapTime = request.getEndScrapTime();
+
+        return scrap;
+    }
 
 
 }
