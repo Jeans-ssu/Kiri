@@ -48,11 +48,8 @@ public class PostService {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
-        // 서비스에서 연관관계 메서드 사용시 리스트 = nullPointException 에러 발생
-//        post.changeMember(member);
-        // 고친 버전
+        // member, post 간 연관관계 설정
         Post newPost = Post.saveMember(member, post);
-
 
         // post 저장
         Post savedPost = postRepository.save(newPost);

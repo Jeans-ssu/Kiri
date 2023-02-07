@@ -1,5 +1,6 @@
 package com.ssu.kiri.member;
 
+import com.ssu.kiri.config.TestConfig;
 import com.ssu.kiri.image.Image;
 import com.ssu.kiri.infra.WithAccount;
 import com.ssu.kiri.post.Post;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.Rollback;
@@ -25,10 +27,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
+@Import({TestConfig.class})
 @SpringBootTest
 @Transactional
-@Rollback(false)
+//@Rollback(false)
 class MemberTest {
 
     @PersistenceContext
