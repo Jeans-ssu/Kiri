@@ -42,7 +42,9 @@ public class PostController {
                 .scrap_count(savePost.getScrap_count())
                 .content(savePost.getContent())
                 .category(savePost.getCategory())
-                .field(savePost.getField())
+                .event(savePost.getEvent())
+                .school(savePost.getSchool())
+                .local(savePost.getLocal())
                 .organizer(savePost.getOrganizer())
                 .link(savePost.getLink())
                 .place(savePost.getPlace())
@@ -70,16 +72,20 @@ public class PostController {
                 .scrap_count(savePost.getScrap_count())
                 .content(savePost.getContent())
                 .category(savePost.getCategory())
-                .field(savePost.getField())
+                .event(savePost.getEvent())
+                .school(savePost.getSchool())
+                .local(savePost.getLocal())
                 .organizer(savePost.getOrganizer())
                 .link(savePost.getLink())
+                .contactNumber(savePost.getContactNumber())
                 .place(savePost.getPlace())
                 .startPostTime(savePost.getStartPostTime())
                 .finishPostTime(savePost.getFinishPostTime())
                 .build();
 
         Post resultPost = postService.updatePost(post, post_id);
-        return ResponseEntity.ok(resultPost);
+        SaveResPost updatePost = SaveResPost.of(resultPost);
+        return ResponseEntity.ok(updatePost);
     }
 
     // 게시글 삭제

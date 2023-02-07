@@ -33,7 +33,11 @@ public class PostMemberReqDto {
     private String passwordVal;
 
     @NotBlank
-    private String interest;
+    private String local; // 지역
+    private String school; // 학교
+
+    @NotBlank
+    private String department; // 소속 (일반인, 대학생, 중고등학생)
 
 
 

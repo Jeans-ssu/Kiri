@@ -29,21 +29,22 @@ public class SavePost {
     private String content; // 글 내용
 
     @NotBlank
-    private String category; // 글 카테고리 (동아리, 스터디,..)
+    private String category; // 큰 카테고리 (지역, 학교)
 
     @NotBlank
-    private String field; // 글 분야 (IT, 공학)
+    private String event; // 작은 카테고리 (축제, 전시, 대회, 강연, 공연, 기타 등)
+    @NotBlank
+    private String local; // 지역
+    private String school; // 학교
+    private String place; // 상세 장소
 
     @NotBlank
     private String organizer; // 주최자
 
     private String link; // 참고링크
-    private String place; // 장소
-
-    //        private List<Long> imageIdList; // 이미지
+    private String contactNumber; // 연락처
     // 이미지 로컬에 저장
     private List<MultipartFile> files;
-
 
 //    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")

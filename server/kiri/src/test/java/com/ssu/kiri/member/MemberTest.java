@@ -104,7 +104,9 @@ class MemberTest {
                 .email("ddd@ddd.com")
                 .username("ddd")
                 .password("ddddddddd")
-                .interest("IT")
+                .local("서울")
+                .school("숭실대학교")
+                .department("대학생")
                 .build();
 
         Member savedMember = memberService.postMember(member);

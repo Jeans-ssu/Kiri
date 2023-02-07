@@ -34,23 +34,18 @@ public class Post {
     private List<Image> imageList = new ArrayList<>(); // 문제
 
     private String title; // 글 제목
-
     private int scrap_count; // 스크랩 수
-
     private String content; // 글 내용
 
-    private String category; // 글 카테고리 (동아리, 스터디,..)
-
-    private String field; // 글 분야 (IT, 공학)
+    private String category; // 큰 카테고리 (지역, 학교 둘 중 택 1)
+    private String event; // 작은 카테고리 (축제, 전시, 대회, 강연, 공연, 기타 등)
+    private String local; // 지역
+    private String school; // 학교
+    private String place; // 상세 장소
 
     private String organizer; // 주최자
-
-
-
-    // 추가
     private String link; // 참고링크
-    private String place; // 장소
-
+    private String contactNumber; // 전화번호
     private LocalDateTime startPostTime;
     private LocalDateTime finishPostTime;
 
@@ -69,20 +64,21 @@ public class Post {
     //======builder=========//
     @Builder
     public Post(
-            String title, int scrap_count, String content, String category, String field,
-            String organizer, String link, String place, List<Image> imageList, LocalDateTime startPostTime, LocalDateTime finishPostTime
+            String title, int scrap_count, String content, String category, String event, String local, String school,
+            String place, String organizer, String link, String contactNumber, LocalDateTime startPostTime, LocalDateTime finishPostTime
     ) {
 
         this.title = title;
         this.scrap_count = scrap_count;
         this.content = content;
         this.category = category;
-        this.field = field;
+        this.event =event;
+        this.local = local;
+        this.school = school;
+        this.place = place;
         this.organizer = organizer;
         this.link = link;
-        this.place = place;
-//        this.imageList = imageList;
-
+        this.contactNumber = contactNumber;
         this.startPostTime = startPostTime;
         this.finishPostTime = finishPostTime;
     }
@@ -90,12 +86,15 @@ public class Post {
 
     //===== 생성자 =====//
 
-    public Post createPostTest(String title,String content, String category, String field,
+    public Post createPostTest(String title, String content, String category, String event, String local, String school, String place,
                                String organizer, LocalDateTime startPostTime, LocalDateTime finishPostTime) {
         this.title = title;
         this.content = content;
         this.category = category;
-        this.field = field;
+        this.event = event;
+        this.local = local;
+        this.school = school;
+        this.place = place;
         this.organizer = organizer;
         this.startPostTime = startPostTime;
         this.finishPostTime = finishPostTime;
@@ -120,9 +119,13 @@ public class Post {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.category = post.getCategory();
-        this.field = post.getField();
+        this.event = event;
+        this.local = local;
+        this.school = school;
         this.link = post.getLink();
         this.place = post.getPlace();
+        this.organizer = post.getOrganizer();
+        this.contactNumber = post.getContactNumber();
 //        this.imageList = post.getImageList();
         this.startPostTime = post.getStartPostTime();
         this.finishPostTime = post.getFinishPostTime();
@@ -136,9 +139,13 @@ public class Post {
         post.title = newPost.getTitle();
         post.content = newPost.getContent();
         post.category = newPost.getCategory();
-        post.field = newPost.getField();
+        post.event = newPost.getEvent();
+        post.local = newPost.getLocal();
+        post.school = newPost.getSchool();
+        post.organizer = newPost.getOrganizer();
         post.link = newPost.getLink();
         post.place = newPost.getPlace();
+        post.contactNumber = newPost.getContactNumber();
 //        this.imageList = newPost.getImageList();
         post.startPostTime = newPost.getStartPostTime();
         post.finishPostTime = newPost.getFinishPostTime();
