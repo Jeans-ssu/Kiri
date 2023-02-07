@@ -1,5 +1,6 @@
 package com.ssu.kiri.post;
 
+import com.ssu.kiri.config.TestConfig;
 import com.ssu.kiri.infra.WithAccount;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.MemberRepository;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Import({TestConfig.class})
 @SpringBootTest
 @Transactional
 //@Rollback(false)

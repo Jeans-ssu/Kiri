@@ -31,6 +31,8 @@ public class ScrapService {
             return false;
         }
 
+        post.updateScrapCount();
+
         // scrap 객체 생성하고 시간 설정
         // scrap 과 member, scrap과 post 관계 설정 -> 연관관계 편의 메서드
         Scrap scrap = Scrap.updateMemberAndPostWithScrap(member, post, requestDto);
@@ -48,9 +50,24 @@ public class ScrapService {
         // post 찾기
         Post post = postRepository.findById(post_id).orElseThrow();
 
+        // post 의 scrap 수 감수
+        post.minusScrapCount();
+
         Scrap scrap = scrapRepository.findByMemberAndPost(member, post).orElseThrow();
         scrapRepository.delete(scrap);
 
+    }
+
+    /**
+     * 좋아요 개수 세기
+     * @param post
+     *
+     */
+    public int countScrap(Post post) {
+        Integer scrapCount = scrapRepository.countByPost(post).orElseThrow();
+        int result = scrapCount.intValue();
+
+        return result;
     }
 
 

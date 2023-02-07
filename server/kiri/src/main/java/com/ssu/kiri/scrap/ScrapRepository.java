@@ -10,4 +10,6 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 
     Optional<Scrap> findByMemberAndPost(Member member, Post post);
 
+    Optional<Integer> countByPost(Post post);
+
 }

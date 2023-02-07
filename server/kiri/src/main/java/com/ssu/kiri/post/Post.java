@@ -152,4 +152,17 @@ public class Post {
 
         return post;
     }
+
+    //==== scrap 으로 인한 scrap 수 증가 ===//
+    public void updateScrapCount() {
+        this.scrap_count = this.scrap_count +1;
+    }
+    //==== scrap 으로 인한 scrap 수 증가 ===//
+    public void minusScrapCount() {
+        if(scrap_count > 0) {
+            this.scrap_count = this.scrap_count - 1;
+        }
+    }
+
+
 }
