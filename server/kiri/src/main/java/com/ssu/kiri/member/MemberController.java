@@ -29,7 +29,9 @@ public class MemberController {
                 .email(postDto.getEmail())
                 .username(postDto.getUsername())
                 .password(postDto.getPassword())
-                .interest(postDto.getInterest())
+                .local(postDto.getLocal())
+                .school(postDto.getSchool())
+                .department(postDto.getDepartment())
                 .build();
 
 //        Member member = memberMapper.postToMember(postDto);
@@ -67,7 +69,9 @@ public class MemberController {
                 .email(updateDto.getEmail())
                 .password(updateDto.getPassword())
                 .username(updateDto.getUsername())
-                .interest(updateDto.getInterest())
+                .local(updateDto.getLocal())
+                .school(updateDto.getSchool())
+                .department(updateDto.getDepartment())
                 .build();
 
 

@@ -70,9 +70,13 @@ class PostControllerTest {
         Post post2 = Post.builder()
                 .title("가을이 오면")
                 .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
-                .category("지역 축제")
-                .field("IT")
+                .category("지역")
+                .event("축제")
+                .local("서울")
+                .school("숭실대학교")
+                .place("진리관")
                 .organizer("주최자는 나야 둘이 될 수 없어")
+                .link("a.com")
                 .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
@@ -106,7 +110,9 @@ class PostControllerTest {
         savePost.setTitle("우주하마");
         savePost.setContent("자세가 곧 스킬인 게임");
         savePost.setCategory("지역 축제");
-        savePost.setField("IT");
+        savePost.setEvent("강연");
+        savePost.setLocal("서울");
+        savePost.setSchool("숭실대학교");
         savePost.setOrganizer("하마");
         savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -137,7 +143,11 @@ class PostControllerTest {
                 .title("가을이 오면")
                 .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
                 .category("지역 축제")
-                .field("IT")
+                .category("지역")
+                .event("축제")
+                .local("서울")
+                .school("숭실대학교")
+                .place("진리관")
                 .organizer("주최자는 나야 둘이 될 수 없어")
                 .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
@@ -151,8 +161,10 @@ class PostControllerTest {
         SavePost savePost = new SavePost();
         savePost.setTitle("우주하마");
         savePost.setContent("자세가 곧 스킬인 게임");
-        savePost.setCategory("지역 축제");
-        savePost.setField("IT");
+        savePost.setCategory("지역");
+        savePost.setEvent("강연");
+        savePost.setLocal("서울");
+        savePost.setSchool("숭실대학교");
         savePost.setOrganizer("하마");
         savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -184,7 +196,10 @@ class PostControllerTest {
                 .title("가을이 오면")
                 .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
                 .category("지역 축제")
-                .field("IT")
+                .category("지역")
+                .event("축제")
+                .local("서울")
+                .school("숭실대학교")
                 .organizer("주최자는 나야 둘이 될 수 없어")
                 .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))

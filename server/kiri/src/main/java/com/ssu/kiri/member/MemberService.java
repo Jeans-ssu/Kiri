@@ -48,7 +48,7 @@ public class MemberService {
         Optional<Member> updateMember = memberRepository.findById(id);
         if(updateMember.isPresent()) {
             Member findMember = updateMember.get();
-            findMember.updateMyMember(member.getEmail(), encPassword, member.getUsername(), member.getInterest());
+            findMember.updateMyMember(member.getEmail(), encPassword, member.getUsername(), member.getLocal(), member.getSchool(), member.getDepartment());
             Member resultMember = memberRepository.save(findMember);
             return resultMember;
         } else {

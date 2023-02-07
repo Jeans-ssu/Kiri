@@ -25,13 +25,17 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
         String username = annotation.value();
         String email = username + "@aaa.com";
         String password = "abcdefgh1234";
-        String interest = "기타";
+        String local = "서울";
+        String school = "숭실대학교";
+        String department = "대학생";
 
         Member member = Member.builder()
                 .email(email)
                 .username(username)
                 .password(password)
-                .interest(interest)
+                .local(local)
+                .school(school)
+                .department(department)
                 .build();
 
         memberService.postMember(member);

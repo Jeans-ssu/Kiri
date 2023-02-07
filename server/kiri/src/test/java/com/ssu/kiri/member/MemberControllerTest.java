@@ -69,7 +69,9 @@ class MemberControllerTest {
         postMemberReqDto.setUsername("ddddd");
         postMemberReqDto.setPassword("ddddd55555");
         postMemberReqDto.setPasswordVal("ddddd55555");
-        postMemberReqDto.setInterest("IT");
+        postMemberReqDto.setSchool("숭실대학교");
+        postMemberReqDto.setDepartment("대학생");
+        postMemberReqDto.setLocal("서울");
 
         //when
         this.mockMvc.perform(
@@ -98,7 +100,9 @@ class MemberControllerTest {
                 .username("ddddd")
                 .email("ddd@ddd.com")
                 .password("ddddd55555")
-                .interest("IT")
+                .local("서울")
+                .department("대학생")
+                .school("숭실대학교")
                 .build();
 
         Member postMember = memberService.postMember(member);
@@ -146,7 +150,9 @@ class MemberControllerTest {
                 .username("ddddd")
                 .email("ddd@ddd.com")
                 .password("ddddd55555")
-                .interest("IT")
+                .local("서울")
+                .department("대학생")
+                .school("숭실대학교")
                 .build();
 
         Member postMember = memberService.postMember(member);
@@ -179,7 +185,9 @@ class MemberControllerTest {
         UpdateDto updateDto = new UpdateDto();
         updateDto.setUsername("creamyyyy");
         updateDto.setEmail("creamyyyy@aaa.com");
-        updateDto.setInterest("IT");
+        updateDto.setLocal("서울");
+        updateDto.setDepartment("대학생");
+        updateDto.setSchool("숭실대학교");
         updateDto.setPassword("bbbbbbbb444");
 
         this.mockMvc.perform(
