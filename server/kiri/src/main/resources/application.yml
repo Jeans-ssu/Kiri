@@ -22,6 +22,10 @@ spring:
       max-file-size: 2MB
       max-request-size: 10MB
 
+  profiles:
+    include:
+      -aws
+
 logging:
   level:
     org.hibernate.SQL: debug
