@@ -1,6 +1,7 @@
 package com.ssu.kiri.image;
 
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.ssu.kiri.image.dto.ImageResDto;
 import com.ssu.kiri.post.Post;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,8 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
-//    public void addFileToLocal(List<MultipartFile> multipartFiles) {
-//
-//    }
-//
-//    public void savePostToLocal() {
-//
-//    }
+    private final AmazonS3 amazonS3;
+
 
 
     public List<ImageResDto> addFiles(List<MultipartFile> multipartFiles) throws IOException {
