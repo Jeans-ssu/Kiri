@@ -51,6 +51,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.auth0/java-jwt
 	implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.1'
 
+	// spring-cloud-aws
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 	// 파일 처리 관련 의존성 주입
 	implementation 'commons-io:commons-io:2.6'
 
