@@ -2,9 +2,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { BsCheck } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
+import { FiSearch } from 'react-icons/fi';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 import axios from '../../api/axios';
 import { SignupSuccessModal, SignupFailModal } from 'components/SignupinModal';
+import SearchSchoolModal from './SearchSchoolModal';
 
 const SignupInputsContainer = styled.div`
   margin-top: 30px;
@@ -14,6 +16,12 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
+  div.column {
+    display: flex;
+  }
+  &.hide {
+    display: none;
+  }
 `;
 
 export const InputHeader = styled.div`
@@ -34,7 +42,7 @@ export const InputHeader = styled.div`
 
 export const SignupInput = styled.input`
   box-sizing: border-box;
-  width: ${(props) => (props.short ? '300px' : '400px')};
+  width: ${(props) => (props.short ? '320px' : '400px')};
   height: 40px;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 5px;
@@ -66,6 +74,20 @@ const SelectInput = styled.select`
   padding-left: 5px;
   &:focus {
     outline: none;
+  }
+`;
+
+const OpenSearchModalBtn = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 80px;
+  background-color: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.mainColor};
+  font-weight: 600;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -106,6 +128,7 @@ const InitialState = {
   Vpassword: '',
   status: '대학생',
   region: '서울',
+  school: '',
 };
 
 const ValidationInitialState = {
@@ -147,10 +170,13 @@ const SignupInputs = () => {
   const [existEmail, setExistEmail] = useState(false); //이미 존재하는 이메일인지 확인
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
   const [isViewMode_, setIsViewMode_] = useState(false); //비밀번호 확인 보기 모드
+  const [showUnivInput, setShowUnivInput] = useState(true); //학교 input 보기 모드
 
   //회원가입 후 성공/실패 모달
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  //학교 검색 모달
+  const [showUnivModal, setShowUnivModal] = useState(false);
 
   const [validation, setValidation] = useState(ValidationInitialState); //닉네임, 이메일, 비밀번호 유효성
 
@@ -240,11 +266,18 @@ const SignupInputs = () => {
   //소속
   const handleChangeStatus = (e) => {
     setUserInput({ ...userInput, status: e.target.value });
+    if (e.target.value === '대학생') setShowUnivInput(true);
+    else setShowUnivInput(false);
   };
 
   //지역
   const handleChangeRegion = (e) => {
     setUserInput({ ...userInput, region: e.target.value });
+  };
+
+  //학교 검색
+  const handleClickSearchUnivBtn = () => {
+    setShowUnivModal(true);
   };
 
   const handleClickSubmitBtn = () => {
@@ -364,9 +397,15 @@ const SignupInputs = () => {
             <option value="일반인">일반인</option>
           </SelectInput>
         </InputContainer>
-        <InputContainer>
+        <InputContainer className={showUnivInput ? null : 'hide'}>
           <InputHeader>학교</InputHeader>
-          <SignupInput short />
+          <div className="column">
+            <SignupInput short />
+            <OpenSearchModalBtn onClick={handleClickSearchUnivBtn}>
+              <FiSearch />
+              찾아보기
+            </OpenSearchModalBtn>
+          </div>
         </InputContainer>
         <InputContainer>
           <InputHeader>지역</InputHeader>
@@ -382,6 +421,7 @@ const SignupInputs = () => {
         </InputContainer>
       </SignupInputsContainer>
       <SubmitBtn onClick={handleClickSubmitBtn}>회원가입</SubmitBtn>
+      <SearchSchoolModal isOpen={showUnivModal} setIsOpen={setShowUnivModal} />
       <SignupSuccessModal isOpen={isSuccess} setIsOpen={setIsSuccess} />
       <SignupFailModal isOpen={isFailed} setIsOpen={setIsFailed} />
     </>
