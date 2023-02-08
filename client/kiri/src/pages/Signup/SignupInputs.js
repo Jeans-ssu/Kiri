@@ -34,7 +34,7 @@ export const InputHeader = styled.div`
 
 export const SignupInput = styled.input`
   box-sizing: border-box;
-  width: 400px;
+  width: ${(props) => (props.short ? '300px' : '400px')};
   height: 40px;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 5px;
@@ -75,7 +75,7 @@ export const SubmitBtn = styled.button`
   border-radius: 40px;
   border: none;
   background-color: ${({ theme }) => theme.colors.mainColor};
-  margin-top: 50px;
+  margin-top: 30px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.light};
   font-size: 15px;
@@ -104,6 +104,8 @@ const InitialState = {
   email: '',
   password: '',
   Vpassword: '',
+  status: '대학생',
+  region: '서울',
 };
 
 const ValidationInitialState = {
@@ -113,6 +115,26 @@ const ValidationInitialState = {
   Vpassword: false,
 };
 
+const Regions = [
+  '서울',
+  '경기',
+  '부산',
+  '인천',
+  '대전',
+  '대구',
+  '울산',
+  '광주',
+  '강원',
+  '충북',
+  '충남',
+  '전북',
+  '전남',
+  '경북',
+  '경남',
+  '세종',
+  '제주',
+];
+
 export const checkEmail = (email) => {
   var check =
     /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -120,9 +142,8 @@ export const checkEmail = (email) => {
 };
 
 const SignupInputs = () => {
-  const [userInput, setUserInput] = useState(InitialState); //닉네임, 이메일, 비밀번호 input
+  const [userInput, setUserInput] = useState(InitialState); //닉네임, 이메일, 비밀번호, 소속, 지역
   const { nickName, email, password, Vpassword } = userInput;
-  const [interest, setInterest] = useState('IT'); //관심분야 select
   const [existEmail, setExistEmail] = useState(false); //이미 존재하는 이메일인지 확인
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
   const [isViewMode_, setIsViewMode_] = useState(false); //비밀번호 확인 보기 모드
@@ -133,6 +154,7 @@ const SignupInputs = () => {
 
   const [validation, setValidation] = useState(ValidationInitialState); //닉네임, 이메일, 비밀번호 유효성
 
+  //유효성 조건
   const checkNickName = /^[가-힣a-zA-Z]{2,10}$/; //한글,영문,숫자 2-10글자
   const checkPassword = /^[a-zA-Z0-9]{8,16}$/; //영문,숫자 8-16글자
 
@@ -156,6 +178,7 @@ const SignupInputs = () => {
     }
   };
 
+  //닉네임, 이메일, 비밀번호
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
     setUserInput({
@@ -214,8 +237,14 @@ const SignupInputs = () => {
     }
   };
 
-  const handleChangeInterest = (e) => {
-    setInterest(e.target.value);
+  //소속
+  const handleChangeStatus = (e) => {
+    setUserInput({ ...userInput, status: e.target.value });
+  };
+
+  //지역
+  const handleChangeRegion = (e) => {
+    setUserInput({ ...userInput, region: e.target.value });
   };
 
   const handleClickSubmitBtn = () => {
@@ -226,7 +255,6 @@ const SignupInputs = () => {
           email: userInput.email,
           password: userInput.password,
           passwordVal: userInput.Vpassword,
-          interest,
         })
         .then(() => {
           setUserInput(InitialState);
@@ -328,17 +356,30 @@ const SignupInputs = () => {
             className={validation.password ? 'validate' : null}
           />
         </InputContainer>
-        <InputHeader>관심분야</InputHeader>
-        <SelectInput onChange={handleChangeInterest} value={interest}>
-          <option value="IT">IT</option>
-          <option value="Business">경영/경제</option>
-          <option value="Science">자연과학</option>
-          <option value="Marketing">마케팅/홍보</option>
-          <option value="Humanities">인문사회</option>
-          <option value="Art">예술</option>
-          <option value="Engineering">공학</option>
-          <option value="Etc">기타</option>
-        </SelectInput>
+        <InputContainer>
+          <InputHeader>소속</InputHeader>
+          <SelectInput onChange={handleChangeStatus} value={userInput.status}>
+            <option value="대학생">대학생</option>
+            <option value="중고등학생">중고등학생</option>
+            <option value="일반인">일반인</option>
+          </SelectInput>
+        </InputContainer>
+        <InputContainer>
+          <InputHeader>학교</InputHeader>
+          <SignupInput short />
+        </InputContainer>
+        <InputContainer>
+          <InputHeader>지역</InputHeader>
+          <SelectInput onChange={handleChangeRegion} value={userInput.region}>
+            {Regions.map((el, idx) => {
+              return (
+                <option key={idx} value={el}>
+                  {el}
+                </option>
+              );
+            })}
+          </SelectInput>
+        </InputContainer>
       </SignupInputsContainer>
       <SubmitBtn onClick={handleClickSubmitBtn}>회원가입</SubmitBtn>
       <SignupSuccessModal isOpen={isSuccess} setIsOpen={setIsSuccess} />
