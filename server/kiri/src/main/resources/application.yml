@@ -26,4 +26,15 @@ logging:
   level:
     org.hibernate.SQL: debug
 
+cloud:
+  aws:
+    s3:
+      bucket: spring-kiri-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+#    credentials:
+#      instance-profile: true
+
 
