@@ -1,14 +1,18 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
 import { BsEyeFill } from 'react-icons/bs';
+import { selectSearchWord } from 'store/modules/searchSlice';
+import { useSelector } from 'react-redux';
 
 const pos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const EventSearchPage = () => {
+  const word = useSelector(selectSearchWord);
+  console.log(word);
   return (
     <PageContainer header footer>
       <EventKeywordPageContainer>
-        <h1>&apos;해커톤&apos; 검색 결과</h1>
+        <h1>&apos;{word}&apos; 검색 결과</h1>
         <EventListMain>
           {pos.map((el) => (
             <EventContainer key={el}>

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLogin } from 'store/modules/userSlice';
+import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
 
 const Main = styled.div`
   display: flex;
@@ -130,6 +131,7 @@ const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
   const [click, setClick] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const menuArr = [{ name: '캘린더' }, { name: '이벤트' }, { name: '글쓰기' }];
 
@@ -141,6 +143,15 @@ const Header = () => {
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
     setClick(true);
+  };
+
+  const searchtext = useRef('');
+
+  const searchHandler = () => {
+    const text = document.getElementById('text').value;
+    searchtext.current = text;
+    dispatch(setSearchWord(searchtext.current));
+    dispatch(setSearchMode(true));
   };
 
   return (
@@ -173,6 +184,7 @@ const Header = () => {
             <SearchInput
               type="text"
               id="text"
+              onKeyUp={searchHandler}
               onKeyPress={() => {
                 if (event.keyCode === 13) {
                   navigate('/event/search');
