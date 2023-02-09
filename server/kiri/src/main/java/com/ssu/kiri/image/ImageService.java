@@ -107,7 +107,6 @@ public class ImageService {
                     .build();
 
 
-
             imageRepository.save(newImage);
             ImageResDto imageResDto = ImageResDto.of(newImage);
 

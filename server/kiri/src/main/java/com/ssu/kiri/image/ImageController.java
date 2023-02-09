@@ -23,11 +23,13 @@ public class ImageController {
     @PostMapping("/api/posts/image")
     public ResponseEntity createImage(@RequestPart(value = "files") List<MultipartFile> multipartFiles) throws IOException {
 
+        System.out.println("ImageController 실행!!!!!!!");
         // member 인가
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
         List<ImageResDto> imageResDtoList = imageService.addFile(multipartFiles);
+
 
         return new ResponseEntity(imageResDtoList, HttpStatus.CREATED);
     }
