@@ -6,6 +6,90 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLogin } from 'store/modules/userSlice';
 import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
 
+const Header = () => {
+  const [currentTab, setCurrentTab] = useState(-1);
+  const [click, setClick] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const menuArr = [{ name: '캘린더' }, { name: '이벤트' }, { name: '글쓰기' }];
+
+  const menu = ['calendar', 'event', 'event/write'];
+
+  const isLogin = useSelector(selectIsLogin);
+  console.log(isLogin);
+
+  const selectMenuHandler = (index) => {
+    setCurrentTab(index);
+    setClick(true);
+  };
+
+  const searchtext = useRef('');
+
+  const searchHandler = () => {
+    const text = document.getElementById('text').value;
+    searchtext.current = text;
+    dispatch(setSearchWord(searchtext.current));
+    dispatch(setSearchMode(true));
+  };
+
+  return (
+    <>
+      <Main>
+        <TabMenu>
+          <Logo>
+            <Link to="/">끼리끼리</Link>
+          </Logo>
+          {menuArr.map((el, idx) => {
+            return (
+              <Link className="menulink" key={idx} to={`/` + `${menu[idx]}`}>
+                <SubMenu
+                  key={idx}
+                  className={`${currentTab === idx ? 'focused' : ''} ${
+                    click ? '' : 'hide'
+                  }`}
+                  onClick={() => selectMenuHandler(idx)}
+                >
+                  {el.name}
+                </SubMenu>
+                {currentTab === idx ? (
+                  <div className="line" key={idx}></div>
+                ) : null}
+              </Link>
+            );
+          })}
+          <Searchdiv>
+            <FaSearch size="17" className="searchicon" />
+            <SearchInput
+              type="text"
+              id="text"
+              onKeyUp={searchHandler}
+              onKeyPress={() => {
+                if (event.keyCode === 13) {
+                  navigate('/event/search');
+                }
+              }}
+              placeholder="검색어를 입력하세요"
+            ></SearchInput>{' '}
+          </Searchdiv>
+          <Login>
+            {isLogin ? (
+              <Link to="/mypage">로그아웃</Link>
+            ) : (
+              <Link to="/signin">로그인</Link>
+            )}
+          </Login>
+          <Profile>
+            <Link to="/mypage">
+              <FaUserCircle size="27" color="black" />
+            </Link>
+          </Profile>
+        </TabMenu>
+      </Main>
+    </>
+  );
+};
+
 const Main = styled.div`
   display: flex;
   width: 100%;
@@ -126,89 +210,5 @@ const Profile = styled.div`
     fill: ${({ theme }) => theme.colors.dark};
   }
 `;
-
-const Header = () => {
-  const [currentTab, setCurrentTab] = useState(-1);
-  const [click, setClick] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const menuArr = [{ name: '캘린더' }, { name: '이벤트' }, { name: '글쓰기' }];
-
-  const menu = ['calendar', 'event', 'event/write'];
-
-  const isLogin = useSelector(selectIsLogin);
-  console.log(isLogin);
-
-  const selectMenuHandler = (index) => {
-    setCurrentTab(index);
-    setClick(true);
-  };
-
-  const searchtext = useRef('');
-
-  const searchHandler = () => {
-    const text = document.getElementById('text').value;
-    searchtext.current = text;
-    dispatch(setSearchWord(searchtext.current));
-    dispatch(setSearchMode(true));
-  };
-
-  return (
-    <>
-      <Main>
-        <TabMenu>
-          <Logo>
-            <Link to="/">끼리끼리</Link>
-          </Logo>
-          {menuArr.map((el, idx) => {
-            return (
-              <Link className="menulink" key={idx} to={`/` + `${menu[idx]}`}>
-                <SubMenu
-                  key={idx}
-                  className={`${currentTab === idx ? 'focused' : ''} ${
-                    click ? '' : 'hide'
-                  }`}
-                  onClick={() => selectMenuHandler(idx)}
-                >
-                  {el.name}
-                </SubMenu>
-                {currentTab === idx ? (
-                  <div className="line" key={idx}></div>
-                ) : null}
-              </Link>
-            );
-          })}
-          <Searchdiv>
-            <FaSearch size="17" className="searchicon" />
-            <SearchInput
-              type="text"
-              id="text"
-              onKeyUp={searchHandler}
-              onKeyPress={() => {
-                if (event.keyCode === 13) {
-                  navigate('/event/search');
-                }
-              }}
-              placeholder="검색어를 입력하세요"
-            ></SearchInput>{' '}
-          </Searchdiv>
-          <Login>
-            {isLogin ? (
-              <Link to="/mypage">로그아웃</Link>
-            ) : (
-              <Link to="/signin">로그인</Link>
-            )}
-          </Login>
-          <Profile>
-            <Link to="/mypage">
-              <FaUserCircle size="27" color="black" />
-            </Link>
-          </Profile>
-        </TabMenu>
-      </Main>
-    </>
-  );
-};
 
 export default Header;

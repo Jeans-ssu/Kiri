@@ -119,13 +119,6 @@ export const checkEmail = (email) => {
   return check.test(email);
 };
 
-const checkExistEmail = (email) => {
-  //TODO: axios 요청으로 변경
-  //임시 - 랜덤으로 return
-  if (email.length % 2 === 0) return true;
-  else return false;
-};
-
 const SignupInputs = () => {
   const [userInput, setUserInput] = useState(InitialState); //닉네임, 이메일, 비밀번호 input
   const { nickName, email, password, Vpassword } = userInput;
@@ -142,6 +135,26 @@ const SignupInputs = () => {
 
   const checkNickName = /^[가-힣a-zA-Z]{2,10}$/; //한글,영문,숫자 2-10글자
   const checkPassword = /^[a-zA-Z0-9]{8,16}$/; //영문,숫자 8-16글자
+
+  //이메일 중복여부 확인
+  const checkExistEmail = async (email) => {
+    try {
+      const response = await axios.post(`/auth/${email}/exist`);
+      const check = response.data;
+      setExistEmail(check);
+      setValidation({
+        ...validation,
+        email: !check,
+      });
+    } catch (error) {
+      setExistEmail(false);
+      setValidation({
+        ...validation,
+        email: true,
+      });
+      console.error('ERROR:', error);
+    }
+  };
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -170,21 +183,7 @@ const SignupInputs = () => {
         });
       } else {
         //이메일 형식이 올바른 경우 -> 이메일 중복 검사
-        if (checkExistEmail(value)) {
-          //이미 존재하는 경우
-          setExistEmail(true);
-          setValidation({
-            ...validation,
-            email: false,
-          });
-        } else {
-          //사용가능한 경우
-          setExistEmail(false);
-          setValidation({
-            ...validation,
-            email: true,
-          });
-        }
+        checkExistEmail(value);
       }
     }
     if (name === 'password') {
