@@ -138,5 +138,15 @@ public class ImageService {
     }
 
 
+    public void deleteImage(Long image_id) {
 
+        Image image = imageRepository.findById(image_id)
+                .orElseThrow(() -> new RuntimeException("삭제하려는 이미지를 찾을 수 없습니다."));
+
+        String filepath = image.getFilepath();
+        // S3에서 파일 삭제
+        amazonS3.deleteObject(bucket, filepath);
+        // DB에서 파일 정보 삭제
+        imageRepository.delete(image);
+    }
 }

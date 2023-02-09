@@ -33,6 +33,11 @@ public class ImageController {
     }
 
 
+    @DeleteMapping("/api/posts/image/{id}")
+    public ResponseEntity deleteImage(@PathVariable("id") Long image_id) {
+        imageService.deleteImage(image_id);
+        return new ResponseEntity("이미지 삭제 완료", HttpStatus.NO_CONTENT);
+    }
 
 
 }
