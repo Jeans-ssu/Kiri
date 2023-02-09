@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +36,8 @@ public class PostController {
 
     // 게시글 등록
     @PostMapping("/api/posts")
-    public ResponseEntity savePost(@Valid @RequestBody SavePost savePost) {
+    public ResponseEntity savePost(@Valid @RequestBody SavePost savePost,
+                                   List<MultipartFile> multipartFiles) {
 
 //        Post post = postMapper.saveToPost(savePost);
         Post post = Post.builder()
@@ -53,11 +56,16 @@ public class PostController {
                 .build();
 
         Post savedPost = postService.savePost(post);
-//        PostResDto.savePost savedPostDto = postMapper.postToSave(savedPost);
         SaveResPost resultPost = SaveResPost.of(savedPost);
 
-//        savedPostDto.setPost_id(savedPost.getId());
+        //=====================이거 꼭 써야 하나?======================//
         resultPost.setMember_id(savedPost.getMember().getId());
+        //=====================이거 꼭 써야 하나?======================//
+
+        // 위 코드내용까지는 post 변경사항을 repository 에 저장해주었음
+        // 이제 image 를 저장할 차례
+
+
 
         return ResponseEntity.ok(resultPost);
     }

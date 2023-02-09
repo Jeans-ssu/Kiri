@@ -29,9 +29,9 @@ public class ImageController {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
-//        imageService.addFileToLocal(multipartFiles);
+        List<ImageResDto> imageResDtoList = imageService.addFile(multipartFiles);
 
-        return null;
+        return new ResponseEntity(imageResDtoList, HttpStatus.CREATED);
     }
 
 }

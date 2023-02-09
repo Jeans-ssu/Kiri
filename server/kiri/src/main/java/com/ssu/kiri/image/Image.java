@@ -21,13 +21,15 @@ public class Image {
 
     private String imgUrl; // 파일 url
     private String filename; // 파일 이름
-    private String postImage; // 포스팅 사진 경로 + 이름
+    private String filepath; // 포스팅 사진 경로 + 이름
 
 
     //======builder=======//
     @Builder
-    public Image(String filename) {
+    public Image(String filename, String filepath, String imgUrl) {
         this.filename = filename;
+        this.filepath = filepath;
+        this.imgUrl = imgUrl;
     }
 
 
