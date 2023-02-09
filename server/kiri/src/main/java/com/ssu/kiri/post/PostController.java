@@ -70,6 +70,9 @@ public class PostController {
     @PostMapping("/api/posts/{post-id}")
     public ResponseEntity<?> updatePost(@PathVariable("post-id") Long post_id,
                                      @Valid @RequestBody SavePost savePost) {
+
+        List<Long> imageIdList = savePost.getImageIdList();
+
 //        Post post = postMapper.saveToPost(savePost);
         Post post = Post.builder()
                 .title(savePost.getTitle())
@@ -87,9 +90,8 @@ public class PostController {
                 .finishPostTime(savePost.getFinishPostTime())
                 .build();
 
-        Post resultPost = postService.updatePost(post, post_id);
-        SaveResPost updatePost = SaveResPost.of(resultPost);
-        return ResponseEntity.ok(updatePost);
+        SaveResPost saveResPost = postService.updatePost(post, post_id, imageIdList);
+        return ResponseEntity.ok(saveResPost);
     }
 
     // 게시글 삭제

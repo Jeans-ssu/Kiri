@@ -203,12 +203,12 @@ class PostServiceTest {
 
 
         //when
-        Post updatePost = postService.updatePost(newPost, savedPostId);
+        SaveResPost saveResPost = postService.updatePost(newPost, savedPostId, imageIdList);
 
         //then
-        assertThat(updatePost.getTitle()).isEqualTo("혜안");
-        assertThat(updatePost.getId()).isEqualTo(savedPostId);
-        assertThat(updatePost.getMember().getUsername()).isEqualTo("creamyyy");
+        assertThat(saveResPost.getTitle()).isEqualTo("혜안");
+        assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
+//        assertThat(saveResPost.getMember().getUsername()).isEqualTo("creamyyy");
 
 
     }

@@ -41,8 +41,6 @@ public class PostService {
 
     // 게시물 등록
     public SaveResPost savePost(Post post, List<Long> ImageIdList) {
-        // 로그인한 사용자 id Post 에 저장 -> Post 저장 -> postId Image 에 저장
-        //====================================================================
         // 연관관계가 있으므로(@JoinColumn(name = "member_id")), Post 를 정하기전에 Member 를 정해주고 나중에 저장해준다.
         // post 에 member 저장 -> post 를 저장 -> image 에 post 저장
 
@@ -64,7 +62,8 @@ public class PostService {
         return saveResPost;
     }
 
-    public Post updatePost(Post post, Long id) {
+    // 게시글 수정
+    public SaveResPost updatePost(Post post, Long id, List<Long> imageIdList) {
         // update 를 해줘야 함. 그런데 member 의 내용은 바뀌지 않음. 수정은 인증된 사용자만 할 수 있으므로.
 
         Optional<Post> optPost = postRepository.findById(id);
@@ -77,9 +76,22 @@ public class PostService {
         Post savedPost = postRepository.save(findPost);
 
 
-        // imageService.updateImage(); // image 따로 변경해주기..
+        // ====== 이미지 수정하기
 
-        return savedPost;
+        // 이미지를 수정하지 않는 경우,
+         if(imageIdList.isEmpty()) {
+
+             List<String> existedImageUrlList = imageService.findImageUrlsByPostId(savedPost.getId());
+             SaveResPost saveResPost = SaveResPost.of(savedPost, existedImageUrlList);
+             return saveResPost;
+         }
+
+        // 게시글을 수정할때 이미지를 수정하는 경우,
+        List<String> savedImageUrlList = imageService.savePost(savedPost, imageIdList);
+        SaveResPost saveResPost = SaveResPost.of(savedPost, savedImageUrlList);
+
+        return saveResPost;
+
     }
 
 

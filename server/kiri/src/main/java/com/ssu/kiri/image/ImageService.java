@@ -32,6 +32,16 @@ public class ImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    // 게시글을 수정할때 이미지를 업데이트 하지 않으면,
+    public List<String> findImageUrlsByPostId(Long id) {
+        List<Image> imageUrlList = imageRepository.findUrlByPostId(id);
+        List<String> imgList = imageUrlList.stream()
+                .map(i -> i.getImgUrl())
+                .collect(Collectors.toList());
+        return imgList;
+    }
+
+
     // 게시글 저장시 이미지 파일도 같이 저장
     public List<String> savePost(Post savedPost, List<Long> imageIdList) {
         List<String> savedImgUrlList = new ArrayList<>();
