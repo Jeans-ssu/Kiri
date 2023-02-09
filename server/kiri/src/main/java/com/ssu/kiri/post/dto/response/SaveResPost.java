@@ -42,5 +42,19 @@ public class SaveResPost {
                 post.getStartPostTime(), post.getFinishPostTime());
     }
 
+    public static SaveResPost of(Post post, List<String> imageList) {
+        SaveResPost saveResPost = new SaveResPost(post.getId(), post.getMember().getId(), post.getTitle(), post.getScrap_count(),
+                post.getContent(), post.getCategory(), post.getEvent(), post.getLocal(), post.getSchool(), post.getOrganizer(),
+                post.getContactNumber(), post.getLink(), post.getPlace(), null,
+                post.getStartPostTime(), post.getFinishPostTime());
+
+        for (String img : imageList) {
+            saveResPost.savedImgList.add(img);
+        }
+        return saveResPost;
+    }
+
+
+
 
 }

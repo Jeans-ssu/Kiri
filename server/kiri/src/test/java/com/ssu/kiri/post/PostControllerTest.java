@@ -6,6 +6,7 @@ import com.ssu.kiri.config.TestConfig;
 import com.ssu.kiri.infra.WithAccount;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.request.SavePost;
+import com.ssu.kiri.post.dto.response.SaveResPost;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -83,10 +86,13 @@ class PostControllerTest {
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
 
-        // 기존 post 저장
-        Post savedPost = postService.savePost(post2);
+        List<Long> imageIdList = new ArrayList<>();
+        imageIdList.add(1L);
 
-        Long savedPostId = savedPost.getId();
+        // 기존 post 저장
+        SaveResPost savedPost = postService.savePost(post2, imageIdList);
+
+        Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
 
 
@@ -155,9 +161,12 @@ class PostControllerTest {
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
 
+        List<Long> imageIdList = new ArrayList<>();
+        imageIdList.add(1L);
+
         // 기존 post 저장
-        Post savedPost = postService.savePost(post2);
-        Long savedPostId = savedPost.getId();
+        SaveResPost savedPost = postService.savePost(post2, imageIdList);
+        Long savedPostId = savedPost.getPost_id();
 
         // 업데이트 할 Post 내용
         SavePost savePost = new SavePost();
@@ -207,9 +216,12 @@ class PostControllerTest {
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
 
+        List<Long> imageIdList = new ArrayList<>();
+        imageIdList.add(1L);
+
         // 기존 post 저장
-        Post savedPost = postService.savePost(post2);
-        Long savedPostId = savedPost.getId();
+        SaveResPost savedPost = postService.savePost(post2, imageIdList);
+        Long savedPostId = savedPost.getPost_id();
 
         //when
         //then

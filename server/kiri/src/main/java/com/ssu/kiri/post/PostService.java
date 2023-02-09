@@ -3,6 +3,7 @@ package com.ssu.kiri.post;
 
 import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.member.Member;
+import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,7 +40,7 @@ public class PostService {
     }
 
     // 게시물 등록
-    public Post savePost(Post post) {
+    public SaveResPost savePost(Post post, List<Long> ImageIdList) {
         // 로그인한 사용자 id Post 에 저장 -> Post 저장 -> postId Image 에 저장
         //====================================================================
         // 연관관계가 있으므로(@JoinColumn(name = "member_id")), Post 를 정하기전에 Member 를 정해주고 나중에 저장해준다.
@@ -55,10 +57,11 @@ public class PostService {
         Post savedPost = postRepository.save(newPost);
 
         // image 에 post 저장
-        // local에 저장..?
+        List<String> savedImageUrlList = imageService.savePost(savedPost, ImageIdList);
 
+        SaveResPost saveResPost = SaveResPost.of(post, savedImageUrlList);
 
-        return savedPost;
+        return saveResPost;
     }
 
     public Post updatePost(Post post, Long id) {

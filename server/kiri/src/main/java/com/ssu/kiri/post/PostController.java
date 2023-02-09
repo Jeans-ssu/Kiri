@@ -39,7 +39,8 @@ public class PostController {
     public ResponseEntity savePost(@Valid @RequestBody SavePost savePost,
                                    List<MultipartFile> multipartFiles) {
 
-//        Post post = postMapper.saveToPost(savePost);
+        List<Long> imageIdList = savePost.getImageIdList();
+
         Post post = Post.builder()
                 .title(savePost.getTitle())
                 .scrap_count(savePost.getScrap_count())
@@ -55,19 +56,14 @@ public class PostController {
                 .finishPostTime(savePost.getFinishPostTime())
                 .build();
 
-        Post savedPost = postService.savePost(post);
-        SaveResPost resultPost = SaveResPost.of(savedPost);
+        SaveResPost saveResPost = postService.savePost(post, imageIdList);
 
         //=====================이거 꼭 써야 하나?======================//
-        resultPost.setMember_id(savedPost.getMember().getId());
+//        saveResPost.setMember_id(saveResPost.getMember().getId());
         //=====================이거 꼭 써야 하나?======================//
 
-        // 위 코드내용까지는 post 변경사항을 repository 에 저장해주었음
-        // 이제 image 를 저장할 차례
 
-
-
-        return ResponseEntity.ok(resultPost);
+        return ResponseEntity.ok(saveResPost);
     }
 
     // 게시글 수정

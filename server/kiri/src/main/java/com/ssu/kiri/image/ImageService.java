@@ -32,6 +32,22 @@ public class ImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    // 게시글 저장시 이미지 파일도 같이 저장
+    public List<String> savePost(Post savedPost, List<Long> imageIdList) {
+        List<String> savedImgUrlList = new ArrayList<>();
+
+        for (Long id : imageIdList) {
+            Image image = imageRepository.findById(id).orElseThrow();
+            image.changePost(savedPost); // Post 와 Image 간 연관관계 편의 메서드로 관계 생성
+            imageRepository.save(image); // 변경한 image 를 다시 repository에 다시 저장해줌
+            savedImgUrlList.add(image.getImgUrl());
+        }
+
+        return savedImgUrlList;
+
+    }
+
+
     // 파일 저장
     public List<ImageResDto> addFile(List<MultipartFile> multipartFiles) throws IOException {
         List<ImageResDto> imageResDtoList = new ArrayList<>();
@@ -110,8 +126,6 @@ public class ImageService {
     public void upload() {
 
     }
-
-
 
 
 
