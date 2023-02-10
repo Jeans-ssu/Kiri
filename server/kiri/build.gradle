@@ -56,6 +56,15 @@ dependencies {
 
 	// 파일 처리 관련 의존성 주입
 	implementation 'commons-io:commons-io:2.6'
+	// https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-core
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-core', version: '1.12.400'
+	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.400'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -70,10 +79,7 @@ dependencies {
 //	testImplementation 'io.findify:s3mock_2.12:0.2.4'
 	testImplementation 'io.findify:s3mock_2.13:0.2.6'
 	// intelliJ가 추천
-	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-core
-	implementation group: 'com.amazonaws', name: 'aws-java-sdk-core', version: '1.12.400'
-	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
-	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.400'
+
 
 
 	// junit5

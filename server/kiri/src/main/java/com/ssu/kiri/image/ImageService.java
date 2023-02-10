@@ -14,7 +14,10 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -86,11 +89,21 @@ public class ImageService {
 
             // 로컬에 저장
             // 디렉토리 이름 생성 , 그리고 해당 디렉토리가 없으면 생성해줌
-            File file = new File(absolutePath + File.separator + filename);
+            String fullFilePath = absolutePath + File.separator + filename;
+            System.out.println("fullFilePath = " + fullFilePath);
+            File file = new File(fullFilePath);
             if(!file.exists()) { file.mkdirs(); }
+
+            // 절대경로를 쓰지 않아서 나는 에러 ..java.nio.file.AccessDeniedException => Path 를 이용하자.
             // multipartFile -> File 로 전환
+//            Path path = Paths.get(fullFilePath).toAbsolutePath();
+//            multipartFile.transferTo(path.toFile());
+
             multipartFile.transferTo(file);
             file.createNewFile(); // 디렉토리와 같은 이름의 파일 생성
+
+//            File file = convert(multipartFile, file1, fullFilePath)
+//                    .orElseThrow();//() -> new IllegalArgumentException("MultipartFile -> File 로의 변환이 실패."));
 
             // S3로 업로드
             amazonS3.putObject(
@@ -113,7 +126,7 @@ public class ImageService {
             imageResDtoList.add(imageResDto);
 
             // 로컬에 남아있는 파일 삭제
-            file.delete();
+//            file.delete();
 
         }
 
@@ -121,6 +134,17 @@ public class ImageService {
 
         return imageResDtoList;
 
+    }
+
+    // multipartFile -> file로 전환
+    private Optional<File> convert(MultipartFile multipartFile, File file, String fullFilePath) throws IOException {
+        if(file.createNewFile()) {
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                fos.write(multipartFile.getBytes());
+            }
+            return Optional.of(file);
+        }
+        return Optional.empty();
     }
 
     // file 의 확장자가 jpq, jpeg, png 중에 있으면 true 리턴
