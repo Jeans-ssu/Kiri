@@ -3,7 +3,7 @@ import GlobalStyle from 'styles/Globalstyle';
 import MainPage from 'pages/Main/MainPage';
 import NoMatchPage from 'pages/NoMatchPage';
 // import EventFieldPage from 'pages/Event/EventFieldPage';
-import EventKeywordPage from 'pages/Event/EventKeywordPage';
+// import EventKeywordPage from 'pages/Event/EventKeywordPage';
 import EventInfoPage from 'pages/Event/EventInfoPage';
 import EventSearchPage from 'pages/Event/EventSearchPage';
 import SignupPage from 'pages/Signup/SignupPage';
@@ -12,6 +12,7 @@ import Mypage from 'pages/Mypage/Mypage';
 import EventWritePage from 'pages/EventWrite/EventWritePage';
 import ReduxPage from 'pages/reduxPage';
 import EventPage from 'pages/Event/EventPage';
+import EventRegion from 'pages/Event/EventRegion';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
           <Route path="/mypage" element={<Mypage />} />
           <Route path="*" element={<NoMatchPage />} />
           <Route path="/event" element={<EventPage />} />
-          <Route path="/event/keyword" element={<EventKeywordPage />} />
+          <Route path="/event/region" element={<EventRegion />} />
           <Route path="/event/:eventId" element={<EventInfoPage />} />
           <Route path="/event/search" element={<EventSearchPage />} />
           <Route path="/event/write" element={<EventWritePage />} />
