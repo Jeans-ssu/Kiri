@@ -13,6 +13,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 import userReducer from './modules/userSlice';
 import authReducer from './modules/authSlice';
+import searchReducer from './modules/searchSlice';
 
 const persistConfig = {
   key: 'root',
@@ -24,6 +25,7 @@ export const rootReducer = combineReducers({
   counter: counterReducer,
   user: userReducer,
   auth: authReducer,
+  search: searchReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
