@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -90,17 +91,23 @@ public class ImageService {
             // 로컬에 저장
             // 디렉토리 이름 생성 , 그리고 해당 디렉토리가 없으면 생성해줌
             String fullFilePath = absolutePath + File.separator + filename;
-            System.out.println("fullFilePath = " + fullFilePath);
-            File file = new File(fullFilePath);
-            if(!file.exists()) { file.mkdirs(); }
+//            System.out.println("fullFilePath = " + fullFilePath);
+//            File file = new File(fullFilePath);
+//            if(!file.exists()) { file.mkdirs(); }
+//            multipartFile.transferTo(file);
+//            file.createNewFile(); // 디렉토리와 같은 이름의 파일 생성
 
             // 절대경로를 쓰지 않아서 나는 에러 ..java.nio.file.AccessDeniedException => Path 를 이용하자.
             // multipartFile -> File 로 전환
-//            Path path = Paths.get(fullFilePath).toAbsolutePath();
-//            multipartFile.transferTo(path.toFile());
-
+            Path path = Paths.get(fullFilePath).toAbsolutePath();
+            File file = path.toFile();
+//            if(!file.exists()) {file.mkdirs();}
             multipartFile.transferTo(file);
-            file.createNewFile(); // 디렉토리와 같은 이름의 파일 생성
+//            Files.createFile(path);
+
+
+
+
 
 //            File file = convert(multipartFile, file1, fullFilePath)
 //                    .orElseThrow();//() -> new IllegalArgumentException("MultipartFile -> File 로의 변환이 실패."));
@@ -119,6 +126,7 @@ public class ImageService {
                     .imgUrl(imgUrl)
                     .build();
 
+            System.out.println("image 객체 생성!!!!!!!!!");
 
             imageRepository.save(newImage);
             ImageResDto imageResDto = ImageResDto.of(newImage);

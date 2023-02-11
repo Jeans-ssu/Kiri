@@ -104,10 +104,17 @@ class ImageControllerTest {
 //
 
         MockMultipartFile image1 = new MockMultipartFile(
-                filename,
+                "files",
                 filename + "." + contentType,
                 "image/png",
                 filename.getBytes());
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "files",
+                "test2.png",
+                "image/png",
+                filename.getBytes());
+
 
 
         // MockMultipartFile 의 originalFilename 관련 문제인듯?
@@ -119,13 +126,14 @@ class ImageControllerTest {
                         MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
                                 .multipart("/api/posts/image") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
                                 .file(image1)
+                                .file(image2)
 //                                .part(image1)
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
-//                                .accept(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8")
                 )
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 //                .andDo(print());
 
 

@@ -26,8 +26,8 @@ public class ImageController {
 
         System.out.println("ImageController 실행!!!!!!!");
         // member 인가
-        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Member member = principalDetails.getMember();
+//        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Member member = principalDetails.getMember();
 
         List<ImageResDto> imageResDtoList = imageService.addFile(multipartFiles);
 

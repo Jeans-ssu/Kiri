@@ -35,7 +35,7 @@ public class PostController {
     }
 
     // 게시글 등록
-    @PostMapping("/api2/posts")
+    @PostMapping("/api/posts")
     public ResponseEntity savePost(@Valid @RequestBody SavePost savePost,
                                    List<MultipartFile> multipartFiles) {
 
