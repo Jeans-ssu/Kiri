@@ -294,6 +294,9 @@ const SignupInputs = () => {
           email: userInput.email,
           password: userInput.password,
           passwordVal: userInput.Vpassword,
+          local: userInput.region,
+          school: userInput.univ,
+          department: userInput.status,
         })
         .then(() => {
           setUserInput(InitialState);
@@ -406,7 +409,7 @@ const SignupInputs = () => {
         <InputContainer className={showUnivInput ? null : 'hide'}>
           <InputHeader>학교</InputHeader>
           <div className="column">
-            <SignupInput short value={userInput.univ} />
+            <SignupInput readOnly short value={userInput.univ} />
             <OpenSearchModalBtn onClick={handleClickSearchUnivBtn}>
               <FiSearch />
               찾아보기
