@@ -15,7 +15,7 @@ const SignupHeader = styled.div`
   .green {
     color: ${({ theme }) => theme.colors.mainColor};
   }
-  margin-top: 40px;
+  margin-top: 10px;
 `;
 
 const SignupPage = () => {
