@@ -6,7 +6,7 @@ import { FiSearch } from 'react-icons/fi';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 import axios from '../../api/axios';
 import { SignupSuccessModal, SignupFailModal } from 'components/SignupinModal';
-import SearchSchoolModal from './SearchSchoolModal';
+import SearchSchoolModal from './SearchUnivModal';
 
 const SignupInputsContainer = styled.div`
   margin-top: 30px;
@@ -128,7 +128,7 @@ const InitialState = {
   Vpassword: '',
   status: '대학생',
   region: '서울',
-  school: '',
+  univ: '',
 };
 
 const ValidationInitialState = {
@@ -280,6 +280,12 @@ const SignupInputs = () => {
     setShowUnivModal(true);
   };
 
+  //학교 설정
+  const setUserUniv = (univName) => {
+    console.log(univName);
+    setUserInput({ ...userInput, univ: univName });
+  };
+
   const handleClickSubmitBtn = () => {
     if (!Object.values(validation).includes(false)) {
       axios
@@ -400,7 +406,7 @@ const SignupInputs = () => {
         <InputContainer className={showUnivInput ? null : 'hide'}>
           <InputHeader>학교</InputHeader>
           <div className="column">
-            <SignupInput short />
+            <SignupInput short value={userInput.univ} />
             <OpenSearchModalBtn onClick={handleClickSearchUnivBtn}>
               <FiSearch />
               찾아보기
@@ -421,7 +427,11 @@ const SignupInputs = () => {
         </InputContainer>
       </SignupInputsContainer>
       <SubmitBtn onClick={handleClickSubmitBtn}>회원가입</SubmitBtn>
-      <SearchSchoolModal isOpen={showUnivModal} setIsOpen={setShowUnivModal} />
+      <SearchSchoolModal
+        isOpen={showUnivModal}
+        setIsOpen={setShowUnivModal}
+        setUserUniv={setUserUniv}
+      />
       <SignupSuccessModal isOpen={isSuccess} setIsOpen={setIsSuccess} />
       <SignupFailModal isOpen={isFailed} setIsOpen={setIsFailed} />
     </>
