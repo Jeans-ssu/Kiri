@@ -35,10 +35,17 @@ public class ImageController {
         return new ResponseEntity(imageResDtoList, HttpStatus.CREATED);
     }
 
-
+    // image 와 post 가 연관관계를 맺기 전
     @DeleteMapping("/api/posts/image/{id}")
     public ResponseEntity deleteImage(@PathVariable("id") Long image_id) {
         imageService.deleteImage(image_id);
+        return new ResponseEntity("이미지 삭제 완료", HttpStatus.NO_CONTENT);
+    }
+
+    // 게시글을 수정할때 이미지 삭제 => image 와 post 간 연관관계 삭제 추가.
+    @DeleteMapping("/api/posts/image/update/{id}")
+    public ResponseEntity deleteUpdateImage(@PathVariable("id") Long image_id) {
+        imageService.deleteUpdateImage(image_id);
         return new ResponseEntity("이미지 삭제 완료", HttpStatus.NO_CONTENT);
     }
 
