@@ -29,9 +29,8 @@ public class PostController {
     // 게시글 상세보기
     @GetMapping("/posts/read/{post-id}")
     public ResponseEntity detailPost(@PathVariable("post-id") Long post_id) {
-        Post post = postService.detailPost(post_id);
-
-        return ResponseEntity.ok(DetailPost.of(post));
+        SaveResPost saveResPost = postService.detailPost(post_id);
+        return ResponseEntity.ok(saveResPost);
     }
 
     // 게시글 등록

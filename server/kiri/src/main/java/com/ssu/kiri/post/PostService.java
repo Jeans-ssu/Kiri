@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,13 +34,18 @@ public class PostService {
     }
 
     // 게시글 상세보기
-    public Post detailPost(Long id) {
-        Optional<Post> onePost = postRepository.findById(id);
-        if(onePost.isPresent()) {
-            return onePost.get();
-        } else {
-            throw new RuntimeException("해당 포스트를 상세보기할 수 없습니다.");
-        }
+    public SaveResPost detailPost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 포스트를 상세보기할 수 없습니다."));
+
+        List<Image> imageList = post.getImageList();
+        List<String> imgUrlList = imageList.stream()
+                .map(img -> img.getImgUrl())
+                .collect(Collectors.toList());
+
+        SaveResPost saveResPost = SaveResPost.ofWithImage(post, imgUrlList);
+
+        return saveResPost;
     }
 
     // 게시물 등록
