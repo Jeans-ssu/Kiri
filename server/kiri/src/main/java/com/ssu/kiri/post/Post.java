@@ -131,6 +131,7 @@ public class Post {
         this.finishPostTime = post.getFinishPostTime();
     }
 
+    // 게시글 등록
     // 연관관계 메서드 호출
     public static Post saveMember(Member member, Post newPost) {
         Post post = new Post();
@@ -165,4 +166,7 @@ public class Post {
     }
 
 
+    public void deleteImage(Image image) {
+        this.imageList.remove(image);
+    }
 }

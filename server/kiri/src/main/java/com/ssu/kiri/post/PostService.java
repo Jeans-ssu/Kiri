@@ -1,8 +1,11 @@
 package com.ssu.kiri.post;
 
 
+import com.ssu.kiri.image.Image;
+import com.ssu.kiri.image.ImageRepository;
 import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.member.Member;
+import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +24,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final ImageService imageService;
+    private final ImageRepository imageRepository;
 
     public ResponseEntity<?> home() {
         // 최근 이벤트 16개, 관심있는 이벤트 10개, 인기있는 이벤트 10개
@@ -28,19 +34,22 @@ public class PostService {
     }
 
     // 게시글 상세보기
-    public Post detailPost(Long id) {
-        Optional<Post> onePost = postRepository.findById(id);
-        if(onePost.isPresent()) {
-            return onePost.get();
-        } else {
-            throw new RuntimeException("해당 포스트를 상세보기할 수 없습니다.");
-        }
+    public SaveResPost detailPost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 포스트를 상세보기할 수 없습니다."));
+
+        List<Image> imageList = post.getImageList();
+        List<String> imgUrlList = imageList.stream()
+                .map(img -> img.getImgUrl())
+                .collect(Collectors.toList());
+
+        SaveResPost saveResPost = SaveResPost.ofWithImage(post, imgUrlList);
+
+        return saveResPost;
     }
 
     // 게시물 등록
-    public Post savePost(Post post) {
-        // 로그인한 사용자 id Post 에 저장 -> Post 저장 -> postId Image 에 저장
-        //====================================================================
+    public SaveResPost savePost(Post post, List<Long> imageIdList) {
         // 연관관계가 있으므로(@JoinColumn(name = "member_id")), Post 를 정하기전에 Member 를 정해주고 나중에 저장해준다.
         // post 에 member 저장 -> post 를 저장 -> image 에 post 저장
 
@@ -54,14 +63,27 @@ public class PostService {
         // post 저장
         Post savedPost = postRepository.save(newPost);
 
+        System.out.println("등록할 이미지가 없는 경우 뭐라 나오냐 imageIdList = " + imageIdList);
+        // post에 이미지가 있는 경우
+        if(imageIdList == null || imageIdList.isEmpty()) {
+            System.out.println("등록할 이미지가 없는 거 확인");
+            SaveResPost saveResPost = SaveResPost.of(savedPost);
+            return saveResPost;
+        }
+
+
+        // post에 이미지가 있는 경우
+        System.out.println("PostService 에서의 imageIdList = " + imageIdList);
         // image 에 post 저장
-        // local에 저장..?
+        List<String> savedImageUrlList = imageService.savePost(savedPost, imageIdList);
 
+        SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, savedImageUrlList);
 
-        return savedPost;
+        return saveResPost;
     }
 
-    public Post updatePost(Post post, Long id) {
+    // 게시글 수정
+    public SaveResPost updatePost(Post post, Long id, List<Long> imageIdList) {
         // update 를 해줘야 함. 그런데 member 의 내용은 바뀌지 않음. 수정은 인증된 사용자만 할 수 있으므로.
 
         Optional<Post> optPost = postRepository.findById(id);
@@ -74,14 +96,37 @@ public class PostService {
         Post savedPost = postRepository.save(findPost);
 
 
-        // imageService.updateImage(); // image 따로 변경해주기..
+        // ====== 이미지 수정하기
 
-        return savedPost;
+        // 이미지를 수정하지 않는 경우,
+         if(imageIdList == null || imageIdList.isEmpty()) {
+             List<String> existedImageUrlList = imageService.findImageUrlsByPostId(savedPost.getId());
+             // 원래 포스트에 이미지가 존재하지 않은 경우
+             if(existedImageUrlList == null || existedImageUrlList.isEmpty()) {
+                 SaveResPost saveResPost = SaveResPost.of(savedPost);
+                 return saveResPost;
+             }
+             // 원래 포스트에 이미지가 존재하지만 수정하지 않는 경우
+             SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, existedImageUrlList);
+             return saveResPost;
+         }
+
+        // 게시글을 수정할때 이미지를 수정하는 경우,
+        List<String> savedImageUrlList = imageService.savePost(savedPost, imageIdList);
+        SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, savedImageUrlList);
+
+        return saveResPost;
+
     }
 
 
 
     public void deletePost(Long id) {
+        List<Image> imageList = imageRepository.findUrlByPostId(id);
+        for (Image image : imageList) {
+            imageService.deleteImage(image.getId());
+        }
+
         postRepository.delete(
                 postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 포스트를 삭제할 수 없습니다."))
         );

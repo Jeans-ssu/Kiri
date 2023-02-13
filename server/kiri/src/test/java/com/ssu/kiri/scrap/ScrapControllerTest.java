@@ -8,6 +8,7 @@ import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.Post;
 import com.ssu.kiri.post.PostRepository;
 import com.ssu.kiri.post.PostService;
+import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.scrap.dto.ScrapReqAdd;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +30,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -85,10 +88,13 @@ class ScrapControllerTest {
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
 
-        // 기존 post 저장
-        Post savedPost = postService.savePost(post);
+        List<Long> imageIdList = new ArrayList<>();
+        imageIdList.add(1L);
 
-        Long savedPostId = savedPost.getId();
+        // 기존 post 저장
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
+
+        Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
 
         // 좋아요 시 필요한 시간들 DTO(실행 시작 시간, 실행 끝난 시간)
@@ -128,10 +134,13 @@ class ScrapControllerTest {
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
 
-        // 기존 post 저장
-        Post savedPost = postService.savePost(post);
+        List<Long> imageIdList = new ArrayList<>();
+        imageIdList.add(1L);
 
-        Long savedPostId = savedPost.getId();
+        // 기존 post 저장
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
+
+        Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
 
         // 좋아요 시 필요한 시간들 DTO(실행 시작 시간, 실행 끝난 시간)

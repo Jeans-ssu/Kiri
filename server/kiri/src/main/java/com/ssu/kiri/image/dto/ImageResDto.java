@@ -4,23 +4,21 @@ import com.ssu.kiri.image.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ImageResDto {
 
-  private String origFileName;
-  private String filePath;
+  private Long image_id;
+  private String imgUrl;
 
-//    private Long image_id;
-//    private String imgUrl; // file path
-//
-//
-//    public ImageResDto(Image image) {
-//        this.image_id = image.getId();
-//        this.imgUrl = image.getImgUrl();
-//    }
+
+  public static ImageResDto of(Image image) {
+    return new ImageResDto(image.getId(), image.getImgUrl());
+  }
 
 }

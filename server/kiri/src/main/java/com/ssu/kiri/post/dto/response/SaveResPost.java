@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 // 게시글 등록
@@ -29,7 +30,7 @@ public class SaveResPost {
     private String contactNumber; // 연락처
     private String link; // 참고링크
     private String place; // 장소
-    private List<String> savedImgList; // 이미지 url 리스트
+    private List<String> savedImgList = new ArrayList<>(); // 이미지 url 리스트
 
     private LocalDateTime startPostTime;
 
@@ -41,6 +42,19 @@ public class SaveResPost {
                 post.getContactNumber(), post.getLink(), post.getPlace(), null,
                 post.getStartPostTime(), post.getFinishPostTime());
     }
+
+    public static SaveResPost ofWithImage(Post post, List<String> imageList) {
+        SaveResPost saveResPost = new SaveResPost(post.getId(), post.getMember().getId(), post.getTitle(), post.getScrap_count(),
+                post.getContent(), post.getCategory(), post.getEvent(), post.getLocal(), post.getSchool(), post.getOrganizer(),
+                post.getContactNumber(), post.getLink(), post.getPlace(), imageList,
+                post.getStartPostTime(), post.getFinishPostTime());
+
+        System.out.println("Post 저장 후 반환할 DTO 의 imageList = " + imageList);
+
+        return saveResPost;
+    }
+
+
 
 
 }
