@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { BsExclamationCircle } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
-import { Regions } from 'util/info';
+import { Regions, Status } from 'util/info';
+import SearchUnivModal from 'pages/Signup/SearchUnivModal';
 
 const MypageInputWrapper = styled.div`
   height: 20px;
@@ -162,6 +163,8 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
   const [isValid, setIsValid] = useState(true); //유효한지 여부
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
 
+  const [isOpen, setIsOpen] = useState(false); //학교 검색 모달
+
   useEffect(() => {
     setEditvalue(userInfo[type]);
   }, [userInfo]);
@@ -191,24 +194,36 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
     setIsEditmode(!isEditmode);
   };
 
+  const handleChangeUserUniv = (univ) => {
+    setUserInfo({ ...userInfo, univ: univ });
+  };
+
   return (
     <MypageInputWrapper>
       <div className="type">{types[type]}</div>
       {isEditmode ? (
         <div className="conatiner">
           <div className="input">
-            {type === 'region' ? (
+            {type === 'region' || type === 'status' ? (
               <SelectInput
                 value={editvalue}
                 onChange={handleChangeInterestSelect}
               >
-                {Regions.map((el, idx) => {
-                  return (
-                    <option value={el} key={idx}>
-                      {el}
-                    </option>
-                  );
-                })}
+                {type === 'region'
+                  ? Regions.map((el, idx) => {
+                      return (
+                        <option value={el} key={idx}>
+                          {el}
+                        </option>
+                      );
+                    })
+                  : Status.map((el, idx) => {
+                      return (
+                        <option value={el} key={idx}>
+                          {el}
+                        </option>
+                      );
+                    })}
               </SelectInput>
             ) : (
               <EditInput
@@ -252,11 +267,22 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
       ) : (
         <EditBtn
           className={type === 'email' ? 'hide' : null}
-          onClick={handleClickEditBtn}
+          onClick={
+            type === 'univ'
+              ? () => {
+                  setIsOpen(true);
+                }
+              : handleClickEditBtn
+          }
         >
           수정
         </EditBtn>
       )}
+      <SearchUnivModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setUserUniv={handleChangeUserUniv}
+      />
     </MypageInputWrapper>
   );
 };

@@ -17,3 +17,5 @@ export const Regions = [
   '세종',
   '제주',
 ];
+
+export const Status = ['대학생', '일반인', '중고등학생'];
