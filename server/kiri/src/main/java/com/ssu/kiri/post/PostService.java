@@ -40,7 +40,7 @@ public class PostService {
     }
 
     // 게시물 등록
-    public SaveResPost savePost(Post post, List<Long> ImageIdList) {
+    public SaveResPost savePost(Post post, List<Long> imageIdList) {
         // 연관관계가 있으므로(@JoinColumn(name = "member_id")), Post 를 정하기전에 Member 를 정해주고 나중에 저장해준다.
         // post 에 member 저장 -> post 를 저장 -> image 에 post 저장
 
@@ -54,10 +54,21 @@ public class PostService {
         // post 저장
         Post savedPost = postRepository.save(newPost);
 
-        // image 에 post 저장
-        List<String> savedImageUrlList = imageService.savePost(savedPost, ImageIdList);
+        System.out.println("등록할 이미지가 없는 경우 뭐라 나오냐 imageIdList = " + imageIdList);
+        // post에 이미지가 있는 경우
+        if(imageIdList == null || imageIdList.isEmpty()) {
+            System.out.println("등록할 이미지가 없는 거 확인");
+            SaveResPost saveResPost = SaveResPost.of(savedPost);
+            return saveResPost;
+        }
 
-        SaveResPost saveResPost = SaveResPost.of(post, savedImageUrlList);
+
+        // post에 이미지가 있는 경우
+        System.out.println("PostService 에서의 imageIdList = " + imageIdList);
+        // image 에 post 저장
+        List<String> savedImageUrlList = imageService.savePost(savedPost, imageIdList);
+
+        SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, savedImageUrlList);
 
         return saveResPost;
     }
@@ -82,13 +93,13 @@ public class PostService {
          if(imageIdList.isEmpty()) {
 
              List<String> existedImageUrlList = imageService.findImageUrlsByPostId(savedPost.getId());
-             SaveResPost saveResPost = SaveResPost.of(savedPost, existedImageUrlList);
+             SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, existedImageUrlList);
              return saveResPost;
          }
 
         // 게시글을 수정할때 이미지를 수정하는 경우,
         List<String> savedImageUrlList = imageService.savePost(savedPost, imageIdList);
-        SaveResPost saveResPost = SaveResPost.of(savedPost, savedImageUrlList);
+        SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, savedImageUrlList);
 
         return saveResPost;
 

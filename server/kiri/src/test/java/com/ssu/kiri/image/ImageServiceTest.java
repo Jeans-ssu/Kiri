@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -84,7 +85,7 @@ class ImageServiceTest {
         List<MultipartFile> list = new ArrayList<>();
         list.add(file);
 
-        //when
+
         List<ImageResDto> imageResDtoList = imageService.addFile(list);
 
         //then

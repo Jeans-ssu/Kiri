@@ -56,6 +56,7 @@ public class ImageService {
             imageRepository.save(image); // 변경한 image 를 다시 repository에 다시 저장해줌
             savedImgUrlList.add(image.getImgUrl());
         }
+        System.out.println("savedImgUrlList = " + savedImgUrlList);
 
         return savedImgUrlList;
 

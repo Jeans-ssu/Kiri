@@ -3,6 +3,9 @@ package com.ssu.kiri.post;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ssu.kiri.config.TestConfig;
+import com.ssu.kiri.image.ImageRepository;
+import com.ssu.kiri.image.ImageService;
+import com.ssu.kiri.image.dto.ImageResDto;
 import com.ssu.kiri.infra.WithAccount;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.request.SavePost;
@@ -17,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,11 +28,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,6 +47,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class PostControllerTest {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
 
     @Autowired
     private WebApplicationContext ctx;
@@ -50,6 +59,8 @@ class PostControllerTest {
     @Autowired PostService postService;
     @Autowired PostRepository postRepository;
     @Autowired MemberRepository memberRepository;
+    @Autowired ImageRepository imageRepository;
+    @Autowired ImageService imageService;
 
     @BeforeEach
     public void setup() {
@@ -59,8 +70,10 @@ class PostControllerTest {
                 .build();
     }
 
+
     @AfterEach
     void afterEach() {
+        imageRepository.deleteAll();
         postRepository.deleteAll();
         memberRepository.deleteAll();
     }
@@ -110,23 +123,21 @@ class PostControllerTest {
     }
 
     @WithAccount("creamyyyy")
-    @DisplayName("게시글 등록")
+    @DisplayName("게시글 등록 : 이미지가 있을 경우")
     @Test
     public void savePost() throws Exception {
         //given
-        SavePost savePost = new SavePost();
-        savePost.setTitle("우주하마");
-        savePost.setContent("자세가 곧 스킬인 게임");
-        savePost.setCategory("지역 축제");
-        savePost.setEvent("강연");
-        savePost.setLocal("서울");
-        savePost.setSchool("숭실대학교");
-        savePost.setOrganizer("하마");
-        savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        SavePost savePost = createSavePost();
 
-        System.out.println("savePost.getStartPostTime() = " + savePost.getStartPostTime());
-        System.out.println("savePost.getFinishPostTime() = " + savePost.getFinishPostTime());
+        // 이미지 객체 생성, 이미지 등록 후 id 리스트만 얻어오기.
+        List<MultipartFile> list = createMockMultipartFiles();
+        List<ImageResDto> imageResDtoList = imageService.addFile(list);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
+
+        savePost.setImageIdList(imageIdList);
+        System.out.println("savePost.getImageIdList() = " + savePost.getImageIdList());
 
         //when & then
         this.mockMvc.perform(
@@ -135,11 +146,38 @@ class PostControllerTest {
                                 .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
+                                .characterEncoding("UTF-8")
                 )
+                .andDo(print())
+                .andExpect(status().isOk());
+//                .andDo(print());
+
+    }
+
+    @WithAccount("creamyyyy")
+    @DisplayName("게시글 등록 : 이미지가 없는 경우")
+    @Test
+    public void savePostWithoutImage() throws Exception {
+        //given
+        SavePost savePost = createSavePost();
+        System.out.println("savePost.getImageIdList() = " + savePost.getImageIdList());
+
+        //when & then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/api/posts") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
+                                .characterEncoding("UTF-8")
+                )
+//                .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(print());
 
     }
+
+
 
     @WithAccount("creamyyyy")
     @DisplayName("게시글 수정")
@@ -169,17 +207,7 @@ class PostControllerTest {
         Long savedPostId = savedPost.getPost_id();
 
         // 업데이트 할 Post 내용
-        SavePost savePost = new SavePost();
-        savePost.setTitle("우주하마");
-        savePost.setContent("자세가 곧 스킬인 게임");
-        savePost.setCategory("지역");
-        savePost.setEvent("강연");
-        savePost.setLocal("서울");
-        savePost.setSchool("숭실대학교");
-        savePost.setOrganizer("하마");
-        savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
+        SavePost savePost = createSavePost();
 
         //when
         this.mockMvc.perform(
@@ -234,6 +262,43 @@ class PostControllerTest {
                 .andDo(print());
 
     }
+
+    private List<MultipartFile> createMockMultipartFiles() {
+        MockMultipartFile image1 = new MockMultipartFile(
+                "files",
+                "test2.jpg",
+                "image/jpg",
+                "test2.jpg".getBytes());
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "files",
+                "test.png",
+                "image/png",
+                "test.png".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(image1);
+        list.add(image2);
+
+        return list;
+    }
+
+    private SavePost createSavePost() {
+        SavePost savePost = new SavePost();
+        savePost.setTitle("우주하마");
+        savePost.setContent("자세가 곧 스킬인 게임");
+        savePost.setCategory("지역 축제");
+        savePost.setEvent("강연");
+        savePost.setLocal("서울");
+        savePost.setSchool("숭실대학교");
+        savePost.setOrganizer("하마");
+        savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        return savePost;
+    }
+
+
 
 
 }
