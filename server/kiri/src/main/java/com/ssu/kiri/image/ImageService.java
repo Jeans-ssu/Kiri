@@ -142,7 +142,7 @@ public class ImageService {
             imageResDtoList.add(imageResDto);
 
             // 로컬에 남아있는 파일 삭제
-//            file.delete();
+            file.delete();
 
         }
 
