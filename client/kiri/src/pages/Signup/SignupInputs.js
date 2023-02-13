@@ -7,6 +7,7 @@ import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 import axios from '../../api/axios';
 import { SignupSuccessModal, SignupFailModal } from 'components/SignupinModal';
 import SearchSchoolModal from './SearchUnivModal';
+import { Regions } from 'util/info';
 
 const SignupInputsContainer = styled.div`
   margin-top: 30px;
@@ -137,26 +138,6 @@ const ValidationInitialState = {
   password: false,
   Vpassword: false,
 };
-
-const Regions = [
-  '서울',
-  '경기',
-  '부산',
-  '인천',
-  '대전',
-  '대구',
-  '울산',
-  '광주',
-  '강원',
-  '충북',
-  '충남',
-  '전북',
-  '전남',
-  '경북',
-  '경남',
-  '세종',
-  '제주',
-];
 
 export const checkEmail = (email) => {
   var check =

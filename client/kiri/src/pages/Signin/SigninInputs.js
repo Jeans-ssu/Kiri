@@ -126,7 +126,9 @@ const SigninInputs = () => {
             SET_USER({
               nickName: res.data.username,
               email: res.data.email,
-              interest: res.data.interest,
+              region: res.data.local,
+              univ: res.data.school,
+              status: res.data.department,
             })
           );
           //메인페이지로 이동

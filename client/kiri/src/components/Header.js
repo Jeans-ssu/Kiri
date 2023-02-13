@@ -17,7 +17,6 @@ const Header = () => {
   const menu = ['calendar', 'event', 'event/write'];
 
   const isLogin = useSelector(selectIsLogin);
-  console.log(isLogin);
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);

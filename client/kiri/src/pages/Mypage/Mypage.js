@@ -12,7 +12,7 @@ const MypageHeader = styled.div`
   color: ${({ theme }) => theme.colors.darkgray};
   font-size: 28px;
   font-weight: 700;
-  margin: 40px 0;
+  margin: 10px 0;
 `;
 
 const Mypage = () => {

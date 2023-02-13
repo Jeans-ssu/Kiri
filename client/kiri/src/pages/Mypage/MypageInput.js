@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { BsExclamationCircle } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
+import { Regions } from 'util/info';
 
 const MypageInputWrapper = styled.div`
   height: 20px;
@@ -133,7 +134,9 @@ const types = {
   nickName: '닉네임',
   email: '이메일',
   password: '비밀번호',
-  interest: '관심분야',
+  region: '지역',
+  status: '소속',
+  univ: '학교',
 };
 
 //유효성 검사 함수
@@ -190,19 +193,18 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
       {isEditmode ? (
         <div className="conatiner">
           <div className="input">
-            {type === 'interest' ? (
+            {type === 'region' ? (
               <SelectInput
                 value={editvalue}
                 onChange={handleChangeInterestSelect}
               >
-                <option value="IT">IT</option>
-                <option value="Business">경영/경제</option>
-                <option value="Science">자연과학</option>
-                <option value="Marketing">마케팅/홍보</option>
-                <option value="Humanities">인문사회</option>
-                <option value="Art">예술</option>
-                <option value="Engineering">공학</option>
-                <option value="Etc">기타</option>
+                {Regions.map((el, idx) => {
+                  return (
+                    <option value={el} key={idx}>
+                      {el}
+                    </option>
+                  );
+                })}
               </SelectInput>
             ) : (
               <EditInput

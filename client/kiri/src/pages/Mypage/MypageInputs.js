@@ -43,6 +43,8 @@ const MypageInputs = () => {
     email: userInfo_.email,
     password: 'password1234',
     interest: userInfo_.interest,
+    status: '학생',
+    univ: '뫄뫄대학교',
   });
 
   const handleClickEditInfoBtn = () => {
@@ -80,7 +82,17 @@ const MypageInputs = () => {
         setUserInfo={setUserInfo}
       />
       <MypageInput
-        type={'interest'}
+        type={'region'}
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
+      />
+      <MypageInput
+        type={'status'}
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
+      />
+      <MypageInput
+        type={'univ'}
         userInfo={userInfo}
         setUserInfo={setUserInfo}
       />
