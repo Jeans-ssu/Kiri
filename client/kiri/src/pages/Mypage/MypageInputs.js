@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MypageInput from './MypageInput';
 import Withdraw from './Withdraw';
 import { useSelector } from 'react-redux';
-import { selectUserInfo } from 'store/modules/userSlice';
 import { selectAccessToken } from 'store/modules/authSlice';
 import axios from '../../api/axios';
 
@@ -34,18 +33,39 @@ const EditInfoBtn = styled.button`
 `;
 
 const MypageInputs = () => {
-  const userInfo_ = useSelector(selectUserInfo);
   const accessToken = useSelector(selectAccessToken);
 
-  //TODO: 비밀번호 수정기능 추가
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   const [userInfo, setUserInfo] = useState({
-    nickName: userInfo_.nickName,
-    email: userInfo_.email,
-    password: 'password1234',
-    interest: userInfo_.interest,
-    status: '학생',
-    univ: '뫄뫄대학교',
+    nickName: '',
+    email: '',
+    interest: '',
+    status: '',
+    univ: '',
+    password: '',
   });
+
+  const getUserInfo = async () => {
+    axios.defaults.headers.common['Authorization'] = accessToken;
+    try {
+      const response = await axios.get('/member');
+      const data = response.data;
+      setUserInfo({
+        nickName: data.username,
+        email: data.email,
+        region: data.local,
+        univ: data.school,
+        status: data.department,
+        password: '',
+      });
+      console.log(data);
+    } catch (error) {
+      console.error('ERROR:', error);
+    }
+  };
 
   const handleClickEditInfoBtn = () => {
     console.log('수정', userInfo);

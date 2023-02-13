@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLogin, DELETE_USER } from 'store/modules/userSlice';
 import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
 import axios from '../api/axios';
-import { DELETE_TOKEN } from 'store/modules/authSlice';
+import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
 
 const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
@@ -34,7 +34,10 @@ const Header = () => {
     dispatch(setSearchMode(true));
   };
 
+  const accessToken = useSelector(selectAccessToken);
+
   const handleClickLogout = () => {
+    axios.defaults.headers.common['Authorization'] = accessToken;
     axios
       .post('/logout')
       .then(() => {

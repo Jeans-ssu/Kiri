@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BsExclamationCircle } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
 import { Regions } from 'util/info';
@@ -161,6 +161,10 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
   const [editvalue, setEditvalue] = useState(userInfo[type]);
   const [isValid, setIsValid] = useState(true); //유효한지 여부
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
+
+  useEffect(() => {
+    setEditvalue(userInfo[type]);
+  }, [userInfo]);
 
   const handleClickEditBtn = () => {
     setIsEditmode(!isEditmode);
