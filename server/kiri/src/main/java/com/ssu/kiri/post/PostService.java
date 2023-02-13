@@ -1,6 +1,8 @@
 package com.ssu.kiri.post;
 
 
+import com.ssu.kiri.image.Image;
+import com.ssu.kiri.image.ImageRepository;
 import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.post.dto.response.SaveResPost;
@@ -21,6 +23,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final ImageService imageService;
+    private final ImageRepository imageRepository;
 
     public ResponseEntity<?> home() {
         // 최근 이벤트 16개, 관심있는 이벤트 10개, 인기있는 이벤트 10개
@@ -90,9 +93,14 @@ public class PostService {
         // ====== 이미지 수정하기
 
         // 이미지를 수정하지 않는 경우,
-         if(imageIdList.isEmpty()) {
-
+         if(imageIdList == null || imageIdList.isEmpty()) {
              List<String> existedImageUrlList = imageService.findImageUrlsByPostId(savedPost.getId());
+             // 원래 포스트에 이미지가 존재하지 않은 경우
+             if(existedImageUrlList == null || existedImageUrlList.isEmpty()) {
+                 SaveResPost saveResPost = SaveResPost.of(savedPost);
+                 return saveResPost;
+             }
+             // 원래 포스트에 이미지가 존재하지만 수정하지 않는 경우
              SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, existedImageUrlList);
              return saveResPost;
          }
@@ -108,6 +116,11 @@ public class PostService {
 
 
     public void deletePost(Long id) {
+        List<Image> imageList = imageRepository.findUrlByPostId(id);
+        for (Image image : imageList) {
+            imageService.deleteImage(image.getId());
+        }
+
         postRepository.delete(
                 postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 포스트를 삭제할 수 없습니다."))
         );

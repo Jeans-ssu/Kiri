@@ -52,5 +52,8 @@ public class Image {
         this.imgUrl = filePath;
     }
 
+    public void deleteImageInPost() {
+        this.getPost().getImageList().remove(this);
+    }
 
 }

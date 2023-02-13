@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssu.kiri.image.dto.ImageResDto;
 import com.ssu.kiri.post.Post;
+import com.ssu.kiri.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class ImageService {
 
+    private final PostRepository postRepository;
     private final ImageRepository imageRepository;
     private final AmazonS3 amazonS3;
 
@@ -39,6 +41,11 @@ public class ImageService {
     // 게시글을 수정할때 이미지를 업데이트 하지 않으면,
     public List<String> findImageUrlsByPostId(Long id) {
         List<Image> imageUrlList = imageRepository.findUrlByPostId(id);
+        // 원래있던 이미지를 삭제하고 이미지 없이 게시글을 등록하려하는 경우.
+        if(imageUrlList == null || imageUrlList.isEmpty()) {
+            return null;
+//            throw new RuntimeException("IMAGE NOT FOUND");
+        }
         List<String> imgList = imageUrlList.stream()
                 .map(i -> i.getImgUrl())
                 .collect(Collectors.toList());
@@ -174,6 +181,23 @@ public class ImageService {
 
         Image image = imageRepository.findById(image_id)
                 .orElseThrow(() -> new RuntimeException("삭제하려는 이미지를 찾을 수 없습니다."));
+
+
+        String filepath = image.getFilepath();
+        // S3에서 파일 삭제
+        amazonS3.deleteObject(bucket, filepath);
+        // DB에서 파일 정보 삭제
+        imageRepository.delete(image);
+    }
+
+    public void deleteUpdateImage(Long image_id) {
+
+        Image image = imageRepository.findById(image_id)
+                .orElseThrow(() -> new RuntimeException("삭제하려는 이미지를 찾을 수 없습니다."));
+
+        // 이미지를 삭제하기 앞서 post 의 imageList 에서 삭제하려는 이미지를 remove해준다.
+        image.deleteImageInPost();
+        System.out.println("image.getPost().getImageList() = " + image.getPost().getImageList());
 
         String filepath = image.getFilepath();
         // S3에서 파일 삭제

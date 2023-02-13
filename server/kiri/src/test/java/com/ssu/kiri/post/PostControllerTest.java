@@ -180,34 +180,32 @@ class PostControllerTest {
 
 
     @WithAccount("creamyyyy")
-    @DisplayName("게시글 수정")
+    @DisplayName("게시글 수정 : 이미지 존재O -> 이미지 존재O")
     @Test
     public void updatePost() throws Exception {
         //given
-        // creamyyy 가 post 등록.
-        Post post2 = Post.builder()
-                .title("가을이 오면")
-                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
-                .category("지역 축제")
-                .category("지역")
-                .event("축제")
-                .local("서울")
-                .school("숭실대학교")
-                .place("진리관")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
 
-        List<Long> imageIdList = new ArrayList<>();
-        imageIdList.add(1L);
+        // 게시글 저장
+        Post post = createPostOne();
+        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
 
-        // 기존 post 저장
-        SaveResPost savedPost = postService.savePost(post2, imageIdList);
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
         Long savedPostId = savedPost.getPost_id();
+
+
 
         // 업데이트 할 Post 내용
         SavePost savePost = createSavePost();
+        List<MultipartFile> updateAfterList = createMockMultipartFile2();
+        List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
+        List<Long> imageIdList2 = imageResDtoList2.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
+        savePost.setImageIdList(imageIdList2);
 
         //when
         this.mockMvc.perform(
@@ -216,11 +214,123 @@ class PostControllerTest {
                                 .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
+                                .characterEncoding("UTF-8")
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
 
         //then
+
+    }
+
+    @WithAccount("creamyyyy")
+    @DisplayName("게시글 수정 : 이미지 존재O , 이미지는 수정 X")
+    @Test
+    public void updatePostOX() throws Exception {
+        //given
+
+        // 게시글 저장
+        Post post = createPostOne();
+        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
+
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        Long savedPostId = savedPost.getPost_id();
+
+
+
+        // 업데이트 할 Post 내용
+        SavePost savePost = createSavePost();
+
+
+        //when & then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/api/posts/{post-id}", savedPostId) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
+                                .characterEncoding("UTF-8")
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+    @WithAccount("creamyyyy")
+    @DisplayName("게시글을 수정 : 게시글에 이미지가 있었는데 삭제해서 이미지가 없는채로 저장하고 싶은 경우")
+    @Test
+    public void updatePostOXX() throws Exception {
+        //given
+
+        // 게시글 저장
+        Post post = createPostOne();
+        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
+
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        Long savedPostId = savedPost.getPost_id();
+
+
+
+        // 업데이트 할 Post 내용
+        imageService.deleteUpdateImage(1L);
+        SavePost savePost = createSavePost();
+
+
+        //when & then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/api/posts/{post-id}", savedPostId) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
+                                .characterEncoding("UTF-8")
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+    @WithAccount("creamyyyy")
+    @DisplayName("게시글 수정 : 이미지 존재X -> 이미지 존재O")
+    @Test
+    public void updatePostXO() throws Exception {
+        //given
+
+        // 게시글 저장
+        Post post = createPostOne();
+        SaveResPost savedPost = postService.savePost(post, null);
+        Long savedPostId = savedPost.getPost_id();
+
+
+        // 업데이트 할 Post 내용
+        SavePost savePost = createSavePost();
+        List<MultipartFile> updateAfterList = createMockMultipartFile2();
+        List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
+        List<Long> imageIdList2 = imageResDtoList2.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
+        savePost.setImageIdList(imageIdList2);
+
+
+        //when & then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/api/posts/{post-id}", savedPostId) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
+                                .characterEncoding("UTF-8")
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
 
     }
 
@@ -230,25 +340,15 @@ class PostControllerTest {
     @Test
     public void deletePost() throws Exception {
         //given
-        // creamyyy 가 post 등록.
-        Post post2 = Post.builder()
-                .title("가을이 오면")
-                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
-                .category("지역 축제")
-                .category("지역")
-                .event("축제")
-                .local("서울")
-                .school("숭실대학교")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
+        // 게시글 등록
+        Post post = createPostOne();
+        List<MultipartFile> list = createMockMultipartFiles();
+        List<ImageResDto> imageResDtoList = imageService.addFile(list);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
 
-        List<Long> imageIdList = new ArrayList<>();
-        imageIdList.add(1L);
-
-        // 기존 post 저장
-        SaveResPost savedPost = postService.savePost(post2, imageIdList);
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
         Long savedPostId = savedPost.getPost_id();
 
         //when
@@ -282,6 +382,33 @@ class PostControllerTest {
 
         return list;
     }
+    private List<MultipartFile> createMockMultipartFile1() {
+        MockMultipartFile image1 = new MockMultipartFile(
+                "files",
+                "test2.jpg",
+                "image/jpg",
+                "test2.jpg".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(image1);
+
+        return list;
+    }
+
+    private List<MultipartFile> createMockMultipartFile2() {
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "files",
+                "test.png",
+                "image/png",
+                "test.png".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(image2);
+
+        return list;
+    }
+
 
     private SavePost createSavePost() {
         SavePost savePost = new SavePost();
@@ -298,7 +425,33 @@ class PostControllerTest {
         return savePost;
     }
 
+    private Post createPostOne() {
+        return Post.builder()
+                .title("혜안")
+                .content("혜안져스 라이어 게임")
+                .category("지역")
+                .event("축제")
+                .local("서울")
+                .school("숭실대학교")
+                .organizer("주최자는 나야 둘이 될 수 없어")
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+    }
 
+    private Post createPostTwo() {
+        return Post.builder()
+                .title("수탉")
+                .content("dead by daylight")
+                .category("지역")
+                .event("전시")
+                .local("부산")
+                .school("숭실대학교")
+                .organizer("주최자는 내가 차지한다.")
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+    }
 
 
 }

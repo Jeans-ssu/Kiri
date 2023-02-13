@@ -166,4 +166,7 @@ public class Post {
     }
 
 
+    public void deleteImage(Image image) {
+        this.imageList.remove(image);
+    }
 }

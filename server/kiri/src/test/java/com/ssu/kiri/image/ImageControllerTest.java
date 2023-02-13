@@ -94,15 +94,6 @@ class ImageControllerTest {
         String filePath = "C:\\Users\\user\\OneDrive\\사진" + File.separator + filename + "." + contentType; // 파일 경로
         FileInputStream fileInputStream = new FileInputStream(filePath);
 
-
-//        MockMultipartFile image1 = new MockMultipartFile(
-//                filename, // name
-//                filename + "." + contentType, // originalFilename
-//                contentType, // jpg, png 같은 파일의 형식
-//                fileInputStream // 파일경로로 생성한 InputStream
-//        );
-//
-
         MockMultipartFile image1 = new MockMultipartFile(
                 "files",
                 filename + "." + contentType,

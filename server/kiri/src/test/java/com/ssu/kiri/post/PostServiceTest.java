@@ -1,6 +1,7 @@
 package com.ssu.kiri.post;
 
 import com.ssu.kiri.config.TestConfig;
+import com.ssu.kiri.image.Image;
 import com.ssu.kiri.image.ImageRepository;
 import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.image.dto.ImageResDto;
@@ -65,7 +66,7 @@ class PostServiceTest {
 
         em.persist(member);
 
-        Post post = Post.builder()
+        Post post23 = Post.builder()
                 .title("봄봄")
 //                .member(member)
                 .content("내용내용내용내용")
@@ -77,8 +78,8 @@ class PostServiceTest {
                 .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
-        post.createPost(member);
-        em.persist(post);
+        post23.createPost(member);
+        em.persist(post23);
     }
 
     @AfterEach
@@ -132,7 +133,6 @@ class PostServiceTest {
         Member member2 = optMember.get();
 
         System.out.println("======================================================");
-        System.out.println("member2.getUsername() = " + member2.getUsername());
 
 
         Post post = createPostOne();
@@ -179,55 +179,146 @@ class PostServiceTest {
 
 
     @WithAccount("creamyyy")
-    @DisplayName("게시글 수정")
+    @DisplayName("게시글 수정 : 이미지 존재O -> 이미지 존재O")
     @Test
     public void updatePost() throws Exception {
         //given
-        // creamyyy 가 post 등록.
-        Post post2 = Post.builder()
-                .title("가을이 오면")
-                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
-                .category("지역")
-                .event("축제")
-                .local("서울")
-                .school("숭실대학교")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
 
-        List<Long> imageIdList = new ArrayList<>();
-        imageIdList.add(1L);
+        Post post = createPostOne();
+        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
 
-        // 기존 post 저장
-        SaveResPost savedPost = postService.savePost(post2, imageIdList);
-
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
 
-        // 업데이트할 newPost 생성
-        Post newPost = Post.builder()
-                .title("혜안")
-                .content("혜안져스 라이어 게임")
-                .category("지역")
-                .event("축제")
-                .local("서울")
-                .school("숭실대학교")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
+
+        // 업데이트 할 Post 내용
+        Post postTwo = createPostTwo();
+        List<MultipartFile> updateAfterList = createMockMultipartFile2();
+        List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
+        List<Long> imageIdList2 = imageResDtoList2.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
 
 
         //when
-        SaveResPost saveResPost = postService.updatePost(newPost, savedPostId, imageIdList);
+        SaveResPost saveResPost = postService.updatePost(postTwo, savedPostId ,imageIdList2);
 
         //then
-        assertThat(saveResPost.getTitle()).isEqualTo("혜안");
         assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
-//        assertThat(saveResPost.getMember().getUsername()).isEqualTo("creamyyy");
+        assertThat(saveResPost.getSavedImgList().size()).isEqualTo(1);
+        System.out.println("saveResPost.getSavedImgList() = " + saveResPost.getSavedImgList());
+        Long member_id = savedPost.getMember_id();
+        Member member = memberRepository.findById(member_id).get();
+        assertThat(member.getUsername()).isEqualTo("creamyyy");
 
 
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("게시글 수정 : 이미지 존재X -> 이미지 존재O")
+    @Test
+    public void updatePostXO() throws Exception {
+        //given
+
+        Post post = createPostOne();
+
+        SaveResPost savedPost = postService.savePost(post, null);
+        Long savedPostId = savedPost.getPost_id();
+        System.out.println("savedPostId = " + savedPostId);
+
+
+        // 업데이트 할 Post 내용
+        Post postTwo = createPostTwo();
+        List<MultipartFile> updateAfterList = createMockMultipartFiles();
+        List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
+        List<Long> imageIdList2 = imageResDtoList2.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
+
+
+        //when
+        SaveResPost saveResPost = postService.updatePost(postTwo, savedPostId ,imageIdList2);
+
+        //then
+        assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
+        assertThat(saveResPost.getSavedImgList().size()).isEqualTo(2);
+        System.out.println("saveResPost.getSavedImgList() = " + saveResPost.getSavedImgList());
+        Long member_id = savedPost.getMember_id();
+        Member member = memberRepository.findById(member_id).get();
+        assertThat(member.getUsername()).isEqualTo("creamyyy");
+
+
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("게시글 수정 : 이미지 존재O , 이미지 수정 X")
+    @Test
+    public void updatePostOX() throws Exception {
+        //given
+
+        Post post = createPostOne();
+        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
+
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        Long savedPostId = savedPost.getPost_id();
+        System.out.println("savedPostId = " + savedPostId);
+
+
+        // 업데이트 할 Post 내용
+        Post postTwo = createPostTwo();
+
+        //when
+        SaveResPost saveResPost = postService.updatePost(postTwo, savedPostId ,null);
+
+        //then
+        assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
+        assertThat(saveResPost.getSavedImgList().size()).isEqualTo(1);
+        System.out.println("saveResPost.getSavedImgList() = " + saveResPost.getSavedImgList());
+        Long member_id = savedPost.getMember_id();
+        Member member = memberRepository.findById(member_id).get();
+        assertThat(member.getUsername()).isEqualTo("creamyyy");
+
+
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("게시글을 수정 : 게시글에 이미지가 있었는데 삭제해서 이미지가 없는채로 저장하고 싶은 경우")
+    @Test
+    public void updatePostWithDelete() throws Exception {
+        //given
+        Post post = createPostOne();
+        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
+
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        Long savedPostId = savedPost.getPost_id();
+        System.out.println("savedPostId = " + savedPostId);
+
+        // 저장된 포스트에서 이미지를 삭제하고 다시 저장(수정) 시도
+        imageService.deleteUpdateImage(1L);
+        Post postTwo = createPostTwo();
+
+        //when
+        SaveResPost saveResPost = postService.updatePost(postTwo, savedPostId ,null);
+
+        //then
+        assertThat(saveResPost.getSavedImgList()).isNullOrEmpty();
+        assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
+        Long member_id = savedPost.getMember_id();
+        Member member = memberRepository.findById(member_id).get();
+        assertThat(member.getUsername()).isEqualTo("creamyyy");
     }
 
 
@@ -236,33 +327,26 @@ class PostServiceTest {
     @Test
     public void deletePost() throws Exception {
         //given
-        // creamyyy 가 post 등록.
-        Post post2 = Post.builder()
-                .title("가을이 오면")
-                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
-                .category("지역")
-                .event("축제")
-                .local("서울")
-                .school("숭실대학교")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
+        // 게시글 등록
+        Post post = createPostOne();
+        List<MultipartFile> list = createMockMultipartFiles();
+        List<ImageResDto> imageResDtoList = imageService.addFile(list);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
 
-        List<Long> imageIdList = new ArrayList<>();
-        imageIdList.add(1L);
-
-        // 기존 post 저장
-        SaveResPost savedPost = postService.savePost(post2, imageIdList);
-
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        Long post_id = savedPost.getPost_id();
 
         //when
-        Long post_id = savedPost.getPost_id();
         postService.deletePost(post_id);
 
         //then
         Optional<Post> deletePost = postRepository.findById(post_id);
         assertThat(deletePost).isEqualTo(Optional.empty());
+        List<Image> resultList = imageRepository.findUrlByPostId(post_id);
+        System.out.println("resultList = " + resultList); // []
+        assertThat(resultList).isNullOrEmpty();
 
     }
 
@@ -287,6 +371,33 @@ class PostServiceTest {
         return list;
     }
 
+    private List<MultipartFile> createMockMultipartFile1() {
+        MockMultipartFile image1 = new MockMultipartFile(
+                "files",
+                "test2.jpg",
+                "image/jpg",
+                "test2.jpg".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(image1);
+
+        return list;
+    }
+
+    private List<MultipartFile> createMockMultipartFile2() {
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "files",
+                "test.png",
+                "image/png",
+                "test.png".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(image2);
+
+        return list;
+    }
+
     private SavePost createSavePost() {
         SavePost savePost = new SavePost();
         savePost.setTitle("우주하마");
@@ -304,13 +415,27 @@ class PostServiceTest {
 
     private Post createPostOne() {
         return Post.builder()
-                .title("우주하마")
-                .content("자세가 곧 스킬인 게임")
+                .title("혜안")
+                .content("혜안져스 라이어 게임")
                 .category("지역")
-                .event("강연")
+                .event("축제")
                 .local("서울")
                 .school("숭실대학교")
-                .organizer("하마")
+                .organizer("주최자는 나야 둘이 될 수 없어")
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+    }
+
+    private Post createPostTwo() {
+        return Post.builder()
+                .title("수탉")
+                .content("dead by daylight")
+                .category("지역")
+                .event("전시")
+                .local("부산")
+                .school("숭실대학교")
+                .organizer("주최자는 내가 차지한다.")
                 .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
