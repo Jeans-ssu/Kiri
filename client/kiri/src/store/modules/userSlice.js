@@ -4,7 +4,9 @@ const initialState = {
   isLogin: false,
   nickName: '',
   email: '',
-  interest: '',
+  region: '',
+  univ: '',
+  status: '',
 };
 
 export const userSlice = createSlice({
@@ -15,12 +17,22 @@ export const userSlice = createSlice({
       state.isLogin = true;
       state.nickName = action.payload.nickName;
       state.email = action.payload.email;
-      state.interest = action.payload.interest;
+      state.region = action.payload.region;
+      state.univ = action.payload.univ;
+      state.status = action.payload.status;
+    },
+    DELETE_USER: (state) => {
+      state.isLogin = false;
+      state.nickName = '';
+      state.email = '';
+      state.region = '';
+      state.univ = '';
+      state.status = '';
     },
   },
 });
 
-export const { SET_USER } = userSlice.actions;
+export const { SET_USER, DELETE_USER } = userSlice.actions;
 export const selectIsLogin = (state) => state.user.isLogin;
 export const selectUserInfo = (state) => state.user;
 

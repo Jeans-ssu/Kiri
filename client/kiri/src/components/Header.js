@@ -3,8 +3,10 @@ import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIsLogin } from 'store/modules/userSlice';
+import { selectIsLogin, DELETE_USER } from 'store/modules/userSlice';
 import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
+import axios from '../api/axios';
+import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
 
 const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
@@ -17,7 +19,6 @@ const Header = () => {
   const menu = ['calendar', 'event', 'event/write'];
 
   const isLogin = useSelector(selectIsLogin);
-  console.log(isLogin);
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
@@ -31,6 +32,21 @@ const Header = () => {
     searchtext.current = text;
     dispatch(setSearchWord(searchtext.current));
     dispatch(setSearchMode(true));
+  };
+
+  const accessToken = useSelector(selectAccessToken);
+
+  const handleClickLogout = () => {
+    axios.defaults.headers.common['Authorization'] = accessToken;
+    axios
+      .post('/logout')
+      .then(() => {
+        dispatch(DELETE_TOKEN);
+        dispatch(DELETE_USER);
+      })
+      .catch((err) => {
+        console.log('ERROR: 로그아웃 실패', err);
+      });
   };
 
   return (
@@ -74,7 +90,9 @@ const Header = () => {
           </Searchdiv>
           <Login>
             {isLogin ? (
-              <Link to="/mypage">로그아웃</Link>
+              <Link to="/" onClick={handleClickLogout}>
+                로그아웃
+              </Link>
             ) : (
               <Link to="/signin">로그인</Link>
             )}

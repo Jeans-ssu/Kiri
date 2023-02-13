@@ -1,7 +1,9 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BsExclamationCircle } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
+import { Regions, Status } from 'util/info';
+import SearchUnivModal from 'pages/Signup/SearchUnivModal';
 
 const MypageInputWrapper = styled.div`
   height: 20px;
@@ -133,7 +135,9 @@ const types = {
   nickName: '닉네임',
   email: '이메일',
   password: '비밀번호',
-  interest: '관심분야',
+  region: '지역',
+  status: '소속',
+  univ: '학교',
 };
 
 //유효성 검사 함수
@@ -158,6 +162,12 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
   const [editvalue, setEditvalue] = useState(userInfo[type]);
   const [isValid, setIsValid] = useState(true); //유효한지 여부
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
+
+  const [isOpen, setIsOpen] = useState(false); //학교 검색 모달
+
+  useEffect(() => {
+    setEditvalue(userInfo[type]);
+  }, [userInfo]);
 
   const handleClickEditBtn = () => {
     setIsEditmode(!isEditmode);
@@ -184,25 +194,36 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
     setIsEditmode(!isEditmode);
   };
 
+  const handleChangeUserUniv = (univ) => {
+    setUserInfo({ ...userInfo, univ: univ });
+  };
+
   return (
     <MypageInputWrapper>
       <div className="type">{types[type]}</div>
       {isEditmode ? (
         <div className="conatiner">
           <div className="input">
-            {type === 'interest' ? (
+            {type === 'region' || type === 'status' ? (
               <SelectInput
                 value={editvalue}
                 onChange={handleChangeInterestSelect}
               >
-                <option value="IT">IT</option>
-                <option value="Business">경영/경제</option>
-                <option value="Science">자연과학</option>
-                <option value="Marketing">마케팅/홍보</option>
-                <option value="Humanities">인문사회</option>
-                <option value="Art">예술</option>
-                <option value="Engineering">공학</option>
-                <option value="Etc">기타</option>
+                {type === 'region'
+                  ? Regions.map((el, idx) => {
+                      return (
+                        <option value={el} key={idx}>
+                          {el}
+                        </option>
+                      );
+                    })
+                  : Status.map((el, idx) => {
+                      return (
+                        <option value={el} key={idx}>
+                          {el}
+                        </option>
+                      );
+                    })}
               </SelectInput>
             ) : (
               <EditInput
@@ -246,11 +267,22 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
       ) : (
         <EditBtn
           className={type === 'email' ? 'hide' : null}
-          onClick={handleClickEditBtn}
+          onClick={
+            type === 'univ'
+              ? () => {
+                  setIsOpen(true);
+                }
+              : handleClickEditBtn
+          }
         >
           수정
         </EditBtn>
       )}
+      <SearchUnivModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setUserUniv={handleChangeUserUniv}
+      />
     </MypageInputWrapper>
   );
 };
