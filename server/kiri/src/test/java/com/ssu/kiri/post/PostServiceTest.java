@@ -53,34 +53,6 @@ class PostServiceTest {
     @Autowired ImageService imageService;
     @Autowired ImageRepository imageRepository;
 
-    @BeforeEach
-    void beforeEach() {
-        Member member = Member.builder()
-                .email("love3@aaa.com")
-                .password("qqqqqq33333")
-                .username("love3")
-                .local("서울")
-                .department("대학생")
-                .school("숭실대학교")
-                .build();
-
-        em.persist(member);
-
-        Post post23 = Post.builder()
-                .title("봄봄")
-//                .member(member)
-                .content("내용내용내용내용")
-                .category("지역")
-                .event("축제")
-                .local("서울")
-                .school("숭실대학교")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
-        post23.createPost(member);
-        em.persist(post23);
-    }
 
     @AfterEach
     void afterEach() {
@@ -102,20 +74,31 @@ class PostServiceTest {
 
 
     // 게시글 상세보기 테스트
-    //    @WithAccount("username")
-    @DisplayName("게시글 상세보기")
+    @WithAccount("username")
+    @DisplayName("게시글 상세보기 테스트")
     @Test
     public void detailPost() throws Exception {
         //given
-        // beforeEach
 
-        //when
-        Post post = postService.detailPost(1L);
+        // 게시글 저장
+        Post post = createPostOne();
+        List<MultipartFile> list = createMockMultipartFiles();
+        List<ImageResDto> imageResDtoList = imageService.addFile(list);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
+
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        Long post_id = savedPost.getPost_id();
+
+        //when - 게시글 상세보기
+        SaveResPost saveResPost = postService.detailPost(post_id);
 
         //then
-//        assertThat(post.getId()).isEqualTo(1L);
-        assertThat(post.getTitle()).isEqualTo("봄봄");
-        assertThat(post.getMember().getUsername()).isEqualTo("love3");
+        assertThat(saveResPost.getPost_id()).isEqualTo(post_id);
+        assertThat(saveResPost.getSavedImgList().size()).isEqualTo(2);
+        assertThat(saveResPost.getTitle()).isEqualTo(post.getTitle());
+        assertThat(saveResPost.getTitle()).isEqualTo("혜안");
 
     }
 

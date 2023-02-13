@@ -84,30 +84,15 @@ class PostControllerTest {
     @Test
     public void detailPost() throws Exception {
         //given
-        // creamyyy 가 post 등록.
-        Post post2 = Post.builder()
-                .title("가을이 오면")
-                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
-                .category("지역")
-                .event("축제")
-                .local("서울")
-                .school("숭실대학교")
-                .place("진리관")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .link("a.com")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
+        Post post = createPostOne();
+        List<MultipartFile> list = createMockMultipartFiles();
+        List<ImageResDto> imageResDtoList = imageService.addFile(list);
+        List<Long> imageIdList = imageResDtoList.stream()
+                .map(img -> img.getImage_id())
+                .collect(Collectors.toList());
 
-        List<Long> imageIdList = new ArrayList<>();
-        imageIdList.add(1L);
-
-        // 기존 post 저장
-        SaveResPost savedPost = postService.savePost(post2, imageIdList);
-
+        SaveResPost savedPost = postService.savePost(post, imageIdList);
         Long savedPostId = savedPost.getPost_id();
-        System.out.println("savedPostId = " + savedPostId);
-
 
 
         // when
