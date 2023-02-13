@@ -21,10 +21,18 @@ export const userSlice = createSlice({
       state.univ = action.payload.univ;
       state.status = action.payload.status;
     },
+    DELETE_USER: (state) => {
+      state.isLogin = false;
+      state.nickName = '';
+      state.email = '';
+      state.region = '';
+      state.univ = '';
+      state.status = '';
+    },
   },
 });
 
-export const { SET_USER } = userSlice.actions;
+export const { SET_USER, DELETE_USER } = userSlice.actions;
 export const selectIsLogin = (state) => state.user.isLogin;
 export const selectUserInfo = (state) => state.user;
 
