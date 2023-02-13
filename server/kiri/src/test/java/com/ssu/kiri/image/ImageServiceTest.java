@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,6 +92,61 @@ class ImageServiceTest {
         //then
         assertThat(imageResDtoList.size()).isEqualTo(1);
 
+    }
+
+    @WithAccount("username")
+    @DisplayName("이미지 삭제 테스트")
+    @Test
+    public void deleteImage() throws Exception {
+        //given
+        // 이미지 등록
+        List<MultipartFile> list = createMockMultipartFile1();
+        List<ImageResDto> imageResDtoList = imageService.addFile(list);
+        Long image_id = imageResDtoList.get(0).getImage_id();
+
+        //when
+        // 이미지 삭제
+        imageService.deleteImage(image_id);
+
+        //then
+        Optional<Image> imageOptional = imageRepository.findById(image_id);
+        assertThat(imageOptional).isEqualTo(Optional.empty());
+
+    }
+
+    private List<MultipartFile> createMockMultipartFile1() {
+        MockMultipartFile image1 = new MockMultipartFile(
+                "files",
+                "test2.jpg",
+                "image/jpg",
+                "test2.jpg".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(image1);
+
+        return list;
+    }
+
+
+
+    private List<MultipartFile> createMockMultipartFiles() {
+        MockMultipartFile image1 = new MockMultipartFile(
+                "files",
+                "test2.jpg",
+                "image/jpg",
+                "test2.jpg".getBytes());
+
+        MockMultipartFile image2 = new MockMultipartFile(
+                "files",
+                "test.png",
+                "image/png",
+                "test.png".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(image1);
+        list.add(image2);
+
+        return list;
     }
 
 }

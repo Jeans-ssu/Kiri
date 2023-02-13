@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ssu.kiri.config.S3MockConfig;
 import com.ssu.kiri.config.TestConfig;
+import com.ssu.kiri.image.dto.ImageResDto;
 import com.ssu.kiri.infra.WithAccount;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.PostRepository;
@@ -130,10 +131,61 @@ class ImageControllerTest {
 
     }
 
+    @WithAccount("creamyyyy")
+    @DisplayName("이미지 삭제 테스트")
+    @Test
+    public void deleteImage() throws Exception {
+        //given
+        List<MultipartFile> list = createMockMultipartFile1();
+        List<ImageResDto> imageResDtoList = imageService.addFile(list);
+        Long image_id = imageResDtoList.get(0).getImage_id();
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .delete("/api/posts/image/{id}", image_id) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                )
+                .andExpect(status().isNoContent())
+                .andDo(print());
+
+    }
+
+    private List<MultipartFile> createMockMultipartFile1() {
+        MockMultipartFile image1 = new MockMultipartFile(
+                "files",
+                "test2.jpg",
+                "image/jpg",
+                "test2.jpg".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(image1);
+
+        return list;
+    }
 
 
 
+    private List<MultipartFile> createMockMultipartFiles() {
+        MockMultipartFile image1 = new MockMultipartFile(
+                "files",
+                "test2.jpg",
+                "image/jpg",
+                "test2.jpg".getBytes());
 
+        MockMultipartFile image2 = new MockMultipartFile(
+                "files",
+                "test.png",
+                "image/png",
+                "test.png".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(image1);
+        list.add(image2);
+
+        return list;
+    }
 
 
 
