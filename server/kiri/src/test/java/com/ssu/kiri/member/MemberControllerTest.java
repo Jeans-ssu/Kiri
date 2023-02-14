@@ -206,5 +206,32 @@ class MemberControllerTest {
 
     }
 
+    @WithAccount("creamyyyy")
+    @DisplayName("개인 정보 수정 테스트 : 비밀 번호를 수정하는 경우")
+    @Test
+    void updateMyMemberWithPassword() throws Exception {
+
+        UpdateDto updateDto = new UpdateDto();
+        updateDto.setUsername("creamyyy");
+        updateDto.setEmail("creamyyy@aaa.com");
+        updateDto.setPassword("aaaaaa1111");
+        updateDto.setLocal("대전");
+        updateDto.setSchool("숭실대학교");
+        updateDto.setDepartment("일반인");
+        updateDto.setCheck_password(true);
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/member") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateDto))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
+    }
+
 
 }

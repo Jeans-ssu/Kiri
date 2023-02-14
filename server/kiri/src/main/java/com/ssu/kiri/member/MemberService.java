@@ -52,7 +52,7 @@ public class MemberService {
         Member findMember = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("개인정보를 수정할 수 없습니다."));
 
         if(updateDto.isCheck_password()) { // 비밀번호 check api를 거쳐서 비밀번호 수정을 하는 경우 - true
-            String rawPassword = member.getPassword();
+            String rawPassword = updateDto.getPassword();
             String encPassword = passwordEncoder.encode(rawPassword);
 
             findMember.updateMyMember(updateDto.getEmail(), encPassword, updateDto.getUsername(),

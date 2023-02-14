@@ -34,6 +34,10 @@ import static org.junit.jupiter.api.Assertions.*;
 //@Rollback(false)
 class MemberTest {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+
     @PersistenceContext
     EntityManager em;
 
@@ -74,6 +78,34 @@ class MemberTest {
         //then
         assertThat(afterMember.getLocal()).isEqualTo("대전");
         assertThat(afterMember.getPassword()).isEqualTo(member.getPassword());
+        System.out.println("beforePassword = " + beforePassword);
+        System.out.println("afterMember.password = " + afterMember.getPassword());
+
+    }
+
+    @DisplayName("개인 정보 수정 테스트 : 비밀 번호를 수정하는 경우")
+    @WithAccount("creamyyy")
+    @Test
+    void updateMyMemberWithPassword() throws Exception {
+        //given
+        Member member = memberRepository.findByEmail("creamyyy@aaa.com").get();
+        Long id = member.getId();
+        String beforePassword = member.getPassword();
+        UpdateDto updateDto = new UpdateDto();
+        updateDto.setUsername("creamyyy");
+        updateDto.setEmail("creamyyy@aaa.com");
+        updateDto.setPassword("aaaaaa1111");
+        updateDto.setLocal("대전");
+        updateDto.setSchool("숭실대학교");
+        updateDto.setDepartment("일반인");
+        updateDto.setCheck_password(true);
+
+        //when
+        Member afterMember = memberService.updateMember(updateDto);
+
+        //then
+        assertThat(afterMember.getLocal()).isEqualTo("대전");
+        assertThat(afterMember.getPassword()).isNotEqualTo(beforePassword);
         System.out.println("beforePassword = " + beforePassword);
         System.out.println("afterMember.password = " + afterMember.getPassword());
 
