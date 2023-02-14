@@ -48,11 +48,11 @@ class MemberTest {
 
     /**
      * username : creamyyy
-     * email : creamyy@aaa.com
+     * email : creamyyy@aaa.com
      * password : abcdefgh1234
      * interest = 기타
      */
-    @DisplayName("개인 정보 수정 테스트")
+    @DisplayName("개인 정보 수정 테스트 : 비밀 번호를 수정하지 않는 경우")
     @WithAccount("creamyyy")
     @Test
     void updateMyMember() throws Exception {
@@ -61,16 +61,19 @@ class MemberTest {
         Long id = member.getId();
         String beforePassword = member.getPassword();
         UpdateDto updateDto = new UpdateDto();
-
-        String changePassword = "aaaaaaa444";
-//        member.changePassword(changePassword);
+        updateDto.setUsername("creamyyy");
+        updateDto.setEmail("creamyyy@aaa.com");
+        updateDto.setLocal("대전");
+        updateDto.setSchool("숭실대학교");
+        updateDto.setDepartment("일반인");
+        updateDto.setCheck_password(false);
 
         //when
         Member afterMember = memberService.updateMember(updateDto);
 
         //then
-        assertThat(beforePassword).isNotEqualTo(afterMember.getPassword());
-        System.out.println("==========================================================================");
+        assertThat(afterMember.getLocal()).isEqualTo("대전");
+        assertThat(afterMember.getPassword()).isEqualTo(member.getPassword());
         System.out.println("beforePassword = " + beforePassword);
         System.out.println("afterMember.password = " + afterMember.getPassword());
 

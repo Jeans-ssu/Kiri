@@ -181,17 +181,17 @@ class MemberControllerTest {
      * @throws Exception
      */
     @WithAccount("creamyyyy")
-    @DisplayName("개인 정보 수정 테스트")
+    @DisplayName("개인 정보 수정 테스트 : 비밀 번호를 수정하지 않는 경우")
     @Test
     void updateMyMember() throws Exception {
 
         UpdateDto updateDto = new UpdateDto();
-        updateDto.setUsername("creamyyyy");
-        updateDto.setEmail("creamyyyy@aaa.com");
-        updateDto.setLocal("서울");
-        updateDto.setDepartment("대학생");
+        updateDto.setUsername("creamyyy");
+        updateDto.setEmail("creamyyy@aaa.com");
+        updateDto.setLocal("대전");
         updateDto.setSchool("숭실대학교");
-        updateDto.setPassword("bbbbbbbb444");
+        updateDto.setDepartment("일반인");
+        updateDto.setCheck_password(false);
 
         this.mockMvc.perform(
                         MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
