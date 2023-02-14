@@ -109,6 +109,7 @@ const SearchUnivModal = ({ isOpen, setIsOpen, setUserUniv }) => {
   const [searchword, setSearchword] = useState('');
   const [univlist, setUnivlist] = useState([]);
   const [selectedUniv, setSelectedUniv] = useState(null);
+  //학교이름 + (캠퍼스 이름) 으로 구분함 ex. 숭실대학교 (본교)
 
   const openModalHandler = () => {
     setIsOpen(!isOpen);
@@ -156,13 +157,15 @@ const SearchUnivModal = ({ isOpen, setIsOpen, setUserUniv }) => {
                   <UnivBox
                     key={idx}
                     onClick={() => {
-                      handleClickUniv(el.schoolName);
+                      handleClickUniv(`${el.schoolName} (${el.campusName})`);
                     }}
                     className={
-                      selectedUniv === el.schoolName ? 'isSelected' : null
+                      selectedUniv === `${el.schoolName} (${el.campusName})`
+                        ? 'isSelected'
+                        : null
                     }
                   >
-                    {el.schoolName}
+                    {`${el.schoolName} (${el.campusName})`}
                   </UnivBox>
                 );
               })}
