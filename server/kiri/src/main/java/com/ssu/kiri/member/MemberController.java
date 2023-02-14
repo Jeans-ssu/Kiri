@@ -89,5 +89,10 @@ public class MemberController {
         return ResponseEntity.ok(isCheck);
     }
 
+    @PostMapping("/auth/{password}/exist")
+    public ResponseEntity checkPasswordExist(@PathVariable String password) {
+        boolean isCheck = memberService.checkPasswordExist(password);
+        return ResponseEntity.ok(isCheck);
+    }
 
 }

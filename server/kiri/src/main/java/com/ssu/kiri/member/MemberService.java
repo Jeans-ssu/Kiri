@@ -1,6 +1,8 @@
 package com.ssu.kiri.member;
 
+import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,5 +69,22 @@ public class MemberService {
     // email 중복 체크
     public boolean checkEmailDuplicate(String email) {
         return memberRepository.existsByEmail(email);
+    }
+
+    // 이미 존재하는 비밀번호인지 체크
+    public boolean checkPasswordExist(String password) {
+        // 기존 member 정보 찾아오기
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+        Long id = member.getId();
+
+        Member findMember = memberRepository.findById(id).orElseThrow();
+
+
+        if(passwordEncoder.matches(password, findMember.getPassword())) {
+            return true;
+        }
+
+        return false;
     }
 }
