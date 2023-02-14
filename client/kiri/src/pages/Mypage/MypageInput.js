@@ -4,7 +4,6 @@ import { BsExclamationCircle } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
 import { Regions, Status } from 'util/info';
 import SearchUnivModal from 'pages/Signup/SearchUnivModal';
-import { useNavigate } from 'react-router';
 
 const MypageInputWrapper = styled.div`
   height: 20px;
