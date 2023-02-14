@@ -21,7 +21,6 @@ public class UpdateDto {
     @Email
     private String email;
 
-    @NotBlank
     @Pattern(regexp = "[0-9a-zA-Z]{8,16}")
     private String password;
 
@@ -31,6 +30,9 @@ public class UpdateDto {
 
     @NotBlank
     private String department; // 소속 (일반인, 대학생, 중고등학생)
+
+    @NotBlank
+    private boolean check_password; // 비밀 번호 바꾸면 true, 안바꾸면 false
 
 
 }

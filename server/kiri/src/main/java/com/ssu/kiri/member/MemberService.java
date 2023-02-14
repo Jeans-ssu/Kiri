@@ -1,5 +1,6 @@
 package com.ssu.kiri.member;
 
+import com.ssu.kiri.member.dto.request.UpdateDto;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,27 +43,29 @@ public class MemberService {
 
 
     // 개인 정보 수정하기
-    public Member updateMember(Member member, Long id) {
+    public Member updateMember(UpdateDto updateDto) {
 
-        String rawPassword = member.getPassword();
-        String encPassword = passwordEncoder.encode(rawPassword);
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+        Long id = member.getId();
 
-        Optional<Member> updateMember = memberRepository.findById(id);
-        if(updateMember.isPresent()) {
-            Member findMember = updateMember.get();
-            findMember.updateMyMember(member.getEmail(), encPassword, member.getUsername(), member.getLocal(), member.getSchool(), member.getDepartment());
-            Member resultMember = memberRepository.save(findMember);
-            return resultMember;
-        } else {
-            throw new RuntimeException("개인정보를 수정할 수 없습니다.");
+        Member findMember = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("개인정보를 수정할 수 없습니다."));
+
+        if(updateDto.isCheck_password()) { // 비밀번호 check api를 거쳐서 비밀번호 수정을 하는 경우 - true
+            String rawPassword = member.getPassword();
+            String encPassword = passwordEncoder.encode(rawPassword);
+
+            findMember.updateMyMember(updateDto.getEmail(), encPassword, updateDto.getUsername(),
+                    updateDto.getLocal(), updateDto.getSchool(), updateDto.getDepartment());
+        } else { // 비밀번호 수정을 하지 않는 경우
+            findMember.updateMyMemberWithoutPassword(updateDto.getEmail(), updateDto.getUsername(), updateDto.getLocal(),
+                    updateDto.getSchool(), updateDto.getDepartment());
         }
 
-//                .map(m -> {
-//                    m.updateMyMember(member.getEmail(), encPassword, member.getUsername(), member.getInterest());
-//                    return memberRepository.save(m);
-//                });
+        Member resultMember = memberRepository.save(findMember);
 
-//        return updateMember.get();
+        return resultMember;
+
     }
 
 

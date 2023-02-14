@@ -3,6 +3,7 @@ package com.ssu.kiri.member;
 import com.ssu.kiri.config.TestConfig;
 import com.ssu.kiri.image.Image;
 import com.ssu.kiri.infra.WithAccount;
+import com.ssu.kiri.member.dto.request.UpdateDto;
 import com.ssu.kiri.post.Post;
 import com.ssu.kiri.scrap.Scrap;
 import org.assertj.core.api.Assertions;
@@ -59,12 +60,13 @@ class MemberTest {
         Member member = memberRepository.findByEmail("creamyyy@aaa.com").get();
         Long id = member.getId();
         String beforePassword = member.getPassword();
+        UpdateDto updateDto = new UpdateDto();
 
         String changePassword = "aaaaaaa444";
-        member.changePassword(changePassword);
+//        member.changePassword(changePassword);
 
         //when
-        Member afterMember = memberService.updateMember(member, id);
+        Member afterMember = memberService.updateMember(updateDto);
 
         //then
         assertThat(beforePassword).isNotEqualTo(afterMember.getPassword());
