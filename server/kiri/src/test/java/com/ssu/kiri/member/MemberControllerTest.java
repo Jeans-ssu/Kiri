@@ -3,6 +3,7 @@ package com.ssu.kiri.member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssu.kiri.config.TestConfig;
 import com.ssu.kiri.infra.WithAccount;
+import com.ssu.kiri.member.dto.request.CheckPassword;
 import com.ssu.kiri.member.dto.request.LoginReqDto;
 import com.ssu.kiri.member.dto.request.PostMemberReqDto;
 import com.ssu.kiri.member.dto.request.UpdateDto;
@@ -239,7 +240,9 @@ class MemberControllerTest {
     @Test
     public void checkPasswordExistTest() throws Exception {
         //given
-        String checkPassword = "abcdefgh1234";
+        String password = "abcdefgh123";
+        CheckPassword checkPassword = new CheckPassword();
+        checkPassword.setPassword(password);
 
         //when
         //then
