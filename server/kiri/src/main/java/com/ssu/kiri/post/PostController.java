@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,16 +29,16 @@ public class PostController {
     // 게시글 상세보기
     @GetMapping("/posts/read/{post-id}")
     public ResponseEntity detailPost(@PathVariable("post-id") Long post_id) {
-        Post post = postService.detailPost(post_id);
-
-        return ResponseEntity.ok(DetailPost.of(post));
+        SaveResPost saveResPost = postService.detailPost(post_id);
+        return ResponseEntity.ok(saveResPost);
     }
 
     // 게시글 등록
     @PostMapping("/api/posts")
     public ResponseEntity savePost(@Valid @RequestBody SavePost savePost) {
 
-//        Post post = postMapper.saveToPost(savePost);
+        List<Long> imageIdList = savePost.getImageIdList();
+
         Post post = Post.builder()
                 .title(savePost.getTitle())
                 .scrap_count(savePost.getScrap_count())
@@ -52,20 +54,23 @@ public class PostController {
                 .finishPostTime(savePost.getFinishPostTime())
                 .build();
 
-        Post savedPost = postService.savePost(post);
-//        PostResDto.savePost savedPostDto = postMapper.postToSave(savedPost);
-        SaveResPost resultPost = SaveResPost.of(savedPost);
+        SaveResPost saveResPost = postService.savePost(post, imageIdList);
 
-//        savedPostDto.setPost_id(savedPost.getId());
-        resultPost.setMember_id(savedPost.getMember().getId());
+        //=====================이거 꼭 써야 하나?======================//
+//        saveResPost.setMember_id(saveResPost.getMember().getId());
+        //=====================이거 꼭 써야 하나?======================//
 
-        return ResponseEntity.ok(resultPost);
+
+        return ResponseEntity.ok(saveResPost);
     }
 
     // 게시글 수정
     @PostMapping("/api/posts/{post-id}")
     public ResponseEntity<?> updatePost(@PathVariable("post-id") Long post_id,
                                      @Valid @RequestBody SavePost savePost) {
+
+        List<Long> imageIdList = savePost.getImageIdList();
+
 //        Post post = postMapper.saveToPost(savePost);
         Post post = Post.builder()
                 .title(savePost.getTitle())
@@ -83,9 +88,8 @@ public class PostController {
                 .finishPostTime(savePost.getFinishPostTime())
                 .build();
 
-        Post resultPost = postService.updatePost(post, post_id);
-        SaveResPost updatePost = SaveResPost.of(resultPost);
-        return ResponseEntity.ok(updatePost);
+        SaveResPost saveResPost = postService.updatePost(post, post_id, imageIdList);
+        return ResponseEntity.ok(saveResPost);
     }
 
     // 게시글 삭제

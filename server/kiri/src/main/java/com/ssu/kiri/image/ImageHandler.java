@@ -24,7 +24,7 @@ public class ImageHandler {
     }
 
 
-    public List<Image> parseFileInfo(List<MultipartFile> multipartFiles) throws Exception {
+    /*public List<Image> parseFileInfo(List<MultipartFile> multipartFiles) throws Exception {
         // 반환할 파일 리스트
         List<Image> fileList = new ArrayList<>();
 
@@ -102,5 +102,5 @@ public class ImageHandler {
 
         return fileList;
     }
-
+*/
 }

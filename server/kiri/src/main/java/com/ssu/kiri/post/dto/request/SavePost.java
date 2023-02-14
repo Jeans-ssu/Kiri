@@ -43,8 +43,8 @@ public class SavePost {
 
     private String link; // 참고링크
     private String contactNumber; // 연락처
-    // 이미지 로컬에 저장
-    private List<MultipartFile> files;
+
+    private List<Long> imageIdList; // DB 에서 찾아올 이미지 아이디 리스트
 
 //    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
