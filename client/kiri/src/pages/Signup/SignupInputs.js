@@ -6,7 +6,7 @@ import { FiSearch } from 'react-icons/fi';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 import axios from '../../api/axios';
 import { SignupSuccessModal, SignupFailModal } from 'components/SignupinModal';
-import SearchSchoolModal from './SearchUnivModal';
+import SearchSchoolModal from '../../components/SearchUnivModal';
 import { Regions } from 'util/info';
 
 const SignupInputsContainer = styled.div`
