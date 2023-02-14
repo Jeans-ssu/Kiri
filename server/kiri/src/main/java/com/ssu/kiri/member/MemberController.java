@@ -4,6 +4,7 @@ import com.ssu.kiri.member.dto.request.PostMemberReqDto;
 import com.ssu.kiri.member.dto.request.UpdateDto;
 import com.ssu.kiri.member.dto.response.PostMemberResDto;
 import com.ssu.kiri.member.dto.response.FindAndUpdateDto;
+import com.ssu.kiri.post.dto.request.CheckPassword;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -75,8 +76,9 @@ public class MemberController {
         return ResponseEntity.ok(isCheck);
     }
 
-    @PostMapping("/auth/{password}/exist")
-    public ResponseEntity checkPasswordExist(@PathVariable String password) {
+    @PostMapping("/auth/password/exist")
+    public ResponseEntity checkPasswordExist(@Valid @RequestBody CheckPassword checkPassword) {
+        String password = checkPassword.getPassword();
         boolean isCheck = memberService.checkPasswordExist(password);
         return ResponseEntity.ok(isCheck);
     }
