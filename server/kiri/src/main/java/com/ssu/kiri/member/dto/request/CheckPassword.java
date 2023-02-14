@@ -1,4 +1,4 @@
-package com.ssu.kiri.post.dto.request;
+package com.ssu.kiri.member.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

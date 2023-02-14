@@ -1,10 +1,10 @@
 package com.ssu.kiri.member;
 
+import com.ssu.kiri.member.dto.request.CheckPassword;
 import com.ssu.kiri.member.dto.request.PostMemberReqDto;
 import com.ssu.kiri.member.dto.request.UpdateDto;
 import com.ssu.kiri.member.dto.response.PostMemberResDto;
 import com.ssu.kiri.member.dto.response.FindAndUpdateDto;
-import com.ssu.kiri.post.dto.request.CheckPassword;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
