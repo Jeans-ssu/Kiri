@@ -3,6 +3,7 @@ package com.ssu.kiri.member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssu.kiri.config.TestConfig;
 import com.ssu.kiri.infra.WithAccount;
+import com.ssu.kiri.member.dto.request.CheckPassword;
 import com.ssu.kiri.member.dto.request.LoginReqDto;
 import com.ssu.kiri.member.dto.request.PostMemberReqDto;
 import com.ssu.kiri.member.dto.request.UpdateDto;
@@ -181,17 +182,17 @@ class MemberControllerTest {
      * @throws Exception
      */
     @WithAccount("creamyyyy")
-    @DisplayName("개인 정보 수정 테스트")
+    @DisplayName("개인 정보 수정 테스트 : 비밀 번호를 수정하지 않는 경우")
     @Test
     void updateMyMember() throws Exception {
 
         UpdateDto updateDto = new UpdateDto();
-        updateDto.setUsername("creamyyyy");
-        updateDto.setEmail("creamyyyy@aaa.com");
-        updateDto.setLocal("서울");
-        updateDto.setDepartment("대학생");
+        updateDto.setUsername("creamyyy");
+        updateDto.setEmail("creamyyy@aaa.com");
+        updateDto.setLocal("대전");
         updateDto.setSchool("숭실대학교");
-        updateDto.setPassword("bbbbbbbb444");
+        updateDto.setDepartment("일반인");
+        updateDto.setCheck_password(false);
 
         this.mockMvc.perform(
                         MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
@@ -199,6 +200,58 @@ class MemberControllerTest {
                                 .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(updateDto))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
+    }
+
+    @WithAccount("creamyyyy")
+    @DisplayName("개인 정보 수정 테스트 : 비밀 번호를 수정하는 경우")
+    @Test
+    void updateMyMemberWithPassword() throws Exception {
+
+        UpdateDto updateDto = new UpdateDto();
+        updateDto.setUsername("creamyyy");
+        updateDto.setEmail("creamyyy@aaa.com");
+        updateDto.setPassword("aaaaaa1111");
+        updateDto.setLocal("대전");
+        updateDto.setSchool("숭실대학교");
+        updateDto.setDepartment("일반인");
+        updateDto.setCheck_password(true);
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/member") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateDto))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
+    }
+
+
+    @WithAccount("creamyyyy")
+    @DisplayName("해당 비밀번호가 이미 DB에 존재하는지 확인 테스트")
+    @Test
+    public void checkPasswordExistTest() throws Exception {
+        //given
+        String password = "abcdefgh123";
+        CheckPassword checkPassword = new CheckPassword();
+        checkPassword.setPassword(password);
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/auth/password/exist") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(checkPassword))
                 )
                 .andExpect(status().isOk())
                 .andDo(print());

@@ -66,17 +66,23 @@ public class Member {
         return this;
     }
 
-    // 개인 정보 수정
-    public void updateMyMember(String email, String encPassword, String username, String local, String school, String department) {
+    // 개인 정보 수정 - 비밀번호도 수정하는 경우.
+    public void updateMyMember(String email, String password, String username, String local, String school, String department) {
         this.email = email;
+        this.password = password;
         this.username = username;
-        this.password = encPassword;
         this.local = local;
         this.school = school;
         this.department = department;
     }
 
-    public void changePassword(String changePassword) {
-        this.password = changePassword;
+    // 개인 정보 수정 - 비밀번호도 수정하는 경우.
+    public void updateMyMemberWithoutPassword(String email, String username, String local, String school, String department) {
+        this.email = email;
+        this.username = username;
+        this.local = local;
+        this.school = school;
+        this.department = department;
     }
+
 }

@@ -3,6 +3,7 @@ package com.ssu.kiri.member;
 import com.ssu.kiri.config.TestConfig;
 import com.ssu.kiri.image.Image;
 import com.ssu.kiri.infra.WithAccount;
+import com.ssu.kiri.member.dto.request.UpdateDto;
 import com.ssu.kiri.post.Post;
 import com.ssu.kiri.scrap.Scrap;
 import org.assertj.core.api.Assertions;
@@ -33,6 +34,10 @@ import static org.junit.jupiter.api.Assertions.*;
 //@Rollback(false)
 class MemberTest {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+
     @PersistenceContext
     EntityManager em;
 
@@ -47,11 +52,11 @@ class MemberTest {
 
     /**
      * username : creamyyy
-     * email : creamyy@aaa.com
+     * email : creamyyy@aaa.com
      * password : abcdefgh1234
      * interest = 기타
      */
-    @DisplayName("개인 정보 수정 테스트")
+    @DisplayName("개인 정보 수정 테스트 : 비밀 번호를 수정하지 않는 경우")
     @WithAccount("creamyyy")
     @Test
     void updateMyMember() throws Exception {
@@ -59,16 +64,48 @@ class MemberTest {
         Member member = memberRepository.findByEmail("creamyyy@aaa.com").get();
         Long id = member.getId();
         String beforePassword = member.getPassword();
-
-        String changePassword = "aaaaaaa444";
-        member.changePassword(changePassword);
+        UpdateDto updateDto = new UpdateDto();
+        updateDto.setUsername("creamyyy");
+        updateDto.setEmail("creamyyy@aaa.com");
+        updateDto.setLocal("대전");
+        updateDto.setSchool("숭실대학교");
+        updateDto.setDepartment("일반인");
+        updateDto.setCheck_password(false);
 
         //when
-        Member afterMember = memberService.updateMember(member, id);
+        Member afterMember = memberService.updateMember(updateDto);
 
         //then
-        assertThat(beforePassword).isNotEqualTo(afterMember.getPassword());
-        System.out.println("==========================================================================");
+        assertThat(afterMember.getLocal()).isEqualTo("대전");
+        assertThat(afterMember.getPassword()).isEqualTo(member.getPassword());
+        System.out.println("beforePassword = " + beforePassword);
+        System.out.println("afterMember.password = " + afterMember.getPassword());
+
+    }
+
+    @DisplayName("개인 정보 수정 테스트 : 비밀 번호를 수정하는 경우")
+    @WithAccount("creamyyy")
+    @Test
+    void updateMyMemberWithPassword() throws Exception {
+        //given
+        Member member = memberRepository.findByEmail("creamyyy@aaa.com").get();
+        Long id = member.getId();
+        String beforePassword = member.getPassword();
+        UpdateDto updateDto = new UpdateDto();
+        updateDto.setUsername("creamyyy");
+        updateDto.setEmail("creamyyy@aaa.com");
+        updateDto.setPassword("aaaaaa1111");
+        updateDto.setLocal("대전");
+        updateDto.setSchool("숭실대학교");
+        updateDto.setDepartment("일반인");
+        updateDto.setCheck_password(true);
+
+        //when
+        Member afterMember = memberService.updateMember(updateDto);
+
+        //then
+        assertThat(afterMember.getLocal()).isEqualTo("대전");
+        assertThat(afterMember.getPassword()).isNotEqualTo(beforePassword);
         System.out.println("beforePassword = " + beforePassword);
         System.out.println("afterMember.password = " + afterMember.getPassword());
 
@@ -166,7 +203,22 @@ class MemberTest {
 
     }
 
+    @WithAccount("creamyyy")
+    @DisplayName("비밀번호가 이미 존재하는지 확인 테스트")
+    @Test
+    public void checkPasswordExistTest() throws Exception {
+        //given
+//        String checkPassword = "abcdefgh1234";
+        String checkPassword = "abcdefgh123";
 
+        //when
+        boolean isExist = memberService.checkPasswordExist(checkPassword);
+
+        //then
+//        assertThat(isExist).isEqualTo(true);
+        assertThat(isExist).isEqualTo(false);
+
+    }
 
 
 
