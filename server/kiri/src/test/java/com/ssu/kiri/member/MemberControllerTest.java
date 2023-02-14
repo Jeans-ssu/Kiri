@@ -234,4 +234,27 @@ class MemberControllerTest {
     }
 
 
+    @WithAccount("creamyyyy")
+    @DisplayName("해당 비밀번호가 이미 DB에 존재하는지 확인 테스트")
+    @Test
+    public void checkPasswordExistTest() throws Exception {
+        //given
+        String checkPassword = "abcdefgh1234";
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .post("/auth/password/exist") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(checkPassword))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
+    }
+
+
 }

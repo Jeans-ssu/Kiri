@@ -203,7 +203,22 @@ class MemberTest {
 
     }
 
+    @WithAccount("creamyyy")
+    @DisplayName("비밀번호가 이미 존재하는지 확인 테스트")
+    @Test
+    public void checkPasswordExistTest() throws Exception {
+        //given
+//        String checkPassword = "abcdefgh1234";
+        String checkPassword = "abcdefgh123";
 
+        //when
+        boolean isExist = memberService.checkPasswordExist(checkPassword);
+
+        //then
+//        assertThat(isExist).isEqualTo(true);
+        assertThat(isExist).isEqualTo(false);
+
+    }
 
 
 
