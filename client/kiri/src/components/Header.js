@@ -7,10 +7,14 @@ import { selectIsLogin, DELETE_USER } from 'store/modules/userSlice';
 import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
 import axios from '../api/axios';
 import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
+import NeedLoginModal from './NeedLoginModal';
 
 const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
   const [click, setClick] = useState(false);
+
+  const [isOpen, setIsOpen] = useState(false); //로그인 필요 모달
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -98,11 +102,18 @@ const Header = () => {
             )}
           </Login>
           <Profile>
-            <Link to="/mypage">
-              <FaUserCircle size="27" color="black" />
-            </Link>
+            {isLogin ? (
+              <Link to="/mypage">
+                <FaUserCircle size="27" color="black" />
+              </Link>
+            ) : (
+              <Link onClick={() => setIsOpen(true)}>
+                <FaUserCircle size="27" color="black" />
+              </Link>
+            )}
           </Profile>
         </TabMenu>
+        <NeedLoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
       </Main>
     </>
   );
