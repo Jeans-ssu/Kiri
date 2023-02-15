@@ -1,5 +1,6 @@
 package com.ssu.kiri.member;
 
+import com.ssu.kiri.member.dto.request.CheckPassword;
 import com.ssu.kiri.member.dto.request.PostMemberReqDto;
 import com.ssu.kiri.member.dto.request.UpdateDto;
 import com.ssu.kiri.member.dto.response.PostMemberResDto;
@@ -64,21 +65,7 @@ public class MemberController {
     public ResponseEntity updateMyMember(//@PathVariable("member-id") Long member_id,
                                          @Valid @RequestBody UpdateDto updateDto) {
 
-//        Member member = memberMapper.updateToM(updateDto);
-        Member member = Member.builder()
-                .email(updateDto.getEmail())
-                .password(updateDto.getPassword())
-                .username(updateDto.getUsername())
-                .local(updateDto.getLocal())
-                .school(updateDto.getSchool())
-                .department(updateDto.getDepartment())
-                .build();
-
-
-        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long id = principalDetails.getMember().getId();
-
-        Member updateMember = memberService.updateMember(member, id);
+        Member updateMember = memberService.updateMember(updateDto);
 
         return ResponseEntity.ok(FindAndUpdateDto.of(updateMember));
     }
@@ -89,5 +76,11 @@ public class MemberController {
         return ResponseEntity.ok(isCheck);
     }
 
+    @PostMapping("/auth/password/exist")
+    public ResponseEntity checkPasswordExist(@Valid @RequestBody CheckPassword checkPassword) {
+        String password = checkPassword.getPassword();
+        boolean isCheck = memberService.checkPasswordExist(password);
+        return ResponseEntity.ok(isCheck);
+    }
 
 }
