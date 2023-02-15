@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { PURGE } from 'redux-persist';
 
 const TOKEN_TIME_OUT = 24 * 60 * 60 * 3 * 1000; //3일
 
@@ -22,6 +23,9 @@ export const authSlice = createSlice({
       state.accessToken = null;
       state.expireTime = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
   },
 });
 

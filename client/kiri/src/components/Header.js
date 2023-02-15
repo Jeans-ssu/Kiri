@@ -8,6 +8,12 @@ import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
 import axios from '../api/axios';
 import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
 import NeedLoginModal from './NeedLoginModal';
+import { persistor } from 'store/store';
+
+//redux-persist 저장값 초기화
+const purge = async () => {
+  await persistor.purge();
+};
 
 const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
@@ -45,10 +51,12 @@ const Header = () => {
     axios
       .post('/logout')
       .then(() => {
+        purge();
         dispatch(DELETE_TOKEN);
         dispatch(DELETE_USER);
       })
       .catch((err) => {
+        purge();
         console.log('ERROR: 로그아웃 실패', err);
       });
   };
