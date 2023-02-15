@@ -101,6 +101,14 @@ public class PostController {
     }
 
 
+    @GetMapping({"/posts", "/posts/{category}", "posts/{category}/{event}"})
+    public ResponseEntity classifyPost(@PathVariable(value = "category", required = false ) String category,
+                                       @PathVariable(value = "event", required = false) List<String> eventList ) {
+
+        postService.classifyPost(category, eventList);
+
+        return null;
+    }
 
 
 

@@ -131,4 +131,29 @@ public class PostService {
                 postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 포스트를 삭제할 수 없습니다."))
         );
     }
+
+    // 분류해서 게시글들 보기
+    public void classifyPost(String category, List<String> eventList) {
+
+        // 1. category eventList 둘다 없는 경우
+        // 2. eventList 만 없는 경우
+        // 3. 둘다 있는 경우
+
+        if(category == null || category.isEmpty()) {
+            if(eventList == null || eventList.isEmpty()) {
+                // 1. category eventList 둘다 없는 경우
+
+                return;
+            }
+
+            // 2. eventList 만 없는 경우
+
+            return;
+        }
+        // 3. 둘다 있는 경우
+
+
+        return;
+
+    }
 }
