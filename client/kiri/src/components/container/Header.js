@@ -5,9 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLogin, DELETE_USER } from 'store/modules/userSlice';
 import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
-import axios from '../api/axios';
+import axios from '../../api/axios';
 import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
-import NeedLoginModal from './NeedLoginModal';
+import NeedLoginModal from 'components/modal/NeedLoginModal';
 
 const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);

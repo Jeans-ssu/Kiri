@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { Regions, EventCategory } from 'util/info';
-import SearchUnivModal from 'components/SearchUnivModal';
+import SearchUnivModal from 'components/modal/SearchUnivModal';
 import { SearchUnivBtn } from 'components/buttons/SearchUnivBtn';
 import { FiSearch } from 'react-icons/fi';
 

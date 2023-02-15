@@ -5,8 +5,11 @@ import { AiFillEye } from 'react-icons/ai';
 import { FiSearch } from 'react-icons/fi';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 import axios from '../../api/axios';
-import { SignupSuccessModal, SignupFailModal } from 'components/SignupinModal';
-import SearchSchoolModal from '../../components/SearchUnivModal';
+import {
+  SignupSuccessModal,
+  SignupFailModal,
+} from 'components/modal/SignupinModal';
+import SearchSchoolModal from '../../components/modal/SearchUnivModal';
 import { Regions } from 'util/info';
 
 const SignupInputsContainer = styled.div`
