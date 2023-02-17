@@ -1,28 +1,56 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectIsLogin } from 'store/modules/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsLogin, DELETE_USER } from 'store/modules/userSlice';
+import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
+import axios from '../api/axios';
+import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
+import NeedLoginModal from './NeedLoginModal';
 
-export const Header = () => {
+const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
   const [click, setClick] = useState(false);
+
+  const [isOpen, setIsOpen] = useState(false); //로그인 필요 모달
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const isLogin = useSelector(selectIsLogin);
-
-  const menuArr = [
-    { name: '캘린더' },
-    { name: '이벤트' },
-    { name: '게시요청' },
-  ];
+  const menuArr = [{ name: '캘린더' }, { name: '이벤트' }, { name: '글쓰기' }];
 
   const menu = ['calendar', 'event', 'event/write'];
+
+  const isLogin = useSelector(selectIsLogin);
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
     setClick(true);
+  };
+
+  const searchtext = useRef('');
+
+  const searchHandler = () => {
+    const text = document.getElementById('text').value;
+    searchtext.current = text;
+    dispatch(setSearchWord(searchtext.current));
+    dispatch(setSearchMode(true));
+  };
+
+  const accessToken = useSelector(selectAccessToken);
+
+  const handleClickLogout = () => {
+    axios.defaults.headers.common['Authorization'] = accessToken;
+    axios
+      .post('/logout')
+      .then(() => {
+        dispatch(DELETE_TOKEN);
+        dispatch(DELETE_USER);
+      })
+      .catch((err) => {
+        console.log('ERROR: 로그아웃 실패', err);
+      });
   };
 
   return (
@@ -55,17 +83,20 @@ export const Header = () => {
             <SearchInput
               type="text"
               id="text"
+              onKeyUp={searchHandler}
               onKeyPress={() => {
                 if (event.keyCode === 13) {
                   navigate('/event/search');
                 }
               }}
               placeholder="검색어를 입력하세요"
-            ></SearchInput>
+            ></SearchInput>{' '}
           </Searchdiv>
           <Login>
             {isLogin ? (
-              <Link to="/signin">로그아웃</Link>
+              <Link to="/" onClick={handleClickLogout}>
+                로그아웃
+              </Link>
             ) : (
               <Link to="/signin">로그인</Link>
             )}
@@ -76,16 +107,18 @@ export const Header = () => {
                 <FaUserCircle size="27" color="black" />
               </Link>
             ) : (
-              <Link to="/signin">
+              <Link onClick={() => setIsOpen(true)}>
                 <FaUserCircle size="27" color="black" />
               </Link>
             )}
           </Profile>
         </TabMenu>
+        <NeedLoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
       </Main>
     </>
   );
 };
+
 const Main = styled.div`
   display: flex;
   width: 100%;
@@ -177,15 +210,9 @@ const SearchInput = styled.input`
   border: none;
   border-radius: 3px;
   padding: 7.8px 9.1px 7.8px 32px;
-
   margin-left: 5px;
   margin-bottom: 14px;
   display: flex;
-  &:active,
-  &:focus {
-    outline: none;
-  }
-  font-size: 12px;
 `;
 
 const Login = styled.button`

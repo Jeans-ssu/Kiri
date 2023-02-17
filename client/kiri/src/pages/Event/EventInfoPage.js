@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
 import { FiShare2 } from 'react-icons/fi';
-import { BsBookmark } from 'react-icons/bs';
-import { BsBookmarkFill } from 'react-icons/bs';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { useState } from 'react';
 
 const EventInfoContainer = styled.div`
