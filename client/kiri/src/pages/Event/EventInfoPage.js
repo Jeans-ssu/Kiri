@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
 import { FiShare2 } from 'react-icons/fi';
-import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import { BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
 import { useState } from 'react';
 
 const EventInfoContainer = styled.div`
@@ -92,7 +92,11 @@ const EventInfoPage = () => {
               </EventSharediv>
             </div>
             <EventBookmarkdiv onClick={() => markHandler()}>
-              {mark ? <BsBookmarkFill size="27" /> : <BsBookmark size="27" />}
+              {mark ? (
+                <BsFillSuitHeartFill size="27" color="#ff6b6b" />
+              ) : (
+                <BsSuitHeart size="27" />
+              )}
             </EventBookmarkdiv>
           </EventUpdiv>
           <EventPerioddiv>
