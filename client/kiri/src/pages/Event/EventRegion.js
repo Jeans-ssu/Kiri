@@ -56,13 +56,13 @@ const EventRegion = () => {
           <div className="dropdown">
             <SelectInput onChange={handleChangeInterest} value={interest}>
               <option value="Seoul">전체</option>
-              <option value="Seoul">서울특별시</option>
-              <option value="Busan">부산특별시</option>
-              <option value="Incheon">인천광역시</option>
-              <option value="Daejeon">대전광역시</option>
-              <option value="Daegu">대구광역시</option>
-              <option value="Ulsan">울산광역시</option>
-              <option value="Gwangju">광주광역시</option>
+              <option value="Seoul">서울</option>
+              <option value="Busan">부산</option>
+              <option value="Incheon">인천</option>
+              <option value="Daejeon">대전</option>
+              <option value="Daegu">대구</option>
+              <option value="Ulsan">울산</option>
+              <option value="Gwangju">광주</option>
               <option value="Gyeonggido">경기도</option>
               <option value="Gangwondo">강원도</option>
               <option value="Chungcheongbukdo">충청북도</option>
@@ -72,6 +72,7 @@ const EventRegion = () => {
               <option value="Gyeongsangbukdo">경상북도</option>
               <option value="Gyeongsangnamdo">경상남도</option>
               <option value="Jeju">제주도</option>
+              <option value="Online">온라인</option>
             </SelectInput>
           </div>
         </SchoolRegionBox>
