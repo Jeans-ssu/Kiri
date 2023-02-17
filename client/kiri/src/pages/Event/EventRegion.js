@@ -55,6 +55,7 @@ const EventRegion = () => {
           })}
           <div className="dropdown">
             <SelectInput onChange={handleChangeInterest} value={interest}>
+              <option value="Seoul">전체</option>
               <option value="Seoul">서울특별시</option>
               <option value="Busan">부산특별시</option>
               <option value="Incheon">인천광역시</option>
