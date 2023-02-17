@@ -40,9 +40,8 @@ const Container = styled.div`
 
 const EventListMain = styled.main`
   display: flex;
-  justify-content: row;
+  justify-content: center;
   flex-wrap: wrap;
-  margin-left: 60px;
 `;
 
 const EventContainer = styled.div`
