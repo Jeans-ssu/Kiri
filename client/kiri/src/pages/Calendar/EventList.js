@@ -41,9 +41,13 @@ const EventList = () => {
               <TimeListBox>00:00 - 00:00</TimeListBox>
               <HeartListBox onClick={markHandler}>
                 {mark ? (
-                  <BsFillSuitHeartFill size="22" color="#ff6b6b" />
+                  <BsFillSuitHeartFill
+                    className="heart"
+                    size="22"
+                    color="#ff6b6b"
+                  />
                 ) : (
-                  <BsSuitHeart size="27" />
+                  <BsSuitHeart className="heart" size="22" />
                 )}
               </HeartListBox>
             </EventListBox>
@@ -92,7 +96,13 @@ const RightBox = styled.div`
   margin-left: 15px;
 `;
 
-const EventListContainer = styled.div``;
+const EventListContainer = styled.div`
+  margin-top: 10px;
+  .heart {
+    display: flex;
+    align-items: center;
+  }
+`;
 
 const EventListBox = styled.div`
   display: flex;
@@ -102,7 +112,7 @@ const EventListBox = styled.div`
 
 const DayListBox = styled.div`
   font-weight: 500;
-  margin-right: 10px;
+  margin-right: 12px;
 `;
 
 const TitleListBox = styled.div`
@@ -116,7 +126,6 @@ const TitleListBox = styled.div`
 `;
 
 const TimeListBox = styled.div`
-  margin: 0 15px;
   margin-left: auto;
 `;
 
