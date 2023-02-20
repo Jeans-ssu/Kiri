@@ -5,15 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLogin, DELETE_USER } from 'store/modules/userSlice';
 import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
-import axios from '../api/axios';
+import axios from '../../api/axios';
 import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
-import NeedLoginModal from './NeedLoginModal';
-import { persistor } from 'store/store';
-
-//redux-persist 저장값 초기화
-const purge = async () => {
-  await persistor.purge();
-};
+import NeedLoginModal from 'components/modal/NeedLoginModal';
 
 const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
@@ -51,12 +45,10 @@ const Header = () => {
     axios
       .post('/logout')
       .then(() => {
-        purge();
         dispatch(DELETE_TOKEN);
         dispatch(DELETE_USER);
       })
       .catch((err) => {
-        purge();
         console.log('ERROR: 로그아웃 실패', err);
       });
   };
@@ -115,7 +107,7 @@ const Header = () => {
                 <FaUserCircle size="27" color="black" />
               </Link>
             ) : (
-              <Link onClick={() => setIsOpen(true)}>
+              <Link to="/mypage" onClick={() => setIsOpen(true)}>
                 <FaUserCircle size="27" color="black" />
               </Link>
             )}
