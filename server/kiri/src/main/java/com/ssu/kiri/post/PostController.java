@@ -2,6 +2,7 @@ package com.ssu.kiri.post;
 
 
 import com.ssu.kiri.post.dto.request.SavePost;
+import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.DetailPost;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import lombok.RequiredArgsConstructor;
@@ -101,13 +102,16 @@ public class PostController {
     }
 
 
-    @GetMapping({"/posts", "/posts/{category}", "posts/{category}/{event}"})
-    public ResponseEntity classifyPost(@PathVariable(value = "category", required = false ) String category,
-                                       @PathVariable(value = "event", required = false) List<String> eventList ) {
+    @GetMapping({"/posts", "/posts/{division}", "/posts/{division}/{category}", "posts/{division}/{category}/{event}"})
+    public ResponseEntity classifyPost(@PathVariable(value = "division", required = false) String division,
+                                       @PathVariable(value = "category", required = false) String category,
+                                       @PathVariable(value = "event", required = false) List<String> eventList) {
+        // division - 학교, 지역
+        // category 에는 어떤 학교인지 또는 어떤 지역인지
+        // eventList 에는 강연, 강의 등등..
+        List<ClassifyPost> classifyPosts = postService.classifyPost(division, category, eventList);
 
-        postService.classifyPost(category, eventList);
-
-        return null;
+        return ResponseEntity.ok(classifyPosts);
     }
 
 

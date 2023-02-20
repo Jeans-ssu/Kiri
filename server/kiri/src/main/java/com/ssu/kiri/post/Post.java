@@ -49,8 +49,10 @@ public class Post {
     private LocalDateTime startPostTime;
     private LocalDateTime finishPostTime;
 
+    private LocalDateTime postTime; // 게시한 날짜
 
-    //===== 연관관계 편의 메서드 =====//
+
+   //===== 연관관계 편의 메서드 =====//
 
     public void changeMember(Member member) {
         this.member = member;
