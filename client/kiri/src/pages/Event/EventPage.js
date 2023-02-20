@@ -30,41 +30,38 @@ const EventPage = () => {
   return (
     <PageContainer header footer>
       <EventFieldPageContainer>
-        <SchoolRegionBox>
-          {filter.map((el, idx) => {
-            return (
-              <Link
-                className="filterLink"
-                key={idx}
-                to={`/event` + `${eventlink[idx]}`}
-              >
-                <FilterLi
+        <TopBox>
+          <SchoolRegionBox>
+            {filter.map((el, idx) => {
+              return (
+                <Link
+                  className="filterLink"
                   key={idx}
-                  className={`${el === '학교' ? 'school' : 'hide'}
-                  `}
-                  onClick={() => selectFilterHandler(idx)}
+                  to={`/event` + `${eventlink[idx]}`}
                 >
-                  <h2>{el}</h2>
-                </FilterLi>
-              </Link>
-            );
-          })}
-        </SchoolRegionBox>
-        <Bar />
-        <SchoolSearchContainer>
-          <SchoolnameBox>
-            <span>OO대학교</span>
-          </SchoolnameBox>
-          <Searchdiv>
-            <FaSearch size="17" className="searchicon" />
-            <SearchInput
-              type="text"
-              id="text"
-              placeholder="다른 학교를 검색해보세요"
-            ></SearchInput>
-          </Searchdiv>
-        </SchoolSearchContainer>
-
+                  <FilterLi
+                    key={idx}
+                    className={`${el === '학교' ? 'school' : 'hide'}
+                  `}
+                    onClick={() => selectFilterHandler(idx)}
+                  >
+                    <h2>{el}</h2>
+                  </FilterLi>
+                </Link>
+              );
+            })}
+          </SchoolRegionBox>
+          <SchoolSearchContainer>
+            <Searchdiv>
+              <FaSearch size="17" className="searchicon" />
+              <SearchInput
+                type="text"
+                id="text"
+                placeholder="원하는 학교를 검색해보세요"
+              ></SearchInput>
+            </Searchdiv>
+          </SchoolSearchContainer>
+        </TopBox>
         <CheckboxDiv>
           {field.map((el, idx) => (
             <>
@@ -119,6 +116,10 @@ const SchoolRegionBox = styled.div`
   }
 `;
 
+const TopBox = styled.div`
+  display: flex;
+`;
+
 const Bar = styled.hr`
   width: 95%;
   border: 0px;
@@ -126,23 +127,14 @@ const Bar = styled.hr`
 `;
 
 const SchoolSearchContainer = styled.div`
-  padding-left: 30px;
+  padding-left: 18px;
   display: flex;
   align-items: center;
-  margin: 20px 0;
-`;
-
-const SchoolnameBox = styled.div`
-  span {
-    font-weight: bold;
-    text-decoration: underline;
-  }
 `;
 
 const Searchdiv = styled.div`
   display: flex;
-  margin-left: 20px;
-  width: 40%;
+  margin-left: 10px;
 
   .searchicon {
     position: absolute;
@@ -159,7 +151,7 @@ const SearchInput = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 3px;
   padding: 7.8px 9.1px 7.8px 32px;
-  width: 100%;
+  width: 240px;
 
   margin-left: 5px;
   display: flex;
