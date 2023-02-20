@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import MypageInput from './MypageInput';
+import { MypageInput, PasswordInput } from './MypageInput';
 import Withdraw from './Withdraw';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
@@ -96,7 +96,7 @@ const MypageInputs = () => {
         userInfo={userInfo}
         setUserInfo={setUserInfo}
       />
-      <MypageInput
+      <PasswordInput
         type={'password'}
         userInfo={userInfo}
         setUserInfo={setUserInfo}
