@@ -152,6 +152,18 @@ public class ImageService {
 
     }
 
+    public String getThumbnail(Long post_id) {
+        List<Image> imageList = imageRepository.findUrlByPostId(post_id);
+        if(imageList == null || imageList.isEmpty()) {
+            return null;
+        }
+        Image image = imageList.get(0);
+        String imgUrl = image.getImgUrl();
+        return imgUrl;
+    }
+
+
+
     // multipartFile -> file로 전환
     private Optional<File> convert(MultipartFile multipartFile, File file, String fullFilePath) throws IOException {
         if(file.createNewFile()) {
