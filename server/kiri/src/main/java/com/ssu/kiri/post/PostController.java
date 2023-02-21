@@ -102,10 +102,11 @@ public class PostController {
     }
 
 
-    @GetMapping({"/posts", "/posts/{division}", "/posts/{division}/{category}", "posts/{division}/{category}/{event}"})
-    public ResponseEntity classifyPost(@PathVariable(value = "division", required = false) String division,
-                                       @PathVariable(value = "category", required = false) String category,
-                                       @PathVariable(value = "event", required = false) List<String> eventList) {
+    @GetMapping("/posts")//({"/posts", "/posts/{division}", "/posts/{division}/{category}", "posts/{division}/{category}/{event}"})
+    public ResponseEntity classifyPost(//@PathVariable(value = "division", required = false) String division, @PathVariable(value = "category", required = false) String category, @PathVariable(value = "event", required = false) List<String> eventList
+                                       @RequestParam(value = "division", required = false) String division,
+                                       @RequestParam(value = "category", required = false) String category,
+                                       @RequestParam(value = "eventList", required = false) List<String> eventList) {
         // division - 학교, 지역
         // category 에는 어떤 학교인지 또는 어떤 지역인지
         // eventList 에는 강연, 강의 등등..

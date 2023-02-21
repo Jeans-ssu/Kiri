@@ -198,6 +198,13 @@ public class PostService {
 
 
         // 4. 둘다 있는 경우 - category와 eventList 둘다 있는 경우
+        // category 와 eventList 가 둘다 있는데, category 가 "전체" 인 경우
+        if(category.equals("전체")) {
+            List<Post> posts = postRepository.findAllByEventIn(eventList);
+            List<ClassifyPost> classifyPosts = convertToClassify(posts);
+            return classifyPosts;
+        }
+        // category 와 eventList 가 둘다 있는데, category 는 "전체" 가 아닌 경우
         if(division.equals("학교")) {
             List<Post> posts = postRepository.findAllBySchoolAndEventIn(category, eventList);
             List<ClassifyPost> classifyPosts = convertToClassify(posts);

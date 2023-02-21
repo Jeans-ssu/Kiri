@@ -26,6 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.MultipartFile;
@@ -347,6 +349,116 @@ class PostControllerTest {
                 .andDo(print());
 
     }
+
+
+    // "카테고리별 게시글 조회: null, null, null" => 결과 8개 정상적으로 다 나옴
+    // "카테고리별 게시글 조회: 지역, null, null" => 결과 8개 정상적으로 다 나옴
+    // "카테고리별 게시글 조회: 학교, null, null" => 결과 8개 정상적으로 다 나옴
+
+    // "카테고리별 게시글 조회: 지역, 전체, null" => 결과 8개 정상적으로 다 나옴
+    // "카테고리별 게시글 조회: 학교, 전체, null" => 결과 8개 정상적으로 다 나옴
+    //
+    // "카테고리별 게시글 조회: 지역, 서울, null" => 결과 6개 정상적으로 다 나옴
+    // "카테고리별 게시글 조회: 학교, 숭실대학교, null" => 결과 4개 정상적으로 다 나옴
+
+    // "카테고리별 게시글 조회: 지역, null, [강연,축제]" => 결과 4개 정상적으로 다 나옴
+    // "카테고리별 게시글 조회: 학교, null, [강연,축제]" => 결과 4개 정상적으로 다 나옴
+    // "카테고리별 게시글 조회: null, null, [강연,축제]" => 결과 4개 정상적으로 다 나옴
+
+    // "카테고리별 게시글 조회: 지역, 서울, [강연,대회]" => 결과 2개 정상적으로 다 나옴
+    // "카테고리별 게시글 조회: 학교, 숭실대학교, [강연,대회]" => 결과 2개 정상적으로 다 나옴
+    // "카테고리별 게시글 조회: 학교, 중앙대학교, [강연,대회]" => 결과 0개 정상적으로 [] 나옴
+
+
+    @WithAccount("creamyyyy")
+    @DisplayName("카테고리별 게시글 조회: division, category, eventList")
+    @Test
+    public void classifyPosts() throws Exception {
+        //given
+        createAndSavePostList();
+
+        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
+
+//        info.add("division", "지역");
+//        info.add("category", "서울");
+
+        info.add("division", "학교");
+        info.add("category", "숭실대학교");
+//        info.add("category", "중앙대학교");
+
+//        info.add("division", "지역");
+//        info.add("category", "전체");
+
+//        info.add("division", "학교");
+//        info.add("category", "전체");
+
+
+
+
+        // when
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .get("/posts") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+//                                .param("division","지역")
+//                                .param("division","학교")
+                                .params(info)
+                                .param("eventList", new String[]{"강연", "대회"})
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
+    }
+
+
+    private void createAndSavePostList() throws Exception {
+        for(int i=1; i<3; i++) {
+            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
+            List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+            List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+            List<Long> imageIdList = imageResDtoList.stream()
+                    .map(img -> img.getImage_id())
+                    .collect(Collectors.toList());
+            SaveResPost savedPost = postService.savePost(post1, imageIdList);
+
+        }
+        for(int i=3; i<5; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "전시", "서울", "숭실대학교", "숭실대");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+        }
+
+        for(int i=5; i<7; i++) {
+            Post post3 = createBasicPost("title" + i, "content" + i, "축제", "서울", "중앙대학교", "중앙대");
+            List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+            List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+            List<Long> imageIdList = imageResDtoList.stream()
+                    .map(img -> img.getImage_id())
+                    .collect(Collectors.toList());
+            SaveResPost savedPost = postService.savePost(post3, imageIdList);
+        }
+
+        for(int i=7; i<9; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "대회", "대전", "대전대학교", "대전대");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+        }
+
+    }
+
+    private Post createBasicPost(String title, String content, String event, String local, String school, String organizer) {
+        return Post.builder()
+                .title(title)
+                .content(content)
+                .category("지역")
+                .event(event)
+                .local(local)
+                .school(school)
+                .organizer(organizer)
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+    }
+
 
     private List<MultipartFile> createMockMultipartFiles() {
         MockMultipartFile image1 = new MockMultipartFile(
