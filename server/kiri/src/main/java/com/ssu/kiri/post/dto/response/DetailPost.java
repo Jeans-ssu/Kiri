@@ -20,7 +20,7 @@ public class DetailPost {
 
     private String content; // 글 내용
 
-    private String category; // 큰 카테고리 (지역, 학교 둘 중 택 1)
+
     private String event; // 작은 카테고리 (축제, 전시, 대회, 강연, 공연, 기타 등)
     private String local; // 지역
     private String school; // 학교
@@ -35,7 +35,7 @@ public class DetailPost {
 
 
     public static DetailPost of(Post post) {
-        return new DetailPost(post.getTitle(), post.getScrap_count(), post.getContent(), post.getCategory(), post.getEvent(),
+        return new DetailPost(post.getTitle(), post.getScrap_count(), post.getContent(), post.getEvent(),
                 post.getLocal(), post.getSchool(), post.getOrganizer(), post.getContactNumber(),
                 post.getLink(), post.getPlace(), null, post.getStartPostTime(), post.getFinishPostTime());
     }

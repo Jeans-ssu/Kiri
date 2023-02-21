@@ -449,7 +449,6 @@ class PostControllerTest {
         return Post.builder()
                 .title(title)
                 .content(content)
-                .category("지역")
                 .event(event)
                 .local(local)
                 .school(school)
@@ -511,7 +510,6 @@ class PostControllerTest {
         SavePost savePost = new SavePost();
         savePost.setTitle("우주하마");
         savePost.setContent("자세가 곧 스킬인 게임");
-        savePost.setCategory("지역 축제");
         savePost.setEvent("강연");
         savePost.setLocal("서울");
         savePost.setSchool("숭실대학교");
@@ -526,7 +524,6 @@ class PostControllerTest {
         return Post.builder()
                 .title("혜안")
                 .content("혜안져스 라이어 게임")
-                .category("지역")
                 .event("축제")
                 .local("서울")
                 .school("숭실대학교")
@@ -540,7 +537,6 @@ class PostControllerTest {
         return Post.builder()
                 .title("수탉")
                 .content("dead by daylight")
-                .category("지역")
                 .event("전시")
                 .local("부산")
                 .school("숭실대학교")

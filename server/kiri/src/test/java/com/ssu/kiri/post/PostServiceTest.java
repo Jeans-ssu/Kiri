@@ -141,7 +141,7 @@ class PostServiceTest {
 
 
         //then
-        assertThat(savedPost.getCategory()).isEqualTo(post.getCategory());
+        assertThat(savedPost.getEvent()).isEqualTo(post.getEvent());
         assertThat(savedPost.getSavedImgList().size()).isEqualTo(2);
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
@@ -162,7 +162,7 @@ class PostServiceTest {
 
 
         //then
-        assertThat(savedPost.getCategory()).isEqualTo(post.getCategory());
+        assertThat(savedPost.getEvent()).isEqualTo(post.getEvent());
         assertThat(savedPost.getSavedImgList()).isNullOrEmpty();
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
@@ -403,7 +403,7 @@ class PostServiceTest {
     }
 
     @WithAccount("creamyyy")
-    @DisplayName("카테고리별 조회 테스트: 학교 ,숭실대학교,null")
+    @DisplayName("카테고리별 조회 테스트: 학교 ,숭실대학교, null")
     @Test
     public void categoryPostWithSchool() throws Exception {
         //given
@@ -415,7 +415,7 @@ class PostServiceTest {
         List<ClassifyPost> classifyPosts = postService.classifyPost("학교", "숭실대학교", null);
 
         //then
-        assertThat(classifyPosts.size()).isEqualTo(2);
+        assertThat(classifyPosts.size()).isEqualTo(4);
         for (ClassifyPost classifyPost : classifyPosts) {
             System.out.println("classifyPost = " + classifyPost);
         }
@@ -465,7 +465,7 @@ class PostServiceTest {
     }
 
     @WithAccount("creamyyy")
-    @DisplayName("카테고리별 조회 테스트: 학교, 숭실대학교, 강연")
+    @DisplayName("카테고리별 조회 테스트: 학교, 숭실대학교, [강연,축제]")
     @Test
     public void categoryPostWithCSE() throws Exception {
         //given
@@ -488,7 +488,7 @@ class PostServiceTest {
     }
 
     @WithAccount("creamyyy")
-    @DisplayName("카테고리별 조회 테스트: 지역, 서울, 강연")
+    @DisplayName("카테고리별 조회 테스트: 지역, 서울, [강연,축제,전시,대회]")
     @Test
     public void categoryPostWithCLE() throws Exception {
         //given
@@ -597,7 +597,6 @@ class PostServiceTest {
         SavePost savePost = new SavePost();
         savePost.setTitle("우주하마");
         savePost.setContent("자세가 곧 스킬인 게임");
-        savePost.setCategory("지역");
         savePost.setEvent("강연");
         savePost.setLocal("서울");
         savePost.setSchool("숭실대학교");
@@ -612,7 +611,6 @@ class PostServiceTest {
         return Post.builder()
                 .title("혜안")
                 .content("혜안져스 라이어 게임")
-                .category("지역")
                 .event("축제")
                 .local("서울")
                 .school("숭실대학교")
@@ -626,7 +624,6 @@ class PostServiceTest {
         return Post.builder()
                 .title("수탉")
                 .content("dead by daylight")
-                .category("지역")
                 .event("전시")
                 .local("부산")
                 .school("숭실대학교")
@@ -640,7 +637,6 @@ class PostServiceTest {
         return Post.builder()
                 .title(title)
                 .content(content)
-                .category("지역")
                 .event(event)
                 .local(local)
                 .school(school)

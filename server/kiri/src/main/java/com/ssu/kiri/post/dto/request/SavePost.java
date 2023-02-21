@@ -29,9 +29,6 @@ public class SavePost {
     private String content; // 글 내용
 
     @NotBlank
-    private String category; // 큰 카테고리 (지역, 학교)
-
-    @NotBlank
     private String event; // 작은 카테고리 (축제, 전시, 대회, 강연, 공연, 기타 등)
     @NotBlank
     private String local; // 지역
