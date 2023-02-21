@@ -516,6 +516,7 @@ class PostControllerTest {
         savePost.setOrganizer("하마");
         savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setEmail("creamyyyy@aaa.com");
 
         return savePost;
     }

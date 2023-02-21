@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -24,6 +25,10 @@ public class SavePost {
     private String title; // 글 제목
 
     private int scrap_count; // 스크랩 수
+
+    @NotBlank
+    @Email
+    private String email;
 
     @NotBlank
     private String content; // 글 내용
