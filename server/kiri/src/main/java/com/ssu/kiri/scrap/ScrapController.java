@@ -40,6 +40,7 @@ public class ScrapController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 스크랩한 게시글 정보만 보여주기
     @GetMapping("/calendar")
     public ResponseEntity getScrap(@RequestParam(value = "year", required = false) String year,
                                    @RequestParam(value = "month", required = false) String month) {
