@@ -50,21 +50,10 @@ class ScrapServiceTest {
         //given
 
         // creamyyy 가 post 등록.
-        Post post = Post.builder()
-                .title("가을이 오면")
-                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
-                .event("축제")
-                .local("서울")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
+        Post post = createPostOne();
 
-        List<Long> imageIdList = new ArrayList<>();
-        imageIdList.add(1L);
 
-        // 기존 post 저장
-        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        SaveResPost savedPost = postService.savePost(post, null);
 
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
@@ -72,14 +61,17 @@ class ScrapServiceTest {
         // 좋아요 시 필요한 시간들 DTO(실행 시작 시간, 실행 끝난 시간)
         ScrapReqAdd request = new ScrapReqAdd();
         request.setStartScrapTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        request.setEndScrapTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        request.setEndScrapTime(LocalDateTime.parse("2022-11-25 12:20:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
 
         //when
         boolean isScrap = scrapService.addScrap(savedPostId, request);
+        boolean cancelScrap = scrapService.addScrap(savedPostId, null);
 
         //then
         assertThat(isScrap).isEqualTo(true);
+        System.out.println("=======================================================================");
+        assertThat(cancelScrap).isEqualTo(false);
 
     }
 
@@ -167,6 +159,20 @@ class ScrapServiceTest {
         assertThat(resultPost.getScrap_count()).isEqualTo(0);
 
 
+    }
+
+
+    private Post createPostOne() {
+        return Post.builder()
+                .title("혜안")
+                .content("혜안져스 라이어 게임")
+                .event("축제")
+                .local("서울")
+                .school("숭실대학교")
+                .organizer("주최자는 나야 둘이 될 수 없어")
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
     }
 
 

@@ -69,4 +69,8 @@ public class Scrap {
     }
 
 
+    public void deleteScrapInMemberAndPost() {
+        this.getMember().getScrapList().remove(this);
+        this.getPost().getScrapList().remove(this);
+    }
 }

@@ -18,6 +18,7 @@ public class ScrapService {
     private final PostRepository postRepository;
     private final ScrapRepository scrapRepository;
 
+    // 단순히 좋아요, 좋아요 취소 만 구현 => 나중에 캘린더에서 시간을 바꾸는 것은 이후 고려하자.
     public boolean addScrap(Long post_id, ScrapReqAdd requestDto) {
         // 회원 찾기
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -26,8 +27,14 @@ public class ScrapService {
         // post 찾기
         Post post = postRepository.findById(post_id).orElseThrow();
 
-        // 좋아요 중복 방지 => 이미 좋아요를 했으면 false 리턴
+        // 좋아요 중복 방지 => 이미 좋아요를 했으면 좋아요 취소 가 됨
         if(isAlreadyScrap(member, post)) {
+            Scrap scrap = scrapRepository.findByMemberAndPost(member, post).get();
+            scrap.deleteScrapInMemberAndPost();
+            scrapRepository.delete(scrap);
+
+            post.minusScrapCount();
+
             return false;
         }
 
@@ -54,6 +61,8 @@ public class ScrapService {
         post.minusScrapCount();
 
         Scrap scrap = scrapRepository.findByMemberAndPost(member, post).orElseThrow();
+        scrap.deleteScrapInMemberAndPost();
+
         scrapRepository.delete(scrap);
 
     }
@@ -75,6 +84,8 @@ public class ScrapService {
     // 로그인한 회원이 이미 좋아요를 했는지 확인
     private boolean isAlreadyScrap(Member member, Post post) {
         return scrapRepository.findByMemberAndPost(member, post).isPresent();
+//        Scrap scrap = scrapRepository.findByMemberAndPost(member, post).orElseThrow();
+//        return scrap;
     }
 
 }
