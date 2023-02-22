@@ -20,15 +20,18 @@ const InputContainer = styled.div`
   flex-direction: column;
   margin-bottom: ${(props) =>
     props.margin_bottom ? props.margin_bottom : '15px'};
-  div.not-same {
+  div#passwordmsg {
     font-size: 12px;
     color: ${({ theme }) => theme.colors.red};
     margin-top: 3px;
   }
+  div.hide {
+    visibility: hidden;
+  }
 `;
 
 const InputHeader = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   color: ${({ theme }) => theme.colors.darkgray};
   font-weight: 700;
   margin-bottom: 5px;
@@ -67,9 +70,9 @@ const PasswordInput = styled.input`
 const SaveChangeBtn = styled.button``;
 
 const InitialValue = {
-  currentPW: '',
-  newPW: '',
-  checkNewPW: '',
+  currentPW: '', //현재 비밀번호
+  newPW: '', //새 비밀번호
+  checkNewPW: '', //새 비밀번호 확인
 };
 
 const ValidInitialValue = {
@@ -81,16 +84,26 @@ const ValidInitialValue = {
 const PasswordChangePage = () => {
   const [passwords, setPasswords] = useState(InitialValue);
   const [isValid, setIsValid] = useState(ValidInitialValue);
+  const [isSame, setIsSame] = useState(true); //사용자 비밀번호와 현재 비밀번호 일치 여부
+  const [isCorrect, setIsCorrect] = useState(false); //새 비밀번호와 새 비밀번호 확인 일치 여부
 
   const handleChangeInput = (event, type) => {
     setPasswords({
       ...passwords,
       [type]: event.target.value,
     });
+    //유효성 검사
     setIsValid({
       ...isValid,
       [type]: checkIsValid('password', event.target.value),
     });
+    if (type === 'currentPW') {
+      setIsCorrect(true);
+    }
+    if (type === 'checkNewPW') {
+      if (passwords.newPW !== passwords.checkNewPW) setIsSame(false);
+      else setIsSame(true);
+    }
   };
 
   return (
@@ -107,6 +120,9 @@ const PasswordChangePage = () => {
             value={passwords.currentPW}
             onChange={(e) => handleChangeInput(e, 'currentPW')}
           />
+          <div id="passwordmsg" className={isCorrect ? 'hide' : null}>
+            비밀번호가 틀렸습니다.
+          </div>
         </InputContainer>
         <InputContainer>
           <InputHeader>
@@ -130,7 +146,9 @@ const PasswordChangePage = () => {
             value={passwords.checkNewPW}
             onChange={(e) => handleChangeInput(e, 'checkNewPW')}
           />
-          <div className={`not-same`}>비밀번호가 일치하지 않습니다.</div>
+          <div id="passwordmsg" className={isSame ? 'hide' : null}>
+            비밀번호가 일치하지 않습니다.
+          </div>
         </InputContainer>
         <SaveChangeBtn>변경하기</SaveChangeBtn>
       </PasswordChangePageContainer>

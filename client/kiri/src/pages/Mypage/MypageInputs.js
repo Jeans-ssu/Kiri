@@ -61,7 +61,6 @@ const MypageInputs = () => {
         status: data.department,
         password: '',
       });
-      console.log(data);
     } catch (error) {
       console.error('ERROR:', error);
     }
