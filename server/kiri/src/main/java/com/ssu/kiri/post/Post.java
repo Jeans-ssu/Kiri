@@ -37,7 +37,7 @@ public class Post {
     private int scrap_count; // 스크랩 수
     private String content; // 글 내용
 
-    private String category; // 큰 카테고리 (지역, 학교 둘 중 택 1)
+//    private String category; // 큰 카테고리 (지역, 학교 둘 중 택 1)
     private String event; // 작은 카테고리 (축제, 전시, 대회, 강연, 공연, 기타 등)
     private String local; // 지역
     private String school; // 학교
@@ -49,8 +49,10 @@ public class Post {
     private LocalDateTime startPostTime;
     private LocalDateTime finishPostTime;
 
+    private LocalDateTime postTime; // 게시한 날짜
 
-    //===== 연관관계 편의 메서드 =====//
+
+   //===== 연관관계 편의 메서드 =====//
 
     public void changeMember(Member member) {
         this.member = member;
@@ -64,14 +66,13 @@ public class Post {
     //======builder=========//
     @Builder
     public Post(
-            String title, int scrap_count, String content, String category, String event, String local, String school,
+            String title, int scrap_count, String content, String event, String local, String school,
             String place, String organizer, String link, String contactNumber, LocalDateTime startPostTime, LocalDateTime finishPostTime
     ) {
 
         this.title = title;
         this.scrap_count = scrap_count;
         this.content = content;
-        this.category = category;
         this.event =event;
         this.local = local;
         this.school = school;
@@ -86,11 +87,10 @@ public class Post {
 
     //===== 생성자 =====//
 
-    public Post createPostTest(String title, String content, String category, String event, String local, String school, String place,
+    public Post createPostTest(String title, String content, String event, String local, String school, String place,
                                String organizer, LocalDateTime startPostTime, LocalDateTime finishPostTime) {
         this.title = title;
         this.content = content;
-        this.category = category;
         this.event = event;
         this.local = local;
         this.school = school;
@@ -118,7 +118,6 @@ public class Post {
 //        this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.category = post.getCategory();
         this.event = event;
         this.local = local;
         this.school = school;
@@ -139,7 +138,6 @@ public class Post {
 
         post.title = newPost.getTitle();
         post.content = newPost.getContent();
-        post.category = newPost.getCategory();
         post.event = newPost.getEvent();
         post.local = newPost.getLocal();
         post.school = newPost.getSchool();

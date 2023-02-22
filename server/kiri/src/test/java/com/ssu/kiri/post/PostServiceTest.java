@@ -1,5 +1,6 @@
 package com.ssu.kiri.post;
 
+import com.ssu.kiri.config.S3MockConfig;
 import com.ssu.kiri.config.TestConfig;
 import com.ssu.kiri.image.Image;
 import com.ssu.kiri.image.ImageRepository;
@@ -9,6 +10,7 @@ import com.ssu.kiri.infra.WithAccount;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.request.SavePost;
+import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -38,7 +40,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Import({TestConfig.class})
+
+@Import({TestConfig.class, S3MockConfig.class})
 @SpringBootTest
 @Transactional
 //@Rollback(false)
@@ -52,6 +55,13 @@ class PostServiceTest {
     @Autowired PostService postService;
     @Autowired ImageService imageService;
     @Autowired ImageRepository imageRepository;
+
+//    @WithAccount("creamyyy")
+//    @BeforeEach
+//    void createPosts() {
+//
+//
+//    }
 
 
     @AfterEach
@@ -131,7 +141,7 @@ class PostServiceTest {
 
 
         //then
-        assertThat(savedPost.getCategory()).isEqualTo(post.getCategory());
+        assertThat(savedPost.getEvent()).isEqualTo(post.getEvent());
         assertThat(savedPost.getSavedImgList().size()).isEqualTo(2);
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
@@ -152,7 +162,7 @@ class PostServiceTest {
 
 
         //then
-        assertThat(savedPost.getCategory()).isEqualTo(post.getCategory());
+        assertThat(savedPost.getEvent()).isEqualTo(post.getEvent());
         assertThat(savedPost.getSavedImgList()).isNullOrEmpty();
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
@@ -333,6 +343,208 @@ class PostServiceTest {
 
     }
 
+    @WithAccount("creamyyy")
+    @DisplayName("카테고리별 조회 테스트: 지역,서울,강연")
+    @Test
+    public void categoryPost() throws Exception {
+        //given
+        // post 리스트 등록
+        for(int i=0; i<5; i++) {
+            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
+            List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+            List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+            List<Long> imageIdList = imageResDtoList.stream()
+                    .map(img -> img.getImage_id())
+                    .collect(Collectors.toList());
+            SaveResPost savedPost = postService.savePost(post1, imageIdList);
+
+        }
+        for(int i=5; i<10; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+        }
+
+        List<String> eventList = new ArrayList<>();
+        eventList.add("강연");
+
+        //when
+        // division: 지역, category: 서울, eventList: 강연
+        List<ClassifyPost> classifyPosts = postService.classifyPost("지역", "서울", eventList);
+
+        //then
+        assertThat(classifyPosts.size()).isEqualTo(5);
+        for (ClassifyPost classifyPost : classifyPosts) {
+            System.out.println("classifyPost.getTitle() = " + classifyPost.getTitle());
+        }
+
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("카테고리별 조회 테스트: null,null,null")
+    @Test
+    public void categoryPostWithout() throws Exception {
+        //given
+        // post 리스트 등록
+        createAndSavePostList();
+
+        List<String> eventList = new ArrayList<>();
+        eventList.add("강연");
+
+        //when
+        // division: 지역, category: 서울, eventList: 강연
+        List<ClassifyPost> classifyPosts = postService.classifyPost(null, null, null);
+
+        //then
+        assertThat(classifyPosts.size()).isEqualTo(8);
+        for (ClassifyPost classifyPost : classifyPosts) {
+            System.out.println("classifyPost.getTitle() = " + classifyPost.getTitle());
+        }
+
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("카테고리별 조회 테스트: 학교 ,숭실대학교, null")
+    @Test
+    public void categoryPostWithSchool() throws Exception {
+        //given
+        // post 리스트 등록
+        createAndSavePostList();
+
+        //when
+        // division: 지역, category: 서울, eventList: 강연
+        List<ClassifyPost> classifyPosts = postService.classifyPost("학교", "숭실대학교", null);
+
+        //then
+        assertThat(classifyPosts.size()).isEqualTo(4);
+        for (ClassifyPost classifyPost : classifyPosts) {
+            System.out.println("classifyPost = " + classifyPost);
+        }
+
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("카테고리별 조회 테스트: 지역 ,대전 ,null")
+    @Test
+    public void categoryPostWithLocal() throws Exception {
+        //given
+        // post 리스트 등록
+        createAndSavePostList();
+
+        //when
+        // division: 지역, category: 서울, eventList: 강연
+        List<ClassifyPost> classifyPosts = postService.classifyPost("지역", "대전", null);
+
+        //then
+        assertThat(classifyPosts.size()).isEqualTo(2);
+        for (ClassifyPost classifyPost : classifyPosts) {
+            System.out.println("classifyPost = " + classifyPost);
+        }
+
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("카테고리별 조회 테스트: null, null, 축제")
+    @Test
+    public void categoryPostWithEvent() throws Exception {
+        //given
+        // post 리스트 등록
+        createAndSavePostList();
+        List<String> eventList = new ArrayList<>();
+        eventList.add("축제");
+
+        //when
+        // division: 지역, category: 서울, eventList: 강연
+        List<ClassifyPost> classifyPosts = postService.classifyPost(null, null, eventList);
+
+        //then
+        assertThat(classifyPosts.size()).isEqualTo(2);
+        for (ClassifyPost classifyPost : classifyPosts) {
+            System.out.println("classifyPost = " + classifyPost);
+        }
+
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("카테고리별 조회 테스트: 학교, 숭실대학교, [강연,축제]")
+    @Test
+    public void categoryPostWithCSE() throws Exception {
+        //given
+        // post 리스트 등록
+        createAndSavePostList();
+        List<String> eventList = new ArrayList<>();
+        eventList.add("강연");
+        eventList.add("축제");
+
+        //when
+        // division: 지역, category: 서울, eventList: 강연
+        List<ClassifyPost> classifyPosts = postService.classifyPost("학교", "숭실대학교", eventList);
+
+        //then
+        assertThat(classifyPosts.size()).isEqualTo(4);
+        for (ClassifyPost classifyPost : classifyPosts) {
+            System.out.println("classifyPost = " + classifyPost);
+        }
+
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("카테고리별 조회 테스트: 지역, 서울, [강연,축제,전시,대회]")
+    @Test
+    public void categoryPostWithCLE() throws Exception {
+        //given
+        // post 리스트 등록
+        createAndSavePostList();
+        List<String> eventList = new ArrayList<>();
+        eventList.add("강연");
+        eventList.add("축제");
+        eventList.add("전시");
+        eventList.add("대회");
+
+        //when
+        // division: 지역, category: 서울, eventList: 강연
+        List<ClassifyPost> classifyPosts = postService.classifyPost("지역", "서울", eventList);
+
+        //then
+        assertThat(classifyPosts.size()).isEqualTo(6);
+        for (ClassifyPost classifyPost : classifyPosts) {
+            System.out.println("classifyPost = " + classifyPost);
+        }
+
+    }
+
+    private void createAndSavePostList() throws Exception {
+        for(int i=1; i<3; i++) {
+            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
+            List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+            List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+            List<Long> imageIdList = imageResDtoList.stream()
+                    .map(img -> img.getImage_id())
+                    .collect(Collectors.toList());
+            SaveResPost savedPost = postService.savePost(post1, imageIdList);
+
+        }
+        for(int i=3; i<5; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "서울", "숭실대학교", "숭실대");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+        }
+
+        for(int i=5; i<7; i++) {
+            Post post3 = createBasicPost("title" + i, "content" + i, "전시", "서울", "중앙대학교", "중앙대");
+            List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+            List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+            List<Long> imageIdList = imageResDtoList.stream()
+                    .map(img -> img.getImage_id())
+                    .collect(Collectors.toList());
+            SaveResPost savedPost = postService.savePost(post3, imageIdList);
+        }
+
+        for(int i=7; i<9; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "대회", "대전", "대전대학교", "대전대");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+        }
+
+    }
+
 
     private List<MultipartFile> createMockMultipartFiles() {
         MockMultipartFile image1 = new MockMultipartFile(
@@ -385,7 +597,6 @@ class PostServiceTest {
         SavePost savePost = new SavePost();
         savePost.setTitle("우주하마");
         savePost.setContent("자세가 곧 스킬인 게임");
-        savePost.setCategory("지역");
         savePost.setEvent("강연");
         savePost.setLocal("서울");
         savePost.setSchool("숭실대학교");
@@ -400,7 +611,6 @@ class PostServiceTest {
         return Post.builder()
                 .title("혜안")
                 .content("혜안져스 라이어 게임")
-                .category("지역")
                 .event("축제")
                 .local("서울")
                 .school("숭실대학교")
@@ -414,11 +624,23 @@ class PostServiceTest {
         return Post.builder()
                 .title("수탉")
                 .content("dead by daylight")
-                .category("지역")
                 .event("전시")
                 .local("부산")
                 .school("숭실대학교")
                 .organizer("주최자는 내가 차지한다.")
+                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+    }
+
+    private Post createBasicPost(String title, String content, String event, String local, String school, String organizer) {
+        return Post.builder()
+                .title(title)
+                .content(content)
+                .event(event)
+                .local(local)
+                .school(school)
+                .organizer(organizer)
                 .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();

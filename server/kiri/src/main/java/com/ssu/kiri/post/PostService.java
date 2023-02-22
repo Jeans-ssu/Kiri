@@ -5,14 +5,19 @@ import com.ssu.kiri.image.Image;
 import com.ssu.kiri.image.ImageRepository;
 import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.member.Member;
+import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -130,5 +135,110 @@ public class PostService {
         postRepository.delete(
                 postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 포스트를 삭제할 수 없습니다."))
         );
+    }
+
+    // 분류해서 게시글들 보기
+    public List<ClassifyPost> classifyPost(String division, String category, List<String> eventList) {
+
+        // 1. category eventList 둘다 없는 경우 -> 나의 학교로 지정되어 나옴
+        // 2. category만 있는 경우 -> 서울, 부산 또는 숭실대학교, 중앙대학교
+        // 3. eventList만 있는 경우 -> 강연, 강의, 축제 ... 리스트
+        // 4. 둘다 있는 경우 - category와 eventList 둘다 있는 경우
+        List<ClassifyPost> list = new ArrayList<>();
+
+        // 1. category eventList 둘다 없는 경우 -> 전체를 보여줌.
+        if(category == null || category.isEmpty()) {
+            if(eventList == null || eventList.isEmpty()) {
+//                if(mySchool == null || mySchool.isEmpty()) {
+                System.out.println("category: null, eventList = null, mySchool: null (학교 미지정)");
+                List<Post> all = postRepository.findAll();
+                List<ClassifyPost> allClassifyPosts = convertToClassify(all);
+                return allClassifyPosts;
+//                }
+//                System.out.println("category: null, eventList = null, mySchool: 존재 (학교 지정)");
+//                List<Post> posts = postRepository.findAllBySchool(mySchool);
+//                List<ClassifyPost> classifyPosts = convertToClassify(posts);
+//                return classifyPosts;
+            }
+        }
+
+        // 2. category만 있는 경우 -> 서울, 부산 또는 숭실대학교, 중앙대학교
+        if(eventList == null || eventList.isEmpty()) {
+            if(category != null || !category.isEmpty()) {
+
+                if(category.equals("전체")) {
+                    System.out.println("category: 전체, eventList = null, 학교 또는 지역 미지정");
+                    List<Post> allSchool = postRepository.findAll();
+                    List<ClassifyPost> allClassifyPosts = convertToClassify(allSchool);
+                    return allClassifyPosts;
+                }
+                if(division.equals("학교")) {
+                    System.out.println("category: OO대학교, eventList = null, 학교만 지정");
+                    List<Post> posts = postRepository.findAllBySchool(category);
+                    List<ClassifyPost> classifyPosts = convertToClassify(posts);
+                    return classifyPosts;
+                } else if(division.equals("지역")) {
+                    System.out.println("category: 서울, eventList = null, 지역만 지정");
+                    List<Post> posts = postRepository.findAllByLocal(category);
+                    List<ClassifyPost> classifyPosts = convertToClassify(posts);
+                    return classifyPosts;
+                }
+            }
+        }
+
+        // 3. eventList만 있는 경우 -> 강연, 강의, 축제 ... 리스트
+        if(category == null || category.isEmpty()) {
+            if(eventList != null || !eventList.isEmpty()) {
+                System.out.println("category: null, eventList = 존재, eventList만 지정");
+                List<Post> posts = postRepository.findAllByEventIn(eventList);
+                List<ClassifyPost> classifyPosts = convertToClassify(posts);
+                return classifyPosts;
+            }
+        }
+
+
+        // 4. 둘다 있는 경우 - category와 eventList 둘다 있는 경우
+        // category 와 eventList 가 둘다 있는데, category 가 "전체" 인 경우
+        if(category.equals("전체")) {
+            List<Post> posts = postRepository.findAllByEventIn(eventList);
+            List<ClassifyPost> classifyPosts = convertToClassify(posts);
+            return classifyPosts;
+        }
+        // category 와 eventList 가 둘다 있는데, category 는 "전체" 가 아닌 경우
+        if(division.equals("학교")) {
+            List<Post> posts = postRepository.findAllBySchoolAndEventIn(category, eventList);
+            List<ClassifyPost> classifyPosts = convertToClassify(posts);
+            return classifyPosts;
+
+        } else { // division.equals("지역")
+            List<Post> posts = postRepository.findAllByLocalAndEventIn(category, eventList);
+            List<ClassifyPost> classifyPosts = convertToClassify(posts);
+            return classifyPosts;
+        }
+
+
+
+
+
+    }
+
+    private List<ClassifyPost> convertToClassify(List<Post> posts) {
+        List<ClassifyPost> list = new ArrayList<>();
+
+        for (Post post : posts) {
+            ClassifyPost classifyPost = new ClassifyPost();
+            classifyPost.setPost_id(post.getId());
+            classifyPost.setTitle(post.getTitle());
+            classifyPost.setScrap_count(post.getScrap_count());
+            classifyPost.setStartPostTime(post.getStartPostTime().toString());
+            String thumbnail = imageService.getThumbnail(post.getId());
+            if(thumbnail == null || thumbnail.isEmpty()) {
+                classifyPost.setImgUrl(null);
+            }else {
+                classifyPost.setImgUrl(thumbnail);
+            }
+            list.add(classifyPost);
+        }
+        return list;
     }
 }
