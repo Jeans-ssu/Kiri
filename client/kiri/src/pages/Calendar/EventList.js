@@ -33,23 +33,35 @@ const EventList = () => {
         </RightBox>
       </PeriodBox>
       <EventListContainer>
+        <EventListBox className="border">
+          <DayLineBox>
+            <DayListBox>이번주 일정 모아보기</DayListBox>
+          </DayLineBox>
+        </EventListBox>
         {day.map((el, idx) => {
           return (
-            <EventListBox key={idx}>
-              <DayListBox>11/{el}</DayListBox>
-              <TitleListBox>이벤트 이름</TitleListBox>
-              <TimeListBox>00:00 - 00:00</TimeListBox>
-              <HeartListBox onClick={markHandler}>
-                {mark ? (
-                  <BsFillSuitHeartFill
-                    className="heart"
-                    size="22"
-                    color="#ff6b6b"
-                  />
-                ) : (
-                  <BsSuitHeart className="heart" size="22" />
-                )}
-              </HeartListBox>
+            <EventListBox
+              key={idx}
+              className={`${idx === 2 || idx === 6 ? 'none' : 'border'}`}
+            >
+              <DayLineBox>
+                <DayListBox>11/{el}</DayListBox>
+              </DayLineBox>
+              <PlanBox>
+                <TimeListBox>00:00</TimeListBox>
+                <TitleListBox>이벤트 이름</TitleListBox>
+                <HeartListBox onClick={markHandler}>
+                  {mark ? (
+                    <BsFillSuitHeartFill
+                      className="heart"
+                      size="17"
+                      color="#ff6b6b"
+                    />
+                  ) : (
+                    <BsSuitHeart className="heart" size="17" />
+                  )}
+                </HeartListBox>
+              </PlanBox>
             </EventListBox>
           );
         })}
@@ -97,40 +109,59 @@ const RightBox = styled.div`
 `;
 
 const EventListContainer = styled.div`
-  margin-top: 10px;
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-gap: 18px 0;
+
   .heart {
     display: flex;
     align-items: center;
   }
+
+  .border {
+    border-right: 1px solid black;
+  }
 `;
 
 const EventListBox = styled.div`
-  display: flex;
-  height: 50px;
+  height: 250px;
   align-items: center;
+`;
+
+const PlanBox = styled.div`
+  display: flex;
+  padding: 0 10px;
+`;
+
+const DayLineBox = styled.div`
+  border-bottom: 1px solid black;
 `;
 
 const DayListBox = styled.div`
   font-weight: 500;
-  margin-right: 12px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  font-size: 19px;
 `;
 
 const TitleListBox = styled.div`
-  border-radius: 5px;
-  border: 1px solid black;
-  height: 30px;
-  width: 760px;
   padding: 3px;
+  margin-left: 2px;
   display: flex;
   align-items: center;
 `;
 
 const TimeListBox = styled.div`
-  margin-left: auto;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
 `;
 
 const HeartListBox = styled.div`
   margin-left: auto;
+  display: flex;
+  align-items: center;
 `;
 
 export default EventList;
