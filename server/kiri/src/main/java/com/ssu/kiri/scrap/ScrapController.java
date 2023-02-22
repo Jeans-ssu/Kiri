@@ -2,15 +2,14 @@ package com.ssu.kiri.scrap;
 
 import com.ssu.kiri.post.PostRepository;
 import com.ssu.kiri.scrap.dto.ScrapReqAdd;
+import com.ssu.kiri.scrap.dto.ScrapResCal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +38,15 @@ public class ScrapController {
     public ResponseEntity deleteScrap(@PathVariable("id") Long post_id) {
         scrapService.deleteScrap(post_id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/calendar")
+    public ResponseEntity getScrap(@RequestParam(value = "year", required = false) String year,
+                                   @RequestParam(value = "month", required = false) String month) {
+
+        List<ScrapResCal> scrap = scrapService.getScrap(year, month);
+
+        return ResponseEntity.ok(scrap);
     }
 
 

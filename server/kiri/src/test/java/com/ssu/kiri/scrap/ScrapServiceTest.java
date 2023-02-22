@@ -18,7 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -176,5 +178,22 @@ class ScrapServiceTest {
     }
 
 
+    @Test
+    public void testCode() throws Exception {
+        LocalDateTime now = LocalDateTime.now();
+        int year = now.getYear();
+        Month month = now.getMonth();
+        int monthValue = now.getMonthValue();
+        int dayOfMonth = now.getDayOfMonth();
+        DayOfWeek dayOfWeek = now.getDayOfWeek();
+        int dayOfYear = now.getDayOfYear();
+        System.out.println("year = " + year);
+        System.out.println("monthValue = " + monthValue);
+        System.out.println("month = " + month);
+        System.out.println("dayOfMonth = " + dayOfMonth);
+        System.out.println("dayOfWeek = " + dayOfWeek);
+        System.out.println("dayOfYear = " + dayOfYear);
+
+    }
 
 }

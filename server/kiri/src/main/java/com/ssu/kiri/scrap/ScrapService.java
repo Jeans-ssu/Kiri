@@ -4,11 +4,15 @@ import com.ssu.kiri.member.Member;
 import com.ssu.kiri.post.Post;
 import com.ssu.kiri.post.PostRepository;
 import com.ssu.kiri.scrap.dto.ScrapReqAdd;
+import com.ssu.kiri.scrap.dto.ScrapResCal;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -94,4 +98,24 @@ public class ScrapService {
 //        return scrap;
     }
 
+    public List<ScrapResCal> getScrap(String year, String month) {
+        if( (year == null || year.isEmpty() ) && ( month == null || month.isEmpty() ) ) {
+            LocalDateTime now = LocalDateTime.now();
+            int nowYear = now.getYear();
+            int nowMonth = now.getMonthValue();
+            int dayOfMonth = now.getDayOfMonth();
+
+            Integer nowIYear = Integer.valueOf(nowYear);
+            Integer nowIMonth = Integer.valueOf(nowMonth);
+
+            List<ScrapResCal> scraps = scrapRepository.findScrapsByYearAndMonth(nowIYear, nowIMonth);
+            return scraps;
+        }
+
+        // 오늘 날짜가 게시글의 startDateTime의 Year과 Month보다 크거나 같고 FinishDateTime의 Year과 Month보다 작거나 같은 경우 가져옴
+        Integer nowIMear = Integer.valueOf(year);
+        Integer nowIMonth = Integer.valueOf(month);
+        List<ScrapResCal> scraps = scrapRepository.findScrapsByYearAndMonth(nowIMonth, nowIMonth);
+        return scraps;
+    }
 }
