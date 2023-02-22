@@ -63,6 +63,13 @@ public class Post {
         member.getPostList().add(this);
     }
 
+    //===== 연관관계 삭제 메서드 =====//
+    public void deletePostAndMember() {
+        member.getPostList().remove(this);
+        this.member = null;
+    }
+
+
     //======builder=========//
     @Builder
     public Post(

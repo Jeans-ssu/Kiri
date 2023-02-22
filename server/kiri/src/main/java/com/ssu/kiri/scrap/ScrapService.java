@@ -67,6 +67,12 @@ public class ScrapService {
 
     }
 
+    public void deleteScrapInPostDelete(Long scrap_id) {
+        Scrap scrap = scrapRepository.findById(scrap_id).orElseThrow();
+        scrapRepository.delete(scrap);
+    }
+
+
     /**
      * 좋아요 개수 세기
      * @param post
