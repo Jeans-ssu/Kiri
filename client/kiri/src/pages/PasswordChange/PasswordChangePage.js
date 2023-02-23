@@ -4,6 +4,9 @@ import { MypageHeader } from 'pages/Mypage/Mypage';
 import { checkIsValid } from 'pages/Mypage/MypageInput';
 import { useState } from 'react';
 import { BsCheck } from 'react-icons/bs';
+import axios from '../../api/axios';
+import { selectAccessToken } from 'store/modules/authSlice';
+import { useSelector } from 'react-redux';
 
 const PasswordChangePageContainer = styled.div`
   display: flex;
@@ -87,7 +90,23 @@ const PasswordChangePage = () => {
   const [isSame, setIsSame] = useState(true); //사용자 비밀번호와 현재 비밀번호 일치 여부
   const [isCorrect, setIsCorrect] = useState(false); //새 비밀번호와 새 비밀번호 확인 일치 여부
 
-  const handleChangeInput = (event, type) => {
+  const accessToken = useSelector(selectAccessToken);
+
+  const checkExistingPassword = async (currentPW) => {
+    axios.defaults.headers.common['Authorization'] = accessToken;
+    try {
+      const response = await axios.post('/auth/password/exist', {
+        password: currentPW,
+      });
+      const check = response.data;
+      if (check) setIsCorrect(true);
+      else setIsCorrect(false);
+    } catch (error) {
+      console.error('ERROR: ', error);
+    }
+  };
+
+  const handleChangeInput = async (event, type) => {
     setPasswords({
       ...passwords,
       [type]: event.target.value,
@@ -97,11 +116,11 @@ const PasswordChangePage = () => {
       ...isValid,
       [type]: checkIsValid('password', event.target.value),
     });
-    if (type === 'currentPW') {
-      setIsCorrect(true);
-    }
+    //사용자 비밀번호와 현재 비밀번호 일치 검사
+    if (type === 'currentPW') checkExistingPassword(event.target.value);
+    //새 비밀번호와 새 비밀번호 확인 일치 검사
     if (type === 'checkNewPW') {
-      if (passwords.newPW !== passwords.checkNewPW) setIsSame(false);
+      if (passwords.newPW !== event.target.value) setIsSame(false);
       else setIsSame(true);
     }
   };
