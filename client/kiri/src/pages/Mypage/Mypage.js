@@ -12,7 +12,7 @@ const MypageContainer = styled.div`
   align-items: center;
 `;
 
-const MypageHeader = styled.div`
+export const MypageHeader = styled.div`
   color: ${({ theme }) => theme.colors.darkgray};
   font-size: 28px;
   font-weight: 700;
