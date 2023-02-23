@@ -5,7 +5,7 @@ import { FaSearch } from 'react-icons/fa';
 import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
-import SearchUnivModal from 'pages/Signup/SearchUnivModal';
+import SearchUnivModal from 'components/SearchUnivModal';
 
 const EventPage = () => {
   const [click, setClick] = useState(false);
