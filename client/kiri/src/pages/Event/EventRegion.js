@@ -123,8 +123,7 @@ const EventFieldPageContainer = styled.div`
   .dropdown {
     display: flex;
     align-items: center;
-    margin-left: 10px;
-    margin-bottom: 7px;
+    margin-left: 33px;
   }
 `;
 
@@ -163,10 +162,10 @@ const FilterLi = styled.li`
 `;
 
 const SelectInput = styled.select`
-  width: 100px;
+  width: 70px;
   height: 30px;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
-  border-radius: 5px;
+  border-radius: 3px;
   padding-left: 5px;
   &:focus {
     outline: none;

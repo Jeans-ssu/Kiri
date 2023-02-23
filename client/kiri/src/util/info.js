@@ -19,3 +19,5 @@ export const Regions = [
 ];
 
 export const Status = ['대학생', '일반인', '중고등학생'];
+
+export const EventCategory = ['전시', '축제', '공연', '강연', '대회', '기타'];
