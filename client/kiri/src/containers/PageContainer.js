@@ -1,6 +1,6 @@
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'styles/theme';
-import Footer from '../components/container/Footer';
+import Footer from '../components/Footer';
 import Header from '../components/container/Header';
 
 const PageContainerBox = styled.div`

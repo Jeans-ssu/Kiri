@@ -7,7 +7,7 @@ import { selectIsLogin, DELETE_USER } from 'store/modules/userSlice';
 import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
 import axios from '../../api/axios';
 import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
-import NeedLoginModal from 'components/modal/NeedLoginModal';
+import NeedLoginModal from 'components/NeedLoginModal';
 
 const Header = () => {
   const [currentTab, setCurrentTab] = useState(-1);
