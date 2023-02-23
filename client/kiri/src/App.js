@@ -13,6 +13,7 @@ import EventWritePage from 'pages/EventWrite/EventWritePage';
 import ReduxPage from 'pages/reduxPage';
 import EventPage from 'pages/Event/EventPage';
 import EventRegion from 'pages/Event/EventRegion';
+import Calendar from 'pages/Calendar/Calendar';
 import PasswordChangePage from 'pages/PasswordChange/PasswordChangePage';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Route path="/event/search" element={<EventSearchPage />} />
           <Route path="/event/write" element={<EventWritePage />} />
           <Route path="/redux" element={<ReduxPage />} />
+          <Route path="/calendar" element={<Calendar />} />
           <Route path="/passwordchange" element={<PasswordChangePage />} />
         </Routes>
       </BrowserRouter>
