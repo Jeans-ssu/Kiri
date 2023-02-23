@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { MypageInput, PasswordInput } from './MypageInput';
 import Withdraw from './Withdraw';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router';
 import { selectAccessToken } from 'store/modules/authSlice';
 import axios from '../../api/axios';
 
@@ -35,18 +36,21 @@ const EditInfoBtn = styled.button`
 const MypageInputs = () => {
   const accessToken = useSelector(selectAccessToken);
 
+  const location = useLocation();
+
   useEffect(() => {
     getUserInfo();
+    setNewPassword(location.state?.password);
   }, []);
 
   const [userInfo, setUserInfo] = useState({
     nickName: '',
     email: '',
-    interest: '',
     status: '',
     univ: '',
-    password: '',
+    region: '',
   });
+  const [newPassword, setNewPassword] = useState(location.state?.password);
 
   const getUserInfo = async () => {
     axios.defaults.headers.common['Authorization'] = accessToken;
@@ -54,12 +58,12 @@ const MypageInputs = () => {
       const response = await axios.get('/member');
       const data = response.data;
       setUserInfo({
+        ...userInfo,
         nickName: data.username,
         email: data.email,
         region: data.local,
         univ: data.school,
         status: data.department,
-        password: '',
       });
     } catch (error) {
       console.error('ERROR:', error);
@@ -67,18 +71,19 @@ const MypageInputs = () => {
   };
 
   const handleClickEditInfoBtn = () => {
-    console.log('수정', userInfo);
     axios.defaults.headers.common['Authorization'] = accessToken;
     axios
       .post('/member', {
         username: userInfo.nickName,
         email: userInfo.email,
-        password: userInfo.password,
-        interest: userInfo.interest,
+        check_password: newPassword !== undefined ? true : false,
+        password: newPassword !== undefined ? newPassword : null,
+        local: userInfo.region,
+        school: userInfo.univ,
+        department: userInfo.status,
       })
-      .then((res) => {
-        //TODO: 닉네임 필요, redux에 회원정보 수정
-        console.log(res.data);
+      .then(() => {
+        window.location.reload();
       })
       .catch((err) => console.error(err));
   };

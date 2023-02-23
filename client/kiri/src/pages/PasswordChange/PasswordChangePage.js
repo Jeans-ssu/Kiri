@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { MypageHeader } from 'pages/Mypage/Mypage';
 import { checkIsValid } from 'pages/Mypage/MypageInput';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { BsCheck } from 'react-icons/bs';
 import axios from '../../api/axios';
 import { selectAccessToken } from 'store/modules/authSlice';
@@ -98,11 +99,13 @@ const ValidInitialValue = {
 
 const PasswordChangePage = () => {
   const [passwords, setPasswords] = useState(InitialValue);
-  const [isValid, setIsValid] = useState(ValidInitialValue);
+  const [isValid, setIsValid] = useState(ValidInitialValue); //유효성 여부 확인
   const [isSame, setIsSame] = useState(true); //사용자 비밀번호와 현재 비밀번호 일치 여부
   const [isCorrect, setIsCorrect] = useState(false); //새 비밀번호와 새 비밀번호 확인 일치 여부
 
   const accessToken = useSelector(selectAccessToken);
+
+  const navigate = useNavigate();
 
   const checkExistingPassword = async (currentPW) => {
     axios.defaults.headers.common['Authorization'] = accessToken;
@@ -134,6 +137,13 @@ const PasswordChangePage = () => {
     if (type === 'checkNewPW') {
       if (passwords.newPW !== event.target.value) setIsSame(false);
       else setIsSame(true);
+    }
+  };
+
+  const handleClickSaveBtn = () => {
+    //다시 마이페이지로 이동
+    if (isSame && isCorrect && !Object.values(isValid).includes(false)) {
+      navigate('/mypage', { state: { password: passwords.newPW } });
     }
   };
 
@@ -181,7 +191,7 @@ const PasswordChangePage = () => {
             비밀번호가 일치하지 않습니다.
           </div>
         </InputContainer>
-        <SaveChangeBtn>변경하기</SaveChangeBtn>
+        <SaveChangeBtn onClick={handleClickSaveBtn}>변경하기</SaveChangeBtn>
       </PasswordChangePageContainer>
     </PageContainer>
   );
