@@ -46,7 +46,7 @@ const EventPage = () => {
   const eventlink = ['', '/region'];
 
   return (
-    <PageContainer header footer>
+    <PageContainer header footer page={'event'}>
       <EventFieldPageContainer>
         <TopBox>
           <SchoolRegionBox>
