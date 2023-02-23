@@ -22,6 +22,7 @@ const MypageHeader = styled.div`
 const Mypage = () => {
   const isLogin = useSelector(selectIsLogin);
   const navigate = useNavigate();
+  console.log(' ');
 
   //미로그인 상태에서 마이페이지 접근시 메인페이지로 이동
   useEffect(() => {
