@@ -70,7 +70,19 @@ const PasswordInput = styled.input`
   font-size: 16px;
 `;
 
-const SaveChangeBtn = styled.button``;
+const SaveChangeBtn = styled.button`
+  margin-top: 15px;
+  width: 100px;
+  height: 35px;
+  background-color: ${({ theme }) => theme.colors.green_1};
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.darkgray};
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 const InitialValue = {
   currentPW: '', //현재 비밀번호
