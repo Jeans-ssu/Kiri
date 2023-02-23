@@ -1,4 +1,9 @@
 import styled from 'styled-components';
+import { useState } from 'react';
+import { Regions, EventCategory } from 'util/info';
+import SearchUnivModal from 'components/SearchUnivModal';
+import { SearchUnivBtn } from 'components/buttons/SearchUnivBtn';
+import { FiSearch } from 'react-icons/fi';
 
 const EventInfoInputContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.mainColor};
@@ -21,7 +26,7 @@ const InfoHeader = styled.div`
 `;
 const InfoTextInput = styled.input`
   box-sizing: border-box;
-  width: 300px;
+  width: ${(props) => props.width || '300px'};
   height: 30px;
   background-color: ${({ theme }) => theme.colors.light};
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
@@ -50,10 +55,20 @@ const InfoSelectInput = styled.select`
 `;
 
 const EventInfoInput = ({ info, setInfo }) => {
+  //학교 찾기 모달
+  const [isOpen, setIsOpen] = useState(false);
+
   const handleChangeInput = (e, target) => {
     setInfo({
       ...info,
       [target]: e.target.value,
+    });
+  };
+
+  const handleSetUniv = (univName) => {
+    setInfo({
+      ...info,
+      univ: univName,
     });
   };
 
@@ -70,6 +85,16 @@ const EventInfoInput = ({ info, setInfo }) => {
         />
       </InfoContainer>
       <InfoContainer>
+        <InfoHeader>
+          이메일 <span className="green">*</span>
+        </InfoHeader>
+        <InfoTextInput
+          type="email"
+          value={info.email}
+          onChange={(e) => handleChangeInput(e, 'email')}
+        />
+      </InfoContainer>
+      <InfoContainer>
         <InfoHeader>연락처</InfoHeader>
         <InfoTextInput
           type="tel"
@@ -79,7 +104,45 @@ const EventInfoInput = ({ info, setInfo }) => {
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>
-          구분 <span className="green">*</span>
+          지역 <span className="green">*</span>
+        </InfoHeader>
+        <InfoSelectInput
+          value={info.region}
+          onChange={(e) => {
+            handleChangeInput(e, 'region');
+          }}
+        >
+          {Regions.map((el, idx) => {
+            return (
+              <option value={el} key={idx}>
+                {el}
+              </option>
+            );
+          })}
+        </InfoSelectInput>
+      </InfoContainer>
+      <InfoContainer>
+        <InfoHeader>
+          학교 <span className="green">*</span>
+        </InfoHeader>
+        <InfoTextInput width="200px" readOnly value={info.univ} />
+        <SearchUnivBtn
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        >
+          <FiSearch />
+          찾아보기
+        </SearchUnivBtn>
+        <SearchUnivModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          setUserUniv={handleSetUniv}
+        />
+      </InfoContainer>
+      <InfoContainer>
+        <InfoHeader>
+          유형 <span className="green">*</span>
         </InfoHeader>
         <InfoSelectInput
           value={info.type}
@@ -87,34 +150,13 @@ const EventInfoInput = ({ info, setInfo }) => {
             handleChangeInput(e, 'type');
           }}
         >
-          <option value="Circle">동아리</option>
-          <option value="Contest">공모전</option>
-          <option value="Volunteer">봉사</option>
-          <option value="lecture">강연</option>
-          <option value="Supporters">서포터즈</option>
-          <option value="SchoolFestival">학교축제</option>
-          <option value="LocalFestival">지역축제</option>
-          <option value="Etc">기타</option>
-        </InfoSelectInput>
-      </InfoContainer>
-      <InfoContainer>
-        <InfoHeader>
-          분야 <span className="green">*</span>
-        </InfoHeader>
-        <InfoSelectInput
-          value={info.field}
-          onChange={(e) => {
-            handleChangeInput(e, 'field');
-          }}
-        >
-          <option value="IT">IT</option>
-          <option value="Business">경영/경제</option>
-          <option value="Science">자연과학</option>
-          <option value="Marketing">마케팅/홍보</option>
-          <option value="Humanities">인문사회</option>
-          <option value="Art">예술</option>
-          <option value="Engineering">공학</option>
-          <option value="Etc">기타</option>
+          {EventCategory.map((el, idx) => {
+            return (
+              <option value={el} key={idx}>
+                {el}
+              </option>
+            );
+          })}
         </InfoSelectInput>
       </InfoContainer>
       <InfoContainer>

@@ -39,7 +39,10 @@ const EventWritePage = () => {
   const [info, setInfo] = useState({
     host: '',
     tel: '',
-    type: 'Circle',
+    email: '',
+    region: '서울', //지역
+    univ: '', //학교
+    type: '전시', //유형
     field: 'IT',
     startDate: '',
     endDate: '',

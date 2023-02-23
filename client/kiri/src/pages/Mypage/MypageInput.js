@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { BsExclamationCircle } from 'react-icons/bs';
 import { AiFillEye } from 'react-icons/ai';
 import { Regions, Status } from 'util/info';
-import SearchUnivModal from 'pages/Signup/SearchUnivModal';
+import SearchUnivModal from 'components/SearchUnivModal';
+import { useNavigate } from 'react-router';
 
 const MypageInputWrapper = styled.div`
   height: 20px;
@@ -141,7 +142,7 @@ const types = {
 };
 
 //유효성 검사 함수
-const checkIsValid = (type, value) => {
+export const checkIsValid = (type, value) => {
   const checkNickName = /^[가-힣a-zA-Z0-9]{2,10}$/;
   const checkPassword = /^[a-zA-Z0-9]{8,16}$/;
 
@@ -156,7 +157,6 @@ const checkIsValid = (type, value) => {
   return true;
 };
 
-//TODO: 유효성 검사
 const MypageInput = ({ type, userInfo, setUserInfo }) => {
   const [isEditmode, setIsEditmode] = useState(false);
   const [editvalue, setEditvalue] = useState(userInfo[type]);
@@ -287,4 +287,19 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
   );
 };
 
-export default MypageInput;
+const PasswordInput = () => {
+  const navigate = useNavigate();
+
+  const handleClickEditBtn = () => {
+    navigate('/passwordchange');
+  };
+
+  return (
+    <MypageInputWrapper>
+      <div className="type">비밀번호</div>
+      <EditBtn onClick={handleClickEditBtn}>비밀번호 변경</EditBtn>
+    </MypageInputWrapper>
+  );
+};
+
+export { PasswordInput, MypageInput };

@@ -6,7 +6,7 @@ import { FiSearch } from 'react-icons/fi';
 import { ViewPasswordBtn } from 'pages/Mypage/MypageInput';
 import axios from '../../api/axios';
 import { SignupSuccessModal, SignupFailModal } from 'components/SignupinModal';
-import SearchSchoolModal from './SearchUnivModal';
+import SearchUnivModal from 'components/SearchUnivModal';
 import { Regions } from 'util/info';
 
 const SignupInputsContainer = styled.div`
@@ -411,7 +411,7 @@ const SignupInputs = () => {
         </InputContainer>
       </SignupInputsContainer>
       <SubmitBtn onClick={handleClickSubmitBtn}>회원가입</SubmitBtn>
-      <SearchSchoolModal
+      <SearchUnivModal
         isOpen={showUnivModal}
         setIsOpen={setShowUnivModal}
         setUserUniv={setUserUniv}
