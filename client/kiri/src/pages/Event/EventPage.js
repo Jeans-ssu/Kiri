@@ -5,10 +5,20 @@ import { FaSearch } from 'react-icons/fa';
 import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
+import SearchUnivModal from 'pages/Signup/SearchUnivModal';
 
 const EventPage = () => {
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
+  const [searchuniv, setSearchUniv] = useState('');
+
+  //학교 검색 모달
+  const [showUnivModal, setShowUnivModal] = useState(false);
+
+  const setUserUniv = (univName) => {
+    console.log(univName);
+    setSearchUniv(univName);
+  };
 
   const selectFilterHandler = () => {
     setClick(true);
@@ -24,47 +34,65 @@ const EventPage = () => {
     console.log(field[idx], fieldClick, currentNav);
   };
 
+  const handleClickSearchUnivBtn = () => {
+    setShowUnivModal(true);
+  };
+
+  const removeUniv = () => {
+    setSearchUniv('');
+  };
+
   const filter = ['학교', '지역'];
   const eventlink = ['', '/region'];
 
   return (
     <PageContainer header footer>
       <EventFieldPageContainer>
-        <SchoolRegionBox>
-          {filter.map((el, idx) => {
-            return (
-              <Link
-                className="filterLink"
-                key={idx}
-                to={`/event` + `${eventlink[idx]}`}
-              >
-                <FilterLi
+        <TopBox>
+          <SchoolRegionBox>
+            {filter.map((el, idx) => {
+              return (
+                <Link
+                  className="filterLink"
                   key={idx}
-                  className={`${el === '학교' ? 'school' : 'hide'}
-                  `}
-                  onClick={() => selectFilterHandler(idx)}
+                  to={`/event` + `${eventlink[idx]}`}
                 >
-                  <h2>{el}</h2>
-                </FilterLi>
-              </Link>
-            );
-          })}
-        </SchoolRegionBox>
-        <Bar />
-        <SchoolSearchContainer>
-          <SchoolnameBox>
-            <span>OO대학교</span>
-          </SchoolnameBox>
-          <Searchdiv>
-            <FaSearch size="17" className="searchicon" />
-            <SearchInput
-              type="text"
-              id="text"
-              placeholder="다른 학교를 검색해보세요"
-            ></SearchInput>
-          </Searchdiv>
-        </SchoolSearchContainer>
-
+                  <FilterLi
+                    key={idx}
+                    className={`${el === '학교' ? 'school' : 'hide'}
+                  `}
+                    onClick={() => selectFilterHandler(idx)}
+                  >
+                    <h2>{el}</h2>
+                  </FilterLi>
+                </Link>
+              );
+            })}
+          </SchoolRegionBox>
+          <SchoolSearchContainer>
+            <Searchdiv>
+              <FaSearch size="17" className="searchicon" />
+              <SearchInput
+                type="text"
+                id="text"
+                placeholder="원하는 학교를 검색해보세요"
+                value={searchuniv}
+              ></SearchInput>
+              <OpenSearchModalBtn>
+                {searchuniv === '' ? (
+                  <Findtxt onClick={handleClickSearchUnivBtn}>찾아보기</Findtxt>
+                ) : (
+                  <Removetxt onClick={removeUniv}>선택안함</Removetxt>
+                )}
+              </OpenSearchModalBtn>
+            </Searchdiv>
+            <SearchUnivModal
+              isOpen={showUnivModal}
+              setIsOpen={setShowUnivModal}
+              setUserUniv={setUserUniv}
+            />
+          </SchoolSearchContainer>
+        </TopBox>
         <CheckboxDiv>
           {field.map((el, idx) => (
             <>
@@ -119,6 +147,10 @@ const SchoolRegionBox = styled.div`
   }
 `;
 
+const TopBox = styled.div`
+  display: flex;
+`;
+
 const Bar = styled.hr`
   width: 95%;
   border: 0px;
@@ -126,23 +158,14 @@ const Bar = styled.hr`
 `;
 
 const SchoolSearchContainer = styled.div`
-  padding-left: 30px;
+  padding-left: 18px;
   display: flex;
   align-items: center;
-  margin: 20px 0;
-`;
-
-const SchoolnameBox = styled.div`
-  span {
-    font-weight: bold;
-    text-decoration: underline;
-  }
 `;
 
 const Searchdiv = styled.div`
   display: flex;
-  margin-left: 20px;
-  width: 40%;
+  margin-left: 10px;
 
   .searchicon {
     position: absolute;
@@ -159,8 +182,8 @@ const SearchInput = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 3px;
   padding: 7.8px 9.1px 7.8px 32px;
-  width: 100%;
-
+  width: 240px;
+  color: black;
   margin-left: 5px;
   display: flex;
   align-items: center;
@@ -168,7 +191,12 @@ const SearchInput = styled.input`
   &:focus {
     outline: none;
   }
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  ::placeholder {
+    font-weight: 500;
+    font-size: 12px;
+  }
 `;
 
 const CheckboxDiv = styled.div`
@@ -188,6 +216,30 @@ const CheckboxDiv = styled.div`
 const FilterLi = styled.li`
   list-style: none;
   cursor: pointer;
+`;
+
+const OpenSearchModalBtn = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 80px;
+  margin-left: -5px;
+  background-color: transparent;
+  border: none;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const Findtxt = styled.div`
+  color: ${({ theme }) => theme.colors.mainColor};
+  font-weight: 600;
+`;
+
+const Removetxt = styled.div`
+  color: ${({ theme }) => theme.colors.lightgray};
+  text-decoration: underline;
+  font-weight: 500;
 `;
 
 export default EventPage;
