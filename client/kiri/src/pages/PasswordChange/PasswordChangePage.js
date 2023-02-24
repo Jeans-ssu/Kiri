@@ -143,7 +143,7 @@ const PasswordChangePage = () => {
   const handleClickSaveBtn = () => {
     //다시 마이페이지로 이동
     if (isSame && isCorrect && !Object.values(isValid).includes(false)) {
-      navigate('/mypage', { state: { password: passwords.newPW } });
+      navigate('/mypage/edit', { state: { password: passwords.newPW } });
     }
   };
 
