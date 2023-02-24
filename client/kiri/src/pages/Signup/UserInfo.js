@@ -52,7 +52,7 @@ const InfoConatiner = styled.div`
   }
 `;
 
-const UserInfo = () => {
+const UserInfo = ({ userInfo }) => {
   return (
     <UserInfoConatiner>
       <ProfileCircleContainer>
@@ -63,11 +63,11 @@ const UserInfo = () => {
       </ProfileCircleContainer>
       <InfoConatiner>
         <div className="section one">
-          <span className="nickname">김뀨뀨</span>
+          <span className="nickname">{userInfo.username}</span>
           <button className="edit">개인정보수정</button>
         </div>
         <div className="section">
-          <span className="email">abcd@email.com</span>
+          <span className="email">{userInfo.email}</span>
         </div>
       </InfoConatiner>
     </UserInfoConatiner>
