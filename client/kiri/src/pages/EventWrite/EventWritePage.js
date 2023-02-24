@@ -66,7 +66,7 @@ const EventWritePage = () => {
   };
 
   return (
-    <PageContainer header footer margin_bottom={false}>
+    <PageContainer header footer margin_bottom={false} page={'event/write'}>
       <EventWritePageContainer>
         <EventTitleInput title={title} setTitle={setTitle} />
         <EventInfoInput info={info} setInfo={setInfo} />

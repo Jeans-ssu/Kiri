@@ -25,11 +25,17 @@ const ContentContainer = styled.div`
 `;
 
 //TODO: 헤더, 푸터 추가
-const PageContainer = ({ children, header, footer, margin_bottom = true }) => {
+const PageContainer = ({
+  children,
+  header,
+  footer,
+  margin_bottom = true,
+  page = {},
+}) => {
   return (
     <PageContainerBox>
       <ThemeProvider theme={theme}>
-        {header === false ? null : <Header />}
+        {header === false ? null : <Header page={page} />}
         <ContentContainer className={margin_bottom ? null : 'none'}>
           {children}
         </ContentContainer>
