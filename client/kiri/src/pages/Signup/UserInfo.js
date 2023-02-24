@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 
 const UserInfoConatiner = styled.div`
-  width: 500px;
+  width: 600px;
   height: 90px;
   margin-top: 10px;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
@@ -40,6 +40,7 @@ const InfoConatiner = styled.div`
   }
   span.email {
     font-size: 13px;
+    color: ${({ theme }) => theme.colors.dark};
   }
   button.edit {
     background-color: transparent;
