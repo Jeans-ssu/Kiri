@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 
 const UserInfoConatiner = styled.div`
   width: 500px;
@@ -53,6 +54,8 @@ const InfoConatiner = styled.div`
 `;
 
 const UserInfo = ({ userInfo }) => {
+  const navigate = useNavigate();
+
   return (
     <UserInfoConatiner>
       <ProfileCircleContainer>
@@ -64,7 +67,14 @@ const UserInfo = ({ userInfo }) => {
       <InfoConatiner>
         <div className="section one">
           <span className="nickname">{userInfo.username}</span>
-          <button className="edit">개인정보수정</button>
+          <button
+            className="edit"
+            onClick={() => {
+              navigate('/mypage/edit');
+            }}
+          >
+            개인정보수정
+          </button>
         </div>
         <div className="section">
           <span className="email">{userInfo.email}</span>
