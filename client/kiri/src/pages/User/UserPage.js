@@ -1,7 +1,7 @@
 import PageContainer from 'containers/PageContainer';
 import styled from 'styled-components';
 import { MypageHeader as UserpageHeader } from 'pages/Mypage/Mypage';
-import UserInfo from 'pages/Signup/UserInfo';
+import UserInfo from 'pages/User/UserInfo';
 import axios from '../../api/axios';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
