@@ -15,6 +15,7 @@ import EventPage from 'pages/Event/EventPage';
 import EventRegion from 'pages/Event/EventRegion';
 import Calendar from 'pages/Calendar/Calendar';
 import PasswordChangePage from 'pages/PasswordChange/PasswordChangePage';
+import UserPage from 'pages/User/UserPage';
 
 function App() {
   return (
@@ -25,7 +26,8 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/signin" element={<SigninPage />} />
-          <Route path="/mypage" element={<Mypage />} />
+          <Route path="/mypage" element={<UserPage />} />
+          <Route path="/mypage/edit" element={<Mypage />} />
           <Route path="*" element={<NoMatchPage />} />
           <Route path="/event" element={<EventPage />} />
           <Route path="/event/region" element={<EventRegion />} />
