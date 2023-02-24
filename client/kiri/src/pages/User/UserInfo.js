@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 
 const UserInfoConatiner = styled.div`
   width: 600px;
-  height: 90px;
+  height: 80px;
   margin-top: 10px;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 5px;
