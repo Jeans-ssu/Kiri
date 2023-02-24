@@ -10,6 +10,10 @@ const TitleHeader = styled.div`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.dark};
   margin-bottom: 10px;
+  display: flex;
+  .title {
+    margin-right: 3px;
+  }
   .green {
     color: ${({ theme }) => theme.colors.mainColor};
     font-size: 20px;
@@ -31,16 +35,27 @@ const TitleInput = styled.input`
   }
 `;
 
-const EventTitleInput = ({ Title, setTitle }) => {
+const ErrorMessageBox = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.red};
+  display: flex;
+  align-items: center;
+  margin-left: 3px;
+`;
+
+const EventTitleInput = ({ Title, setTitle, titleRef, errorMessage }) => {
   const handleChangeInput = (e) => {
     setTitle(e.target.value);
   };
   return (
     <EventTitleInputContainer>
       <TitleHeader>
-        제목 <span className="green">*</span>
+        <div className="title">제목</div>
+        <span className="green">*</span>
+        <ErrorMessageBox> {errorMessage.titleErrorMessage}</ErrorMessageBox>
       </TitleHeader>
-      <TitleInput value={Title} onChange={handleChangeInput} />
+      <TitleInput value={Title} onChange={handleChangeInput} ref={titleRef} />
     </EventTitleInputContainer>
   );
 };

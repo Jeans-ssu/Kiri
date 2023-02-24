@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import PageContainer from 'containers/PageContainer';
 import styled from 'styled-components';
 import EventTitleInput from './EventTitleInput';
@@ -40,9 +40,9 @@ const EventWritePage = () => {
     host: '',
     tel: '',
     email: '',
-    region: '서울', //지역
+    region: '선택', //지역
     univ: '', //학교
-    type: '전시', //유형
+    type: '선택', //유형
     field: 'IT',
     startDate: '',
     endDate: '',
@@ -53,8 +53,138 @@ const EventWritePage = () => {
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
+  const [errorMessage, setErrorMessage] = useState({
+    titleErrorMessage: '',
+    hostErrorMessage: '',
+    emailErrorMessage: '',
+    regionErrorMessage: '',
+    univErrorMessage: '',
+    typeErrorMessage: '',
+    startDateErrorMessage: '',
+    endDateErrorMessage: '',
+    explainErrorMessage: '',
+  });
+  console.log(errorMessage);
+
+  const titleRef = useRef();
+  const hostRef = useRef();
+  const emailRef = useRef();
+  const regionRef = useRef();
+  const univRef = useRef();
+  const typeRef = useRef();
+  const startDateRef = useRef();
+  const endDateRef = useRef();
+  const explainRef = useRef();
 
   const handleClickWriteBtn = () => {
+    if (
+      title === '' ||
+      info.host === '' ||
+      info.email === '' ||
+      info.region === '선택' ||
+      info.univ === '' ||
+      info.type === '선택' ||
+      info.startDate === '' ||
+      info.endDate === '' ||
+      explain === ''
+    ) {
+      if (explain === '') {
+        explainRef.current && explainRef.current.focus();
+        setErrorMessage((prev) => {
+          return { ...prev, explainErrorMessage: '설명을 입력해주세요.' };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, explainErrorMessage: '' };
+        });
+      }
+      if (info.endDate === '') {
+        endDateRef.current && endDateRef.current.focus();
+        setErrorMessage((prev) => {
+          return {
+            ...prev,
+            endDateErrorMessage: '끝나는 날짜를 입력해주세요.',
+          };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, endDateErrorMessage: '' };
+        });
+      }
+      if (info.startDate === '') {
+        startDateRef.current && startDateRef.current.focus();
+        setErrorMessage((prev) => {
+          return {
+            ...prev,
+            startDateErrorMessage: '시작하는 날짜를 입력해주세요.',
+          };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, startDateErrorMessage: '' };
+        });
+      }
+      if (info.type === '선택') {
+        typeRef.current && typeRef.current.focus();
+        setErrorMessage((prev) => {
+          return { ...prev, typeErrorMessage: '유형을 입력해주세요.' };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, typeErrorMessage: '' };
+        });
+      }
+      if (info.univ === '') {
+        univRef.current && univRef.current.focus();
+        setErrorMessage((prev) => {
+          return { ...prev, univErrorMessage: '학교를 입력해주세요.' };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, univErrorMessage: '' };
+        });
+      }
+      if (info.region === '선택') {
+        regionRef.current && regionRef.current.focus();
+        setErrorMessage((prev) => {
+          return { ...prev, regionErrorMessage: '지역을 입력해주세요.' };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, regionErrorMessage: '' };
+        });
+      }
+      if (info.email === '') {
+        emailRef.current && emailRef.current.focus();
+        setErrorMessage((prev) => {
+          return { ...prev, emailErrorMessage: '이메일을 입력해주세요.' };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, emailErrorMessage: '' };
+        });
+      }
+      if (info.host === '') {
+        hostRef.current && hostRef.current.focus();
+        setErrorMessage((prev) => {
+          return { ...prev, hostErrorMessage: '주체/단체를 입력해주세요.' };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, hostErrorMessage: '' };
+        });
+      }
+      if (title === '') {
+        titleRef.current && titleRef.current.focus();
+        setErrorMessage((prev) => {
+          return { ...prev, titleErrorMessage: '제목을 입력해주세요.' };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, titleErrorMessage: '' };
+        });
+      }
+    }
     const blob = new Blob([JSON.stringify({ title, ...info, explain, link })], {
       type: 'application/json',
     });
@@ -68,9 +198,30 @@ const EventWritePage = () => {
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
       <EventWritePageContainer>
-        <EventTitleInput title={title} setTitle={setTitle} />
-        <EventInfoInput info={info} setInfo={setInfo} />
-        <EventExplainInput explain={explain} setExplain={setExplain} />
+        <EventTitleInput
+          title={title}
+          setTitle={setTitle}
+          titleRef={titleRef}
+          errorMessage={errorMessage}
+        />
+        <EventInfoInput
+          info={info}
+          setInfo={setInfo}
+          hostRef={hostRef}
+          emailRef={emailRef}
+          regionRef={regionRef}
+          univRef={univRef}
+          typeRef={typeRef}
+          startDateRef={startDateRef}
+          endDateRef={endDateRef}
+          errorMessage={errorMessage}
+        />
+        <EventExplainInput
+          explain={explain}
+          setExplain={setExplain}
+          explainRef={explainRef}
+          errorMessage={errorMessage}
+        />
         <EventEtcInput
           link={link}
           setLink={setLink}

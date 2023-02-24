@@ -15,6 +15,13 @@ const InfoContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 15px;
+  .start {
+    margin-left: -13px;
+  }
+
+  .univ {
+    margin-left: -2px;
+  }
 `;
 const InfoHeader = styled.div`
   width: 85px;
@@ -54,7 +61,27 @@ const InfoSelectInput = styled.select`
   }
 `;
 
-const EventInfoInput = ({ info, setInfo }) => {
+const ErrorMessageBox = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.red};
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+`;
+
+const EventInfoInput = ({
+  info,
+  setInfo,
+  hostRef,
+  emailRef,
+  regionRef,
+  univRef,
+  typeRef,
+  startDateRef,
+  endDateRef,
+  errorMessage,
+}) => {
   //학교 찾기 모달
   const [isOpen, setIsOpen] = useState(false);
 
@@ -82,7 +109,9 @@ const EventInfoInput = ({ info, setInfo }) => {
           type="text"
           value={info.host}
           onChange={(e) => handleChangeInput(e, 'host')}
+          ref={hostRef}
         />
+        <ErrorMessageBox> {errorMessage.hostErrorMessage}</ErrorMessageBox>
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>
@@ -92,7 +121,9 @@ const EventInfoInput = ({ info, setInfo }) => {
           type="email"
           value={info.email}
           onChange={(e) => handleChangeInput(e, 'email')}
+          ref={emailRef}
         />
+        <ErrorMessageBox> {errorMessage.emailErrorMessage}</ErrorMessageBox>
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>연락처</InfoHeader>
@@ -111,6 +142,7 @@ const EventInfoInput = ({ info, setInfo }) => {
           onChange={(e) => {
             handleChangeInput(e, 'region');
           }}
+          ref={regionRef}
         >
           {Regions.map((el, idx) => {
             return (
@@ -119,7 +151,8 @@ const EventInfoInput = ({ info, setInfo }) => {
               </option>
             );
           })}
-        </InfoSelectInput>
+        </InfoSelectInput>{' '}
+        <ErrorMessageBox> {errorMessage.regionErrorMessage}</ErrorMessageBox>
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>
@@ -130,6 +163,7 @@ const EventInfoInput = ({ info, setInfo }) => {
           onClick={() => {
             setIsOpen(true);
           }}
+          ref={univRef}
         >
           <FiSearch />
           찾아보기
@@ -139,6 +173,10 @@ const EventInfoInput = ({ info, setInfo }) => {
           setIsOpen={setIsOpen}
           setUserUniv={handleSetUniv}
         />
+        <ErrorMessageBox className="univ">
+          {' '}
+          {errorMessage.univErrorMessage}
+        </ErrorMessageBox>
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>
@@ -149,6 +187,7 @@ const EventInfoInput = ({ info, setInfo }) => {
           onChange={(e) => {
             handleChangeInput(e, 'type');
           }}
+          ref={typeRef}
         >
           {EventCategory.map((el, idx) => {
             return (
@@ -158,6 +197,7 @@ const EventInfoInput = ({ info, setInfo }) => {
             );
           })}
         </InfoSelectInput>
+        <ErrorMessageBox> {errorMessage.typeErrorMessage}</ErrorMessageBox>
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>
@@ -168,13 +208,26 @@ const EventInfoInput = ({ info, setInfo }) => {
           className="smallSize"
           value={info.startDate}
           onChange={(e) => handleChangeInput(e, 'startDate')}
+          ref={startDateRef}
         />
         <InfoTextInput
           type="date"
           className="smallSize"
           value={info.endDate}
           onChange={(e) => handleChangeInput(e, 'endDate')}
+          ref={endDateRef}
         />
+        {/* {errorMessage.startDateErrorMessage === '' &&
+        errorMessage.endDateErrorMessage === '' ? (
+          <ErrorMessageBox>날짜를 입력해주세요</ErrorMessageBox>
+        ) : (
+          ''
+        )} */}
+        <ErrorMessageBox className="start">
+          {' '}
+          {errorMessage.startDateErrorMessage}
+        </ErrorMessageBox>
+        <ErrorMessageBox> {errorMessage.endDateErrorMessage}</ErrorMessageBox>
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>시간</InfoHeader>

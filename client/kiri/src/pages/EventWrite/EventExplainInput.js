@@ -14,7 +14,9 @@ const ExplainHeader = styled.div`
   .green {
     color: ${({ theme }) => theme.colors.mainColor};
     font-size: 18px;
+    margin-left: 3px;
   }
+  display: flex;
 `;
 
 const ExplainInput = styled.textarea`
@@ -31,7 +33,21 @@ const ExplainInput = styled.textarea`
   }
 `;
 
-const EventExplainInput = ({ explain, setExplain }) => {
+const ErrorMessageBox = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.red};
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+`;
+
+const EventExplainInput = ({
+  explain,
+  setExplain,
+  explainRef,
+  errorMessage,
+}) => {
   const handleChangeInput = (e) => {
     setExplain(e.target.value);
   };
@@ -40,8 +56,14 @@ const EventExplainInput = ({ explain, setExplain }) => {
     <EventExplainInputContainer>
       <ExplainHeader>
         설명 <span className="green">*</span>
+        <ErrorMessageBox> {errorMessage.explainErrorMessage}</ErrorMessageBox>
       </ExplainHeader>
-      <ExplainInput type="text" value={explain} onChange={handleChangeInput} />
+      <ExplainInput
+        type="text"
+        value={explain}
+        onChange={handleChangeInput}
+        ref={explainRef}
+      />
     </EventExplainInputContainer>
   );
 };
