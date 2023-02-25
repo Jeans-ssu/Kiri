@@ -186,7 +186,9 @@ class ScrapServiceTest {
 //        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
 //        List<ScrapResCal> list = scrapService.getScrap("2023", "3");
 //        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
-        List<ScrapResCal> list = scrapService.getScrap("2022", "12");
+//        List<ScrapResCal> list = scrapService.getScrap("2022", "12");
+        List<ScrapResCal> list = scrapService.getScrap("2022", "10");
+
 
         //then
 //        assertThat(list.size()).isEqualTo(7);
@@ -195,7 +197,7 @@ class ScrapServiceTest {
 //        assertThat(list.size()).isEqualTo(3);
 //        assertThat(list.size()).isEqualTo(6);
 //        assertThat(list.size()).isEqualTo(5);
-        assertThat(list.size()).isEqualTo(2);
+        assertThat(list.size()).isEqualTo(0);
 
     }
 

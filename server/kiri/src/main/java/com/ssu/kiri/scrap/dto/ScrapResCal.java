@@ -32,7 +32,7 @@ public class ScrapResCal {
 
     @QueryProjection
     public ScrapResCal (Long post_id, String title, String organizer, String school,
-                        String local, String event, LocalDateTime startSCrapTime, LocalDateTime finishScrapTime) {
+                        String local, String event, LocalDateTime startScrapTime, LocalDateTime finishScrapTime) {
 
         this.post_id = post_id;
         this.title = title;
