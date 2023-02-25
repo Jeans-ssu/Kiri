@@ -15,25 +15,17 @@ const purge = async () => {
   await persistor.purge();
 };
 
-const Header = () => {
-  const [currentTab, setCurrentTab] = useState(-1);
-  const [click, setClick] = useState(false);
-
+const Header = ({ page }) => {
   const [isOpen, setIsOpen] = useState(false); //로그인 필요 모달
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const menuArr = [{ name: '캘린더' }, { name: '이벤트' }, { name: '글쓰기' }];
-
   const menu = ['calendar', 'event', 'event/write'];
+  const pageidx = menu.findIndex((el) => el === page);
 
   const isLogin = useSelector(selectIsLogin);
-
-  const selectMenuHandler = (index) => {
-    setCurrentTab(index);
-    setClick(true);
-  };
 
   const searchtext = useRef('');
 
@@ -73,16 +65,10 @@ const Header = () => {
               <Link className="menulink" key={idx} to={`/` + `${menu[idx]}`}>
                 <SubMenu
                   key={idx}
-                  className={`${currentTab === idx ? 'focused' : ''} ${
-                    click ? '' : 'hide'
-                  }`}
-                  onClick={() => selectMenuHandler(idx)}
+                  className={`${pageidx === idx ? 'focused' : ''}`}
                 >
                   {el.name}
                 </SubMenu>
-                {currentTab === idx ? (
-                  <div className="line" key={idx}></div>
-                ) : null}
               </Link>
             );
           })}
