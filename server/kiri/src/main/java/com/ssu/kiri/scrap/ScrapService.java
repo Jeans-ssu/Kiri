@@ -113,9 +113,10 @@ public class ScrapService {
         }
 
         // 오늘 날짜가 게시글의 startDateTime의 Year과 Month보다 크거나 같고 FinishDateTime의 Year과 Month보다 작거나 같은 경우 가져옴
-        Integer nowIMear = Integer.valueOf(year);
+        Integer nowIYear = Integer.valueOf(year);
         Integer nowIMonth = Integer.valueOf(month);
-        List<ScrapResCal> scraps = scrapRepository.findScrapsByYearAndMonth(nowIMonth, nowIMonth);
+        List<ScrapResCal> scraps = scrapRepository.findScrapsByYearAndMonth(nowIYear, nowIMonth);
         return scraps;
+
     }
 }

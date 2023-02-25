@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 public class ScrapResCal {
     /**
      * list [ 글id

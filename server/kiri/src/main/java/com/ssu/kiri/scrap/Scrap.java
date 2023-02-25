@@ -69,6 +69,8 @@ public class Scrap {
         scrap.startScrapTime = request.getStartScrapTime();
         scrap.endScrapTime = request.getEndScrapTime();
 
+        scrap.changeStartAndFinishYearMonth();
+
         return scrap;
     }
 
