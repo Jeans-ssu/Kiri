@@ -38,11 +38,6 @@ const MypageInputs = () => {
 
   const location = useLocation();
 
-  useEffect(() => {
-    getUserInfo();
-    setNewPassword(location.state?.password);
-  }, []);
-
   const [userInfo, setUserInfo] = useState({
     nickName: '',
     email: '',
@@ -51,6 +46,11 @@ const MypageInputs = () => {
     region: '',
   });
   const [newPassword, setNewPassword] = useState(location.state?.password);
+
+  useEffect(() => {
+    getUserInfo();
+    setNewPassword(location.state?.password);
+  }, []);
 
   const getUserInfo = async () => {
     axios.defaults.headers.common['Authorization'] = accessToken;
@@ -71,7 +71,7 @@ const MypageInputs = () => {
   };
 
   const handleClickEditInfoBtn = () => {
-    axios.defaults.headers.common['Authorization'] = accessToken;
+    //axios.defaults.headers.common['Authorization'] = accessToken;
     axios
       .post('/member', {
         username: userInfo.nickName,
