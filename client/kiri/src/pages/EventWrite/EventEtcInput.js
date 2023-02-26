@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const EventEtcInputContainer = styled.div`
   display: flex;
@@ -42,7 +42,29 @@ const ImgInput = styled.input`
   }
 `;
 
+const PreviewBox = styled.div`
+  display: flex;
+  margin-left: 70px;
+`;
+
+const ImgPreview = styled.img`
+  width: 50px;
+  height: 50px;
+`;
+
 const EventEtcInput = ({ link, setLink, img, setImg }) => {
+  const [image, setImage] = useState([]);
+
+  const addImage = (e) => {
+    const nowSelectImageList = e.target.files;
+    const nowImageUrlList = [...image];
+    for (let i = 0; i < nowSelectImageList.length; i++) {
+      const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
+      nowImageUrlList.push(nowImageUrl);
+    }
+    setImage(nowImageUrlList);
+  };
+
   const handleChangeInput = (e) => {
     setLink(e.target.value);
   };
@@ -51,7 +73,10 @@ const EventEtcInput = ({ link, setLink, img, setImg }) => {
 
   const handleChangeImgInput = (e) => {
     setImg({ ...img, image: e.target.files[0] });
+    console.log('image', image);
   };
+
+  console.log('image', image);
 
   return (
     <EventEtcInputContainer>
@@ -61,14 +86,25 @@ const EventEtcInput = ({ link, setLink, img, setImg }) => {
       </EtcContainer>
       <EtcContainer>
         <EtcHeader>이미지</EtcHeader>
-        <ImgInput
-          type="file"
-          name="file"
-          accept="image/*"
-          ref={fileInput}
-          onChange={handleChangeImgInput}
-        />
+        <label htmlFor="input-file" onChange={addImage}>
+          <ImgInput
+            id="input-file"
+            type="file"
+            name="file"
+            accept="image/*"
+            ref={fileInput}
+            multiple="multiple"
+            onChange={handleChangeImgInput}
+          />
+        </label>
       </EtcContainer>
+      <PreviewBox>
+        {image.length > 0
+          ? image.map((el, idx) => {
+              return <ImgPreview key={idx} alt="img" src={el} />;
+            })
+          : ''}
+      </PreviewBox>
     </EventEtcInputContainer>
   );
 };
