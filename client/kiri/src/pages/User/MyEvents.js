@@ -45,7 +45,7 @@ const MyEvents = () => {
 
   useEffect(() => {
     setEvents(myevents);
-  }, [events]);
+  }, []);
 
   return (
     <MyEventsContainer>

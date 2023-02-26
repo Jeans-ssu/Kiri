@@ -4,6 +4,7 @@ import { MypageHeader as UserpageHeader } from 'pages/Mypage/Mypage';
 import UserInfo from 'pages/User/UserInfo';
 import MyEvents from './MyEvents';
 import axios from '../../api/axios';
+import { setAuthHeader } from 'api/setAuthHeader';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
@@ -18,7 +19,7 @@ const UserPage = () => {
   const [userInfo, setUserInfo] = useState({});
 
   const accessToken = useSelector(selectAccessToken);
-  axios.defaults.headers.common['Authorization'] = accessToken;
+  setAuthHeader(accessToken);
 
   useEffect(() => {
     axios
