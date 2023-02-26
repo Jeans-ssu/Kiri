@@ -29,7 +29,7 @@ const UserPage = () => {
       .catch((err) => {
         console.log('ERROR: ', err);
       });
-  }, [userInfo]);
+  }, []);
 
   return (
     <PageContainer header footer={false} margin_bottom={false}>
