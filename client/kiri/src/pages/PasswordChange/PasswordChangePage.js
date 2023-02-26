@@ -8,6 +8,7 @@ import { BsCheck } from 'react-icons/bs';
 import axios from '../../api/axios';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { useSelector } from 'react-redux';
+import { setAuthHeader } from 'api/setAuthHeader';
 
 const PasswordChangePageContainer = styled.div`
   display: flex;
@@ -104,11 +105,11 @@ const PasswordChangePage = () => {
   const [isCorrect, setIsCorrect] = useState(false); //새 비밀번호와 새 비밀번호 확인 일치 여부
 
   const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
 
   const navigate = useNavigate();
 
   const checkExistingPassword = async (currentPW) => {
-    axios.defaults.headers.common['Authorization'] = accessToken;
     try {
       const response = await axios.post('/auth/password/exist', {
         password: currentPW,
