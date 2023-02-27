@@ -190,6 +190,11 @@ const SigninInputs = () => {
             value={password}
             onChange={handleChangeInput}
             className={validation.password ? 'validate' : null}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                handleClickSigninBtn();
+              }
+            }}
           />
         </InputContainer>
         <BtnContainer>
