@@ -26,8 +26,12 @@ public class Scrap {
     private Post post;
 
     private LocalDateTime startScrapTime;
-
     private LocalDateTime endScrapTime;
+
+    private int startYear;
+    private int startMonth;
+    private int finishYear;
+    private int finishMonth;
 
 
     //===== 연관관계 편의 메서드 =====//
@@ -65,8 +69,22 @@ public class Scrap {
         scrap.startScrapTime = request.getStartScrapTime();
         scrap.endScrapTime = request.getEndScrapTime();
 
+        scrap.changeStartAndFinishYearMonth();
+
         return scrap;
     }
 
 
+    public void deleteScrapInMemberAndPost() {
+        this.getMember().getScrapList().remove(this);
+        this.getPost().getScrapList().remove(this);
+    }
+
+
+    public void changeStartAndFinishYearMonth() {
+        this.startYear = startScrapTime.getYear();
+        this.startMonth = startScrapTime.getMonthValue();
+        this.finishYear = endScrapTime.getYear();
+        this.finishMonth = endScrapTime.getMonthValue();
+    }
 }

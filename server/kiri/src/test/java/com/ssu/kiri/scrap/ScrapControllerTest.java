@@ -25,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -159,6 +161,157 @@ class ScrapControllerTest {
 
     }
 
+
+    @WithAccount("creamyyyy")
+    @DisplayName("스크랩한 게시글 날짜별로 가져오기")
+    @Test
+    public void getScrap() throws Exception {
+        //given
+        List<Long> postIdList = createAndSavePostList();
+        List<ScrapReqAdd> scrapReq = createScrapReq();
+        int iter = 0;
+
+        for (Long id : postIdList) {
+            scrapService.addScrap(id, scrapReq.get(iter++));
+        }
+
+        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
+
+        // 결과: post_id = 1
+//        info.add("year", "2022");
+//        info.add("month", "11");
+
+        // 결과: post_id = 1
+//        info.add("year", "2022");
+//        info.add("month", "12");
+
+        // 결과: post_id = 1,2,3,6,7
+//        info.add("year", "2023");
+//        info.add("month", "1");
+
+        // 결과: post_id = 1,2,3,4,5,6,8
+//        info.add("year", "2023");
+//        info.add("month", "2");
+
+        // 결과: post_id = 1,4,5,6,8
+        info.add("year", "2023");
+        info.add("month", "3");
+
+        // 결과: post_id = 8
+//        info.add("year", "2024");
+//        info.add("month", "1");
+
+        // 결과: post_id = 없음
+//        info.add("year", "2024");
+//        info.add("month", "8");
+
+
+
+
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .get("/calendar") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .params(info)
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+    private List<ScrapReqAdd> createScrapReq() {
+        List<ScrapReqAdd> list = new ArrayList<>();
+
+        // 시작: 이번달, 끝: 이번달
+        ScrapReqAdd reqAdd1 = createScrapReqAdd(2022, 2023, 11, 3, 5, 10);
+        list.add(reqAdd1);
+
+        // 시작: 이전달, 끝: 이번달
+        ScrapReqAdd reqAdd2 = createScrapReqAdd(2023, 2023, 1, 2, 5, 10);
+        list.add(reqAdd2);
+        list.add(reqAdd2);
+
+        // 시작: 이번달, 끝: 다음달
+        ScrapReqAdd reqAdd3 = createScrapReqAdd(2023, 2023, 2, 3, 5, 10);
+        list.add(reqAdd3);
+        list.add(reqAdd3);
+
+        // 시작: 이전달, 끝: 다음달
+        ScrapReqAdd reqAdd4 = createScrapReqAdd(2023, 2023, 1, 3, 5, 10);
+        list.add(reqAdd4);
+
+        // 시작: 이전달, 끝: 이전달
+        ScrapReqAdd reqAdd5 = createScrapReqAdd(2023, 2023, 1, 1, 5, 10);
+        list.add(reqAdd5);
+
+
+        ScrapReqAdd reqAdd6 = createScrapReqAdd(2023, 2024, 2, 2, 5, 10);
+        list.add(reqAdd6);
+        list.add(reqAdd6);
+
+        return list;
+    }
+
+    private ScrapReqAdd createScrapReqAdd(int sy, int fy, int sm, int fm, int d, int h) {
+        ScrapReqAdd scrapReqAdd = new ScrapReqAdd();
+        LocalDateTime time1 = LocalDateTime.of(sy, sm, d, h,h,h);
+        LocalDateTime time2 = LocalDateTime.of(fy, fm, d, h,h,h);
+        scrapReqAdd.setStartScrapTime(time1);
+        scrapReqAdd.setEndScrapTime(time2);
+
+        return scrapReqAdd;
+    }
+
+    private List<Long> createAndSavePostList() throws Exception {
+        List<Long> list = new ArrayList<>();
+
+        for(int i=1; i<3; i++) {
+            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교",
+                    "숭실대", "2023-02-25 12:10:00", "2023-02-25 12:20:00");
+            SaveResPost savedPost = postService.savePost(post1, null);
+            list.add(savedPost.getPost_id());
+        }
+
+        for(int i=3; i<5; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "서울", "숭실대학교",
+                    "숭실대", "2023-01-25 12:10:00", "2022-02-25 12:20:00");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+            list.add(saveResPost.getPost_id());
+        }
+
+        for(int i=5; i<7; i++) {
+            Post post3 = createBasicPost("title" + i, "content" + i, "전시", "서울", "중앙대학교",
+                    "중앙대", "2022-02-25 12:10:00", "2022-03-25 12:10:00");
+            SaveResPost savedPost = postService.savePost(post3, null);
+            list.add(savedPost.getPost_id());
+        }
+
+        for(int i=7; i<9; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "대회", "대전", "대전대학교",
+                    "대전대", "2022-01-25 12:10:00", "2022-03-25 12:10:00");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+            list.add(saveResPost.getPost_id());
+        }
+
+        return list;
+    }
+
+    private Post createBasicPost(String title, String content, String event, String local, String school, String organizer,
+                                 String startTime, String finishTime) {
+        return Post.builder()
+                .title(title)
+                .content(content)
+                .event(event)
+                .local(local)
+                .school(school)
+                .organizer(organizer)
+                .startPostTime(LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .finishPostTime(LocalDateTime.parse(finishTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+    }
 
 
 

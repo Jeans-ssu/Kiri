@@ -12,6 +12,10 @@ import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.SaveResPost;
+import com.ssu.kiri.scrap.Scrap;
+import com.ssu.kiri.scrap.ScrapRepository;
+import com.ssu.kiri.scrap.ScrapService;
+import com.ssu.kiri.scrap.dto.ScrapReqAdd;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
@@ -55,6 +59,8 @@ class PostServiceTest {
     @Autowired PostService postService;
     @Autowired ImageService imageService;
     @Autowired ImageRepository imageRepository;
+    @Autowired ScrapService scrapService;
+    @Autowired ScrapRepository scrapRepository;
 
 //    @WithAccount("creamyyy")
 //    @BeforeEach
@@ -330,6 +336,20 @@ class PostServiceTest {
 
         SaveResPost savedPost = postService.savePost(post, imageIdList);
         Long post_id = savedPost.getPost_id();
+        Long member_id = savedPost.getMember_id();
+
+        Member member1 = memberRepository.findById(member_id).get();
+        List<Post> postList = member1.getPostList();
+        for (Post post1 : postList) {
+            System.out.println("post1.getTitle() = " + post1.getTitle());
+        }
+//        System.out.println("member.getPostList() = " + member1.getPostList());
+
+        ScrapReqAdd request = new ScrapReqAdd();
+        request.setStartScrapTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        request.setEndScrapTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        scrapService.addScrap(post_id, request);
 
         //when
         postService.deletePost(post_id);
@@ -337,10 +357,17 @@ class PostServiceTest {
         //then
         Optional<Post> deletePost = postRepository.findById(post_id);
         assertThat(deletePost).isEqualTo(Optional.empty());
+
         List<Image> resultList = imageRepository.findUrlByPostId(post_id);
         System.out.println("resultList = " + resultList); // []
         assertThat(resultList).isNullOrEmpty();
 
+        List<Scrap> scrapByPostId = scrapRepository.findScrapByPostId(post_id);
+        assertThat(scrapByPostId).isNullOrEmpty();
+
+        Member member = memberRepository.findById(member_id).get();
+        assertThat(member.getPostList()).isNullOrEmpty();
+        System.out.println("member.getPostList() = " + member.getPostList());
     }
 
     @WithAccount("creamyyy")
