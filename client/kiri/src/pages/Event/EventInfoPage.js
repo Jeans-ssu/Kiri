@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
 import { FiShare2 } from 'react-icons/fi';
 import { BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const EventInfoContainer = styled.div`
   padding: 0 40px 40px 40px;
@@ -67,12 +67,162 @@ const EventPosterdiv = styled.div`
   }
 `;
 
+const SliderBox = styled.div`
+  width: 500px;
+  height: 600px;
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  ul {
+    list-style: none;
+  }
+
+  li {
+    position: absolute;
+    transition-delay: 1s;
+    padding: 0;
+    margin: 0;
+  }
+`;
+
+const CircleBox = styled.div`
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 2;
+  left: 610px;
+  bottom: 140px;
+
+  .select {
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid rgba(0, 0, 0, 0.55);
+    width: 7px;
+    height: 7px;
+    margin: 0 5px;
+  }
+  .unselect {
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.55);
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+`;
+
+const CircleList = styled.div`
+  display: inline-block;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.55);
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  cursor: pointer;
+`;
+
+// const SliderBox = styled.div`
+//   width: 400px;
+//   height: 600px;
+//   position: relative;
+//   margin: 0 auto;
+//   overflow: hidden;
+
+//   ul.imgs {
+//     padding: 0;
+//     margin: 0;
+//     list-style: none;
+//   }
+
+//   ul.imgs li {
+//     position: absolute;
+//     left: 400px;
+//     transition-delay: 1s;
+
+//     padding: 0;
+//     margin: 0;
+//   }
+//   label {
+//     display: inline-block;
+//     border-radius: 50%;
+//     background-color: rgba(0, 0, 0, 0.55);
+//     width: 10px;
+//     height: 10px;
+//     margin: 0 5px;
+
+//     cursor: pointer;
+//   }
+// `;
+
+// const Radiobtn = styled.input.attrs({ type: 'radio' })`
+//   display: none;
+//   &:nth-child(1):checked ~ .bullets > label:nth-child(1) {
+//     background-color: transparent;
+//     border: 3px solid rgba(0, 0, 0, 0.55);
+//   }
+//   &:nth-child(2):checked ~ .bullets > label:nth-child(2) {
+//     background-color: transparent;
+//     border: 3px solid rgba(0, 0, 0, 0.55);
+//   }
+//   &:nth-child(3):checked ~ .bullets > label:nth-child(3) {
+//     background-color: transparent;
+//     border: 3px solid rgba(0, 0, 0, 0.55);
+//   }
+//   &:nth-child(4):checked ~ .bullets > label:nth-child(4) {
+//     background-color: transparent;
+//     border: 3px solid rgba(0, 0, 0, 0.55);
+//   }
+
+//   &:nth-child(1):checked ~ ul.imgs > li:nth-child(1) {
+//     left: 0;
+//     transition: 0.5s;
+//     z-index: 1;
+//   }
+//   &:nth-child(2):checked ~ ul.imgs > li:nth-child(2) {
+//     left: 0;
+//     transition: 0.5s;
+//     z-index: 1;
+//   }
+//   &:nth-child(3):checked ~ ul.imgs > li:nth-child(3) {
+//     left: 0;
+//     transition: 0.5s;
+//     z-index: 1;
+//   }
+//   &:nth-child(4):checked ~ ul.imgs > li:nth-child(4) {
+//     left: 0;
+//     transition: 0.5s;
+//     z-index: 1;
+//   }
+// `;
+
+// const BulletsBox = styled.div`
+//   position: absolute;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   bottom: 20px;
+//   z-index: 2;
+// `;
+
 const EventInfodiv = styled.div`
   margin-left: 40px;
 `;
 
 const EventInfoPage = () => {
+  // 나중에 이미지 배열로 수정 필요
+  const posters = [
+    `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
+    `${process.env.PUBLIC_URL}/poster.jpg`,
+    `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
+    `${process.env.PUBLIC_URL}/poster.jpg`,
+  ];
   const [mark, setMark] = useState(false);
+  const [select, setSelect] = useState(0);
+  const number = useRef(0);
+
+  const selectHandler = (idx) => {
+    number.current = idx;
+    setSelect(idx);
+    console.log(number.current);
+  };
 
   const markHandler = () => {
     setMark(!mark);
@@ -107,11 +257,80 @@ const EventInfoPage = () => {
         </EventTopdiv>
         <EventContentdiv>
           <EventPosterdiv>
-            <img
+            <SliderBox>
+              <ul className="imgs">
+                {posters.map((el, idx) => {
+                  return (
+                    <li key={idx}>
+                      {idx === select ? <img alt={idx} src={el}></img> : ''}
+                    </li>
+                  );
+                })}
+              </ul>
+            </SliderBox>
+            <CircleBox>
+              {posters.map((el, idx) => {
+                return (
+                  <CircleList
+                    onClick={() => selectHandler(idx)}
+                    key={idx}
+                    className={select === idx ? 'select' : 'unselect'}
+                  ></CircleList>
+                );
+              })}
+            </CircleBox>
+            {/* <SliderBox>
+              <Radiobtn
+                type="radio"
+                name="slide"
+                id="slide1"
+                checked
+              ></Radiobtn>
+              <Radiobtn type="radio" name="slide" id="slide2"></Radiobtn>
+              <Radiobtn type="radio" name="slide" id="slide3"></Radiobtn>
+              <Radiobtn type="radio" name="slide" id="slide4"></Radiobtn>
+              <ul id="imgholder" className="imgs">
+                <li>
+                  <img
+                    className="poster"
+                    alt="poster"
+                    src={`${process.env.PUBLIC_URL}/img/event_cover.jpeg`}
+                  ></img>
+                </li>
+                <li>
+                  <img
+                    className="poster"
+                    alt="poster"
+                    src={`${process.env.PUBLIC_URL}/poster.jpg`}
+                  ></img>
+                </li>
+                <li>
+                  <img
+                    className="poster"
+                    alt="poster"
+                    src={`${process.env.PUBLIC_URL}/img/event_cover.jpeg`}
+                  ></img>
+                </li>
+                <li>
+                  <img
+                    className="poster"
+                    alt="poster"
+                    src={`${process.env.PUBLIC_URL}/poster.jpg`}
+                  ></img>
+                </li>
+              </ul>
+              <BulletsBox className="bullets">
+                <label htmlFor="slide1">&nbsp;</label>
+                <label htmlFor="slide2">&nbsp;</label>
+                <label htmlFor="slide3">&nbsp;</label>
+                <label htmlFor="slide4">&nbsp;</label>
+              </BulletsBox>
+            </SliderBox> */}
+            {/* <img
               className="poster"
               alt="poster"
               src={`${process.env.PUBLIC_URL}/poster.jpg`}
-            ></img>
+            ></img> */}
           </EventPosterdiv>
           <EventInfodiv>
             <article>
