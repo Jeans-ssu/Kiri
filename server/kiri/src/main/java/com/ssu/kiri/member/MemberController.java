@@ -6,8 +6,11 @@ import com.ssu.kiri.member.dto.request.UpdateDto;
 import com.ssu.kiri.member.dto.response.PostMemberResDto;
 import com.ssu.kiri.member.dto.response.FindAndUpdateDto;
 import com.ssu.kiri.security.auth.PrincipalDetails;
+import com.ssu.kiri.security.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -82,5 +85,18 @@ public class MemberController {
         boolean isCheck = memberService.checkPasswordExist(password);
         return ResponseEntity.ok(isCheck);
     }
+
+//    @GetMapping("/member/logout")
+//    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
+//        response.addHeader(JwtProperties.HEADER_STRING, null);
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if(authentication != null) {
+//            new SecurityContextLogoutHandler().logout(request,response,authentication);
+//        }
+//
+//        return new ResponseEntity("로그아웃 성공", HttpStatus.OK);
+//    }
+
 
 }
