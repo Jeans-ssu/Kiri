@@ -14,7 +14,7 @@ const colors = {
   blue: '#759CFF',
   pink: '#FF8CDF',
   orange: '#FF7878',
-  purple: '#9479FF',
+  purple2: '#9479FF',
 };
 
 const theme = {
