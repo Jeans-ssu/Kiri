@@ -382,12 +382,12 @@ class PostControllerTest {
 //        info.add("division", "지역");
 //        info.add("category", "서울");
 
-        info.add("division", "학교");
-        info.add("category", "숭실대학교");
+//        info.add("division", "학교");
+//        info.add("category", "숭실대학교");
 //        info.add("category", "중앙대학교");
 
-//        info.add("division", "지역");
-//        info.add("category", "전체");
+        info.add("division", "지역");
+        info.add("category", "전체");
 
 //        info.add("division", "학교");
 //        info.add("category", "전체");
@@ -399,10 +399,10 @@ class PostControllerTest {
         this.mockMvc.perform(
                         MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
                                 .get("/posts") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
-//                                .param("division","지역")
+                                .param("division","지역")
 //                                .param("division","학교")
                                 .params(info)
-                                .param("eventList", new String[]{"강연", "대회"})
+//                                .param("eventList", new String[]{"강연", "대회"})
                                 .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
                 )
                 .andExpect(status().isOk())

@@ -7,6 +7,9 @@ import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.SaveResPost;
+import com.ssu.kiri.scrap.Scrap;
+import com.ssu.kiri.scrap.ScrapRepository;
+import com.ssu.kiri.scrap.ScrapService;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,6 +33,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final ImageService imageService;
     private final ImageRepository imageRepository;
+    private final ScrapRepository scrapRepository;
+    private final ScrapService scrapService;
 
     public ResponseEntity<?> home() {
         // 최근 이벤트 16개, 관심있는 이벤트 10개, 인기있는 이벤트 10개
@@ -127,14 +132,28 @@ public class PostService {
 
 
     public void deletePost(Long id) {
+        // 1. 관련 이미지 삭제하기
         List<Image> imageList = imageRepository.findUrlByPostId(id);
         for (Image image : imageList) {
             imageService.deleteImage(image.getId());
         }
 
-        postRepository.delete(
-                postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 포스트를 삭제할 수 없습니다."))
-        );
+        // 2. 관련 스크랩 삭제하기
+        List<Scrap> scrapList = scrapRepository.findScrapByPostId(id);
+        for (Scrap scrap : scrapList) {
+            scrapService.deleteScrapInPostDelete(scrap.getId());
+        }
+
+        // 3. 관련 회원과의 관계 삭제하기
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 포스트를 삭제할 수 없습니다."));
+        post.deletePostAndMember();
+
+        // 4. post 삭제
+        postRepository.delete(post);
+
+//        postRepository.delete(
+//                postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 포스트를 삭제할 수 없습니다."))
+//        );
     }
 
     // 분류해서 게시글들 보기
