@@ -260,4 +260,12 @@ public class PostService {
         }
         return list;
     }
+
+    public List<ClassifyPost> searchPost(String relation) {
+
+        List<Post> posts = postRepository.findByTitleContaining(relation);
+        List<ClassifyPost> classifyPosts = convertToClassify(posts);
+
+        return classifyPosts;
+    }
 }

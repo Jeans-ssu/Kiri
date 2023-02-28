@@ -15,4 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Long> , PostCustomRe
 
     List<Post> findAllByLocalAndEventIn(String Local, List<String> eventList);
     List<Post> findAllBySchoolAndEventIn(String School, List<String> eventList);
+
+    List<Post> findByTitleContaining(String title);
 }

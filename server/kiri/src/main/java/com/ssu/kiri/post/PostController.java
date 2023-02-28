@@ -114,7 +114,12 @@ public class PostController {
         return ResponseEntity.ok(classifyPosts);
     }
 
+    @GetMapping("/posts/search")
+    public ResponseEntity searchPost(@RequestParam("relation") String relation) {
+        List<ClassifyPost> posts = postService.searchPost(relation);
 
+        return ResponseEntity.ok(posts);
+    }
 
 
 }
