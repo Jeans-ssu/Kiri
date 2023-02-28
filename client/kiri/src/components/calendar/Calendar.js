@@ -1,4 +1,4 @@
-import { Icon } from '@iconify/react';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import {
   format,
   addMonths,
@@ -17,23 +17,19 @@ import styled from 'styled-components';
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
     <div className="header row">
-      <div className="col col-start">
-        <span className="text">
-          <span className="text month">{format(currentMonth, 'M')}월</span>
-        </span>
+      <IoIosArrowBack className="left" onClick={prevMonth} />
+      <div className="dates row">
+        <div className="text month">{format(currentMonth, 'M')}월</div>
         {format(currentMonth, 'yyyy')}
       </div>
-      <div className="col col-end">
-        <Icon icon="bi:arrow-left-circle-fill" onClick={prevMonth} />
-        <Icon icon="bi:arrow-right-circle-fill" onClick={nextMonth} />
-      </div>
+      <IoIosArrowForward className="right" onClick={nextMonth} />
     </div>
   );
 };
 
 const RenderDays = () => {
   const days = [];
-  const date = ['Sun', 'Mon', 'Thu', 'Wed', 'Thrs', 'Fri', 'Sat'];
+  const date = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
   for (let i = 0; i < 7; i++) {
     days.push(
@@ -133,8 +129,8 @@ export const CalendarComponent = () => {
 };
 
 const CalendarContainer = styled.div`
-  width: 500px;
-  border: 1px solid black;
+  width: 870px;
+  //border: 1px solid black;
   div.row {
     display: flex;
   }
@@ -142,15 +138,49 @@ const CalendarContainer = styled.div`
     display: flex;
     flex-direction: column;
   }
-  div.day {
-    width: 40px;
-    border: 1px solid blue;
-  }
   div.cell {
-    width: 40px;
+    width: 100%;
     border: 1px solid black;
     span.not-valid {
       color: lightgray;
     }
+  }
+  div.header {
+    align-items: center;
+    color: ${({ theme }) => theme.colors.dark};
+    div.dates {
+      font-weight: 600;
+      display: flex;
+      align-items: baseline;
+      div.month {
+        font-size: 24px;
+        font-weight: 600;
+        padding-right: 5px;
+        text-align: end;
+      }
+    }
+    svg {
+      width: 16px;
+      height: 16px;
+      &.left {
+        margin-right: 10px;
+      }
+      &.right {
+        margin-left: 10px;
+      }
+    }
+    margin: 8px 0;
+  }
+  div.days {
+    div.day {
+      width: 100%;
+      height: 30px;
+      font-weight: 500;
+      color: ${({ theme }) => theme.colors.darkgray};
+      padding: 3px 3px;
+    }
+  }
+  div.cell {
+    height: 55px;
   }
 `;

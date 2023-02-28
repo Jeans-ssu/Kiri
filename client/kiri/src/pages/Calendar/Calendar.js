@@ -7,7 +7,9 @@ const Calendar = () => {
   return (
     <PageContainer header footer>
       <Container>
-        <CalendarComponent />
+        <CalendarBox>
+          <CalendarComponent />
+        </CalendarBox>
         <EventBox>
           <EventList></EventList>
         </EventBox>
@@ -18,7 +20,11 @@ const Calendar = () => {
 
 const Container = styled.div``;
 
-//const CalendarBox = styled.div``;
+const CalendarBox = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 400px;
+`;
 
 const EventBox = styled.div``;
 
