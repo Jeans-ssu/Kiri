@@ -145,4 +145,5 @@ public class ScrapRepositoryImpl implements ScrapCustomRepository {
     }
 
 
+
 }
