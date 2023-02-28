@@ -268,4 +268,13 @@ public class PostService {
 
         return classifyPosts;
     }
+
+    public List<ClassifyPost> getMyPost() {
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+
+        List<Post> posts = postRepository.findAllByMember(member);
+        List<ClassifyPost> classifyPosts = convertToClassify(posts);
+        return classifyPosts;
+    }
 }

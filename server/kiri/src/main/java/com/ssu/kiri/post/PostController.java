@@ -1,13 +1,16 @@
 package com.ssu.kiri.post;
 
 
+import com.ssu.kiri.member.Member;
 import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.DetailPost;
 import com.ssu.kiri.post.dto.response.SaveResPost;
+import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -121,5 +124,11 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
+    @GetMapping("/api/posts/mypost")
+    public ResponseEntity getMyPost() {
+        List<ClassifyPost> posts = postService.getMyPost();
+
+        return ResponseEntity.ok(posts);
+    }
 
 }

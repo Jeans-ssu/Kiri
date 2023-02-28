@@ -701,5 +701,29 @@ class PostServiceTest {
 
     }
 
+    @WithAccount("creamyyy")
+    @DisplayName("내가 쓴 글 조회 테스트")
+    @Test
+    public void getMyPost() throws Exception {
+        //given
+        for(int i=5; i<7; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+        }
+
+        Post post3 = createBasicPost("무서운 이야기", "content", "강연", "부산", "부산대학교", "부산대");
+        SaveResPost saveResPost = postService.savePost(post3, null);
+
+        Post post4 = createBasicPost("재밌는 이야기", "content", "전시", "부산", "부산대학교", "부산대");
+        SaveResPost savedPost = postService.savePost(post4, null);
+
+        //when
+        List<ClassifyPost> myPost = postService.getMyPost();
+
+        //then
+        assertThat(myPost.size()).isEqualTo(4);
+
+    }
+
 
 }
