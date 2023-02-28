@@ -273,6 +273,7 @@ public class PostService {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
+        System.out.println("========================================================================================");
         List<Post> posts = postRepository.findAllByMember(member);
         List<ClassifyPost> classifyPosts = convertToClassify(posts);
         return classifyPosts;
