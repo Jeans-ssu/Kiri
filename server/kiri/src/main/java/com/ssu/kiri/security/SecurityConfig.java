@@ -5,6 +5,7 @@ import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.security.handler.MemberLogoutHandler;
 import com.ssu.kiri.security.jwt.JwtAuthenticationFilter;
 import com.ssu.kiri.security.jwt.JwtAuthorizationFilter;
+import com.ssu.kiri.security.jwt.JwtProperties;
 import com.ssu.kiri.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -56,11 +57,6 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .apply(new MyCustomDsl()) // 커스텀 필터 등록
-                .and()
-                .logout()
-                .logoutSuccessUrl("/login")
-//                .addLogoutHandler(new MemberLogoutHandler())
-
 
                 .and()
 
@@ -74,7 +70,19 @@ public class SecurityConfig {
 
                         .anyRequest() // 나머지 req들은 인증없이 허용
                         .permitAll()
+                )
+
+
+//        http
+                .logout(
+                        logout -> logout.permitAll()
+                                .logoutSuccessHandler((request, response, authentication) -> {
+                                    response.addHeader(JwtProperties.HEADER_STRING, null);
+                                    response.setStatus(HttpServletResponse.SC_OK);
+                                })
                 );
+//                .logoutSuccessUrl("/login")
+//                .addLogoutHandler(new MemberLogoutHandler())
 
         return http.build();
 

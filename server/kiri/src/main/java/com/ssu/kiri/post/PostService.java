@@ -260,4 +260,22 @@ public class PostService {
         }
         return list;
     }
+
+    public List<ClassifyPost> searchPost(String relation) {
+
+        List<Post> posts = postRepository.findByTitleContaining(relation);
+        List<ClassifyPost> classifyPosts = convertToClassify(posts);
+
+        return classifyPosts;
+    }
+
+    public List<ClassifyPost> getMyPost() {
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+
+        System.out.println("========================================================================================");
+        List<Post> posts = postRepository.findAllByMember(member);
+        List<ClassifyPost> classifyPosts = convertToClassify(posts);
+        return classifyPosts;
+    }
 }

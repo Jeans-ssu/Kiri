@@ -547,5 +547,63 @@ class PostControllerTest {
                 .build();
     }
 
+    @WithAccount("creamyyy")
+    @DisplayName("제목 기준으로 검색 기능 테스트")
+    @Test
+    public void searchPostTest() throws Exception {
+        //given
+        for(int i=5; i<10; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+        }
+
+        Post post3 = createBasicPost("무서운 이야기", "content", "강연", "부산", "부산대학교", "부산대");
+        SaveResPost saveResPost = postService.savePost(post3, null);
+
+        Post post4 = createBasicPost("재밌는 이야기", "content", "전시", "부산", "부산대학교", "부산대");
+        SaveResPost savedPost = postService.savePost(post4, null);
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .get("/posts/search") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .param("relation","le")
+//
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+    @WithAccount("creamyyy")
+    @DisplayName("내가 작성한 글 조회 테스트")
+    @Test
+    public void getMyPostTest() throws Exception {
+        //given
+        for(int i=5; i<7; i++) {
+            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SaveResPost saveResPost = postService.savePost(post2, null);
+        }
+
+        Post post3 = createBasicPost("무서운 이야기", "content", "강연", "부산", "부산대학교", "부산대");
+        SaveResPost saveResPost = postService.savePost(post3, null);
+
+        Post post4 = createBasicPost("재밌는 이야기", "content", "전시", "부산", "부산대학교", "부산대");
+        SaveResPost savedPost = postService.savePost(post4, null);
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .get("/api/posts/mypost") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
 
 }
