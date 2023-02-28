@@ -1,12 +1,13 @@
 import PageContainer from 'containers/PageContainer';
 import styled from 'styled-components';
 import EventList from './EventList';
+import { CalendarComponent } from 'components/calendar/Calendar';
 
 const Calendar = () => {
   return (
     <PageContainer header footer>
       <Container>
-        <CalendarBox>캘린더</CalendarBox>
+        <CalendarComponent />
         <EventBox>
           <EventList></EventList>
         </EventBox>
@@ -17,7 +18,7 @@ const Calendar = () => {
 
 const Container = styled.div``;
 
-const CalendarBox = styled.div``;
+//const CalendarBox = styled.div``;
 
 const EventBox = styled.div``;
 
