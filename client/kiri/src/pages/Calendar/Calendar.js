@@ -5,7 +5,7 @@ import { CalendarComponent } from 'components/calendar/Calendar';
 
 const Calendar = () => {
   return (
-    <PageContainer header footer>
+    <PageContainer header footer padding="15px 0">
       <Container>
         <CalendarBox>
           <CalendarComponent />
@@ -23,7 +23,6 @@ const Container = styled.div``;
 const CalendarBox = styled.div`
   display: flex;
   justify-content: center;
-  height: 400px;
 `;
 
 const EventBox = styled.div``;

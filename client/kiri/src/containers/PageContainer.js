@@ -18,7 +18,7 @@ const ContentContainer = styled.div`
   min-width: 375px;
   background-color: white;
   margin-bottom: 30px;
-  padding: 40px 0;
+  padding: ${(props) => (props.padding ? props.padding : '40px 0')};
   &.none {
     margin-bottom: 0;
   }
@@ -31,12 +31,16 @@ const PageContainer = ({
   footer,
   margin_bottom = true,
   page = {},
+  padding,
 }) => {
   return (
     <PageContainerBox>
       <ThemeProvider theme={theme}>
         {header === false ? null : <Header page={page} />}
-        <ContentContainer className={margin_bottom ? null : 'none'}>
+        <ContentContainer
+          className={margin_bottom ? null : 'none'}
+          padding={padding}
+        >
           {children}
         </ContentContainer>
         {footer === false ? null : <Footer />}

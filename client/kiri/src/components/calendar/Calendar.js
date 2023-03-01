@@ -77,7 +77,7 @@ const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
             className={
               format(currentMonth, 'M') !== format(day, 'M')
                 ? 'text not-valid'
-                : ''
+                : 'text'
             }
           >
             {formattedDate}
@@ -107,7 +107,6 @@ export const CalendarComponent = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
   };
   const onDateClick = (day) => {
-    console.log(day);
     setSelectedDate(day);
   };
 
@@ -137,13 +136,6 @@ const CalendarContainer = styled.div`
   div.col {
     display: flex;
     flex-direction: column;
-  }
-  div.cell {
-    width: 100%;
-    border: 1px solid black;
-    span.not-valid {
-      color: lightgray;
-    }
   }
   div.header {
     align-items: center;
@@ -177,10 +169,24 @@ const CalendarContainer = styled.div`
       height: 30px;
       font-weight: 500;
       color: ${({ theme }) => theme.colors.darkgray};
+      border: 1.5px solid ${({ theme }) => theme.colors.lightgray};
+      border-left: none;
       padding: 3px 3px;
     }
   }
+  div.body {
+    border-left: 1.5px solid ${({ theme }) => theme.colors.lightgray};
+  }
   div.cell {
-    height: 55px;
+    width: 100%;
+    border-right: 1.5px solid ${({ theme }) => theme.colors.lightgray};
+    border-bottom: 1.5px solid ${({ theme }) => theme.colors.lightgray};
+    span.not-valid {
+      color: lightgray;
+    }
+    span.text {
+      padding: 5px;
+    }
+    height: 70px;
   }
 `;
