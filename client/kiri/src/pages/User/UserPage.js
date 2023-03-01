@@ -17,6 +17,7 @@ const UserPageContainer = styled.div`
 
 const UserPage = () => {
   const [userInfo, setUserInfo] = useState({});
+  const [userEvents, setUserEvents] = useState([]);
 
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
@@ -30,6 +31,14 @@ const UserPage = () => {
       .catch((err) => {
         console.log('ERROR: ', err);
       });
+    axios
+      .get('/api/posts/mypost')
+      .then((res) => {
+        setUserEvents([...res.data]);
+      })
+      .catch((err) => {
+        console.log('ERROR: ', err);
+      });
   }, []);
 
   return (
@@ -37,7 +46,7 @@ const UserPage = () => {
       <UserPageContainer>
         <UserpageHeader>마이페이지</UserpageHeader>
         <UserInfo userInfo={userInfo} />
-        <MyEvents />
+        <MyEvents userEvents={userEvents} />
       </UserPageContainer>
     </PageContainer>
   );
