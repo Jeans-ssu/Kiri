@@ -12,8 +12,9 @@ import {
   addDays,
   isToday,
 } from 'date-fns';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'api/axios';
 
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
@@ -107,6 +108,22 @@ const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
 export const CalendarComponent = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [likedEvents, setLikedEvents] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `/calendar?year=${format(currentMonth, 'yyyy')}&month=${format(
+          currentMonth,
+          'M'
+        )}`
+      )
+      .then((res) => {
+        setLikedEvents(res.data);
+        console.log(likedEvents);
+      })
+      .catch((err) => console.log('ERROR: ', err));
+  }, [currentMonth]);
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
@@ -153,15 +170,15 @@ const CalendarContainer = styled.div`
       display: flex;
       align-items: baseline;
       div.month {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: 600;
         padding-right: 5px;
         text-align: end;
       }
     }
     svg {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       color: ${({ theme }) => theme.colors.mainColor};
       &:hover {
         cursor: pointer;
@@ -204,7 +221,7 @@ const CalendarContainer = styled.div`
     border-bottom: 1px solid ${({ theme }) => theme.colors.lightgray};
     color: ${({ theme }) => theme.colors.darkgray};
     span.not-valid {
-      color: lightgray;
+      color: ${({ theme }) => theme.colors.gray};
     }
     span.text {
       font-size: 13px;
@@ -215,5 +232,8 @@ const CalendarContainer = styled.div`
     &.today > span {
       color: ${({ theme }) => theme.colors.mainColor};
     }
+  }
+  div.cell.disabled {
+    background-color: ${({ theme }) => theme.colors.light};
   }
 `;
