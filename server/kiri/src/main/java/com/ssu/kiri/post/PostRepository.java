@@ -1,6 +1,7 @@
 package com.ssu.kiri.post;
 
 import com.ssu.kiri.image.Image;
+import com.ssu.kiri.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,4 +16,8 @@ public interface PostRepository extends JpaRepository<Post, Long> , PostCustomRe
 
     List<Post> findAllByLocalAndEventIn(String Local, List<String> eventList);
     List<Post> findAllBySchoolAndEventIn(String School, List<String> eventList);
+
+    List<Post> findByTitleContaining(String title);
+
+    List<Post> findAllByMember(Member member);
 }
