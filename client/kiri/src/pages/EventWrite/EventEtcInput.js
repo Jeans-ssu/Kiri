@@ -2,6 +2,93 @@ import styled from 'styled-components';
 import { useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 
+const EventEtcInput = ({ link, setLink }) => {
+  const [image, setImage] = useState([]);
+
+  const addImage = (e) => {
+    const nowSelectImageList = e.target.files;
+    const nowImageUrlList = [...image];
+    for (let i = 0; i < nowSelectImageList.length; i++) {
+      const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
+      nowImageUrlList.push(nowImageUrl);
+      console.log('urllist', nowImageUrlList);
+      console.log('length', nowImageUrlList.length);
+    }
+    if (nowImageUrlList.length > 10) {
+      console.log('length 10 이상임');
+      setImage(nowImageUrlList.slice(0, 10));
+      alert('이미지는 최대 10개만 첨부 가능합니다.');
+    } else {
+      setImage(nowImageUrlList);
+    }
+  };
+
+  const handleChangeInput = (e) => {
+    setLink(e.target.value);
+  };
+
+  const fileInput = useRef(null);
+
+  const deleteImg = (idx) => {
+    image.splice(idx, 1);
+    setImage([...image]);
+    console.log('delete', image);
+  };
+
+  return (
+    <EventEtcInputContainer>
+      <EtcContainer>
+        <EtcHeader>참고링크</EtcHeader>
+        <LinkInput type="url" value={link} onChange={handleChangeInput} />
+      </EtcContainer>
+      <EtcContainer>
+        <EtcHeader>이미지</EtcHeader>
+        <label className="label" htmlFor="input-file">
+          파일 선택
+        </label>
+        <ImgInput
+          id="input-file"
+          type="file"
+          name="file"
+          accept="image/*"
+          ref={fileInput}
+          multiple="multiple"
+          onChange={addImage}
+          style={{ display: 'none' }}
+        />
+      </EtcContainer>
+      <PreviewBox>
+        {' '}
+        <GridImageBox>
+          {image.length > 0
+            ? image.length >= 6
+              ? image.map((el, idx) => {
+                  return (
+                    <GridBox key={idx}>
+                      <GridImagePreview key={idx} alt="img" src={el} />
+                      <GridRemoveBtn onClick={() => deleteImg(idx)}>
+                        <Icon className="X" icon="ic:round-close" />
+                      </GridRemoveBtn>
+                    </GridBox>
+                  );
+                })
+              : image.map((el, idx) => {
+                  return (
+                    <GridBox key={idx}>
+                      <GridImagePreview key={idx} alt="img" src={el} />
+                      <GridRemoveBtn onClick={() => deleteImg(idx)}>
+                        <Icon className="X" icon="ic:round-close" />
+                      </GridRemoveBtn>
+                    </GridBox>
+                  );
+                })
+            : ''}{' '}
+        </GridImageBox>
+      </PreviewBox>
+    </EventEtcInputContainer>
+  );
+};
+
 const EventEtcInputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -66,102 +153,35 @@ const PreviewBox = styled.div`
   margin-left: 70px;
 
   .X {
-    font-size: 15px;
+    font-size: 17px;
   }
 `;
 
-const ImgContainter = styled.div`
-  position: relative;
-  width: 70px;
-  height: 70px;
-  margin-right: 30px;
+const GridImageBox = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-gap: 18px 18px;
 `;
 
-const ImgPreview = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
+const GridBox = styled.div`
+  display: flex;
+`;
+
+const GridImagePreview = styled.img`
+  width: 135px;
+  height: 135px;
   transform: translate(50, 50);
-  width: 100%;
-  height: 100%;
   object-fit: cover;
   margin: auto;
 `;
 
-const DeleteButton = styled.button`
-  position: absolute;
-  top: 0;
-  left: 65px;
+const GridRemoveBtn = styled.button`
   border: none;
   background: transparent;
   display: flex;
-  align-items: center;
   cursor: pointer;
+  margin-left: 2px;
+  padding: 0;
 `;
-
-const EventEtcInput = ({ link, setLink }) => {
-  const [image, setImage] = useState([]);
-
-  const addImage = (e) => {
-    const nowSelectImageList = e.target.files;
-    const nowImageUrlList = [...image];
-    for (let i = 0; i < nowSelectImageList.length; i++) {
-      const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
-      nowImageUrlList.push(nowImageUrl);
-    }
-    setImage(nowImageUrlList);
-  };
-
-  const handleChangeInput = (e) => {
-    setLink(e.target.value);
-  };
-
-  const fileInput = useRef(null);
-
-  const deleteImg = (idx) => {
-    image.splice(idx, 1);
-    setImage([...image]);
-    console.log('delete', image);
-  };
-
-  return (
-    <EventEtcInputContainer>
-      <EtcContainer>
-        <EtcHeader>참고링크</EtcHeader>
-        <LinkInput type="url" value={link} onChange={handleChangeInput} />
-      </EtcContainer>
-      <EtcContainer>
-        <EtcHeader>이미지</EtcHeader>
-        <label className="label" htmlFor="input-file">
-          파일 선택
-        </label>
-        <ImgInput
-          id="input-file"
-          type="file"
-          name="file"
-          accept="image/*"
-          ref={fileInput}
-          multiple="multiple"
-          onChange={addImage}
-          style={{ display: 'none' }}
-        />
-      </EtcContainer>
-      <PreviewBox>
-        {image.length > 0
-          ? image.map((el, idx) => {
-              return (
-                <ImgContainter key={idx}>
-                  <ImgPreview key={idx} alt="img" src={el} />
-                  <DeleteButton onClick={() => deleteImg(idx)}>
-                    <Icon className="X" icon="ic:round-close" />
-                  </DeleteButton>
-                </ImgContainter>
-              );
-            })
-          : ''}
-      </PreviewBox>
-    </EventEtcInputContainer>
-  );
-};
 
 export default EventEtcInput;
