@@ -5,6 +5,7 @@ import com.ssu.kiri.member.Member;
 import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.DetailPost;
+import com.ssu.kiri.post.dto.response.MyPostDto;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -126,7 +127,7 @@ public class PostController {
 
     @GetMapping("/api/posts/mypost")
     public ResponseEntity getMyPost() {
-        List<ClassifyPost> posts = postService.getMyPost();
+        List<MyPostDto> posts = postService.getMyPost();
 
         return ResponseEntity.ok(posts);
     }
