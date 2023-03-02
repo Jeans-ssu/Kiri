@@ -136,7 +136,7 @@ export const CalendarComponent = () => {
 };
 
 const CalendarContainer = styled.div`
-  width: 870px;
+  width: 950px;
   //border: 1px solid black;
   div.row {
     display: flex;
