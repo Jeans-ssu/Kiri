@@ -10,6 +10,7 @@ import {
   isSameMonth,
   isSameDay,
   addDays,
+  isToday,
 } from 'date-fns';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -29,11 +30,17 @@ const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
 
 const RenderDays = () => {
   const days = [];
-  const date = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  //const date = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  const date = ['일', '월', '화', '수', '목', '금', '토'];
 
   for (let i = 0; i < 7; i++) {
     days.push(
-      <div className="col day" key={i}>
+      <div
+        className={`col day ${
+          date[i] === '토' || date[i] === '일' ? 'weekend' : null
+        }`}
+        key={i}
+      >
         {date[i]}
       </div>
     );
@@ -67,7 +74,8 @@ const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
               : format(currentMonth, 'M') !== format(day, 'M')
               ? 'not-valid'
               : 'valid'
-          }`}
+          }
+          ${isToday(day) ? 'today' : ''}`}
           key={day}
           onClick={() => {
             onDateClick(cloneDay);
@@ -154,6 +162,10 @@ const CalendarContainer = styled.div`
     svg {
       width: 16px;
       height: 16px;
+      color: ${({ theme }) => theme.colors.mainColor};
+      &:hover {
+        cursor: pointer;
+      }
       &.left {
         margin-right: 10px;
       }
@@ -164,29 +176,44 @@ const CalendarContainer = styled.div`
     margin: 8px 0;
   }
   div.days {
+    border-left: 1px solid transparent;
     div.day {
       width: 100%;
       height: 30px;
       font-weight: 500;
       color: ${({ theme }) => theme.colors.darkgray};
-      border: 1.5px solid ${({ theme }) => theme.colors.lightgray};
-      border-left: none;
+      border: none;
+      border-bottom: 1px solid ${({ theme }) => theme.colors.lightgray};
       padding: 3px 3px;
+      text-align: center;
+      line-height: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      color: ${({ theme }) => theme.colors.darkgray};
+    }
+    div.weekend {
+      color: ${({ theme }) => theme.colors.gray};
     }
   }
   div.body {
-    border-left: 1.5px solid ${({ theme }) => theme.colors.lightgray};
+    border-left: 1px solid ${({ theme }) => theme.colors.lightgray};
   }
   div.cell {
     width: 100%;
-    border-right: 1.5px solid ${({ theme }) => theme.colors.lightgray};
-    border-bottom: 1.5px solid ${({ theme }) => theme.colors.lightgray};
+    border-right: 1px solid ${({ theme }) => theme.colors.lightgray};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.lightgray};
+    color: ${({ theme }) => theme.colors.darkgray};
     span.not-valid {
       color: lightgray;
     }
     span.text {
-      padding: 5px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px;
     }
-    height: 70px;
+    height: 100px;
+    &.today > span {
+      color: ${({ theme }) => theme.colors.mainColor};
+    }
   }
 `;
