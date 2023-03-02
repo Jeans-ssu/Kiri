@@ -58,7 +58,12 @@ const Header = ({ page }) => {
       <Main>
         <TabMenu>
           <Logo>
-            <Link to="/">끼리끼리</Link>
+            <Link to="/">
+              <img
+                src={process.env.PUBLIC_URL + '/img/main_logo.svg'}
+                alt="main logo"
+              />
+            </Link>
           </Logo>
           {menuArr.map((el, idx) => {
             return (
@@ -135,6 +140,9 @@ const Logo = styled.div`
     text-decoration: none;
     color: ${({ theme }) => theme.colors.mainColor};
     font-weight: 700;
+  }
+  img {
+    width: 100px;
   }
 `;
 

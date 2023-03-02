@@ -11,6 +11,10 @@ const colors = {
   purple: '#9B90E6',
   yellow: '#FFCF70',
   red: '#FF6B6B',
+  blue: '#759CFF',
+  pink: '#FF8CDF',
+  orange: '#FF7878',
+  purple2: '#9479FF',
 };
 
 const theme = {
