@@ -144,6 +144,7 @@ const EventInfoInput = ({
           }}
           ref={regionRef}
         >
+          <option value="선택">선택</option>
           {Regions.map((el, idx) => {
             return (
               <option value={el} key={idx}>
@@ -151,7 +152,7 @@ const EventInfoInput = ({
               </option>
             );
           })}
-        </InfoSelectInput>{' '}
+        </InfoSelectInput>
         <ErrorMessageBox> {errorMessage.regionErrorMessage}</ErrorMessageBox>
       </InfoContainer>
       <InfoContainer>
@@ -174,7 +175,6 @@ const EventInfoInput = ({
           setUserUniv={handleSetUniv}
         />
         <ErrorMessageBox className="univ">
-          {' '}
           {errorMessage.univErrorMessage}
         </ErrorMessageBox>
       </InfoContainer>
@@ -189,6 +189,7 @@ const EventInfoInput = ({
           }}
           ref={typeRef}
         >
+          <option value="선택">선택</option>
           {EventCategory.map((el, idx) => {
             return (
               <option value={el} key={idx}>

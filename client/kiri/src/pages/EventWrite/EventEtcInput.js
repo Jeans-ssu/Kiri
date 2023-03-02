@@ -58,7 +58,6 @@ const EventEtcInput = ({ link, setLink }) => {
         />
       </EtcContainer>
       <PreviewBox>
-        {' '}
         <GridImageBox>
           {image.length > 0
             ? image.length >= 6
