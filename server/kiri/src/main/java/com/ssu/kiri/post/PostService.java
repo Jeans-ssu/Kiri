@@ -6,6 +6,7 @@ import com.ssu.kiri.image.ImageRepository;
 import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
+import com.ssu.kiri.post.dto.response.MyPostDto;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.scrap.Scrap;
 import com.ssu.kiri.scrap.ScrapRepository;
@@ -269,13 +270,35 @@ public class PostService {
         return classifyPosts;
     }
 
-    public List<ClassifyPost> getMyPost() {
+    public List<MyPostDto> getMyPost() {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
         System.out.println("========================================================================================");
         List<Post> posts = postRepository.findAllByMember(member);
-        List<ClassifyPost> classifyPosts = convertToClassify(posts);
-        return classifyPosts;
+        List<MyPostDto> myPostDtos = convertToMyPost(posts);
+        return myPostDtos;
+    }
+
+    private List<MyPostDto> convertToMyPost(List<Post> posts) {
+        List<MyPostDto> list = new ArrayList<>();
+
+        for (Post post : posts) {
+            MyPostDto myPostDto = new MyPostDto();
+            myPostDto.setPost_id(post.getId());
+            myPostDto.setTitle(post.getTitle());
+            myPostDto.setScrap_count(post.getScrap_count());
+            myPostDto.setStartPostTime(post.getStartPostTime().toString());
+            myPostDto.setFinishPostTime(post.getFinishPostTime().toString());
+
+            String thumbnail = imageService.getThumbnail(post.getId());
+            if(thumbnail == null || thumbnail.isEmpty()) {
+                myPostDto.setImgUrl(null);
+            }else {
+                myPostDto.setImgUrl(thumbnail);
+            }
+            list.add(myPostDto);
+        }
+        return list;
     }
 }

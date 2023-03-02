@@ -11,6 +11,7 @@ import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
+import com.ssu.kiri.post.dto.response.MyPostDto;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.scrap.Scrap;
 import com.ssu.kiri.scrap.ScrapRepository;
@@ -62,7 +63,7 @@ class PostServiceTest {
     @Autowired ScrapService scrapService;
     @Autowired ScrapRepository scrapRepository;
 
-//    @WithAccount("creamyyy")
+//    @WithAccount("user1")
 //    @BeforeEach
 //    void createPosts() {
 //
@@ -718,7 +719,7 @@ class PostServiceTest {
         SaveResPost savedPost = postService.savePost(post4, null);
 
         //when
-        List<ClassifyPost> myPost = postService.getMyPost();
+        List<MyPostDto> myPost = postService.getMyPost();
 
         //then
         assertThat(myPost.size()).isEqualTo(4);
