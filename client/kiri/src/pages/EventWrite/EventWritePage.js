@@ -64,7 +64,6 @@ const EventWritePage = () => {
     endDateErrorMessage: '',
     explainErrorMessage: '',
   });
-  console.log(errorMessage);
 
   const titleRef = useRef();
   const hostRef = useRef();

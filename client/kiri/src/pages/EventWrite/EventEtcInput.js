@@ -1,25 +1,21 @@
 import styled from 'styled-components';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Icon } from '@iconify/react';
 
-const EventEtcInput = ({ link, setLink }) => {
-  const [image, setImage] = useState([]);
-
+const EventEtcInput = ({ link, setLink, img, setImg }) => {
   const addImage = (e) => {
     const nowSelectImageList = e.target.files;
-    const nowImageUrlList = [...image];
+    const nowImageUrlList = [...img];
     for (let i = 0; i < nowSelectImageList.length; i++) {
       const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
       nowImageUrlList.push(nowImageUrl);
-      console.log('urllist', nowImageUrlList);
-      console.log('length', nowImageUrlList.length);
     }
     if (nowImageUrlList.length > 10) {
       console.log('length 10 이상임');
-      setImage(nowImageUrlList.slice(0, 10));
+      setImg(nowImageUrlList.slice(0, 10));
       alert('이미지는 최대 10개만 첨부 가능합니다.');
     } else {
-      setImage(nowImageUrlList);
+      setImg(nowImageUrlList);
     }
   };
 
@@ -30,9 +26,8 @@ const EventEtcInput = ({ link, setLink }) => {
   const fileInput = useRef(null);
 
   const deleteImg = (idx) => {
-    image.splice(idx, 1);
-    setImage([...image]);
-    console.log('delete', image);
+    img.splice(idx, 1);
+    setImg([...img]);
   };
 
   return (
@@ -59,9 +54,9 @@ const EventEtcInput = ({ link, setLink }) => {
       </EtcContainer>
       <PreviewBox>
         <GridImageBox>
-          {image.length > 0
-            ? image.length >= 6
-              ? image.map((el, idx) => {
+          {img.length > 0
+            ? img.length >= 6
+              ? img.map((el, idx) => {
                   return (
                     <GridBox key={idx}>
                       <GridImagePreview key={idx} alt="img" src={el} />
@@ -71,7 +66,7 @@ const EventEtcInput = ({ link, setLink }) => {
                     </GridBox>
                   );
                 })
-              : image.map((el, idx) => {
+              : img.map((el, idx) => {
                   return (
                     <GridBox key={idx}>
                       <GridImagePreview key={idx} alt="img" src={el} />
