@@ -3,6 +3,9 @@ import PageContainer from 'containers/PageContainer';
 import { FiShare2 } from 'react-icons/fi';
 import { BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
 import { useState } from 'react';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
 
 const EventInfoContainer = styled.div`
   padding: 0 40px 40px 40px;
@@ -62,6 +65,7 @@ const EventContentdiv = styled.div`
 `;
 
 const EventPosterdiv = styled.div`
+  width: 400px;
   img {
     width: 400px;
   }
@@ -72,10 +76,24 @@ const EventInfodiv = styled.div`
 `;
 
 const EventInfoPage = () => {
+  // 나중에 이미지 배열로 수정 필요
+  const posters = [
+    `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
+    `${process.env.PUBLIC_URL}/poster.jpg`,
+    `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
+    `${process.env.PUBLIC_URL}/poster.jpg`,
+  ];
   const [mark, setMark] = useState(false);
 
   const markHandler = () => {
     setMark(!mark);
+  };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
   };
 
   return (
@@ -107,11 +125,15 @@ const EventInfoPage = () => {
         </EventTopdiv>
         <EventContentdiv>
           <EventPosterdiv>
-            <img
-              className="poster"
-              alt="poster"
-              src={`${process.env.PUBLIC_URL}/poster.jpg`}
-            ></img>
+            <Slider {...settings}>
+              {posters.map((el, idx) => {
+                return (
+                  <div key={idx}>
+                    <img alt="poster" key={idx} src={el}></img>
+                  </div>
+                );
+              })}
+            </Slider>
           </EventPosterdiv>
           <EventInfodiv>
             <article>
