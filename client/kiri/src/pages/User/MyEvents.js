@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 const MyEventsContainer = styled.div`
@@ -23,37 +22,47 @@ const MyEventsContentWrapper = styled.div`
   overflow: overlay;
 `;
 
-const myevents = [
-  {
-    post_id: 1,
-    title: '숭실대학교 글로벌미디어학부 졸업전시회에 초대합니다',
-    event: '전시',
-    startPostTime: '2022-11-25T12:10:00',
-    finishPostTime: '2022-11-25T12:30:00',
-  },
-  {
-    post_id: 2,
-    title: '숭실대학교 대동제',
-    event: '축제',
-    startPostTime: '2022-11-25T12:10:00',
-    finishPostTime: '2022-11-25T12:30:00',
-  },
-];
+const EventGuideMsg = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors.gray};
+  button {
+    background-color: transparent;
+    border: none;
+    margin: 8px;
+    color: ${({ theme }) => theme.colors.mainColor};
+    font-weight: 500;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
 
-const MyEvents = () => {
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    setEvents(myevents);
-  }, []);
+const MyEvents = ({ userEvents }) => {
+  const navigate = useNavigate();
 
   return (
     <MyEventsContainer>
       <MyEventsHeader>내가 작성한 이벤트</MyEventsHeader>
       <MyEventsContentWrapper>
-        {events.map((el) => {
-          return <MyEvent key={el.post_id} eventInfo={el} />;
-        })}
+        {userEvents.length !== 0 ? (
+          userEvents?.map((el) => {
+            return <MyEvent key={el.post_id} eventInfo={el} />;
+          })
+        ) : (
+          <EventGuideMsg>
+            <div>
+              아직 작성한 이벤트가 없습니다. 원하는 이벤트를 공유해보세요!
+            </div>
+            <button onClick={() => navigate('/event/write')}>
+              글 작성하러 가기
+            </button>
+          </EventGuideMsg>
+        )}
       </MyEventsContentWrapper>
     </MyEventsContainer>
   );
