@@ -5,6 +5,13 @@ import EventTitleInput from './EventTitleInput';
 import EventInfoInput from './EventInfoInput';
 import EventExplainInput from './EventExplainInput';
 import EventEtcInput from './EventEtcInput';
+import axios from '../../api/axios';
+
+const jwtToken = localStorage.getItem('Authorization');
+const headers = {
+  'Content-Type': 'multipart/form-data',
+  Authorization: jwtToken,
+};
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -50,6 +57,23 @@ const EventWritePage = () => {
     endTime: '',
     location: '',
   });
+
+  const [post, setPost] = useState({
+    email: '',
+    event: '',
+    local: '',
+    school: '',
+    place: null,
+    organizer: '',
+    contactNumber: null,
+    startPostTime: '',
+    finishPostTime: '',
+    scrap_count: 0,
+    title: '',
+    link: null,
+    imageIdList: null,
+  });
+
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
@@ -183,15 +207,81 @@ const EventWritePage = () => {
           return { ...prev, titleErrorMessage: '' };
         });
       }
+    } else {
+      console.log('img', img);
+      setPost({
+        email: info.email,
+        event: info.type,
+        local: info.region,
+        school: info.univ,
+        place: info.location,
+        organizer: info.host,
+        contactNumber: info.tel,
+        startPostTime: info.startDate + ' ' + info.startTime,
+        finishPostTime: info.endDate + ' ' + info.endTime,
+        link: link,
+        imageIdList: img.image,
+        title: title,
+        scrap_count: 0,
+      });
+
+      const blob = new Blob([JSON.stringify({ post })], {
+        event: 'application/json',
+      });
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('scrap_count', 0);
+      formData.append('email', post.email);
+      formData.append('content', explain);
+      formData.append('event', post.event);
+      formData.append('local', post.local);
+      formData.append('school', post.school);
+      formData.append('place', post.place);
+      formData.append('organizer', post.orgainzer);
+      formData.append('link', link);
+      formData.append('contactNumber', post.contactNumber);
+      formData.append('imageIdList', null);
+      formData.append('startPostTime', info.startDate + ' ' + info.startTime);
+      formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
+      console.log(blob);
+      // formData.append('img', img.image);
+      console.log('글 작성', { title, ...post, explain, link });
+      //axios POST - body에 formData
+      for (var key of formData.keys()) {
+        console.log('formData Key', key);
+      }
+
+      for (var value of formData.values()) {
+        console.log('formData Value', value);
+      }
+      axios
+        .post(
+          '/api/posts',
+          formData
+          // {
+          //   title: title,
+          //   scrap_count: 0,
+          //   email: info.email,
+          //   content: info.content,
+          //   event: info.event,
+          //   local: info.local,
+          //   school: info.school,
+          //   place: info.place,
+          //   organizer: info.orgainzer,
+          //   link: link,
+          //   contactNumber: info.contactNumber,
+          //   imageIdList: null,
+          //   startPostTime: info.startDate + info.startTime,
+          //   finishPostTime: info.endDate + info.endTime,
+          // }
+        )
+        .then(() => {
+          alert('등록이 완료되었습니다');
+        })
+        .catch((err) => console.error(err));
+      //console.log('글 작성', { title, ...info, explain, link });
+      //axios POST - body에 formData
     }
-    const blob = new Blob([JSON.stringify({ title, ...info, explain, link })], {
-      type: 'application/json',
-    });
-    const formData = new FormData();
-    formData.append('data', blob);
-    formData.append('img', img.image);
-    //console.log('글 작성', { title, ...info, explain, link });
-    //axios POST - body에 formData
   };
 
   return (
