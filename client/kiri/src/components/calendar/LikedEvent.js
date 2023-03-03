@@ -11,8 +11,15 @@ const LikedEventContainer = styled.div`
   margin: 0 0 1px 1px;
   padding-left: 4px;
   color: ${({ theme }) => theme.colors.darkgray};
+  color: ${({ isSameMonth }) => (isSameMonth ? '#434343' : '#737373')};
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
-export const LikedEvent = ({ title, type }) => {
-  return <LikedEventContainer type={type}>{title}</LikedEventContainer>;
+export const LikedEvent = ({ title, type, isSameMonth }) => {
+  return (
+    <LikedEventContainer type={type} isSameMonth={isSameMonth}>
+      {title}
+    </LikedEventContainer>
+  );
 };
