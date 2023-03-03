@@ -136,14 +136,8 @@ const extractEvents = (date, arr) => {
       isAfter(date, parseISO(el.startScrapTime)) &&
       isBefore(date, parseISO(el.finishScrapTime))
     ) {
-      //let copiedISOstart = parseISO(el.startScrapTime);
       el.calDate = date;
       extractedEvents.push(el);
-      // while (copiedISOstart < parseISO(el.finishScrapTime)) {
-      //   el.calDate = copiedISOstart;
-      //   extractedEvents.push(el);
-      //   copiedISOstart = addDays(copiedISOstart, 1);
-      // }
     }
   });
   return extractedEvents;
