@@ -4,6 +4,7 @@ import { MypageHeader as UserpageHeader } from 'pages/Mypage/Mypage';
 import UserInfo from 'pages/User/UserInfo';
 import MyEvents from './MyEvents';
 import axios from '../../api/axios';
+import { setAuthHeader } from 'api/setAuthHeader';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
@@ -16,9 +17,10 @@ const UserPageContainer = styled.div`
 
 const UserPage = () => {
   const [userInfo, setUserInfo] = useState({});
+  const [userEvents, setUserEvents] = useState([]);
 
   const accessToken = useSelector(selectAccessToken);
-  axios.defaults.headers.common['Authorization'] = accessToken;
+  setAuthHeader(accessToken);
 
   useEffect(() => {
     axios
@@ -29,14 +31,22 @@ const UserPage = () => {
       .catch((err) => {
         console.log('ERROR: ', err);
       });
-  }, [userInfo]);
+    axios
+      .get('/api/posts/mypost')
+      .then((res) => {
+        setUserEvents([...res.data]);
+      })
+      .catch((err) => {
+        console.log('ERROR: ', err);
+      });
+  }, []);
 
   return (
     <PageContainer header footer={false} margin_bottom={false}>
       <UserPageContainer>
         <UserpageHeader>마이페이지</UserpageHeader>
         <UserInfo userInfo={userInfo} />
-        <MyEvents />
+        <MyEvents userEvents={userEvents} />
       </UserPageContainer>
     </PageContainer>
   );

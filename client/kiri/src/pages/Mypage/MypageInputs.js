@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 import { selectAccessToken } from 'store/modules/authSlice';
 import axios from '../../api/axios';
+import { setAuthHeader } from 'api/setAuthHeader';
 
 const MypageInputsContainer = styled.div``;
 
@@ -35,13 +36,9 @@ const EditInfoBtn = styled.button`
 
 const MypageInputs = () => {
   const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
 
   const location = useLocation();
-
-  useEffect(() => {
-    getUserInfo();
-    setNewPassword(location.state?.password);
-  }, []);
 
   const [userInfo, setUserInfo] = useState({
     nickName: '',
@@ -52,8 +49,12 @@ const MypageInputs = () => {
   });
   const [newPassword, setNewPassword] = useState(location.state?.password);
 
+  useEffect(() => {
+    getUserInfo();
+    setNewPassword(location.state?.password);
+  }, []);
+
   const getUserInfo = async () => {
-    axios.defaults.headers.common['Authorization'] = accessToken;
     try {
       const response = await axios.get('/member');
       const data = response.data;
@@ -71,7 +72,6 @@ const MypageInputs = () => {
   };
 
   const handleClickEditInfoBtn = () => {
-    axios.defaults.headers.common['Authorization'] = accessToken;
     axios
       .post('/member', {
         username: userInfo.nickName,
