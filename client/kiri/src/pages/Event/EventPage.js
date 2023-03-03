@@ -1,16 +1,18 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
 import SearchUnivModal from 'components/SearchUnivModal';
+import axios from '../../api/axios';
 
 const EventPage = () => {
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
   const [searchuniv, setSearchUniv] = useState('');
+  const [data, setData] = useState();
 
   //학교 검색 모달
   const [showUnivModal, setShowUnivModal] = useState(false);
@@ -22,6 +24,21 @@ const EventPage = () => {
 
   const selectFilterHandler = () => {
     setClick(true);
+  };
+
+  useEffect(() => {
+    getPost();
+  }, []);
+
+  const getPost = async () => {
+    try {
+      const response = await axios.get('/posts?division=학교');
+      const resdata = response.data;
+      console.log('data', resdata);
+      setData(resdata);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
   };
 
   const field = ['축제', '전시', '공연', '강연', '대회', '기타'];
@@ -105,7 +122,7 @@ const EventPage = () => {
           ))}
         </CheckboxDiv>
         <Bar />
-        <EventContent />
+        <EventContent data={data} setData={setData} />
       </EventFieldPageContainer>
     </PageContainer>
   );
