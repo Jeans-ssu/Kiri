@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
@@ -14,6 +14,8 @@ const EventPage = () => {
   const [currentNav, setCurrentNav] = useState(-1);
   const [searchuniv, setSearchUniv] = useState('');
   const [data, setData] = useState();
+  const result = useRef();
+  result.current = '';
 
   //학교 검색 모달
   const [showUnivModal, setShowUnivModal] = useState(false);
@@ -60,6 +62,19 @@ const EventPage = () => {
       .get(`${url}&category=${univsearch}`)
       .then((res) => {
         console.log('categoryuniv', univsearch);
+        setData(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  async function getEvent() {
+    const eventtag = result.current.slice(0, -1);
+    console.log(eventtag);
+    await axios
+      .get(`${url}&event=${eventtag}`)
+      .then((res) => {
         setData(res.data);
       })
       .catch((error) => {
@@ -125,12 +140,13 @@ const EventPage = () => {
           </SchoolSearchContainer>
         </TopBox>
         <CheckboxDiv>
-          {field.map((el, idx) => (
+          {field.map((el) => (
             <>
               <EventTag
-                idx={idx}
                 tag={el}
                 selectNavHandler={selectNavHandler}
+                result={result}
+                getEvent={getEvent}
               />
             </>
           ))}
