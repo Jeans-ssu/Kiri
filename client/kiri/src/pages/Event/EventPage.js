@@ -9,6 +9,7 @@ import SearchUnivModal from 'components/SearchUnivModal';
 import axios from '../../api/axios';
 
 const EventPage = () => {
+  const url = '/posts?division=학교';
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
   const [searchuniv, setSearchUniv] = useState('');
@@ -32,9 +33,8 @@ const EventPage = () => {
 
   const getPost = async () => {
     try {
-      const response = await axios.get('/posts?division=학교');
+      const response = await axios.get(url);
       const resdata = response.data;
-      console.log('data', resdata);
       setData(resdata);
     } catch (error) {
       console.error('Error: ', error);
@@ -54,6 +54,18 @@ const EventPage = () => {
   const handleClickSearchUnivBtn = () => {
     setShowUnivModal(true);
   };
+
+  async function getCategory(univsearch) {
+    await axios
+      .get(`${url}&category=${univsearch}`)
+      .then((res) => {
+        console.log('categoryuniv', univsearch);
+        setData(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   const removeUniv = () => {
     setSearchUniv('');
@@ -107,6 +119,8 @@ const EventPage = () => {
               isOpen={showUnivModal}
               setIsOpen={setShowUnivModal}
               setUserUniv={setUserUniv}
+              getCategory={getCategory}
+              filter={filter[0]}
             />
           </SchoolSearchContainer>
         </TopBox>
