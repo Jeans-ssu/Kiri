@@ -1,18 +1,62 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
+import axios from '../../api/axios';
 
 const EventRegion = () => {
+  const url = '/posts?division=지역';
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
   const [interest, setInterest] = useState('IT'); // 지역 select
+  const [data, setData] = useState();
+  const result = useRef();
+  result.current = '';
 
   const selectFilterHandler = () => {
     setClick(true);
   };
+
+  useEffect(() => {
+    getPost();
+  }, []);
+
+  const getPost = async () => {
+    try {
+      const response = await axios.get(url);
+      const resdata = response.data;
+      setData(resdata);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
+  };
+
+  async function getCategory(region) {
+    await axios
+      .get(`${url}&category=${region}`)
+      .then((res) => {
+        console.log('region', region);
+        setData(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  async function getEvent() {
+    const eventtag = result.current.slice(0, -1);
+    console.log(eventtag);
+    await axios
+      .get(`${url}&event=${eventtag}`)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   const field = ['축제', '전시', '공연', '강연', '대회', '기타'];
   const fieldClick = [false, false, false, false, false, false];
@@ -25,7 +69,9 @@ const EventRegion = () => {
   };
 
   const handleChangeInterest = (e) => {
+    console.log(e.target.value);
     setInterest(e.target.value);
+    getCategory(e.target.value);
   };
 
   const filter = ['학교', '지역'];
@@ -55,40 +101,41 @@ const EventRegion = () => {
           })}
           <div className="dropdown">
             <SelectInput onChange={handleChangeInterest} value={interest}>
-              <option value="Seoul">전체</option>
-              <option value="Seoul">서울</option>
-              <option value="Busan">부산</option>
-              <option value="Incheon">인천</option>
-              <option value="Daejeon">대전</option>
-              <option value="Daegu">대구</option>
-              <option value="Ulsan">울산</option>
-              <option value="Gwangju">광주</option>
-              <option value="Gyeonggido">경기도</option>
-              <option value="Gangwondo">강원도</option>
-              <option value="Chungcheongbukdo">충청북도</option>
-              <option value="Chungcheongnamdo">충청남도</option>
-              <option value="Jeollabukdo">전라북도</option>
-              <option value="Jeollanamdo">전라남도</option>
-              <option value="Gyeongsangbukdo">경상북도</option>
-              <option value="Gyeongsangnamdo">경상남도</option>
-              <option value="Jeju">제주도</option>
-              <option value="Online">온라인</option>
+              <option value="">전체</option>
+              <option value="서울">서울</option>
+              <option value="부산">부산</option>
+              <option value="인천">인천</option>
+              <option value="대전">대전</option>
+              <option value="대구">대구</option>
+              <option value="울산">울산</option>
+              <option value="광주">광주</option>
+              <option value="경기도">경기도</option>
+              <option value="강원도">강원도</option>
+              <option value="충청북도">충청북도</option>
+              <option value="충청남도">충청남도</option>
+              <option value="전라북도">전라북도</option>
+              <option value="전라남도">전라남도</option>
+              <option value="경상북도">경상북도</option>
+              <option value="경상남도">경상남도</option>
+              <option value="제주도">제주도</option>
+              <option value="온라인">온라인</option>
             </SelectInput>
           </div>
         </SchoolRegionBox>
         <CheckboxDiv>
-          {field.map((el, idx) => (
+          {field.map((el) => (
             <>
               <EventTag
-                idx={idx}
                 tag={el}
                 selectNavHandler={selectNavHandler}
+                result={result}
+                getEvent={getEvent}
               />
             </>
           ))}
         </CheckboxDiv>
         <Bar />
-        <EventContent />
+        <EventContent data={data} setData={setData} />
       </EventFieldPageContainer>
     </PageContainer>
   );
@@ -162,11 +209,11 @@ const FilterLi = styled.li`
 `;
 
 const SelectInput = styled.select`
-  width: 70px;
+  width: 82px;
   height: 30px;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 3px;
-  padding-left: 5px;
+  padding-left: 3px;
   &:focus {
     outline: none;
   }
