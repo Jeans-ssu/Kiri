@@ -5,6 +5,7 @@ import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
 import axios from '../../api/axios';
+import { Regions } from 'util/info';
 
 const EventRegion = () => {
   const url = '/posts?division=지역';
@@ -102,22 +103,13 @@ const EventRegion = () => {
           <div className="dropdown">
             <SelectInput onChange={handleChangeInterest} value={interest}>
               <option value="">전체</option>
-              <option value="서울">서울</option>
-              <option value="부산">부산</option>
-              <option value="인천">인천</option>
-              <option value="대전">대전</option>
-              <option value="대구">대구</option>
-              <option value="울산">울산</option>
-              <option value="광주">광주</option>
-              <option value="경기도">경기도</option>
-              <option value="강원도">강원도</option>
-              <option value="충청북도">충청북도</option>
-              <option value="충청남도">충청남도</option>
-              <option value="전라북도">전라북도</option>
-              <option value="전라남도">전라남도</option>
-              <option value="경상북도">경상북도</option>
-              <option value="경상남도">경상남도</option>
-              <option value="제주도">제주도</option>
+              {Regions.map((el, idx) => {
+                return (
+                  <option key={idx} value={el}>
+                    {el}
+                  </option>
+                );
+              })}
               <option value="온라인">온라인</option>
             </SelectInput>
           </div>
@@ -209,7 +201,7 @@ const FilterLi = styled.li`
 `;
 
 const SelectInput = styled.select`
-  width: 82px;
+  width: 70px;
   height: 30px;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 3px;
