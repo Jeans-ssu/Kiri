@@ -7,9 +7,17 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import axios from '../../api/axios';
+import { useSelector } from 'react-redux';
+import { setAuthHeader } from 'api/setAuthHeader';
+import { selectAccessToken } from 'store/modules/authSlice';
+// const jwtToken = localStorage.getItem('Authorization');
+// const headers = {
+//   Authorization: jwtToken,
+// };
 
 const EventInfoPage = ({ id }) => {
   // 나중에 이미지 배열로 수정 필요
+  id = 2;
   const posters = [
     `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
     `${process.env.PUBLIC_URL}/poster.jpg`,
@@ -37,6 +45,9 @@ const EventInfoPage = ({ id }) => {
     finishPostTime: '2022-11-25T12:30:00',
   });
 
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
   const markHandler = () => {
     setMark(!mark);
   };
@@ -62,6 +73,20 @@ const EventInfoPage = ({ id }) => {
     }
   };
 
+  const scrap = () => {
+    axios
+      .post(
+        `/extra/${id}`,
+        {
+          startScrapTime: data.startPostTime,
+          endScrapTime: data.finishPostTime,
+        }
+      )
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <PageContainer header footer>
       <EventInfoContainer>
@@ -79,7 +104,7 @@ const EventInfoPage = ({ id }) => {
               {mark ? (
                 <BsFillSuitHeartFill size="27" color="#ff6b6b" />
               ) : (
-                <BsSuitHeart size="27" />
+                <BsSuitHeart onClick={scrap} size="27" />
               )}
             </EventBookmarkdiv>
           </EventUpdiv>
