@@ -1,26 +1,19 @@
-# .github/workflows/client.yml
 name: client
 on:
   push:
     branches:
-      - main
+      - reference
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout source code.
         uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - name: Install dependencies
-        run: npm i -f
+        run: npm install
         working-directory: ./client/kiri
       - name: Build
         run: npm run build
-        env:
-          CI: ""
         working-directory: ./client/kiri
       - name: SHOW AWS CLI VERSION
         env:
@@ -39,4 +32,4 @@ jobs:
             --region ap-northeast-2 \
             build s3://kiri-test \
             --delete
-        working-directory: "./client/kiri"
+        working-directory: ./client/kiri
