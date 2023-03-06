@@ -3,7 +3,7 @@ name: client
 on:
   push:
     branches:
-      - reference
+      - main
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -33,4 +33,4 @@ jobs:
             --region ap-northeast-2 \
             build s3://kiri-test \
             --delete
-        working-directory: ./my-agora-states-client
+        working-directory: ./Kiri/client/kiri
