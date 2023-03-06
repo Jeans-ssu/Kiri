@@ -19,6 +19,8 @@ jobs:
         working-directory: ./client/kiri
       - name: Build
         run: npm run build
+        env:
+          CI: ""
         working-directory: ./client/kiri
       - name: SHOW AWS CLI VERSION
         env:
