@@ -1,40 +1,40 @@
 # .github/workflows/client.yml
 name: client
-
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]    # main 브랜치에서 push, pull_request 이벤트가 일어났을 때 실행
-
+    branches:
+      - main
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@master
-
-      - name: Cache node modules  # node modules 캐싱
-        uses: actions/cache@v3
+      - name: Checkout source code.
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-master-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
-
-      - name: Install Dependencies
-        run: yarn
-
+          node-version: 16
+      - name: Install dependencies
+        run: npm i -f
+        working-directory: ./client/kiri
       - name: Build
-        run: yarn build
-
-      - name: Deploy
+        run: npm run build
+        working-directory: ./client/kiri
+      - name: SHOW AWS CLI VERSION
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
         run: |
-          aws s3 cp \
-            --recursive \
+          aws --version
+      - name: Sync Bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
+        run: |
+          aws s3 sync \
             --region ap-northeast-2 \
-            build s3://kiri-test
+            build s3://kiri-test \
+            --delete
+        working-directory: "./client/kiri"
