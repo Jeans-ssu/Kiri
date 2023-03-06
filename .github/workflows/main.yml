@@ -2,7 +2,7 @@ name: client
 on:
   push:
     branches:
-      - reference
+      - main
 jobs:
   build:
     runs-on: ubuntu-22.04
