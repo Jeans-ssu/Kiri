@@ -208,7 +208,6 @@ const EventWritePage = () => {
         });
       }
     } else {
-      console.log('img', img);
       setPost({
         email: info.email,
         event: info.type,
@@ -220,67 +219,79 @@ const EventWritePage = () => {
         startPostTime: info.startDate + ' ' + info.startTime,
         finishPostTime: info.endDate + ' ' + info.endTime,
         link: link,
-        imageIdList: img.image,
         title: title,
         scrap_count: 0,
       });
+      if (img.length === 0 || img.length === undefined) {
+        console.log('length = 0');
+        axios
+          .post('/api/posts', {
+            title: title,
+            scrap_count: 0,
+            email: info.email,
+            content: explain,
+            event: info.event,
+            local: info.region,
+            school: info.univ,
+            place: info.place,
+            organizer: info.host,
+            link: link,
+            contactNumber: info.tel,
+            imageIdList: null,
+            startPostTime: info.startDate + ' ' + info.startTime,
+            finishPostTime: info.endDate + ' ' + info.endTime,
+          })
+          .then(() => {
+            alert('등록이 완료되었습니다.');
+          })
+          .catch((err) => console.error(err));
+      } else {
+        const formData = new FormData();
 
-      const blob = new Blob([JSON.stringify({ post })], {
-        event: 'application/json',
-      });
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('scrap_count', 0);
-      formData.append('email', post.email);
-      formData.append('content', explain);
-      formData.append('event', post.event);
-      formData.append('local', post.local);
-      formData.append('school', post.school);
-      formData.append('place', post.place);
-      formData.append('organizer', post.orgainzer);
-      formData.append('link', link);
-      formData.append('contactNumber', post.contactNumber);
-      formData.append('imageIdList', null);
-      formData.append('startPostTime', info.startDate + ' ' + info.startTime);
-      formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
-      console.log(blob);
-      // formData.append('img', img.image);
-      console.log('글 작성', { title, ...post, explain, link });
-      //axios POST - body에 formData
-      for (var key of formData.keys()) {
-        console.log('formData Key', key);
-      }
+        const blob = new Blob([JSON.stringify({ ...post, explain })], {
+          event: 'application/json',
+        });
+        console.log(blob);
+        // formData.append('data', blob);
 
-      for (var value of formData.values()) {
-        console.log('formData Value', value);
+        formData.append('title', title);
+        formData.append('scrap_count', 0);
+        formData.append('email', post.email);
+        formData.append('content', explain);
+        formData.append('event', post.event);
+        formData.append('local', post.local);
+        formData.append('school', post.school);
+        formData.append('place', post.place);
+        formData.append('organizer', post.orgainzer);
+        formData.append('link', link);
+        formData.append('contactNumber', post.contactNumber);
+        formData.append('startPostTime', info.startDate + ' ' + info.startTime);
+        formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
+
+        axios
+          .post('/api/posts', formData, { headers })
+          .catch((err) => console.error(err));
+
+        // formData.append('img', img.image);
+        //axios POST - body에 formData
+        // for (var key of formData.keys()) {
+        //   console.log('formData Key', key);
+        // }
+
+        // for (var value of formData.values()) {
+        //   console.log('formData Value', value);
+        // }
+        //console.log('글 작성', { title, ...info, explain, link });
+        //axios POST - body에 formData
+        const ImgformData = new FormData();
+        ImgformData.append('imageIdList', img);
+        axios
+          .post('/api/posts/image', ImgformData, { headers })
+          .then(() => {
+            alert('등록이 완료되었습니다.');
+          })
+          .catch((err) => console.error(err));
       }
-      axios
-        .post(
-          '/api/posts',
-          formData
-          // {
-          //   title: title,
-          //   scrap_count: 0,
-          //   email: info.email,
-          //   content: info.content,
-          //   event: info.event,
-          //   local: info.local,
-          //   school: info.school,
-          //   place: info.place,
-          //   organizer: info.orgainzer,
-          //   link: link,
-          //   contactNumber: info.contactNumber,
-          //   imageIdList: null,
-          //   startPostTime: info.startDate + info.startTime,
-          //   finishPostTime: info.endDate + info.endTime,
-          // }
-        )
-        .then(() => {
-          alert('등록이 완료되었습니다');
-        })
-        .catch((err) => console.error(err));
-      //console.log('글 작성', { title, ...info, explain, link });
-      //axios POST - body에 formData
     }
   };
 
