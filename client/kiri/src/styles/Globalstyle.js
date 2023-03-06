@@ -4,6 +4,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: RobotoInCjk, 'Noto Sans KR', 'Apple SD Gothic Neo',
       'Nanum Gothic', 'Malgun Gothic', sans-serif;
+    margin: 0;
+    padding: 0;
   }
   
   a {
