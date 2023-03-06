@@ -3,8 +3,9 @@ name: client
 
 on:
   push:
-    branches:
-      - main    # sub-branch[branch name] 브랜치에서 push 이벤트가 일어났을 때 실행
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]    # main 브랜치에서 push, pull_request 이벤트가 일어났을 때 실행
 
 jobs:
   build:
@@ -14,7 +15,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Cache node modules  # node modules 캐싱
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.OS }}-master-build-${{ hashFiles('**/yarn.lock') }}
@@ -22,15 +23,18 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
 
-      - name: Install Dependencies # node module install
+      - name: Install Dependencies
         run: yarn
 
-      - name: Build # project build
+      - name: Build
         run: yarn build
 
-      - name: Deploy 
+      - name: Deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws s3 sync ./build s3://kiri-test
+          aws s3 cp \
+            --recursive \
+            --region ap-northeast-2 \
+            build s3://kiri-test
