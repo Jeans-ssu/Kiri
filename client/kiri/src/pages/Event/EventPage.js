@@ -11,6 +11,7 @@ const EventPage = () => {
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
   const [searchuniv, setSearchUniv] = useState('');
+  const [order, setOrder] = useState('최신순');
 
   //학교 검색 모달
   const [showUnivModal, setShowUnivModal] = useState(false);
@@ -36,6 +37,10 @@ const EventPage = () => {
 
   const handleClickSearchUnivBtn = () => {
     setShowUnivModal(true);
+  };
+
+  const handleChangeOrder = (e) => {
+    setOrder(e.target.value);
   };
 
   const removeUniv = () => {
@@ -105,11 +110,37 @@ const EventPage = () => {
           ))}
         </CheckboxDiv>
         <Bar />
+        <EventOrderBox>
+          <SelectInput onChange={handleChangeOrder} value={order}>
+            <option value="최신순">최신순</option>
+            <option value="좋아요순">좋아요순</option>
+          </SelectInput>
+        </EventOrderBox>
         <EventContent />
       </EventFieldPageContainer>
     </PageContainer>
   );
 };
+
+const EventOrderBox = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+`;
+
+const SelectInput = styled.select`
+  width: 85px;
+  height: 30px;
+  border: none;
+  border-radius: 3px;
+  padding-left: 5px;
+  margin-left: auto;
+  margin-right: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  &:focus {
+    outline: none;
+  }
+`;
 
 const EventFieldPageContainer = styled.div`
   /* color: ${({ theme }) => theme.colors.mainColor}; */
@@ -135,6 +166,12 @@ const EventFieldPageContainer = styled.div`
   .filterLink {
     text-decoration: none;
     color: ${({ theme }) => theme.colors.dark};
+  }
+
+  option {
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.lightgray};
+    }
   }
 `;
 
