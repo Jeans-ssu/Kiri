@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import eventColorMatcher from 'util/eventColorMatcher';
+import EventModal from './EventModal';
 
 const LikedEventContainer = styled.div`
   height: 22px;
@@ -14,12 +16,41 @@ const LikedEventContainer = styled.div`
   color: ${({ isSameMonth }) => (isSameMonth ? '#434343' : '#737373')};
   overflow: hidden;
   text-overflow: ellipsis;
+  &:hover {
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.colors.lightgray};
+  }
 `;
 
-export const LikedEvent = ({ title, type, isSameMonth }) => {
+export const LikedEvent = ({
+  eventId,
+  isSameMonth,
+  title,
+  type,
+  school,
+  startTime,
+  finishTime,
+  organizer,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <LikedEventContainer type={type} isSameMonth={isSameMonth}>
+    <LikedEventContainer
+      type={type}
+      isSameMonth={isSameMonth}
+      onClick={() => setIsOpen(!isOpen)}
+    >
       {title}
+      <EventModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        eventId={eventId}
+        title={title}
+        type={type}
+        school={school}
+        startTime={startTime}
+        finishTime={finishTime}
+        organizer={organizer}
+      />
     </LikedEventContainer>
   );
 };

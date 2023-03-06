@@ -195,9 +195,14 @@ const RenderCells = ({
             return (
               <LikedEvent
                 key={idx}
+                eventId={el.post_id}
+                isSameMonth={isSameMonth(day, monthStart)}
                 title={el.title}
                 type={el.event}
-                isSameMonth={isSameMonth(day, monthStart)}
+                school={el.school}
+                startTime={el.startScrapTime}
+                finishTime={el.finishScrapTime}
+                organizer={el.organizer}
               />
             );
           })}
