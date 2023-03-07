@@ -23,6 +23,31 @@ const EventEtcInput = ({ link, setLink, img, setImg }) => {
     setLink(e.target.value);
   };
 
+  // const imageHandler = () => {
+  //   const input = document.createElement('input');
+
+  //   input.setAttribute('type', 'file');
+  //   input.setAttribute('accept', 'image/*');
+  //   input.click();
+
+  //   input.onchange = () => {
+  //     if (input.files) {
+  //       for (let i = 0; i < input.files.length; i++) {
+  //         const file = input.files[i];
+  //         setFile((prev) => {
+  //           return [...prev, file];
+  //         });
+  //       }
+  //       console.log('files', file);
+  //       const imageURL = URL.createObjectURL(file);
+  //       setImageUrl((prev) => {
+  //         return [...prev, imageURL];
+  //       });
+  //       console.log('imgurl', imageUrl);
+  //     }
+  //   };
+  // };
+
   const fileInput = useRef(null);
 
   const deleteImg = (idx) => {
