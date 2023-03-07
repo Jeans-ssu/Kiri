@@ -3,7 +3,7 @@ import { IoMdClose } from 'react-icons/io';
 import { useNavigate } from 'react-router';
 import eventColorMatcher from 'util/eventColorMatcher';
 import { parseISO, format } from 'date-fns';
-import { AiFillHeart } from 'react-icons/ai';
+import { AiFillHeart, AiOutlineExport } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
 import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
@@ -100,7 +100,7 @@ const EventBtnsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 15px;
-  margin: 20px 0;
+  margin-top: 20px;
   button {
     background-color: transparent;
     border: none;
@@ -118,10 +118,34 @@ const EventBtnsContainer = styled.div`
     }
   }
   button.cancel {
-    color: ${({ theme }) => theme.colors.lightgray};
+    color: ${({ theme }) => theme.colors.gray};
   }
   button.look {
     color: ${({ theme }) => theme.colors.mainColor};
+  }
+`;
+
+const ExportBtnContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 15px;
+  margin: 10px 0;
+  button {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.darkgray};
+    svg {
+      margin: 2px;
+      width: 15px;
+      height: 15px;
+    }
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -205,6 +229,12 @@ const EventModal = ({
                 자세히 보기
               </button>
             </EventBtnsContainer>
+            <ExportBtnContainer>
+              <button>
+                <AiOutlineExport />
+                내보내기
+              </button>
+            </ExportBtnContainer>
           </ModalView>
         </ModalBackdrop>
       ) : null}
