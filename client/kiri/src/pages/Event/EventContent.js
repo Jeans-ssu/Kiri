@@ -1,22 +1,88 @@
 import styled from 'styled-components';
-import { BsEyeFill } from 'react-icons/bs';
+import { BsFillSuitHeartFill } from 'react-icons/bs';
 
-const pos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const dummydata = [
+  {
+    post_id: 1,
+    title: 'title1',
+    imgUrl:
+      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/3080e4a7-97fc-4169-85ee-44cd31a819d3test2.jpg',
+    startPostTime: '2023-11-06T12:10',
+    scrap_count: 0,
+  },
 
+  {
+    post_id: 2,
+    title: 'title2',
+    imgUrl:
+      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/76a60188-d5cd-4510-bb16-8104fe20ef21test2.jpg',
+    startPostTime: '2023-05-25T12:10',
+    scrap_count: 0,
+  },
+
+  {
+    post_id: 3,
+    title: 'title3',
+    imgUrl: null,
+    startPostTime: '2023-03-25T12:10',
+    scrap_count: 0,
+  },
+
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2023-04-25T12:10',
+    scrap_count: 0,
+  },
+];
+//            Todo:  { data }
 const EventContent = () => {
+  // function dateFormat(date) {
+  //   const dateFormat2 = date.getFullYear() + '-'+((date.getMonth()+1)<9?"0"+(date.getMonth()))
+  //   }
+  // const dday = (day) => {
+  //   const today = new Date();
+  //   console.log('tdoay', today);
+  //   console.log('day', day);
+  // };
+
+  const DDay = (expiry_date) => {
+    const now = new Date(); // 2022-11-25
+    const target = new Date(
+      expiry_date.slice(0, 4),
+      MakeDay(expiry_date.slice(5, 7)) - 1,
+      MakeDay(expiry_date.slice(8, 10))
+    );
+    const distance = target.getTime() - now.getTime();
+    const day = Math.floor(distance / (1000 * 60 * 60 * 24));
+    return day + 1;
+  };
+  const MakeDay = (data) => {
+    if (data.indexOf('0') === 0) {
+      return data.slice(1, 2);
+    } else {
+      return data;
+    }
+  };
+
   return (
     <Container>
       <EventListMain>
-        {pos.map((el) => (
-          <EventContainer key={el}>
+        {dummydata.map((el, idx) => (
+          <EventContainer key={idx}>
             <EventList>
-              <h4>2023 제목</h4>
-              <p className="host">주최</p>
+              <h4>{el.title}</h4>
+              <p className="host">{el.post_id}</p>
               <div className="flex">
-                <p className="dday">D-nn</p>
+                <p className="dday">D-{DDay(el.startPostTime.slice(0, 10))}</p>
                 <div className="flex">
-                  <BsEyeFill size="12" className="eyeicon" />
-                  <p className="watch">조회수</p>
+                  <BsFillSuitHeartFill
+                    className="eyeicon"
+                    size="12"
+                    color="#ff6b6b"
+                  />
+                  <p className="watch">{el.scrap_count}</p>
                 </div>
               </div>
             </EventList>
@@ -24,6 +90,7 @@ const EventContent = () => {
               <img
                 className="poster"
                 alt="poster"
+                //src={el.imgUrl}
                 src={`${process.env.PUBLIC_URL}/poster.jpg`}
               ></img>
             </EventImg>
