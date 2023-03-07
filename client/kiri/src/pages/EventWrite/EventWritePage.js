@@ -6,12 +6,9 @@ import EventInfoInput from './EventInfoInput';
 import EventExplainInput from './EventExplainInput';
 import EventEtcInput from './EventEtcInput';
 import axios from '../../api/axios';
-
-const jwtToken = localStorage.getItem('Authorization');
-const headers = {
-  'Content-Type': 'multipart/form-data',
-  Authorization: jwtToken,
-};
+import { selectAccessToken } from 'store/modules/authSlice';
+import { setAuthHeader } from 'api/setAuthHeader';
+import { useSelector } from 'react-redux';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -42,6 +39,9 @@ const WriteBtn = styled.button`
 `;
 
 const EventWritePage = () => {
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
   const [title, setTitle] = useState('');
   const [info, setInfo] = useState({
     host: '',
@@ -56,22 +56,6 @@ const EventWritePage = () => {
     startTime: '',
     endTime: '',
     location: '',
-  });
-
-  const [post, setPost] = useState({
-    email: '',
-    event: '',
-    local: '',
-    school: '',
-    place: null,
-    organizer: '',
-    contactNumber: null,
-    startPostTime: '',
-    finishPostTime: '',
-    scrap_count: 0,
-    title: '',
-    link: null,
-    imageIdList: null,
   });
 
   const [explain, setExplain] = useState('');
@@ -208,20 +192,6 @@ const EventWritePage = () => {
         });
       }
     } else {
-      setPost({
-        email: info.email,
-        event: info.type,
-        local: info.region,
-        school: info.univ,
-        place: info.location,
-        organizer: info.host,
-        contactNumber: info.tel,
-        startPostTime: info.startDate + ' ' + info.startTime,
-        finishPostTime: info.endDate + ' ' + info.endTime,
-        link: link,
-        title: title,
-        scrap_count: 0,
-      });
       if (img.length === 0 || img.length === undefined) {
         console.log('length = 0');
         axios
@@ -230,7 +200,7 @@ const EventWritePage = () => {
             scrap_count: 0,
             email: info.email,
             content: explain,
-            event: info.event,
+            event: info.type,
             local: info.region,
             school: info.univ,
             place: info.place,
@@ -238,8 +208,8 @@ const EventWritePage = () => {
             link: link,
             contactNumber: info.tel,
             imageIdList: null,
-            startPostTime: info.startDate + ' ' + info.startTime,
-            finishPostTime: info.endDate + ' ' + info.endTime,
+            startPostTime: info.startDate + ' ' + info.startTime + ':00',
+            finishPostTime: info.endDate + ' ' + info.endTime + ':00',
           })
           .then(() => {
             alert('등록이 완료되었습니다.');
@@ -248,29 +218,27 @@ const EventWritePage = () => {
       } else {
         const formData = new FormData();
 
-        const blob = new Blob([JSON.stringify({ ...post, explain })], {
-          event: 'application/json',
-        });
-        console.log(blob);
+        // const blob = new Blob([JSON.stringify({ ...post, explain })], {
+        //   event: 'application/json',
+        // });
+        // console.log(blob);
         // formData.append('data', blob);
 
         formData.append('title', title);
         formData.append('scrap_count', 0);
-        formData.append('email', post.email);
+        formData.append('email', info.email);
         formData.append('content', explain);
-        formData.append('event', post.event);
-        formData.append('local', post.local);
-        formData.append('school', post.school);
-        formData.append('place', post.place);
-        formData.append('organizer', post.orgainzer);
+        formData.append('event', info.type);
+        formData.append('local', info.region);
+        formData.append('school', info.univ);
+        formData.append('place', info.location);
+        formData.append('organizer', info.host);
         formData.append('link', link);
-        formData.append('contactNumber', post.contactNumber);
+        formData.append('contactNumber', info.tel);
         formData.append('startPostTime', info.startDate + ' ' + info.startTime);
         formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
 
-        axios
-          .post('/api/posts', formData, { headers })
-          .catch((err) => console.error(err));
+        axios.post('/api/posts', formData).catch((err) => console.error(err));
 
         // formData.append('img', img.image);
         //axios POST - body에 formData
@@ -286,7 +254,7 @@ const EventWritePage = () => {
         const ImgformData = new FormData();
         ImgformData.append('imageIdList', img);
         axios
-          .post('/api/posts/image', ImgformData, { headers })
+          .post('/api/posts/image', ImgformData)
           .then(() => {
             alert('등록이 완료되었습니다.');
           })
