@@ -9,6 +9,7 @@ import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
+import { CreateIcsFile } from 'pages/Calendar/CreateIcsFile';
 
 const ModalContainer = styled.div``;
 
@@ -135,9 +136,13 @@ const ExportBtnContainer = styled.div`
     align-items: center;
     background-color: transparent;
     border: none;
-    font-size: 12px;
-    font-weight: 600;
     color: ${({ theme }) => theme.colors.darkgray};
+    a {
+      color: ${({ theme }) => theme.colors.darkgray};
+      text-decoration-color: ${({ theme }) => theme.colors.darkgray};
+      font-weight: 600;
+      font-size: 12px;
+    }
     svg {
       margin: 2px;
       width: 15px;
@@ -230,9 +235,20 @@ const EventModal = ({
               </button>
             </EventBtnsContainer>
             <ExportBtnContainer>
-              <button>
+              <button className="export">
                 <AiOutlineExport />
-                내보내기
+                <a
+                  href={CreateIcsFile(
+                    format(parseISO(startTime), 'yyyyMMdd'),
+                    format(parseISO(finishTime), 'yyyyMMdd'),
+                    title,
+                    type,
+                    school
+                  )}
+                  download={`${title}.ics`}
+                >
+                  내보내기
+                </a>
               </button>
             </ExportBtnContainer>
           </ModalView>
