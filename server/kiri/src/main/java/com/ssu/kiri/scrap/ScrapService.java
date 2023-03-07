@@ -3,6 +3,7 @@ package com.ssu.kiri.scrap;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.post.Post;
 import com.ssu.kiri.post.PostRepository;
+import com.ssu.kiri.post.PostService;
 import com.ssu.kiri.scrap.dto.ScrapReqAdd;
 import com.ssu.kiri.scrap.dto.ScrapResCal;
 import com.ssu.kiri.security.auth.PrincipalDetails;
@@ -23,6 +24,7 @@ public class ScrapService {
 
     private final PostRepository postRepository;
     private final ScrapRepository scrapRepository;
+    private final PostService postService;
 
     // 단순히 좋아요, 좋아요 취소 만 구현 => 나중에 캘린더에서 시간을 바꾸는 것은 이후 고려하자.
     public boolean addScrap(Long post_id, ScrapReqAdd requestDto) {
@@ -122,4 +124,26 @@ public class ScrapService {
 
     }
 
+    public List<ScrapResCal> getScrapWithLocal(String year, String month) {
+
+        if( (year == null || year.isEmpty() ) && ( month == null || month.isEmpty() ) ) {
+            LocalDateTime now = LocalDateTime.now();
+            int nowYear = now.getYear();
+            int nowMonth = now.getMonthValue();
+            int dayOfMonth = now.getDayOfMonth();
+
+            Integer nowIYear = Integer.valueOf(nowYear);
+            Integer nowIMonth = Integer.valueOf(nowMonth);
+
+            List<ScrapResCal> scraps = postService.findScrapsByLocal(nowIYear, nowIMonth);
+            return scraps;
+        }
+
+        // 오늘 날짜가 게시글의 startDateTime의 Year과 Month보다 크거나 같고 FinishDateTime의 Year과 Month보다 작거나 같은 경우 가져옴
+        Integer nowIYear = Integer.valueOf(year);
+        Integer nowIMonth = Integer.valueOf(month);
+        List<ScrapResCal> scraps = postService.findScrapsByLocal(nowIYear, nowIMonth);
+        return scraps;
+
+    }
 }
