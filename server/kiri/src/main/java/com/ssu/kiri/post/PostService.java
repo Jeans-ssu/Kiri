@@ -5,6 +5,7 @@ import com.ssu.kiri.image.Image;
 import com.ssu.kiri.image.ImageRepository;
 import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.member.Member;
+import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.MyPostDto;
 import com.ssu.kiri.post.dto.response.SaveResPost;
@@ -36,6 +37,7 @@ public class PostService {
     private final ImageRepository imageRepository;
     private final ScrapRepository scrapRepository;
     private final ScrapService scrapService;
+    private final MemberRepository memberRepository;
 
     public ResponseEntity<?> home() {
         // 최근 이벤트 16개, 관심있는 이벤트 10개, 인기있는 이벤트 10개
@@ -67,9 +69,12 @@ public class PostService {
         // post 에 member 설정
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
+        Long id = member.getId();
+        Member findMember = memberRepository.findById(id).orElseThrow();
+
 
         // member, post 간 연관관계 설정
-        Post newPost = Post.saveMember(member, post);
+        Post newPost = Post.saveMember(findMember, post);
 
         // post 저장
         Post savedPost = postRepository.save(newPost);
