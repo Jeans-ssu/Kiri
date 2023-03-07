@@ -19,6 +19,9 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'api/axios';
 import { LikedEvent } from './LikedEvent';
+import { useSelector } from 'react-redux';
+import { selectAccessToken } from 'store/modules/authSlice';
+import { setAuthHeader } from 'api/setAuthHeader';
 
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
@@ -144,6 +147,7 @@ const extractEvents = (date, arr) => {
 };
 
 const RenderCells = ({
+  getMonthEvents,
   currentMonth,
   selectedDate,
   onDateClick,
@@ -195,6 +199,7 @@ const RenderCells = ({
             return (
               <LikedEvent
                 key={idx}
+                getMonthEvents={getMonthEvents}
                 eventId={el.post_id}
                 isSameMonth={isSameMonth(day, monthStart)}
                 title={el.title}
@@ -225,19 +230,27 @@ export const CalendarComponent = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [likedEvents, setLikedEvents] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get(
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
+  const getMonthEvents = async () => {
+    try {
+      const response = await axios.get(
         `/calendar?year=${format(currentMonth, 'yyyy')}&month=${format(
           currentMonth,
           'M'
         )}`
-      )
-      .then(() => {
-        //setLikedEvents(res.data);
-        setLikedEvents(events);
-      })
-      .catch((err) => console.log('ERROR: ', err));
+      );
+      const data = response.data;
+      setLikedEvents(data);
+      //setLikedEvents(events);
+    } catch (error) {
+      console.error('ERROR: ', error);
+    }
+  };
+
+  useEffect(() => {
+    getMonthEvents;
     setLikedEvents(events);
   }, [currentMonth]);
 
@@ -260,6 +273,7 @@ export const CalendarComponent = () => {
       />
       <RenderDays />
       <RenderCells
+        getMonthEvents={getMonthEvents}
         currentMonth={currentMonth}
         selectedDate={selectedDate}
         onDateClick={onDateClick}

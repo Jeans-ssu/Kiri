@@ -24,6 +24,7 @@ const LikedEventContainer = styled.div`
 
 export const LikedEvent = ({
   eventId,
+  getMonthEvents,
   isSameMonth,
   title,
   type,
@@ -41,6 +42,7 @@ export const LikedEvent = ({
     >
       {title}
       <EventModal
+        getMonthEvents={getMonthEvents}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         eventId={eventId}

@@ -5,6 +5,10 @@ import eventColorMatcher from 'util/eventColorMatcher';
 import { parseISO, format } from 'date-fns';
 import { AiFillHeart } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
+import axios from '../../api/axios';
+import { useSelector } from 'react-redux';
+import { selectAccessToken } from 'store/modules/authSlice';
+import { setAuthHeader } from 'api/setAuthHeader';
 
 const ModalContainer = styled.div``;
 
@@ -122,6 +126,7 @@ const EventBtnsContainer = styled.div`
 `;
 
 const EventModal = ({
+  getMonthEvents,
   isOpen,
   setIsOpen,
   eventId,
@@ -132,6 +137,9 @@ const EventModal = ({
   finishTime,
   organizer,
 }) => {
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
   const openModalHandler = () => {
     setIsOpen(!isOpen);
   };
@@ -142,7 +150,14 @@ const EventModal = ({
   };
 
   const handleClickCancelBtn = () => {
-    console.log('좋아요 취소');
+    axios
+      .post(`/extra/${eventId}`)
+      .then(() => {
+        console.log('좋아요 취소 성공');
+        getMonthEvents();
+      })
+      .catch((err) => console.log('ERROR: ', err));
+    openModalHandler();
   };
 
   return (
