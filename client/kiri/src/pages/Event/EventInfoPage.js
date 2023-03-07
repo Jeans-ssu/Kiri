@@ -41,8 +41,9 @@ const EventInfoPage = ({ id }) => {
     savedImgList: [
       'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/522ae7eb-9ca0-457b-9d61-007fb9f1b9d1test2.jpg',
     ],
-    startPostTime: '2022-11-25T12:10:00',
-    finishPostTime: '2022-11-25T12:30:00',
+    startPostTime: '2023-05-25T12:10:00',
+    //01234567890123456789
+    finishPostTime: '2023-05-25T12:30:00',
   });
 
   const accessToken = useSelector(selectAccessToken);
@@ -75,16 +76,32 @@ const EventInfoPage = ({ id }) => {
 
   const scrap = () => {
     axios
-      .post(
-        `/extra/${id}`,
-        {
-          startScrapTime: data.startPostTime,
-          endScrapTime: data.finishPostTime,
-        }
-      )
+      .post(`/extra/${id}`, {
+        startScrapTime: data.startPostTime,
+        endScrapTime: data.finishPostTime,
+      })
       .catch((err) => {
         console.error(err);
       });
+  };
+
+  const DDay = (expiry_date) => {
+    const now = new Date(); // 2022-11-25
+    const target = new Date(
+      expiry_date.slice(0, 4),
+      MakeDay(expiry_date.slice(5, 7)) - 1,
+      MakeDay(expiry_date.slice(8, 10))
+    );
+    const distance = target.getTime() - now.getTime();
+    const day = Math.floor(distance / (1000 * 60 * 60 * 24));
+    return day + 1;
+  };
+  const MakeDay = (data) => {
+    if (data.indexOf('0') === 0) {
+      return data.slice(1, 2);
+    } else {
+      return data;
+    }
   };
 
   return (
@@ -109,9 +126,29 @@ const EventInfoPage = ({ id }) => {
             </EventBookmarkdiv>
           </EventUpdiv>
           <EventPerioddiv>
-            <EventDdaydiv>D-??</EventDdaydiv>
+            <EventDdaydiv>
+              D-{DDay(data.startPostTime.slice(0, 10))}
+            </EventDdaydiv>
             <EventWriterdiv>{data.organizer}</EventWriterdiv>
-            <EventTimediv>{data.startPostTime}</EventTimediv>
+            <EventTimediv>
+              <div className="start">
+                {data.startPostTime.slice(0, 10)}
+                &nbsp;
+                {data.startPostTime.slice(11, 19)}
+              </div>
+              <div className="finish">
+                {data.startPostTime.slice(0, 10) ===
+                data.finishPostTime.slice(0, 10) ? (
+                  <div>&nbsp;~&nbsp;{data.finishPostTime.slice(11, 19)}</div>
+                ) : (
+                  <div>
+                    &nbsp;~&nbsp;
+                    {data.finishPostTime.slice(0, 10)}&nbsp;
+                    {data.finishPostTime.slice(11, 19)}
+                  </div>
+                )}
+              </div>
+            </EventTimediv>
           </EventPerioddiv>
         </EventTopdiv>
         <EventContentdiv>
@@ -186,6 +223,7 @@ const EventWriterdiv = styled.div`
 
 const EventTimediv = styled.div`
   margin-left: auto;
+  display: flex;
 `;
 
 const EventContentdiv = styled.div`
