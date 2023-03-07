@@ -90,6 +90,7 @@ const EventInfoInput = ({
       ...info,
       [target]: e.target.value,
     });
+    console.log('info', info);
   };
 
   const handleSetUniv = (univName) => {

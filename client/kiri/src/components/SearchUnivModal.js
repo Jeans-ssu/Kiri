@@ -105,7 +105,13 @@ const SelectUnivBtn = styled.button`
   }
 `;
 
-const SearchUnivModal = ({ isOpen, setIsOpen, setUserUniv }) => {
+const SearchUnivModal = ({
+  isOpen,
+  setIsOpen,
+  setUserUniv,
+  getCategory,
+  filter,
+}) => {
   const [searchword, setSearchword] = useState('');
   const [univlist, setUnivlist] = useState([]);
   const [selectedUniv, setSelectedUniv] = useState(null);
@@ -132,6 +138,10 @@ const SearchUnivModal = ({ isOpen, setIsOpen, setUserUniv }) => {
   const handleClickSelectBtn = () => {
     setUserUniv(selectedUniv);
     setIsOpen(!isOpen);
+    if (filter === '학교') {
+      getCategory(selectedUniv);
+      console.log('selectuniv', selectedUniv);
+    }
   };
 
   return (

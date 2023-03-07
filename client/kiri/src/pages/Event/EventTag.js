@@ -1,46 +1,35 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export const EventTag = ({ tag, selectNavHandler, idx }) => {
+export const EventTag = ({ tag, result, getEvent }) => {
   const [check, setCheck] = useState(false);
 
   const lineCheck = () => {
     setCheck(!check);
   };
 
-  //   const removeTags = (indexToRemove) => {
-  //     tags.splice(indexToRemove, 1);
-  //     setTags([...tags]);
-  //   };
-
-  const [filterState, setFilterState] = useState({
-    Tags: {
-      Festival: false,
-      Exhibit: false,
-      Performance: false,
-      Lecture: false,
-      Competition: false,
-      Extra: false,
-    },
-  });
-
-  const handleFilter = (e) => {
-    const Filter = e.target.id;
-    setFilterState({
-      Tags: { ...filterState.Tags, [Filter]: !filterState.Tags[Filter] },
+  function getCheckboxValue() {
+    const query = 'input[name="event"]:checked';
+    const selectedEls = document.querySelectorAll(query);
+    let res = '';
+    selectedEls.forEach((el) => {
+      res += el.value + ',';
     });
-    console.log('filterstate', filterState);
-  };
+    result.current = res;
+    console.log('resultcurrent', result.current);
+  }
 
   return (
     <>
       <FilterInput
-        type="checkbox"
-        id={tag}
+        name="event"
         onClick={() => {
-          selectNavHandler(idx);
-          handleFilter;
+          getCheckboxValue();
+          getEvent();
         }}
+        type="checkbox"
+        value={tag}
+        id={tag}
       />
       <FilterLable
         className={check ? 'focused' : ''}
@@ -48,13 +37,6 @@ export const EventTag = ({ tag, selectNavHandler, idx }) => {
         htmlFor={tag}
       >
         {tag}
-        {/* {check ? (
-          <button className="tag-close-icon" onClick={() => removeTags(idx)}>
-            x
-          </button>
-        ) : (
-          ''
-        )} */}
       </FilterLable>
     </>
   );

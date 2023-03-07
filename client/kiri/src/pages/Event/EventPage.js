@@ -1,17 +1,22 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
 import SearchUnivModal from 'components/SearchUnivModal';
+import axios from '../../api/axios';
 
 const EventPage = () => {
+  const url = '/posts?division=학교';
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
   const [searchuniv, setSearchUniv] = useState('');
   const [order, setOrder] = useState('최신순');
+  const [data, setData] = useState();
+  const result = useRef();
+  result.current = '';
 
   //학교 검색 모달
   const [showUnivModal, setShowUnivModal] = useState(false);
@@ -23,6 +28,20 @@ const EventPage = () => {
 
   const selectFilterHandler = () => {
     setClick(true);
+  };
+
+  useEffect(() => {
+    getPost();
+  }, []);
+
+  const getPost = async () => {
+    try {
+      const response = await axios.get(url);
+      const resdata = response.data;
+      setData(resdata);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
   };
 
   const field = ['축제', '전시', '공연', '강연', '대회', '기타'];
@@ -39,9 +58,35 @@ const EventPage = () => {
     setShowUnivModal(true);
   };
 
+
   const handleChangeOrder = (e) => {
     setOrder(e.target.value);
   };
+
+  async function getCategory(univsearch) {
+    await axios
+      .get(`${url}&category=${univsearch}`)
+      .then((res) => {
+        console.log('categoryuniv', univsearch);
+        setData(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  async function getEvent() {
+    const eventtag = result.current.slice(0, -1);
+    console.log(eventtag);
+    await axios
+      .get(`${url}&event=${eventtag}`)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   const removeUniv = () => {
     setSearchUniv('');
@@ -95,16 +140,19 @@ const EventPage = () => {
               isOpen={showUnivModal}
               setIsOpen={setShowUnivModal}
               setUserUniv={setUserUniv}
+              getCategory={getCategory}
+              filter={filter[0]}
             />
           </SchoolSearchContainer>
         </TopBox>
         <CheckboxDiv>
-          {field.map((el, idx) => (
+          {field.map((el) => (
             <>
               <EventTag
-                idx={idx}
                 tag={el}
                 selectNavHandler={selectNavHandler}
+                result={result}
+                getEvent={getEvent}
               />
             </>
           ))}
@@ -116,7 +164,7 @@ const EventPage = () => {
             <option value="좋아요순">좋아요순</option>
           </SelectInput>
         </EventOrderBox>
-        <EventContent />
+        <EventContent data={data} setData={setData} />
       </EventFieldPageContainer>
     </PageContainer>
   );
