@@ -12,6 +12,7 @@ const EventRegion = () => {
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
   const [interest, setInterest] = useState('IT'); // 지역 select
+  const [order, setOrder] = useState('최신순');
   const [data, setData] = useState();
   const result = useRef();
   result.current = '';
@@ -75,6 +76,10 @@ const EventRegion = () => {
     getCategory(e.target.value);
   };
 
+  const handleChangeOrder = (e) => {
+    setOrder(e.target.value);
+  };
+
   const filter = ['학교', '지역'];
   const eventlink = ['', '/region'];
 
@@ -127,11 +132,37 @@ const EventRegion = () => {
           ))}
         </CheckboxDiv>
         <Bar />
+        <EventOrderBox>
+          <OrderInput onChange={handleChangeOrder} value={order}>
+            <option value="최신순">최신순</option>
+            <option value="좋아요순">좋아요순</option>
+          </OrderInput>
+        </EventOrderBox>
         <EventContent data={data} setData={setData} />
       </EventFieldPageContainer>
     </PageContainer>
   );
 };
+
+const EventOrderBox = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+`;
+
+const OrderInput = styled.select`
+  width: 85px;
+  height: 30px;
+  border: none;
+  border-radius: 3px;
+  padding-left: 5px;
+  margin-left: auto;
+  margin-right: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  &:focus {
+    outline: none;
+  }
+`;
 
 const EventFieldPageContainer = styled.div`
   /* color: ${({ theme }) => theme.colors.mainColor}; */
