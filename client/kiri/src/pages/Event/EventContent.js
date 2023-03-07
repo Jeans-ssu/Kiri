@@ -7,7 +7,7 @@ const dummydata = [
     title: 'title1',
     imgUrl:
       'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/3080e4a7-97fc-4169-85ee-44cd31a819d3test2.jpg',
-    startPostTime: '2022-11-25T12:10',
+    startPostTime: '2023-11-06T12:10',
     scrap_count: 0,
   },
 
@@ -16,7 +16,7 @@ const dummydata = [
     title: 'title2',
     imgUrl:
       'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/76a60188-d5cd-4510-bb16-8104fe20ef21test2.jpg',
-    startPostTime: '2022-11-25T12:10',
+    startPostTime: '2023-05-25T12:10',
     scrap_count: 0,
   },
 
@@ -24,7 +24,7 @@ const dummydata = [
     post_id: 3,
     title: 'title3',
     imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
+    startPostTime: '2023-03-25T12:10',
     scrap_count: 0,
   },
 
@@ -32,7 +32,7 @@ const dummydata = [
     post_id: 4,
     title: 'title4',
     imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
+    startPostTime: '2023-04-25T12:10',
     scrap_count: 0,
   },
 ];
@@ -46,6 +46,26 @@ const EventContent = () => {
   //   console.log('tdoay', today);
   //   console.log('day', day);
   // };
+
+  const DDay = (expiry_date) => {
+    const now = new Date(); // 2022-11-25
+    const target = new Date(
+      expiry_date.slice(0, 4),
+      MakeDay(expiry_date.slice(5, 7)) - 1,
+      MakeDay(expiry_date.slice(8, 10))
+    );
+    const distance = target.getTime() - now.getTime();
+    const day = Math.floor(distance / (1000 * 60 * 60 * 24));
+    return day + 1;
+  };
+  const MakeDay = (data) => {
+    if (data.indexOf('0') === 0) {
+      return data.slice(1, 2);
+    } else {
+      return data;
+    }
+  };
+
   return (
     <Container>
       <EventListMain>
@@ -55,7 +75,7 @@ const EventContent = () => {
               <h4>{el.title}</h4>
               <p className="host">{el.post_id}</p>
               <div className="flex">
-                <p className="dday">{el.startPostTime.slice(0, 10)}</p>
+                <p className="dday">D-{DDay(el.startPostTime.slice(0, 10))}</p>
                 <div className="flex">
                   <BsFillSuitHeartFill
                     className="eyeicon"
