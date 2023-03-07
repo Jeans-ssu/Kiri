@@ -34,7 +34,8 @@ public class ScrapRepositoryImpl implements ScrapCustomRepository {
                         post.local,
                         post.event,
                         scrap.startScrapTime,
-                        scrap.endScrapTime))
+                        scrap.endScrapTime,
+                        post.place))
                 .from(scrap)
                 .leftJoin(scrap.post, post)
                 .leftJoin(scrap.member, member)
