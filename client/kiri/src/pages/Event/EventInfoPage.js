@@ -10,14 +10,14 @@ import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { selectAccessToken } from 'store/modules/authSlice';
+import { useLocation } from 'react-router-dom';
 // const jwtToken = localStorage.getItem('Authorization');
 // const headers = {
 //   Authorization: jwtToken,
 // };
 
-const EventInfoPage = ({ id }) => {
+const EventInfoPage = () => {
   // 나중에 이미지 배열로 수정 필요
-  id = 2;
   const posters = [
     `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
     `${process.env.PUBLIC_URL}/poster.jpg`,
@@ -26,24 +26,22 @@ const EventInfoPage = ({ id }) => {
   ];
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
-    post_id: 1,
-    member_id: 1,
-    title: '혜안',
+    post_id: 0,
+    member_id: 0,
+    title: '',
     scrap_count: 0,
-    content: '혜안져스 라이어 게임',
-    event: '축제',
-    local: '서울',
-    school: '숭실대학교',
-    organizer: '주최자는 나야 둘이 될 수 없어',
+    content: '',
+    event: '',
+    local: '',
+    school: '',
+    organizer: '',
     contactNumber: null,
     link: null,
     place: null,
-    savedImgList: [
-      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/522ae7eb-9ca0-457b-9d61-007fb9f1b9d1test2.jpg',
-    ],
-    startPostTime: '2023-05-25T12:10:00',
+    savedImgList: [],
+    startPostTime: '',
     //01234567890123456789
-    finishPostTime: '2023-05-25T12:30:00',
+    finishPostTime: '',
   });
 
   const accessToken = useSelector(selectAccessToken);
@@ -52,6 +50,10 @@ const EventInfoPage = ({ id }) => {
   const markHandler = () => {
     setMark(!mark);
   };
+
+  console.log('pre Url', useLocation().pathname);
+  const preID = useLocation().pathname.substring(7);
+  console.log('ID', preID);
 
   const settings = {
     dots: true,
@@ -66,7 +68,7 @@ const EventInfoPage = ({ id }) => {
 
   const getPost = async () => {
     try {
-      const response = await axios.get(`/posts/read/${id}`);
+      const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
       setData(resdata);
     } catch (error) {
@@ -76,7 +78,7 @@ const EventInfoPage = ({ id }) => {
 
   const scrap = () => {
     axios
-      .post(`/extra/${id}`, {
+      .post(`/extra/${preID}`, {
         startScrapTime: data.startPostTime,
         endScrapTime: data.finishPostTime,
       })
