@@ -213,7 +213,7 @@ class ScrapControllerTest {
         //then
         this.mockMvc.perform(
                         MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
-                                .get("/calendar") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .get("/calendar/{id}",1) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
                                 .params(info)
                                 .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
                 )
@@ -277,21 +277,21 @@ class ScrapControllerTest {
 
         for(int i=3; i<5; i++) {
             Post post2 = createBasicPost("title" + i, "content" + i, "축제", "서울", "숭실대학교",
-                    "숭실대", "2023-01-25 12:10:00", "2022-02-25 12:20:00");
+                    "숭실대", "2023-01-25 12:10:00", "2023-04-25 12:20:00");
             SaveResPost saveResPost = postService.savePost(post2, null);
             list.add(saveResPost.getPost_id());
         }
 
         for(int i=5; i<7; i++) {
             Post post3 = createBasicPost("title" + i, "content" + i, "전시", "서울", "중앙대학교",
-                    "중앙대", "2022-02-25 12:10:00", "2022-03-25 12:10:00");
+                    "중앙대", "2022-02-25 12:10:00", "2022-08-25 12:10:00");
             SaveResPost savedPost = postService.savePost(post3, null);
             list.add(savedPost.getPost_id());
         }
 
         for(int i=7; i<9; i++) {
             Post post2 = createBasicPost("title" + i, "content" + i, "대회", "대전", "대전대학교",
-                    "대전대", "2022-01-25 12:10:00", "2022-03-25 12:10:00");
+                    "대전대", "2022-01-25 12:10:00", "2023-03-25 12:10:00");
             SaveResPost saveResPost = postService.savePost(post2, null);
             list.add(saveResPost.getPost_id());
         }
@@ -313,6 +313,58 @@ class ScrapControllerTest {
                 .build();
     }
 
+    @WithAccount("creamyyyy")
+    @DisplayName("서울 지역 게시글 날짜별로 가져오기")
+    @Test
+    public void getScrapWithoutLogin() throws Exception {
+        //given
+        List<Long> postIdList = createAndSavePostList();
+
+        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
+
+        // 결과: post_id = 1
+//        info.add("year", "2022");
+//        info.add("month", "11");
+
+        // 결과: post_id = 1
+//        info.add("year", "2022");
+//        info.add("month", "12");
+
+        // 결과: post_id = 1,2,3,6,7
+//        info.add("year", "2023");
+//        info.add("month", "1");
+
+        // 결과: post_id = 1,2,3,4,5,6,8
+//        info.add("year", "2023");
+//        info.add("month", "2");
+
+        // 결과: post_id = 1,4,5,6,8
+        info.add("year", "2023");
+        info.add("month", "3");
+
+        // 결과: post_id = 8
+//        info.add("year", "2024");
+//        info.add("month", "1");
+
+        // 결과: post_id = 없음
+//        info.add("year", "2024");
+//        info.add("month", "8");
+
+
+
+        //when
+        //then
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+                                .get("/calendar") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+//                                .params(info)
+                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+//                .andDo(print());
+
+    }
 
 
 }

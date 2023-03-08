@@ -1,6 +1,7 @@
 package com.ssu.kiri.scrap;
 
 import com.ssu.kiri.post.PostRepository;
+import com.ssu.kiri.post.dto.response.PostResCal;
 import com.ssu.kiri.scrap.dto.ScrapReqAdd;
 import com.ssu.kiri.scrap.dto.ScrapResCal;
 import lombok.RequiredArgsConstructor;
@@ -42,13 +43,13 @@ public class ScrapController {
     }
 
     // 스크랩한 게시글 정보만 보여주기
-    @GetMapping("/calendar/{id}")
+    @GetMapping(value = {"/calendar/{id}", "/calendar"})
     public ResponseEntity getScrap(@RequestParam(value = "year", required = false) String year,
                                    @RequestParam(value = "month", required = false) String month,
                                    @PathVariable(value = "id", required = false) Long member_id) {
 
         if(member_id == null) {
-            List<ScrapResCal> scrap = scrapService.getScrapWithLocal(year, month);
+            List<PostResCal> scrap = scrapService.getScrapWithLocal(year, month);
             return ResponseEntity.ok(scrap);
         }
 

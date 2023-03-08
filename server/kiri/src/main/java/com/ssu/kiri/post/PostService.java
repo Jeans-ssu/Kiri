@@ -8,6 +8,7 @@ import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.MyPostDto;
+import com.ssu.kiri.post.dto.response.PostResCal;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.scrap.Scrap;
 import com.ssu.kiri.scrap.ScrapRepository;
@@ -309,9 +310,9 @@ public class PostService {
     }
 
 
-    public List<ScrapResCal> findScrapsByLocal(Integer nowIYear, Integer nowIMonth) {
+    public List<PostResCal> findScrapsByLocal(Integer nowIYear, Integer nowIMonth) {
         String local = "서울";
-        List<ScrapResCal> scraps = postRepository.findScrapsByLocal(nowIYear, nowIMonth, local);
+        List<PostResCal> scraps = postRepository.findScrapsByLocal(nowIYear, nowIMonth, local);
         return scraps;
     }
 }

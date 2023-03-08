@@ -7,6 +7,7 @@ import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.Post;
 import com.ssu.kiri.post.PostRepository;
 import com.ssu.kiri.post.PostService;
+import com.ssu.kiri.post.dto.response.PostResCal;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.scrap.dto.ScrapReqAdd;
 import com.ssu.kiri.scrap.dto.ScrapResCal;
@@ -282,14 +283,14 @@ class ScrapServiceTest {
 
         for(int i=1; i<3; i++) {
             Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교",
-                    "숭실대", "2023-02-25 12:10:00", "2023-02-25 12:20:00");
+                    "숭실대", "2022-12-25 12:10:00", "2023-02-25 12:20:00");
             SaveResPost savedPost = postService.savePost(post1, null);
             list.add(savedPost.getPost_id());
         }
 
         for(int i=3; i<5; i++) {
             Post post2 = createBasicPost("title" + i, "content" + i, "축제", "서울", "숭실대학교",
-                    "숭실대", "2023-01-25 12:10:00", "2022-02-25 12:20:00");
+                    "숭실대", "2023-01-25 12:10:00", "2023-02-25 12:20:00");
             SaveResPost saveResPost = postService.savePost(post2, null);
             list.add(saveResPost.getPost_id());
         }
@@ -303,7 +304,7 @@ class ScrapServiceTest {
 
         for(int i=7; i<9; i++) {
             Post post2 = createBasicPost("title" + i, "content" + i, "대회", "대전", "대전대학교",
-                    "대전대", "2022-01-25 12:10:00", "2022-03-25 12:10:00");
+                    "대전대", "2022-11-25 12:10:00", "2023-03-25 12:10:00");
             SaveResPost saveResPost = postService.savePost(post2, null);
             list.add(saveResPost.getPost_id());
         }
@@ -325,5 +326,34 @@ class ScrapServiceTest {
                 .build();
     }
 
+
+    @WithAccount("creamyyyy")
+    @DisplayName("서울 지역 게시글의 정보 리스트 가져오기")
+    @Test
+    public void getScrapTestWithoutLogin() throws Exception {
+        //given
+        List<Long> postIdList = createAndSavePostList();
+
+
+        //when
+//        List<ScrapResCal> list = scrapService.getScrap(null, null);
+//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
+//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
+//        List<ScrapResCal> list = scrapService.getScrap("2023", "3");
+//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
+        List<PostResCal> list = scrapService.getScrapWithLocal("2023", "3");
+//        List<ScrapResCal> list = scrapService.getScrap("2022", "10");
+
+
+        //then
+//        assertThat(list.size()).isEqualTo(7);
+//        assertThat(list.size()).isEqualTo(7);
+//        assertThat(list.size()).isEqualTo(4);
+//        assertThat(list.size()).isEqualTo(3);
+//        assertThat(list.size()).isEqualTo(6);
+        assertThat(list.size()).isEqualTo(0);
+//        assertThat(list.size()).isEqualTo(0);
+
+    }
 
 }

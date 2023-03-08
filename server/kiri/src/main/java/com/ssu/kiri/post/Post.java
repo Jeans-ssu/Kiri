@@ -52,6 +52,11 @@ public class Post {
     private LocalDateTime postTime; // 게시한 날짜
 
 
+    private int startYear;
+    private int startMonth;
+    private int finishYear;
+    private int finishMonth;
+
    //===== 연관관계 편의 메서드 =====//
 
     public void changeMember(Member member) {
@@ -89,6 +94,10 @@ public class Post {
         this.contactNumber = contactNumber;
         this.startPostTime = startPostTime;
         this.finishPostTime = finishPostTime;
+        this.startYear = startPostTime.getYear();
+        this.startMonth = startPostTime.getMonthValue();
+        this.finishYear = finishPostTime.getYear();
+        this.finishMonth = finishPostTime.getMonthValue();
     }
 
 
@@ -135,6 +144,12 @@ public class Post {
 //        this.imageList = post.getImageList();
         this.startPostTime = post.getStartPostTime();
         this.finishPostTime = post.getFinishPostTime();
+
+        this.startYear = startPostTime.getYear();
+        this.startMonth = startPostTime.getMonthValue();
+        this.finishYear = finishPostTime.getYear();
+        this.finishMonth = finishPostTime.getMonthValue();
+
     }
 
     // 게시글 등록
@@ -156,6 +171,8 @@ public class Post {
         post.startPostTime = newPost.getStartPostTime();
         post.finishPostTime = newPost.getFinishPostTime();
 
+        post.changeStartAndFinishYearMonth();
+
         return post;
     }
 
@@ -174,4 +191,12 @@ public class Post {
     public void deleteImage(Image image) {
         this.imageList.remove(image);
     }
+
+    public void changeStartAndFinishYearMonth() {
+        this.startYear = startPostTime.getYear();
+        this.startMonth = startPostTime.getMonthValue();
+        this.finishYear = finishPostTime.getYear();
+        this.finishMonth = finishPostTime.getMonthValue();
+    }
+
 }
