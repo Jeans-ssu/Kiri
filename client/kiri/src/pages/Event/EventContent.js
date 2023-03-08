@@ -64,6 +64,7 @@ const EventListMain = styled.main`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin: auto;
 `;
 
 const EventContainer = styled.div`
