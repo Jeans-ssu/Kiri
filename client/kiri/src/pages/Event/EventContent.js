@@ -1,22 +1,43 @@
 import styled from 'styled-components';
-import { BsEyeFill } from 'react-icons/bs';
+import { BsFillSuitHeartFill } from 'react-icons/bs';
 
-const pos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const EventContent = ({ data }) => {
+  const DDay = (expiry_date) => {
+    const now = new Date(); // 2022-11-25
+    const target = new Date(
+      expiry_date.slice(0, 4),
+      MakeDay(expiry_date.slice(5, 7)) - 1,
+      MakeDay(expiry_date.slice(8, 10))
+    );
+    const distance = target.getTime() - now.getTime();
+    const day = Math.floor(distance / (1000 * 60 * 60 * 24));
+    return day + 1;
+  };
+  const MakeDay = (data) => {
+    if (data.indexOf('0') === 0) {
+      return data.slice(1, 2);
+    } else {
+      return data;
+    }
+  };
 
-const EventContent = () => {
   return (
     <Container>
       <EventListMain>
-        {pos.map((el) => (
-          <EventContainer key={el}>
+        {data?.map((el, idx) => (
+          <EventContainer key={idx}>
             <EventList>
-              <h4>2023 제목</h4>
-              <p className="host">주최</p>
+              <h4>{el.title}</h4>
+              <p className="host">{el.post_id}</p>
               <div className="flex">
-                <p className="dday">D-nn</p>
+                <p className="dday">D-{DDay(el.startPostTime.slice(0, 10))}</p>
                 <div className="flex">
-                  <BsEyeFill size="12" className="eyeicon" />
-                  <p className="watch">조회수</p>
+                  <BsFillSuitHeartFill
+                    className="eyeicon"
+                    size="12"
+                    color="#ff6b6b"
+                  />
+                  <p className="watch">{el.scrap_count}</p>
                 </div>
               </div>
             </EventList>
@@ -24,6 +45,7 @@ const EventContent = () => {
               <img
                 className="poster"
                 alt="poster"
+                //src={el.imgUrl}
                 src={`${process.env.PUBLIC_URL}/poster.jpg`}
               ></img>
             </EventImg>
@@ -42,6 +64,7 @@ const EventListMain = styled.main`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin: auto;
 `;
 
 const EventContainer = styled.div`

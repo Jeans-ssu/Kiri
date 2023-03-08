@@ -36,6 +36,10 @@ const Foot = styled.footer`
     text-decoration-line: none;
     color: ${({ theme }) => theme.colors.green_1};
   }
+
+  div.version {
+    display: none;
+  }
 `;
 
 const Footer = () => {
@@ -64,6 +68,7 @@ const Footer = () => {
         <br />
         <span>Copyright @ Kiri</span>
       </p>
+      <div className="version">version 1.0.0</div>
     </Foot>
   );
 };

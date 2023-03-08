@@ -11,9 +11,17 @@ import {
   isSameDay,
   addDays,
   isToday,
+  parseISO,
+  isAfter,
+  isBefore,
 } from 'date-fns';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'api/axios';
+import { LikedEvent } from './LikedEvent';
+import { useSelector } from 'react-redux';
+import { selectAccessToken } from 'store/modules/authSlice';
+import { setAuthHeader } from 'api/setAuthHeader';
 
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
@@ -48,7 +56,103 @@ const RenderDays = () => {
   return <div className="days row">{days}</div>;
 };
 
-const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
+const events = [
+  {
+    post_id: 1,
+    title: '글로벌미디어 졸업전시',
+    organizer: '숭실대',
+    school: '숭실대학교',
+    local: '서울',
+    event: '전시',
+    startScrapTime: '2023-03-05T10:10:10',
+    finishScrapTime: '2023-03-05T10:10:10',
+  },
+  {
+    post_id: 4,
+    title: '숭실대학교 대동제',
+    organizer: '숭실대',
+    school: '숭실대학교',
+    local: '서울',
+    event: '축제',
+    startScrapTime: '2023-03-04T10:10:10',
+    finishScrapTime: '2023-03-05T10:10:10',
+  },
+  {
+    post_id: 5,
+    title: '숭대극회 연극',
+    organizer: '숭실대',
+    school: '숭실대학교',
+    local: '서울',
+    event: '공연',
+    startScrapTime: '2023-03-16T10:10:10',
+    finishScrapTime: '2023-03-20T10:10:10',
+  },
+  {
+    post_id: 8,
+    title: '인공지능 경진대회',
+    organizer: '숭실대',
+    school: '숭실대학교',
+    local: '서울',
+    event: '대회',
+    startScrapTime: '2023-03-26T10:10:10',
+    finishScrapTime: '2023-03-26T10:10:10',
+  },
+  {
+    post_id: 9,
+    title: '취업하는법',
+    organizer: '숭실대',
+    school: '숭실대학교',
+    local: '서울',
+    event: '강연',
+    startScrapTime: '2023-03-31T10:10:10',
+    finishScrapTime: '2023-04-01T10:10:10',
+  },
+];
+
+//해당 날짜의 이벤트 객체들만 추출하는 함수
+const extractEvents = (date, arr) => {
+  const extractedEvents = [];
+  const formattedDate = format(date, 'MM/dd/yyyy');
+  arr.map((el) => {
+    let formattedStartScrapTime = format(
+      parseISO(el.startScrapTime),
+      'MM/dd/yyyy'
+    );
+    let formattedFinishScrapTime = format(
+      parseISO(el.finishScrapTime),
+      'MM/dd/yyyy'
+    );
+    if (
+      formattedStartScrapTime === formattedDate &&
+      formattedFinishScrapTime === formattedDate
+    ) {
+      el.calDate = date;
+      extractedEvents.push(el);
+    } else if (formattedStartScrapTime === formattedDate) {
+      el.calDate = date;
+      extractedEvents.push(el);
+    } else if (formattedFinishScrapTime === formattedDate) {
+      el.calDate = date;
+      extractedEvents.push(el);
+    } else if (
+      //여러날인 경우
+      isAfter(date, parseISO(el.startScrapTime)) &&
+      isBefore(date, parseISO(el.finishScrapTime))
+    ) {
+      el.calDate = date;
+      extractedEvents.push(el);
+    }
+  });
+  return extractedEvents;
+};
+
+const RenderCells = ({
+  getMonthEvents,
+  currentMonth,
+  selectedDate,
+  onDateClick,
+  likedEvents,
+}) => {
   const monthStart = startOfMonth(currentMonth); //오늘이 속한 달의 시작일
   const monthEnd = endOfMonth(monthStart); //오늘이 속한 달의 마지막일
   const startDate = startOfWeek(monthStart); //monthStart가 속한 주의 시작일
@@ -63,6 +167,7 @@ const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
     for (let i = 0; i < 7; i++) {
       formattedDate = format(day, 'd');
       const cloneDay = day;
+      const todayEvents = extractEvents(day, likedEvents);
       days.push(
         <div
           role="presentation"
@@ -90,6 +195,22 @@ const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
           >
             {formattedDate}
           </span>
+          {todayEvents.map((el, idx) => {
+            return (
+              <LikedEvent
+                key={idx}
+                getMonthEvents={getMonthEvents}
+                eventId={el.post_id}
+                isSameMonth={isSameMonth(day, monthStart)}
+                title={el.title}
+                type={el.event}
+                school={el.school}
+                startTime={el.startScrapTime}
+                finishTime={el.finishScrapTime}
+                organizer={el.organizer}
+              />
+            );
+          })}
         </div>
       );
       day = addDays(day, 1);
@@ -107,6 +228,31 @@ const RenderCells = ({ currentMonth, selectedDate, onDateClick }) => {
 export const CalendarComponent = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [likedEvents, setLikedEvents] = useState([]);
+
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
+  const getMonthEvents = async () => {
+    try {
+      const response = await axios.get(
+        `/calendar?year=${format(currentMonth, 'yyyy')}&month=${format(
+          currentMonth,
+          'M'
+        )}`
+      );
+      const data = response.data;
+      setLikedEvents(data);
+      //setLikedEvents(events);
+    } catch (error) {
+      console.error('ERROR: ', error);
+    }
+  };
+
+  useEffect(() => {
+    getMonthEvents;
+    setLikedEvents(events);
+  }, [currentMonth]);
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
@@ -127,16 +273,18 @@ export const CalendarComponent = () => {
       />
       <RenderDays />
       <RenderCells
+        getMonthEvents={getMonthEvents}
         currentMonth={currentMonth}
         selectedDate={selectedDate}
         onDateClick={onDateClick}
+        likedEvents={likedEvents}
       />
     </CalendarContainer>
   );
 };
 
 const CalendarContainer = styled.div`
-  width: 870px;
+  width: 950px;
   //border: 1px solid black;
   div.row {
     display: flex;
@@ -153,15 +301,15 @@ const CalendarContainer = styled.div`
       display: flex;
       align-items: baseline;
       div.month {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: 600;
         padding-right: 5px;
         text-align: end;
       }
     }
     svg {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       color: ${({ theme }) => theme.colors.mainColor};
       &:hover {
         cursor: pointer;
@@ -204,16 +352,19 @@ const CalendarContainer = styled.div`
     border-bottom: 1px solid ${({ theme }) => theme.colors.lightgray};
     color: ${({ theme }) => theme.colors.darkgray};
     span.not-valid {
-      color: lightgray;
+      color: ${({ theme }) => theme.colors.gray};
     }
     span.text {
       font-size: 13px;
       font-weight: 600;
-      padding: 10px;
+      padding: 10px 0 5px 10px;
     }
-    height: 100px;
+    height: 120px;
     &.today > span {
       color: ${({ theme }) => theme.colors.mainColor};
     }
+  }
+  div.cell.disabled {
+    background-color: ${({ theme }) => theme.colors.light};
   }
 `;
