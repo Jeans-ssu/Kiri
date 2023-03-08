@@ -77,14 +77,8 @@ const EventInfoPage = ({ id }) => {
   const scrap = () => {
     axios
       .post(`/extra/${id}`, {
-        startScrapTime:
-          data.startPostTime.slice(0, 10) +
-          ' ' +
-          data.startPostTime.slice(11, 19),
-        endScrapTime:
-          data.finishPostTime.slice(0, 10) +
-          ' ' +
-          data.finishPostTime.slice(11, 19),
+        startScrapTime: data.startPostTime,
+        endScrapTime: data.finishPostTime,
       })
       .catch((err) => {
         console.error(err);
