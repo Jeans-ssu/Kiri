@@ -163,7 +163,7 @@ const EventPage = () => {
             <option value="좋아요순">좋아요순</option>
           </SelectInput>
         </EventOrderBox>
-        <EventContent data={data} setData={setData} />
+        <EventContent data={data} />
       </EventFieldPageContainer>
     </PageContainer>
   );
