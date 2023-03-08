@@ -58,7 +58,6 @@ const EventPage = () => {
     setShowUnivModal(true);
   };
 
-
   const handleChangeOrder = (e) => {
     setOrder(e.target.value);
   };
