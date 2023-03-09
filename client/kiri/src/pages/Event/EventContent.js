@@ -1,51 +1,13 @@
 import styled from 'styled-components';
 import { BsFillSuitHeartFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router';
 
-const dummydata = [
-  {
-    post_id: 1,
-    title: 'title1',
-    imgUrl:
-      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/3080e4a7-97fc-4169-85ee-44cd31a819d3test2.jpg',
-    startPostTime: '2023-11-06T12:10',
-    scrap_count: 0,
-  },
+const EventContent = ({ data }) => {
+  const navigate = useNavigate();
 
-  {
-    post_id: 2,
-    title: 'title2',
-    imgUrl:
-      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/76a60188-d5cd-4510-bb16-8104fe20ef21test2.jpg',
-    startPostTime: '2023-05-25T12:10',
-    scrap_count: 0,
-  },
-
-  {
-    post_id: 3,
-    title: 'title3',
-    imgUrl: null,
-    startPostTime: '2023-03-25T12:10',
-    scrap_count: 0,
-  },
-
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2023-04-25T12:10',
-    scrap_count: 0,
-  },
-];
-//            Todo:  { data }
-const EventContent = () => {
-  // function dateFormat(date) {
-  //   const dateFormat2 = date.getFullYear() + '-'+((date.getMonth()+1)<9?"0"+(date.getMonth()))
-  //   }
-  // const dday = (day) => {
-  //   const today = new Date();
-  //   console.log('tdoay', today);
-  //   console.log('day', day);
-  // };
+  const handleOnClickEvent = (eventId) => {
+    navigate(`/event/${eventId}`);
+  };
 
   const DDay = (expiry_date) => {
     const now = new Date(); // 2022-11-25
@@ -69,9 +31,9 @@ const EventContent = () => {
   return (
     <Container>
       <EventListMain>
-        {dummydata.map((el, idx) => (
+        {data?.map((el, idx) => (
           <EventContainer key={idx}>
-            <EventList>
+            <EventList onClick={() => handleOnClickEvent(el.post_id)}>
               <h4>{el.title}</h4>
               <p className="host">{el.post_id}</p>
               <div className="flex">
@@ -109,6 +71,7 @@ const EventListMain = styled.main`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin: auto;
 `;
 
 const EventContainer = styled.div`

@@ -78,7 +78,7 @@ const EventPage = () => {
     const eventtag = result.current.slice(0, -1);
     console.log(eventtag);
     await axios
-      .get(`${url}&event=${eventtag}`)
+      .get(`${url}&eventList=${eventtag}`)
       .then((res) => {
         setData(res.data);
       })
@@ -163,7 +163,7 @@ const EventPage = () => {
             <option value="좋아요순">좋아요순</option>
           </SelectInput>
         </EventOrderBox>
-        <EventContent data={data} setData={setData} />
+        <EventContent data={data} />
       </EventFieldPageContainer>
     </PageContainer>
   );
