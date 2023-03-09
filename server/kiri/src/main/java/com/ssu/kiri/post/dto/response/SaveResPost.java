@@ -35,18 +35,20 @@ public class SaveResPost {
 
     private LocalDateTime finishPostTime;
 
+    private String email;
+
     public static SaveResPost of(Post post) {
         return new SaveResPost(post.getId(), post.getMember().getId(), post.getTitle(), post.getScrap_count(),
                 post.getContent(), post.getEvent(), post.getLocal(), post.getSchool(), post.getOrganizer(),
                 post.getContactNumber(), post.getLink(), post.getPlace(), null,
-                post.getStartPostTime(), post.getFinishPostTime());
+                post.getStartPostTime(), post.getFinishPostTime(), post.getEmail());
     }
 
     public static SaveResPost ofWithImage(Post post, List<String> imageList) {
         SaveResPost saveResPost = new SaveResPost(post.getId(), post.getMember().getId(), post.getTitle(), post.getScrap_count(),
                 post.getContent(), post.getEvent(), post.getLocal(), post.getSchool(), post.getOrganizer(),
                 post.getContactNumber(), post.getLink(), post.getPlace(), imageList,
-                post.getStartPostTime(), post.getFinishPostTime());
+                post.getStartPostTime(), post.getFinishPostTime(), post.getEmail());
 
         System.out.println("Post 저장 후 반환할 DTO 의 imageList = " + imageList);
 

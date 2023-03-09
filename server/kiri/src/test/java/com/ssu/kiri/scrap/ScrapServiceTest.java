@@ -7,6 +7,8 @@ import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.Post;
 import com.ssu.kiri.post.PostRepository;
 import com.ssu.kiri.post.PostService;
+import com.ssu.kiri.post.dto.request.SavePost;
+import com.ssu.kiri.post.dto.response.PostResCal;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.scrap.dto.ScrapReqAdd;
 import com.ssu.kiri.scrap.dto.ScrapResCal;
@@ -56,10 +58,10 @@ class ScrapServiceTest {
         //given
 
         // creamyyy 가 post 등록.
-        Post post = createPostOne();
+//        Post post = createPostOne();
+        SavePost savePost = createSavePost();
 
-
-        SaveResPost savedPost = postService.savePost(post, null);
+        SaveResPost savedPost = postService.savePost(savePost, null);
 
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
@@ -88,21 +90,23 @@ class ScrapServiceTest {
         //given
 
         // creamyyy 가 post 등록.
-        Post post = Post.builder()
-                .title("가을이 오면")
-                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
-                .event("축제")
-                .local("서울")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
+//        Post post = Post.builder()
+//                .title("가을이 오면")
+//                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
+//                .event("축제")
+//                .local("서울")
+//                .organizer("주최자는 나야 둘이 될 수 없어")
+//                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+//                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+//                .build();
+
+        SavePost savePost = createSavePost();
 
         List<Long> imageIdList = new ArrayList<>();
         imageIdList.add(1L);
 
         // 기존 post 저장
-        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
 
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
@@ -128,21 +132,23 @@ class ScrapServiceTest {
     @Test
     public void countScrapTest() throws Exception {
         //given
-        Post post = Post.builder()
-                .title("가을이 오면")
-                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
-                .event("축제")
-                .local("서울")
-                .organizer("주최자는 나야 둘이 될 수 없어")
-                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
+//        Post post = Post.builder()
+//                .title("가을이 오면")
+//                .content("눈부신 아침햇살에 비친 그대의 미소가 아름다워요")
+//                .event("축제")
+//                .local("서울")
+//                .organizer("주최자는 나야 둘이 될 수 없어")
+//                .startPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+//                .finishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+//                .build();
+
+        SavePost savePost = createSavePost();
 
         List<Long> imageIdList = new ArrayList<>();
         imageIdList.add(1L);
 
         // 기존 post 저장
-        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
 
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
@@ -186,8 +192,8 @@ class ScrapServiceTest {
 //        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
 //        List<ScrapResCal> list = scrapService.getScrap("2023", "3");
 //        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
-//        List<ScrapResCal> list = scrapService.getScrap("2022", "12");
-        List<ScrapResCal> list = scrapService.getScrap("2022", "10");
+        List<ScrapResCal> list = scrapService.getScrap("2022", "12");
+//        List<ScrapResCal> list = scrapService.getScrap("2022", "10");
 
 
         //then
@@ -196,8 +202,8 @@ class ScrapServiceTest {
 //        assertThat(list.size()).isEqualTo(4);
 //        assertThat(list.size()).isEqualTo(3);
 //        assertThat(list.size()).isEqualTo(6);
-//        assertThat(list.size()).isEqualTo(5);
-        assertThat(list.size()).isEqualTo(0);
+        assertThat(list.size()).isEqualTo(2);
+//        assertThat(list.size()).isEqualTo(0);
 
     }
 
@@ -277,34 +283,39 @@ class ScrapServiceTest {
     }
 
 
+
     private List<Long> createAndSavePostList() throws Exception {
         List<Long> list = new ArrayList<>();
 
         for(int i=1; i<3; i++) {
-            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교",
-                    "숭실대", "2023-02-25 12:10:00", "2023-02-25 12:20:00");
-            SaveResPost savedPost = postService.savePost(post1, null);
+//            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교",
+//                    "숭실대", "2023-02-25 12:10:00", "2023-02-25 12:20:00");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "서울", "중앙대학교", "중앙대");
+            SaveResPost savedPost = postService.savePost(savePost, null);
             list.add(savedPost.getPost_id());
         }
 
         for(int i=3; i<5; i++) {
-            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "서울", "숭실대학교",
-                    "숭실대", "2023-01-25 12:10:00", "2022-02-25 12:20:00");
-            SaveResPost saveResPost = postService.savePost(post2, null);
-            list.add(saveResPost.getPost_id());
+//            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "서울", "숭실대학교",
+//                    "숭실대", "2023-01-25 12:10:00", "2023-04-25 12:20:00");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "서울", "중앙대학교", "중앙대");
+            SaveResPost savedPost = postService.savePost(savePost, null);
+            list.add(savedPost.getPost_id());
         }
 
         for(int i=5; i<7; i++) {
-            Post post3 = createBasicPost("title" + i, "content" + i, "전시", "서울", "중앙대학교",
-                    "중앙대", "2022-02-25 12:10:00", "2022-03-25 12:10:00");
-            SaveResPost savedPost = postService.savePost(post3, null);
+//            Post post3 = createBasicPost("title" + i, "content" + i, "전시", "서울", "중앙대학교",
+//                    "중앙대", "2022-02-25 12:10:00", "2022-08-25 12:10:00");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "서울", "중앙대학교", "중앙대");
+            SaveResPost savedPost = postService.savePost(savePost, null);
             list.add(savedPost.getPost_id());
         }
 
         for(int i=7; i<9; i++) {
-            Post post2 = createBasicPost("title" + i, "content" + i, "대회", "대전", "대전대학교",
-                    "대전대", "2022-01-25 12:10:00", "2022-03-25 12:10:00");
-            SaveResPost saveResPost = postService.savePost(post2, null);
+//            Post post2 = createBasicPost("title" + i, "content" + i, "대회", "대전", "대전대학교",
+//                    "대전대", "2022-01-25 12:10:00", "2023-03-25 12:10:00");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "대회", "대전", "대전대학교", "대전");
+            SaveResPost saveResPost = postService.savePost(savePost, null);
             list.add(saveResPost.getPost_id());
         }
 
@@ -325,5 +336,64 @@ class ScrapServiceTest {
                 .build();
     }
 
+
+    @WithAccount("creamyyyy")
+    @DisplayName("서울 지역 게시글의 정보 리스트 가져오기")
+    @Test
+    public void getScrapTestWithoutLogin() throws Exception {
+        //given
+        List<Long> postIdList = createAndSavePostList();
+
+
+        //when
+//        List<ScrapResCal> list = scrapService.getScrap(null, null);
+//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
+//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
+//        List<ScrapResCal> list = scrapService.getScrap("2023", "3");
+//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
+        List<PostResCal> list = scrapService.getScrapWithLocal("2023", "3");
+//        List<ScrapResCal> list = scrapService.getScrap("2022", "10");
+
+
+        //then
+//        assertThat(list.size()).isEqualTo(7);
+//        assertThat(list.size()).isEqualTo(7);
+//        assertThat(list.size()).isEqualTo(4);
+//        assertThat(list.size()).isEqualTo(3);
+//        assertThat(list.size()).isEqualTo(6);
+        assertThat(list.size()).isEqualTo(0);
+//        assertThat(list.size()).isEqualTo(0);
+
+    }
+
+    private SavePost createSavePost() {
+        SavePost savePost = new SavePost();
+        savePost.setEmail("kkk@kkk.com");
+        savePost.setTitle("우주하마");
+        savePost.setContent("자세가 곧 스킬인 게임");
+        savePost.setEvent("강연");
+        savePost.setLocal("서울");
+        savePost.setSchool("숭실대학교");
+        savePost.setOrganizer("하마");
+        savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        return savePost;
+    }
+
+    private SavePost createSavePost(String title, String content, String event, String local, String school, String organizer) {
+        SavePost savePost = new SavePost();
+        savePost.setTitle(title);
+        savePost.setContent(content);
+        savePost.setEvent(event);
+        savePost.setLocal(local);
+        savePost.setSchool(school);
+        savePost.setOrganizer(organizer);
+        savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setEmail("kkk@kkk.com");
+
+        return savePost;
+    }
 
 }

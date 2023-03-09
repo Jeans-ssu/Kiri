@@ -29,10 +29,11 @@ public class ScrapResCal {
     private String event;
     private LocalDateTime startScrapTime;
     private LocalDateTime finishScrapTime;
+    private String place;
 
     @QueryProjection
     public ScrapResCal (Long post_id, String title, String organizer, String school,
-                        String local, String event, LocalDateTime startScrapTime, LocalDateTime finishScrapTime) {
+                        String local, String event, LocalDateTime startScrapTime, LocalDateTime finishScrapTime, String place) {
 
         this.post_id = post_id;
         this.title = title;
@@ -42,7 +43,7 @@ public class ScrapResCal {
         this.event = event;
         this.startScrapTime = startScrapTime;
         this.finishScrapTime = finishScrapTime;
-
+        this.place = place;
     }
 
 

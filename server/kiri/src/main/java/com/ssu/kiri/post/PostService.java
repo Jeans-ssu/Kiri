@@ -6,12 +6,15 @@ import com.ssu.kiri.image.ImageRepository;
 import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.MemberRepository;
+import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
 import com.ssu.kiri.post.dto.response.MyPostDto;
+import com.ssu.kiri.post.dto.response.PostResCal;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.scrap.Scrap;
 import com.ssu.kiri.scrap.ScrapRepository;
 import com.ssu.kiri.scrap.ScrapService;
+import com.ssu.kiri.scrap.dto.ScrapResCal;
 import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -62,7 +65,7 @@ public class PostService {
     }
 
     // 게시물 등록
-    public SaveResPost savePost(Post post, List<Long> imageIdList) {
+    public SaveResPost savePost(SavePost post, List<Long> imageIdList) {
         // 연관관계가 있으므로(@JoinColumn(name = "member_id")), Post 를 정하기전에 Member 를 정해주고 나중에 저장해준다.
         // post 에 member 저장 -> post 를 저장 -> image 에 post 저장
 
@@ -308,4 +311,9 @@ public class PostService {
     }
 
 
+    public List<PostResCal> findScrapsByLocal(Integer nowIYear, Integer nowIMonth) {
+        String local = "서울";
+        List<PostResCal> scraps = postRepository.findScrapsByLocal(nowIYear, nowIMonth, local);
+        return scraps;
+    }
 }
