@@ -4,6 +4,7 @@ package com.ssu.kiri.post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssu.kiri.image.Image;
 import com.ssu.kiri.member.Member;
+import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.scrap.Scrap;
 import lombok.*;
 
@@ -57,6 +58,8 @@ public class Post {
     private int finishYear;
     private int finishMonth;
 
+    private String email;
+
    //===== 연관관계 편의 메서드 =====//
 
     public void changeMember(Member member) {
@@ -78,7 +81,7 @@ public class Post {
     //======builder=========//
     @Builder
     public Post(
-            String title, int scrap_count, String content, String event, String local, String school,
+            String title, int scrap_count, String content, String event, String local, String school, String email,
             String place, String organizer, String link, String contactNumber, LocalDateTime startPostTime, LocalDateTime finishPostTime
     ) {
 
@@ -98,6 +101,7 @@ public class Post {
         this.startMonth = startPostTime.getMonthValue();
         this.finishYear = finishPostTime.getYear();
         this.finishMonth = finishPostTime.getMonthValue();
+        this.email = email;
     }
 
 
@@ -154,7 +158,7 @@ public class Post {
 
     // 게시글 등록
     // 연관관계 메서드 호출
-    public static Post saveMember(Member member, Post newPost) {
+    public static Post saveMember(Member member, SavePost newPost) {
         Post post = new Post();
         post.changeMember(member);
 
@@ -170,6 +174,7 @@ public class Post {
 //        this.imageList = newPost.getImageList();
         post.startPostTime = newPost.getStartPostTime();
         post.finishPostTime = newPost.getFinishPostTime();
+        post.email = newPost.getEmail();
 
         post.changeStartAndFinishYearMonth();
 

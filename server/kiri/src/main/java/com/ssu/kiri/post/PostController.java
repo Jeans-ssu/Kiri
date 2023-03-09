@@ -44,7 +44,7 @@ public class PostController {
 
         List<Long> imageIdList = savePost.getImageIdList();
 
-        Post post = Post.builder()
+        /*Post post = Post.builder()
                 .title(savePost.getTitle())
                 .scrap_count(savePost.getScrap_count())
                 .content(savePost.getContent())
@@ -57,8 +57,8 @@ public class PostController {
                 .startPostTime(savePost.getStartPostTime())
                 .finishPostTime(savePost.getFinishPostTime())
                 .build();
-
-        SaveResPost saveResPost = postService.savePost(post, imageIdList);
+*/
+        SaveResPost saveResPost = postService.savePost(savePost, imageIdList);
 
         //=====================이거 꼭 써야 하나?======================//
 //        saveResPost.setMember_id(saveResPost.getMember().getId());

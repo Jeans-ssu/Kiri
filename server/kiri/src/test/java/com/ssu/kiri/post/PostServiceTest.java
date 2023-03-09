@@ -98,14 +98,15 @@ class PostServiceTest {
         //given
 
         // 게시글 저장
-        Post post = createPostOne();
+//        Post post = createPostOne();
+        SavePost savePost = createSavePost();
         List<MultipartFile> list = createMockMultipartFiles();
         List<ImageResDto> imageResDtoList = imageService.addFile(list);
         List<Long> imageIdList = imageResDtoList.stream()
                 .map(img -> img.getImage_id())
                 .collect(Collectors.toList());
 
-        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long post_id = savedPost.getPost_id();
 
         //when - 게시글 상세보기
@@ -114,7 +115,7 @@ class PostServiceTest {
         //then
         assertThat(saveResPost.getPost_id()).isEqualTo(post_id);
         assertThat(saveResPost.getSavedImgList().size()).isEqualTo(2);
-        assertThat(saveResPost.getTitle()).isEqualTo(post.getTitle());
+        assertThat(saveResPost.getTitle()).isEqualTo(savePost.getTitle());
         assertThat(saveResPost.getTitle()).isEqualTo("혜안");
 
     }
@@ -135,7 +136,8 @@ class PostServiceTest {
         System.out.println("======================================================");
 
 
-        Post post = createPostOne();
+//        Post post = createPostOne();
+        SavePost savePost = createSavePost();
         List<MultipartFile> list = createMockMultipartFiles();
         List<ImageResDto> imageResDtoList = imageService.addFile(list);
         List<Long> imageIdList = imageResDtoList.stream()
@@ -144,11 +146,11 @@ class PostServiceTest {
 
 
         //when
-        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
 
 
         //then
-        assertThat(savedPost.getEvent()).isEqualTo(post.getEvent());
+        assertThat(savedPost.getEvent()).isEqualTo(savePost.getEvent());
         assertThat(savedPost.getSavedImgList().size()).isEqualTo(2);
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
@@ -162,14 +164,15 @@ class PostServiceTest {
     @Test
     public void savePostWithoutImage() throws Exception {
         //given
-        Post post = createPostOne();
+//        Post post = createPostOne();
+        SavePost savePost = createSavePost();
 
         //when
-        SaveResPost savedPost = postService.savePost(post, null);
+        SaveResPost savedPost = postService.savePost(savePost, null);
 
 
         //then
-        assertThat(savedPost.getEvent()).isEqualTo(post.getEvent());
+        assertThat(savedPost.getEvent()).isEqualTo(savePost.getEvent());
         assertThat(savedPost.getSavedImgList()).isNullOrEmpty();
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
@@ -184,14 +187,15 @@ class PostServiceTest {
     public void updatePost() throws Exception {
         //given
 
-        Post post = createPostOne();
+//        Post post = createPostOne();
+        SavePost savePost = createSavePost();
         List<MultipartFile> updateBeforeList = createMockMultipartFile1();
         List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
         List<Long> imageIdList = imageResDtoList.stream()
                 .map(img -> img.getImage_id())
                 .collect(Collectors.toList());
 
-        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
 
@@ -225,9 +229,10 @@ class PostServiceTest {
     public void updatePostXO() throws Exception {
         //given
 
-        Post post = createPostOne();
+//        Post post = createPostOne();
+        SavePost savePost = createSavePost();
 
-        SaveResPost savedPost = postService.savePost(post, null);
+        SaveResPost savedPost = postService.savePost(savePost, null);
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
 
@@ -261,14 +266,15 @@ class PostServiceTest {
     public void updatePostOX() throws Exception {
         //given
 
-        Post post = createPostOne();
+//        Post post = createPostOne();
+        SavePost savePost = createSavePost();
         List<MultipartFile> updateBeforeList = createMockMultipartFile1();
         List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
         List<Long> imageIdList = imageResDtoList.stream()
                 .map(img -> img.getImage_id())
                 .collect(Collectors.toList());
 
-        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
 
@@ -295,14 +301,15 @@ class PostServiceTest {
     @Test
     public void updatePostWithDelete() throws Exception {
         //given
-        Post post = createPostOne();
+//        Post post = createPostOne();
+        SavePost savePost = createSavePost();
         List<MultipartFile> updateBeforeList = createMockMultipartFile1();
         List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
         List<Long> imageIdList = imageResDtoList.stream()
                 .map(img -> img.getImage_id())
                 .collect(Collectors.toList());
 
-        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
 
@@ -328,14 +335,15 @@ class PostServiceTest {
     public void deletePost() throws Exception {
         //given
         // 게시글 등록
-        Post post = createPostOne();
+//        Post post = createPostOne();
+        SavePost savePost = createSavePost();
         List<MultipartFile> list = createMockMultipartFiles();
         List<ImageResDto> imageResDtoList = imageService.addFile(list);
         List<Long> imageIdList = imageResDtoList.stream()
                 .map(img -> img.getImage_id())
                 .collect(Collectors.toList());
 
-        SaveResPost savedPost = postService.savePost(post, imageIdList);
+        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long post_id = savedPost.getPost_id();
         Long member_id = savedPost.getMember_id();
 
@@ -378,18 +386,20 @@ class PostServiceTest {
         //given
         // post 리스트 등록
         for(int i=0; i<5; i++) {
-            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
+//            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "서울", "중앙대학교", "중앙대");
             List<MultipartFile> updateBeforeList = createMockMultipartFile1();
             List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
             List<Long> imageIdList = imageResDtoList.stream()
                     .map(img -> img.getImage_id())
                     .collect(Collectors.toList());
-            SaveResPost savedPost = postService.savePost(post1, imageIdList);
+            SaveResPost savedPost = postService.savePost(savePost, imageIdList);
 
         }
         for(int i=5; i<10; i++) {
-            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
-            SaveResPost saveResPost = postService.savePost(post2, null);
+//            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SaveResPost saveResPost = postService.savePost(savePost, null);
         }
 
         List<String> eventList = new ArrayList<>();
@@ -542,33 +552,37 @@ class PostServiceTest {
 
     private void createAndSavePostList() throws Exception {
         for(int i=1; i<3; i++) {
-            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
+//            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
             List<MultipartFile> updateBeforeList = createMockMultipartFile1();
             List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
             List<Long> imageIdList = imageResDtoList.stream()
                     .map(img -> img.getImage_id())
                     .collect(Collectors.toList());
-            SaveResPost savedPost = postService.savePost(post1, imageIdList);
+            SaveResPost savedPost = postService.savePost(savePost, imageIdList);
 
         }
         for(int i=3; i<5; i++) {
-            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "서울", "숭실대학교", "숭실대");
-            SaveResPost saveResPost = postService.savePost(post2, null);
+//            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "서울", "숭실대학교", "숭실대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "서울", "숭실대학교", "숭실대");
+            SaveResPost saveResPost = postService.savePost(savePost, null);
         }
 
         for(int i=5; i<7; i++) {
-            Post post3 = createBasicPost("title" + i, "content" + i, "전시", "서울", "중앙대학교", "중앙대");
+//            Post post3 = createBasicPost("title" + i, "content" + i, "전시", "서울", "중앙대학교", "중앙대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "전시", "서울", "중앙대학교", "중앙대");
             List<MultipartFile> updateBeforeList = createMockMultipartFile1();
             List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
             List<Long> imageIdList = imageResDtoList.stream()
                     .map(img -> img.getImage_id())
                     .collect(Collectors.toList());
-            SaveResPost savedPost = postService.savePost(post3, imageIdList);
+            SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         }
 
         for(int i=7; i<9; i++) {
-            Post post2 = createBasicPost("title" + i, "content" + i, "대회", "대전", "대전대학교", "대전대");
-            SaveResPost saveResPost = postService.savePost(post2, null);
+//            Post post2 = createBasicPost("title" + i, "content" + i, "대회", "대전", "대전대학교", "대전대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "대회", "대전", "대전대학교", "대전대");
+            SaveResPost saveResPost = postService.savePost(savePost, null);
         }
 
     }
@@ -623,6 +637,7 @@ class PostServiceTest {
 
     private SavePost createSavePost() {
         SavePost savePost = new SavePost();
+        savePost.setEmail("kkk@kkk.com");
         savePost.setTitle("우주하마");
         savePost.setContent("자세가 곧 스킬인 게임");
         savePost.setEvent("강연");
@@ -634,6 +649,7 @@ class PostServiceTest {
 
         return savePost;
     }
+
 
     private Post createPostOne() {
         return Post.builder()
@@ -681,15 +697,18 @@ class PostServiceTest {
     public void searchPostTest() throws Exception {
         //given
         for(int i=5; i<10; i++) {
-            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
-            SaveResPost saveResPost = postService.savePost(post2, null);
+//            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SaveResPost saveResPost = postService.savePost(savePost, null);
         }
 
-        Post post3 = createBasicPost("무서운 이야기", "content", "강연", "부산", "부산대학교", "부산대");
-        SaveResPost saveResPost = postService.savePost(post3, null);
+//        Post post3 = createBasicPost("무서운 이야기", "content", "강연", "부산", "부산대학교", "부산대");
+        SavePost savePost2 = createSavePost("무서운 이야기", "content", "강연", "부산", "부산대학교", "부산대");
+        SaveResPost saveResPost = postService.savePost(savePost2, null);
 
-        Post post4 = createBasicPost("재밌는 이야기", "content", "전시", "부산", "부산대학교", "부산대");
-        SaveResPost savedPost = postService.savePost(post4, null);
+//        Post post4 = createBasicPost("재밌는 이야기", "content", "전시", "부산", "부산대학교", "부산대");
+        SavePost savePost3 = createSavePost("재밌는 이야기", "content", "전시", "부산", "부산대학교", "부산대");
+        SaveResPost savedPost = postService.savePost(savePost3, null);
 
         //when
         List<ClassifyPost> classifyPosts = postService.searchPost("T");
@@ -708,15 +727,18 @@ class PostServiceTest {
     public void getMyPost() throws Exception {
         //given
         for(int i=5; i<7; i++) {
-            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
-            SaveResPost saveResPost = postService.savePost(post2, null);
+//            Post post2 = createBasicPost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
+            SaveResPost saveResPost = postService.savePost(savePost, null);
         }
 
-        Post post3 = createBasicPost("무서운 이야기", "content", "강연", "부산", "부산대학교", "부산대");
-        SaveResPost saveResPost = postService.savePost(post3, null);
+//        Post post3 = createBasicPost("무서운 이야기", "content", "강연", "부산", "부산대학교", "부산대");
+        SavePost savePost2 = createSavePost("무서운 이야기", "content", "강연", "부산", "부산대학교", "부산대");
+        SaveResPost saveResPost = postService.savePost(savePost2, null);
 
-        Post post4 = createBasicPost("재밌는 이야기", "content", "전시", "부산", "부산대학교", "부산대");
-        SaveResPost savedPost = postService.savePost(post4, null);
+//        Post post4 = createBasicPost("재밌는 이야기", "content", "전시", "부산", "부산대학교", "부산대");
+        SavePost savePost3 = createSavePost("재밌는 이야기", "content", "전시", "부산", "부산대학교", "부산대");
+        SaveResPost savedPost = postService.savePost(savePost3, null);
 
         //when
         List<MyPostDto> myPost = postService.getMyPost();
@@ -726,5 +748,20 @@ class PostServiceTest {
 
     }
 
+
+    private SavePost createSavePost(String title, String content, String event, String local, String school, String organizer) {
+        SavePost savePost = new SavePost();
+        savePost.setTitle(title);
+        savePost.setContent(content);
+        savePost.setEvent(event);
+        savePost.setLocal(local);
+        savePost.setSchool(school);
+        savePost.setOrganizer(organizer);
+        savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setEmail("kkk@kkk.com");
+
+        return savePost;
+    }
 
 }
