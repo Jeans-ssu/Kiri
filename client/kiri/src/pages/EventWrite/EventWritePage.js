@@ -53,8 +53,8 @@ const EventWritePage = () => {
     field: 'IT',
     startDate: '',
     endDate: '',
-    startTime: '',
-    endTime: '',
+    startTime: '00:00:00',
+    endTime: '00:00:00',
     location: '',
   });
   const [explain, setExplain] = useState('');
