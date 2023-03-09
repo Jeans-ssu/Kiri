@@ -151,7 +151,6 @@ const SignupInputs = () => {
   const [existEmail, setExistEmail] = useState(false); //이미 존재하는 이메일인지 확인
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
   const [isViewMode_, setIsViewMode_] = useState(false); //비밀번호 확인 보기 모드
-  const [showUnivInput, setShowUnivInput] = useState(true); //학교 input 보기 모드
 
   //회원가입 후 성공/실패 모달
   const [isSuccess, setIsSuccess] = useState(false);
@@ -247,8 +246,6 @@ const SignupInputs = () => {
   //소속
   const handleChangeStatus = (e) => {
     setUserInput({ ...userInput, status: e.target.value });
-    if (e.target.value === '대학생') setShowUnivInput(true);
-    else setShowUnivInput(false);
   };
 
   //지역
@@ -387,7 +384,7 @@ const SignupInputs = () => {
             <option value="일반인">일반인</option>
           </SelectInput>
         </InputContainer>
-        <InputContainer className={showUnivInput ? null : 'hide'}>
+        <InputContainer>
           <InputHeader>학교</InputHeader>
           <div className="column">
             <SignupInput readOnly short value={userInput.univ} />
