@@ -63,28 +63,55 @@ const EventPage = () => {
   };
 
   async function getCategory(univsearch) {
-    await axios
-      .get(`${url}&category=${univsearch}`)
-      .then((res) => {
-        console.log('categoryuniv', univsearch);
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const eventtag = result.current.slice(0, -1);
+    console.log('학교에서의', eventtag);
+    if (eventtag !== '') {
+      console.log('tag가 이미 선택된 순간');
+      await axios
+        .get(`${url}&category=${univsearch}&eventList=${eventtag}`)
+        .then((res) => {
+          console.log('categoryuniv', univsearch);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log('tag선택안됨');
+      await axios
+        .get(`${url}&category=${univsearch}`)
+        .then((res) => {
+          console.log('categoryuniv', univsearch);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }
 
   async function getEvent() {
     const eventtag = result.current.slice(0, -1);
     console.log(eventtag);
-    await axios
-      .get(`${url}&event=${eventtag}`)
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (searchuniv !== '') {
+      await axios
+        .get(`${url}&category=${searchuniv}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      await axios
+        .get(`${url}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }
 
   const removeUniv = () => {
