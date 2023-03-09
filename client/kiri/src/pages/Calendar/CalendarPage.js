@@ -5,7 +5,7 @@ import { CalendarComponent } from 'components/calendar/Calendar';
 
 const Calendar = () => {
   return (
-    <PageContainer header footer padding="15px 0">
+    <PageContainer header footer padding="15px 0" page={'calendar'}>
       <Container>
         <CalendarBox>
           <CalendarComponent />
