@@ -1,9 +1,36 @@
 import styled from 'styled-components';
 import { useRef } from 'react';
 import { Icon } from '@iconify/react';
+import axios from '../../api/axios';
+import { useSelector } from 'react-redux';
+import { selectAccessToken } from 'store/modules/authSlice';
+import { setAuthHeader } from 'api/setAuthHeader';
+
+const uploadImg = (formData) => {
+  axios
+    .post('/api/posts/image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => console.log('ERROR: ', err));
+};
 
 const EventEtcInput = ({ link, setLink, img, setImg }) => {
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
   const addImage = (e) => {
+    const formData = new FormData();
+    for (let i = 0; i < e.target.files.length; i++) {
+      formData.append('files', e.target.files[i]);
+    }
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
+    uploadImg(formData);
     const nowSelectImageList = e.target.files;
     const nowImageUrlList = [...img];
     for (let i = 0; i < nowSelectImageList.length; i++) {
