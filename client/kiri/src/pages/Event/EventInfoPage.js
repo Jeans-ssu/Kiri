@@ -127,7 +127,7 @@ const EventInfoPage = () => {
             </div>
             <EventBookmarkdiv onClick={() => markHandler()}>
               {mark ? (
-                <BsFillSuitHeartFill size="27" color="#ff6b6b" />
+                <BsFillSuitHeartFill onClick={scrap} size="27" color="#ff6b6b" />
               ) : (
                 <BsSuitHeart onClick={scrap} size="27" />
               )}
