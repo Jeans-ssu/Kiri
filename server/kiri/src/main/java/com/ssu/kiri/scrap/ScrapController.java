@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,11 +27,11 @@ public class ScrapController {
      */
     @PostMapping("/extra/{id}")
     public ResponseEntity addScrap(@PathVariable("id") Long post_id,
-                                   @Valid @RequestBody ScrapReqAdd request) {
+                                   @Valid @RequestBody Optional<ScrapReqAdd> request) {
 
-        boolean result = scrapService.addScrap(post_id, request);
+        boolean result = scrapService.addScrap(post_id, request.get());
 
-        return result ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return result ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
