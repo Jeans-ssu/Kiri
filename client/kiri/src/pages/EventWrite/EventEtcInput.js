@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 
-const EventEtcInput = ({ link, setLink, img, setImg, setImgList }) => {
+const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
 
@@ -83,7 +83,9 @@ const EventEtcInput = ({ link, setLink, img, setImg, setImgList }) => {
 
   const deleteImg = (idx) => {
     img.splice(idx, 1);
+    imgList.splice(idx, 1);
     setImg([...img]);
+    setImgList([...imgList]);
   };
 
   return (

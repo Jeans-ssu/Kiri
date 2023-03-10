@@ -240,8 +240,12 @@ const EventWritePage = () => {
         formData.append('place', info.location);
         formData.append('organizer', info.host);
         formData.append('link', link);
-        for (let i = 0; i < imgarr.length; i++) {
-          formData.append('imageIdList', imgarr[i]);
+        if (imgarr.length === 1) {
+          formData.append('imageIdList[]', [imgarr]);
+        } else {
+          for (let i = 0; i < imgarr.length; i++) {
+            formData.append('imageIdList', imgarr[i]);
+          }
         }
         formData.append('contactNumber', info.tel);
         formData.append('startPostTime', info.startDate + ' ' + info.startTime);
@@ -286,6 +290,7 @@ const EventWritePage = () => {
           setLink={setLink}
           img={img}
           setImg={setImg}
+          imgList={imgList}
           setImgList={setImgList}
         />
         <BtnContainer>
