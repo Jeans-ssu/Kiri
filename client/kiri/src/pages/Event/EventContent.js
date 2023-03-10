@@ -1,7 +1,14 @@
 import styled from 'styled-components';
 import { BsFillSuitHeartFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router';
 
 const EventContent = ({ data }) => {
+  const navigate = useNavigate();
+
+  const handleOnClickEvent = (eventId) => {
+    navigate(`/event/${eventId}`);
+  };
+
   const DDay = (expiry_date) => {
     const now = new Date(); // 2022-11-25
     const target = new Date(
@@ -26,7 +33,7 @@ const EventContent = ({ data }) => {
       <EventListMain>
         {data?.map((el, idx) => (
           <EventContainer key={idx}>
-            <EventList>
+            <EventList onClick={() => handleOnClickEvent(el.post_id)}>
               <h4>{el.title}</h4>
               <p className="host">{el.post_id}</p>
               <div className="flex">

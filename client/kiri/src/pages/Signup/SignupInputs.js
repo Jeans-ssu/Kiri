@@ -30,6 +30,8 @@ export const InputHeader = styled.div`
   font-size: 14px;
   margin-bottom: 5px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: relative;
   svg#check {
     margin-left: 5px;
@@ -38,6 +40,12 @@ export const InputHeader = styled.div`
   }
   svg#check.validate {
     visibility: visible;
+  }
+  label {
+    display: flex;
+    align-items: center;
+    margin-right: 80px;
+    font-size: 11px;
   }
 `;
 
@@ -89,6 +97,9 @@ const OpenSearchModalBtn = styled.button`
   font-weight: 600;
   &:hover {
     cursor: pointer;
+  }
+  &:disabled {
+    color: ${({ theme }) => theme.colors.gray};
   }
 `;
 
@@ -151,7 +162,8 @@ const SignupInputs = () => {
   const [existEmail, setExistEmail] = useState(false); //이미 존재하는 이메일인지 확인
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
   const [isViewMode_, setIsViewMode_] = useState(false); //비밀번호 확인 보기 모드
-  const [showUnivInput, setShowUnivInput] = useState(true); //학교 input 보기 모드
+
+  const [isSelectUniv, setIsSelectUniv] = useState(false); //학교 선택 여부
 
   //회원가입 후 성공/실패 모달
   const [isSuccess, setIsSuccess] = useState(false);
@@ -247,13 +259,21 @@ const SignupInputs = () => {
   //소속
   const handleChangeStatus = (e) => {
     setUserInput({ ...userInput, status: e.target.value });
-    if (e.target.value === '대학생') setShowUnivInput(true);
-    else setShowUnivInput(false);
   };
 
   //지역
   const handleChangeRegion = (e) => {
     setUserInput({ ...userInput, region: e.target.value });
+  };
+
+  //학교 설정 여부
+  const handleChangeIsSelectUniv = () => {
+    setIsSelectUniv(!isSelectUniv);
+    if (!isSelectUniv) {
+      setUserInput({ ...userInput, univ: '선택안함' });
+    } else {
+      setUserInput({ ...userInput, univ: '' });
+    }
   };
 
   //학교 검색
@@ -387,11 +407,26 @@ const SignupInputs = () => {
             <option value="일반인">일반인</option>
           </SelectInput>
         </InputContainer>
-        <InputContainer className={showUnivInput ? null : 'hide'}>
-          <InputHeader>학교</InputHeader>
+        <InputContainer>
+          <InputHeader>
+            <span>학교</span>
+            <label>
+              선택안함
+              <input
+                type="checkbox"
+                name="chose"
+                value="선택안함"
+                checked={isSelectUniv}
+                onChange={handleChangeIsSelectUniv}
+              />
+            </label>
+          </InputHeader>
           <div className="column">
             <SignupInput readOnly short value={userInput.univ} />
-            <OpenSearchModalBtn onClick={handleClickSearchUnivBtn}>
+            <OpenSearchModalBtn
+              onClick={handleClickSearchUnivBtn}
+              disabled={isSelectUniv ? 'disabled' : null}
+            >
               <FiSearch />
               찾아보기
             </OpenSearchModalBtn>
