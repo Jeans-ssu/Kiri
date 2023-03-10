@@ -13,7 +13,7 @@ const EventRegion = () => {
   const url = '/posts?division=지역';
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
-  const [interest, setInterest] = useState(''); // 지역 select
+  const [region, setRegion] = useState(''); // 지역 select
   const [order, setOrder] = useState('최신순');
   const [data, setData] = useState();
   const result = useRef();
@@ -67,9 +67,9 @@ const EventRegion = () => {
   function getEvent() {
     const eventtag = result.current.slice(0, -1);
     console.log(eventtag);
-    if (interest !== '') {
+    if (region !== '') {
       axios
-        .get(`${url}&category=${interest}&eventList=${eventtag}`)
+        .get(`${url}&category=${region}&eventList=${eventtag}`)
         .then((res) => {
           setData(res.data);
         })
@@ -101,7 +101,7 @@ const EventRegion = () => {
 
   const handleChangeInterest = (e) => {
     console.log(e.target.value);
-    setInterest(e.target.value);
+    setRegion(e.target.value);
     getCategory(e.target.value);
   };
 
@@ -135,7 +135,7 @@ const EventRegion = () => {
             );
           })}
           <div className="dropdown">
-            <SelectInput onChange={handleChangeInterest} value={interest}>
+            <SelectInput onChange={handleChangeInterest} value={region}>
               <option value="">전체</option>
               {Regions.map((el, idx) => {
                 return (
