@@ -52,8 +52,8 @@ const EventContent = ({ data }) => {
               <img
                 className="poster"
                 alt="poster"
-                //src={el.imgUrl}
-                src={`${process.env.PUBLIC_URL}/poster.jpg`}
+                src={el.imgUrl}
+                // src={`${process.env.PUBLIC_URL}/poster.jpg`}
               ></img>
             </EventImg>
           </EventContainer>
