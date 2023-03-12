@@ -11,182 +11,6 @@ import { useSelector } from 'react-redux';
 import { selectTagWord } from 'store/modules/tagSlice';
 import Pagination from 'components/Pagination';
 
-const dummydata = [
-  {
-    post_id: 1,
-    title: 'title1',
-    imgUrl:
-      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/3080e4a7-97fc-4169-85ee-44cd31a819d3test2.jpg',
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-
-  {
-    post_id: 2,
-    title: 'title2',
-    imgUrl:
-      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/76a60188-d5cd-4510-bb16-8104fe20ef21test2.jpg',
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-
-  {
-    post_id: 3,
-    title: 'title3',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2022-11-25T12:10',
-    scrap_count: 0,
-  },
-];
-
 const EventPage = () => {
   const url = '/posts?division=학교';
   const [click, setClick] = useState(false);
@@ -196,8 +20,6 @@ const EventPage = () => {
   const [data, setData] = useState();
   const result = useRef();
   result.current = '';
-
-  console.log('data', data);
 
   const [page, setPage] = useState(1);
   const limit = 10;
@@ -384,14 +206,10 @@ const EventPage = () => {
             <option value="좋아요순">좋아요순</option>
           </SelectInput>
         </EventOrderBox>
-        <EventContent data={postsData(dummydata)} />
+        <EventContent data={postsData(data)} />
       </EventFieldPageContainer>
       <PaginationBox>
-        <Pagination
-          page={page}
-          totalPosts={dummydata.length}
-          setPage={setPage}
-        />
+        <Pagination page={page} totalPosts={data?.length} setPage={setPage} />
       </PaginationBox>
     </PageContainer>
   );
