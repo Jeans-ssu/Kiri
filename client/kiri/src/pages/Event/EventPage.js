@@ -9,6 +9,183 @@ import SearchUnivModal from 'components/SearchUnivModal';
 import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectTagWord } from 'store/modules/tagSlice';
+import Pagination from 'components/Pagination';
+
+const dummydata = [
+  {
+    post_id: 1,
+    title: 'title1',
+    imgUrl:
+      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/3080e4a7-97fc-4169-85ee-44cd31a819d3test2.jpg',
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+
+  {
+    post_id: 2,
+    title: 'title2',
+    imgUrl:
+      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/76a60188-d5cd-4510-bb16-8104fe20ef21test2.jpg',
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+
+  {
+    post_id: 3,
+    title: 'title3',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+  {
+    post_id: 4,
+    title: 'title4',
+    imgUrl: null,
+    startPostTime: '2022-11-25T12:10',
+    scrap_count: 0,
+  },
+];
 
 const EventPage = () => {
   const url = '/posts?division=학교';
@@ -19,6 +196,19 @@ const EventPage = () => {
   const [data, setData] = useState();
   const result = useRef();
   result.current = '';
+
+  console.log('data', data);
+
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  const postsData = (posts) => {
+    if (posts) {
+      const result = posts.slice(offset, offset + limit);
+      return result;
+    }
+  };
 
   //학교 검색 모달
   const [showUnivModal, setShowUnivModal] = useState(false);
@@ -194,11 +384,23 @@ const EventPage = () => {
             <option value="좋아요순">좋아요순</option>
           </SelectInput>
         </EventOrderBox>
-        <EventContent data={data} />
+        <EventContent data={postsData(dummydata)} />
       </EventFieldPageContainer>
+      <PaginationBox>
+        <Pagination
+          page={page}
+          totalPosts={dummydata.length}
+          setPage={setPage}
+        />
+      </PaginationBox>
     </PageContainer>
   );
 };
+
+const PaginationBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const EventOrderBox = styled.div`
   display: flex;
