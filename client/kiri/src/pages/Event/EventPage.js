@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
 import SearchUnivModal from 'components/SearchUnivModal';
 import axios from '../../api/axios';
+import { useSelector } from 'react-redux';
+import { selectTagWord } from 'store/modules/tagSlice';
 
 const EventPage = () => {
   const url = '/posts?division=학교';
@@ -61,34 +63,63 @@ const EventPage = () => {
   const handleChangeOrder = (e) => {
     setOrder(e.target.value);
   };
+  const eventtag = useSelector(selectTagWord);
 
-  async function getCategory(univsearch) {
-    await axios
-      .get(`${url}&category=${univsearch}`)
-      .then((res) => {
-        console.log('categoryuniv', univsearch);
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  function getCategory(univsearch) {
+    console.log('학교에서의', eventtag);
+    if (eventtag !== '') {
+      console.log('tag가 이미 선택된 순간');
+      axios
+        .get(`${url}&category=${univsearch}&eventList=${eventtag}`)
+        .then((res) => {
+          console.log('categoryuniv', univsearch);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log('tag선택안됨');
+      axios
+        .get(`${url}&category=${univsearch}`)
+        .then((res) => {
+          console.log('categoryuniv', univsearch);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }
 
-  async function getEvent() {
+  function getEvent() {
     const eventtag = result.current.slice(0, -1);
     console.log(eventtag);
-    await axios
-      .get(`${url}&eventList=${eventtag}`)
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (searchuniv !== '') {
+      axios
+        .get(`${url}&category=${searchuniv}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log("searchuniv = ''");
+      axios
+        .get(`${url}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }
 
   const removeUniv = () => {
     setSearchUniv('');
+    getCategory('');
   };
 
   const filter = ['학교', '지역'];

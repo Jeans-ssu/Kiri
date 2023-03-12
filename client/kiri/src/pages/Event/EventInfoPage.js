@@ -18,12 +18,12 @@ import { useLocation } from 'react-router-dom';
 
 const EventInfoPage = () => {
   // 나중에 이미지 배열로 수정 필요
-  const posters = [
-    `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
-    `${process.env.PUBLIC_URL}/poster.jpg`,
-    `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
-    `${process.env.PUBLIC_URL}/poster.jpg`,
-  ];
+  // const posters = [
+  //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
+  //   `${process.env.PUBLIC_URL}/poster.jpg`,
+  //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
+  //   `${process.env.PUBLIC_URL}/poster.jpg`,
+  // ];
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
     post_id: 0,
@@ -167,7 +167,7 @@ const EventInfoPage = () => {
           <EventPosterdiv>
             {/** Todo: 이미지 넣기 */}
             <Slider {...settings}>
-              {posters.map((el, idx) => {
+              {data.savedImgList.map((el, idx) => {
                 return (
                   <div key={idx}>
                     <img alt="poster" key={idx} src={el}></img>

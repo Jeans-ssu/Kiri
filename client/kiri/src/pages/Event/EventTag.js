@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { setTagMode, setTagWord } from 'store/modules/tagSlice';
 
 export const EventTag = ({ tag, result, getEvent }) => {
   const [check, setCheck] = useState(false);
+  const dispatch = useDispatch();
 
   const lineCheck = () => {
     setCheck(!check);
@@ -17,6 +20,8 @@ export const EventTag = ({ tag, result, getEvent }) => {
     });
     result.current = res;
     console.log('resultcurrent', result.current);
+    dispatch(setTagWord(result.current.slice(0, -1)));
+    dispatch(setTagMode(true));
   }
 
   return (

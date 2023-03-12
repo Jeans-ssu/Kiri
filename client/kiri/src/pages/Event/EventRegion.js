@@ -6,16 +6,19 @@ import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
 import axios from '../../api/axios';
 import { Regions } from 'util/info';
+import { useSelector } from 'react-redux';
+import { selectTagWord } from 'store/modules/tagSlice';
 
 const EventRegion = () => {
   const url = '/posts?division=지역';
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
-  const [interest, setInterest] = useState('IT'); // 지역 select
+  const [region, setRegion] = useState(''); // 지역 select
   const [order, setOrder] = useState('최신순');
   const [data, setData] = useState();
   const result = useRef();
   result.current = '';
+  const eventtag = useSelector(selectTagWord);
 
   const selectFilterHandler = () => {
     setClick(true);
@@ -35,29 +38,55 @@ const EventRegion = () => {
     }
   };
 
-  async function getCategory(region) {
-    await axios
-      .get(`${url}&category=${region}`)
-      .then((res) => {
-        console.log('region', region);
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  function getCategory(region) {
+    if (eventtag !== '') {
+      console.log('tag가 이미 선택된 순간');
+      axios
+        .get(`${url}&category=${region}&eventList=${eventtag}`)
+        .then((res) => {
+          console.log('region', region);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log('tag선택안됨');
+      axios
+        .get(`${url}&category=${region}`)
+        .then((res) => {
+          console.log('categoryregion', region);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }
 
-  async function getEvent() {
+  function getEvent() {
     const eventtag = result.current.slice(0, -1);
     console.log(eventtag);
-    await axios
-      .get(`${url}&event=${eventtag}`)
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (region !== '') {
+      axios
+        .get(`${url}&category=${region}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log('지역이 없을때');
+      axios
+        .get(`${url}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }
 
   const field = ['축제', '전시', '공연', '강연', '대회', '기타'];
@@ -72,7 +101,7 @@ const EventRegion = () => {
 
   const handleChangeInterest = (e) => {
     console.log(e.target.value);
-    setInterest(e.target.value);
+    setRegion(e.target.value);
     getCategory(e.target.value);
   };
 
@@ -106,7 +135,7 @@ const EventRegion = () => {
             );
           })}
           <div className="dropdown">
-            <SelectInput onChange={handleChangeInterest} value={interest}>
+            <SelectInput onChange={handleChangeInterest} value={region}>
               <option value="">전체</option>
               {Regions.map((el, idx) => {
                 return (
