@@ -241,10 +241,10 @@ const EventWritePage = () => {
         formData.append('organizer', info.host);
         formData.append('link', link);
         if (imgarr.length === 1) {
-          formData.append('imageIdList[]', [imgarr]);
+          formData.append('imageIdList[]', [Number(imgarr)]);
         } else {
           for (let i = 0; i < imgarr.length; i++) {
-            formData.append('imageIdList', imgarr[i]);
+            formData.append('imageIdList', Number(imgarr[i]));
           }
         }
         formData.append('contactNumber', info.tel);
