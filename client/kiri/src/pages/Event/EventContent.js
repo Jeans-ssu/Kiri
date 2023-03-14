@@ -49,12 +49,17 @@ const EventContent = ({ data }) => {
               </div>
             </EventList>
             <EventImg>
-              <img
-                className="poster"
-                alt="poster"
-                src={el.imgUrl}
-                // src={`${process.env.PUBLIC_URL}/poster.jpg`}
-              ></img>
+              {el.imgUrl === null ? (
+                <ImgNull>
+                  <img
+                    className="logo"
+                    src={process.env.PUBLIC_URL + '/img/main_logo.svg'}
+                    alt="main logo"
+                  />
+                </ImgNull>
+              ) : (
+                <img className="poster" alt="poster" src={el.imgUrl}></img>
+              )}
             </EventImg>
           </EventContainer>
         ))}
@@ -64,8 +69,23 @@ const EventContent = ({ data }) => {
   );
 };
 
+const ImgNull = styled.div`
+  width: 150px;
+  height: 210px;
+  background-color: #d9d9d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Container = styled.div`
   display: flex;
+  .logo {
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const EventListMain = styled.main`
