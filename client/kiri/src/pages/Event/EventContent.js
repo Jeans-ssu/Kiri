@@ -58,6 +58,7 @@ const EventContent = ({ data }) => {
             </EventImg>
           </EventContainer>
         ))}
+        {data?.length % 2 === 1 ? <div className="empty" /> : ''}
       </EventListMain>
     </Container>
   );
@@ -72,6 +73,16 @@ const EventListMain = styled.main`
   justify-content: center;
   flex-wrap: wrap;
   margin: auto;
+
+  .empty {
+    width: 360px;
+    height: 210px;
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding-left: 30px;
+    padding: 10px;
+  }
 `;
 
 const EventContainer = styled.div`
