@@ -1,10 +1,14 @@
-import { useRef, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaSearch, FaUserCircle } from 'react-icons/fa';
 import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLogin, DELETE_USER } from 'store/modules/userSlice';
-import { setSearchWord, setSearchMode } from 'store/modules/searchSlice';
+import {
+  setSearchWord,
+  setSearchMode,
+  selectSearchWord,
+} from 'store/modules/searchSlice';
 import axios from '../api/axios';
 import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
 import NeedLoginModal from './NeedLoginModal';
@@ -20,6 +24,13 @@ const Header = ({ page }) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!(location.pathname.slice(0, 13) === '/event/search')) {
+      dispatch(setSearchWord(''));
+    }
+  }, []);
 
   const menuArr = [{ name: '캘린더' }, { name: '이벤트' }, { name: '글쓰기' }];
   const menu = ['calendar', 'event', 'event/write'];
@@ -27,13 +38,17 @@ const Header = ({ page }) => {
 
   const isLogin = useSelector(selectIsLogin);
 
-  const searchtext = useRef('');
+  const serachWord = useSelector(selectSearchWord);
 
-  const searchHandler = () => {
-    const text = document.getElementById('text').value;
-    searchtext.current = text;
-    dispatch(setSearchWord(searchtext.current));
-    dispatch(setSearchMode(true));
+  const handleChangeSearchword = (e) => {
+    dispatch(setSearchWord(e.target.value));
+  };
+
+  const handleOnKeyPressEnter = (e) => {
+    if (e.key === 'Enter') {
+      dispatch(setSearchMode(true));
+      navigate(`/event/search/${serachWord}`);
+    }
   };
 
   const accessToken = useSelector(selectAccessToken);
@@ -82,13 +97,10 @@ const Header = ({ page }) => {
             <SearchInput
               type="text"
               id="text"
-              onKeyUp={searchHandler}
-              onKeyPress={() => {
-                if (event.keyCode === 13) {
-                  navigate('/event/search');
-                }
-              }}
+              onKeyPress={handleOnKeyPressEnter}
+              onChange={handleChangeSearchword}
               placeholder="검색어를 입력하세요"
+              value={serachWord}
             ></SearchInput>
           </Searchdiv>
           <Login>
@@ -215,6 +227,7 @@ const SearchInput = styled.input`
   margin-left: 5px;
   margin-bottom: 14px;
   display: flex;
+  outline: none;
 `;
 
 const Login = styled.button`
