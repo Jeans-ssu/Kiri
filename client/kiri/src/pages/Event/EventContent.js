@@ -3,7 +3,6 @@ import { BsFillSuitHeartFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router';
 
 const EventContent = ({ data }) => {
-
   const navigate = useNavigate();
 
   const handleOnClickEvent = (eventId) => {
@@ -32,33 +31,39 @@ const EventContent = ({ data }) => {
   return (
     <Container>
       <EventListMain>
-        {data?.map((el, idx) => (
-          <EventContainer key={idx}>
-            <EventList onClick={() => handleOnClickEvent(el.post_id)}>
-              <h4>{el.title}</h4>
-              <p className="host">{el.post_id}</p>
-              <div className="flex">
-                <p className="dday">D-{DDay(el.startPostTime.slice(0, 10))}</p>
+        {data.length === 0 ? (
+          <NoEventContainer>검색 결과가 없습니다.</NoEventContainer>
+        ) : (
+          data?.map((el, idx) => (
+            <EventContainer key={idx}>
+              <EventList onClick={() => handleOnClickEvent(el.post_id)}>
+                <h4>{el.title}</h4>
+                <p className="host">{el.post_id}</p>
                 <div className="flex">
-                  <BsFillSuitHeartFill
-                    className="eyeicon"
-                    size="12"
-                    color="#ff6b6b"
-                  />
-                  <p className="watch">{el.scrap_count}</p>
+                  <p className="dday">
+                    D-{DDay(el.startPostTime.slice(0, 10))}
+                  </p>
+                  <div className="flex">
+                    <BsFillSuitHeartFill
+                      className="eyeicon"
+                      size="12"
+                      color="#ff6b6b"
+                    />
+                    <p className="watch">{el.scrap_count}</p>
+                  </div>
                 </div>
-              </div>
-            </EventList>
-            <EventImg>
-              <img
-                className="poster"
-                alt="poster"
-                src={el.imgUrl}
-                // src={`${process.env.PUBLIC_URL}/poster.jpg`}
-              ></img>
-            </EventImg>
-          </EventContainer>
-        ))}
+              </EventList>
+              <EventImg>
+                <img
+                  className="poster"
+                  alt="poster"
+                  src={el.imgUrl}
+                  // src={`${process.env.PUBLIC_URL}/poster.jpg`}
+                ></img>
+              </EventImg>
+            </EventContainer>
+          ))
+        )}
       </EventListMain>
     </Container>
   );
@@ -69,6 +74,8 @@ const NoEventContainer = styled.div`
   width: 800px;
   height: 400px;
   text-align: center;
+  line-height: 400px;
+  color: ${({ theme }) => theme.colors.gray};
 `;
 
 const Container = styled.div`
