@@ -244,7 +244,7 @@ const EventWritePage = () => {
           formData.append('imageIdList[]', [Number(imgarr)]);
         } else {
           for (let i = 0; i < imgarr.length; i++) {
-            formData.append('imageIdList', Number(imgarr[i]));
+            formData.append('imageIdList[]', Number(imgarr[i]));
           }
         }
         formData.append('contactNumber', info.tel);
