@@ -1,38 +1,43 @@
 import styled from 'styled-components';
 import { BsEyeFill } from 'react-icons/bs';
 
-const pos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-const EventContent = () => {
+const EventContent = ({ data }) => {
   return (
     <Container>
       <EventListMain>
-        {pos.map((el) => (
-          <EventContainer key={el}>
-            <EventList>
-              <h4>2023 제목</h4>
-              <p className="host">주최</p>
-              <div className="flex">
-                <p className="dday">D-nn</p>
+        {data.length === 0 ? (
+          <NoEventContainer>검색 결과가 없습니다.</NoEventContainer>
+        ) : (
+          data?.map((el) => (
+            <EventContainer key={el}>
+              <EventList>
+                <h4>{el.title}</h4>
+                <p className="host">주최</p>
                 <div className="flex">
-                  <BsEyeFill size="12" className="eyeicon" />
-                  <p className="watch">조회수</p>
+                  <p className="dday">D-nn</p>
+                  <div className="flex">
+                    <BsEyeFill size="12" className="eyeicon" />
+                    <p className="watch">조회수</p>
+                  </div>
                 </div>
-              </div>
-            </EventList>
-            <EventImg>
-              <img
-                className="poster"
-                alt="poster"
-                src={`${process.env.PUBLIC_URL}/poster.jpg`}
-              ></img>
-            </EventImg>
-          </EventContainer>
-        ))}
+              </EventList>
+              <EventImg>
+                <img className="poster" alt="poster" src={el.imgUrl}></img>
+              </EventImg>
+            </EventContainer>
+          ))
+        )}
       </EventListMain>
     </Container>
   );
 };
+
+const NoEventContainer = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.mainColor};
+  width: 800px;
+  height: 400px;
+  text-align: center;
+`;
 
 const Container = styled.div`
   display: flex;

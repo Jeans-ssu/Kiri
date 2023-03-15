@@ -12,7 +12,7 @@ import { useParams } from 'react-router';
 import EventContent from './EventContent';
 
 const EventSearchPage = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const searchWord = useSelector(selectSearchWord);
   const searchMode = useSelector(selectSearchMode);
 
