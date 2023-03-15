@@ -180,13 +180,45 @@ const EventInfoPage = () => {
             <article>{data.content}</article>
           </EventInfodiv>
         </EventContentdiv>
+        <EditBox>
+          <EditBtn>수정</EditBtn>
+          <DeleteBtn>삭제</DeleteBtn>
+        </EditBox>
       </EventInfoContainer>
     </PageContainer>
   );
 };
 
+const EditBox = styled.div`
+  display: flex;
+  height: 50px;
+`;
+
+const EditBtn = styled.button`
+  margin-left: auto;
+  color: ${({ theme }) => theme.colors.darkgray};
+  margin-top: 20px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-decoration: underline;
+`;
+
+const DeleteBtn = styled.button`
+  margin-top: 20px;
+  margin-left: 10px;
+  width: 45px;
+  height: 30px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background-color: ${({ theme }) => theme.colors.red};
+  cursor: pointer;
+  color: white;
+`;
+
 const EventInfoContainer = styled.div`
-  padding: 0 40px 40px 40px;
+  padding: 0 40px 0 40px;
 `;
 
 const EventTopdiv = styled.div``;
