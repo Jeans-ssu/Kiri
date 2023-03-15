@@ -49,22 +49,43 @@ const EventContent = ({ data }) => {
               </div>
             </EventList>
             <EventImg>
-              <img
-                className="poster"
-                alt="poster"
-                src={el.imgUrl}
-                // src={`${process.env.PUBLIC_URL}/poster.jpg`}
-              ></img>
+              {el.imgUrl === null ? (
+                <ImgNull>
+                  <img
+                    className="logo"
+                    src={process.env.PUBLIC_URL + '/img/main_logo.svg'}
+                    alt="main logo"
+                  />
+                </ImgNull>
+              ) : (
+                <img className="poster" alt="poster" src={el.imgUrl}></img>
+              )}
             </EventImg>
           </EventContainer>
         ))}
+        {data?.length % 2 === 1 ? <div className="empty" /> : ''}
       </EventListMain>
     </Container>
   );
 };
 
+const ImgNull = styled.div`
+  width: 150px;
+  height: 210px;
+  background-color: #d9d9d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Container = styled.div`
   display: flex;
+  .logo {
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const EventListMain = styled.main`
@@ -72,6 +93,16 @@ const EventListMain = styled.main`
   justify-content: center;
   flex-wrap: wrap;
   margin: auto;
+
+  .empty {
+    width: 360px;
+    height: 210px;
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding-left: 30px;
+    padding: 10px;
+  }
 `;
 
 const EventContainer = styled.div`
