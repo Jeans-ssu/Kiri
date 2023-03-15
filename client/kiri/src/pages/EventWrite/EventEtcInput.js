@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 
-const EventEtcInput = ({ link, setLink, img, setImg, setImgList }) => {
+const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
+  const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
 
@@ -27,7 +28,11 @@ const EventEtcInput = ({ link, setLink, img, setImg, setImgList }) => {
   const addImage = (e) => {
     const formData = new FormData();
     for (let i = 0; i < e.target.files.length; i++) {
-      formData.append('files', e.target.files[i]);
+      console.log('e.target.files', e.target.files[i]);
+      imgArr.current.push(e.target.files[i]);
+    }
+    for (let i = 0; i < imgArr.current.length; i++) {
+      formData.append('files', imgArr.current[i]);
     }
     // for (let value of formData.values()) {
     //   console.log(value);
@@ -54,36 +59,14 @@ const EventEtcInput = ({ link, setLink, img, setImg, setImgList }) => {
     setLink(e.target.value);
   };
 
-  // const imageHandler = () => {
-  //   const input = document.createElement('input');
-
-  //   input.setAttribute('type', 'file');
-  //   input.setAttribute('accept', 'image/*');
-  //   input.click();
-
-  //   input.onchange = () => {
-  //     if (input.files) {
-  //       for (let i = 0; i < input.files.length; i++) {
-  //         const file = input.files[i];
-  //         setFile((prev) => {
-  //           return [...prev, file];
-  //         });
-  //       }
-  //       console.log('files', file);
-  //       const imageURL = URL.createObjectURL(file);
-  //       setImageUrl((prev) => {
-  //         return [...prev, imageURL];
-  //       });
-  //       console.log('imgurl', imageUrl);
-  //     }
-  //   };
-  // };
-
   const fileInput = useRef(null);
 
   const deleteImg = (idx) => {
     img.splice(idx, 1);
+    imgList.splice(idx, 1);
+    imgArr.current.splice(idx, 1);
     setImg([...img]);
+    setImgList([...imgList]);
   };
 
   return (
