@@ -31,20 +31,26 @@ const EventContent = ({ data }) => {
   return (
     <Container>
       <EventListMain>
-        {data?.map((el, idx) => (
-          <EventContainer key={idx}>
-            <EventList onClick={() => handleOnClickEvent(el.post_id)}>
-              <h4>{el.title}</h4>
-              <p className="host">{el.post_id}</p>
-              <div className="flex">
-                <p className="dday">D-{DDay(el.startPostTime.slice(0, 10))}</p>
+        {data.length === 0 ? (
+          <NoEventContainer>검색 결과가 없습니다.</NoEventContainer>
+        ) : (
+          data?.map((el, idx) => (
+            <EventContainer key={idx}>
+              <EventList onClick={() => handleOnClickEvent(el.post_id)}>
+                <h4>{el.title}</h4>
+                <p className="host">{el.post_id}</p>
                 <div className="flex">
-                  <BsFillSuitHeartFill
-                    className="eyeicon"
-                    size="12"
-                    color="#ff6b6b"
-                  />
-                  <p className="watch">{el.scrap_count}</p>
+                  <p className="dday">
+                    D-{DDay(el.startPostTime.slice(0, 10))}
+                  </p>
+                  <div className="flex">
+                    <BsFillSuitHeartFill
+                      className="eyeicon"
+                      size="12"
+                      color="#ff6b6b"
+                    />
+                    <p className="watch">{el.scrap_count}</p>
+                  </div>
                 </div>
               </div>
             </EventList>
@@ -68,6 +74,15 @@ const EventContent = ({ data }) => {
     </Container>
   );
 };
+
+
+const NoEventContainer = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.mainColor};
+  width: 800px;
+  height: 400px;
+  text-align: center;
+  line-height: 400px;
+  color: ${({ theme }) => theme.colors.gray};
 
 const ImgNull = styled.div`
   width: 150px;

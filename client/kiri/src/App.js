@@ -32,7 +32,10 @@ function App() {
           <Route path="/event" element={<EventPage />} />
           <Route path="/event/region" element={<EventRegion />} />
           <Route path="/event/:eventId" element={<EventInfoPage />} />
-          <Route path="/event/search" element={<EventSearchPage />} />
+          <Route
+            path="/event/search/:searchWordParam"
+            element={<EventSearchPage />}
+          />
           <Route path="/event/write" element={<EventWritePage />} />
           <Route path="/redux" element={<ReduxPage />} />
           <Route path="/calendar" element={<Calendar />} />
