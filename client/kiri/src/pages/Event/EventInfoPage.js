@@ -2,10 +2,188 @@ import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
 import { FiShare2 } from 'react-icons/fi';
 import { BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
+import axios from '../../api/axios';
+import { useSelector } from 'react-redux';
+import { setAuthHeader } from 'api/setAuthHeader';
+import { selectAccessToken } from 'store/modules/authSlice';
+import { useLocation } from 'react-router-dom';
+// const jwtToken = localStorage.getItem('Authorization');
+// const headers = {
+//   Authorization: jwtToken,
+// };
+
+const EventInfoPage = () => {
+  // 나중에 이미지 배열로 수정 필요
+  // const posters = [
+  //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
+  //   `${process.env.PUBLIC_URL}/poster.jpg`,
+  //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
+  //   `${process.env.PUBLIC_URL}/poster.jpg`,
+  // ];
+  const [mark, setMark] = useState(false);
+  const [data, setData] = useState({
+    post_id: 0,
+    member_id: 0,
+    title: '',
+    scrap_count: 0,
+    content: '',
+    event: '',
+    local: '',
+    school: '',
+    organizer: '',
+    contactNumber: null,
+    link: null,
+    place: null,
+    savedImgList: [],
+    startPostTime: '',
+    //01234567890123456789
+    finishPostTime: '',
+  });
+
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
+  const markHandler = () => {
+    setMark(!mark);
+  };
+
+  console.log('pre Url', useLocation().pathname);
+  const preID = useLocation().pathname.substring(7);
+  console.log('ID', preID);
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
+  useEffect(() => {
+    getPost();
+  }, []);
+
+  const getPost = async () => {
+    try {
+      const response = await axios.get(`/posts/read/${preID}`);
+      const resdata = response.data;
+      setData(resdata);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
+  };
+
+  const scrap = () => {
+    axios
+      .post(`/extra/${preID}`, {
+        startScrapTime:
+          data.startPostTime.slice(0, 10) +
+          ' ' +
+          data.startPostTime.slice(11, 19),
+        endScrapTime:
+          data.finishPostTime.slice(0, 10) +
+          ' ' +
+          data.finishPostTime.slice(11, 19),
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const DDay = (expiry_date) => {
+    const now = new Date(); // 2022-11-25
+    const target = new Date(
+      expiry_date.slice(0, 4),
+      MakeDay(expiry_date.slice(5, 7)) - 1,
+      MakeDay(expiry_date.slice(8, 10))
+    );
+    const distance = target.getTime() - now.getTime();
+    const day = Math.floor(distance / (1000 * 60 * 60 * 24));
+    return day + 1;
+  };
+  const MakeDay = (data) => {
+    if (data.indexOf('0') === 0) {
+      return data.slice(1, 2);
+    } else {
+      return data;
+    }
+  };
+
+  return (
+    <PageContainer header footer>
+      <EventInfoContainer>
+        <EventTopdiv>
+          <EventUpdiv>
+            <div className="left">
+              <EventTitlediv>
+                <h1>{data.title}</h1>
+              </EventTitlediv>
+              <EventSharediv>
+                <FiShare2 size="27" />
+              </EventSharediv>
+            </div>
+            <EventBookmarkdiv onClick={() => markHandler()}>
+              {mark ? (
+                <BsFillSuitHeartFill
+                  onClick={scrap}
+                  size="27"
+                  color="#ff6b6b"
+                />
+              ) : (
+                <BsSuitHeart onClick={scrap} size="27" />
+              )}
+            </EventBookmarkdiv>
+          </EventUpdiv>
+          <EventPerioddiv>
+            <EventDdaydiv>
+              D-{DDay(data.startPostTime.slice(0, 10))}
+            </EventDdaydiv>
+            <EventWriterdiv>{data.organizer}</EventWriterdiv>
+            <EventTimediv>
+              <div className="start">
+                {data.startPostTime.slice(0, 10)}
+                &nbsp;
+                {data.startPostTime.slice(11, 19)}
+              </div>
+              <div className="finish">
+                {data.startPostTime.slice(0, 10) ===
+                data.finishPostTime.slice(0, 10) ? (
+                  <div>&nbsp;~&nbsp;{data.finishPostTime.slice(11, 19)}</div>
+                ) : (
+                  <div>
+                    &nbsp;~&nbsp;
+                    {data.finishPostTime.slice(0, 10)}&nbsp;
+                    {data.finishPostTime.slice(11, 19)}
+                  </div>
+                )}
+              </div>
+            </EventTimediv>
+          </EventPerioddiv>
+        </EventTopdiv>
+        <EventContentdiv>
+          <EventPosterdiv>
+            {/** Todo: 이미지 넣기 */}
+            <Slider {...settings}>
+              {data.savedImgList.map((el, idx) => {
+                return (
+                  <div key={idx}>
+                    <img alt="poster" key={idx} src={el}></img>
+                  </div>
+                );
+              })}
+            </Slider>
+          </EventPosterdiv>
+          <EventInfodiv>
+            <article>{data.content}</article>
+          </EventInfodiv>
+        </EventContentdiv>
+      </EventInfoContainer>
+    </PageContainer>
+  );
+};
 
 const EventInfoContainer = styled.div`
   padding: 0 40px 40px 40px;
@@ -57,6 +235,7 @@ const EventWriterdiv = styled.div`
 
 const EventTimediv = styled.div`
   margin-left: auto;
+  display: flex;
 `;
 
 const EventContentdiv = styled.div`
@@ -74,114 +253,5 @@ const EventPosterdiv = styled.div`
 const EventInfodiv = styled.div`
   margin-left: 40px;
 `;
-
-const EventInfoPage = () => {
-  // 나중에 이미지 배열로 수정 필요
-  const posters = [
-    `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
-    `${process.env.PUBLIC_URL}/poster.jpg`,
-    `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
-    `${process.env.PUBLIC_URL}/poster.jpg`,
-  ];
-  const [mark, setMark] = useState(false);
-
-  const markHandler = () => {
-    setMark(!mark);
-  };
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
-  return (
-    <PageContainer header footer>
-      <EventInfoContainer>
-        <EventTopdiv>
-          <EventUpdiv>
-            <div className="left">
-              <EventTitlediv>
-                <h1>Event title</h1>
-              </EventTitlediv>
-              <EventSharediv>
-                <FiShare2 size="27" />
-              </EventSharediv>
-            </div>
-            <EventBookmarkdiv onClick={() => markHandler()}>
-              {mark ? (
-                <BsFillSuitHeartFill size="27" color="#ff6b6b" />
-              ) : (
-                <BsSuitHeart size="27" />
-              )}
-            </EventBookmarkdiv>
-          </EventUpdiv>
-          <EventPerioddiv>
-            <EventDdaydiv>D-??</EventDdaydiv>
-            <EventWriterdiv>주최</EventWriterdiv>
-            <EventTimediv>2023.02.06</EventTimediv>
-          </EventPerioddiv>
-        </EventTopdiv>
-        <EventContentdiv>
-          <EventPosterdiv>
-            <Slider {...settings}>
-              {posters.map((el, idx) => {
-                return (
-                  <div key={idx}>
-                    <img alt="poster" key={idx} src={el}></img>
-                  </div>
-                );
-              })}
-            </Slider>
-          </EventPosterdiv>
-          <EventInfodiv>
-            <article>
-              ○ 활동내용<br></br>
-              -비브(ViiV)어플을 활용한 다양한 브이로그 영상 제작<br></br>
-              -빙고판을 활용한 빙고 촬영 미션 수행
-              <br></br>
-              <br></br>○ 기간 및 일정<br></br>
-              -접수 기간:12.26~01.08<br></br>
-              -서포터즈 선발 발표:01.09<br></br>
-              -활동 기간:2023.01.10~02.28(약 2개월)<br></br>
-              -지원자 선발:50명 내외<br></br>
-              <br></br>
-              <br></br>○ 모집 대상<br></br>
-              -대학생, 졸업생, 휴학생 등 20대 연령층부터 30대 연령층 모두 가능
-              <br></br>
-              -온라인 활동이 가능한 사람<br></br>
-              -여행과 영상을 좋아하는 사람<br></br>
-              -SNS 활동을 즐겨하는 사람<br></br>
-              <br></br>
-              <br></br>○ 우대 사항<br></br>
-              -책임감이 강하고 아이디어가 반짝이는 사람<br></br>
-              -인플루언서 (인스타그램, 유튜버, 블로거)<br></br>
-              -영상을 만드는 것에 관심이 많은 사람<br></br>
-              -다양한 여가, 여행지 소개를 즐기는 사람<br></br>
-              <br></br>
-              <br></br>○ 활동 지역<br></br>
-              -활동은 모두 온라인으로 진행될 예정입니다!<br></br>
-              <br></br>
-              <br></br>○ 활동 혜택<br></br>
-              -월간 활동비 10만원 지급(미션 완료 시)<br></br>
-              -우수 활동자 시상<br></br>
-              (에어팟 2세대, CJ 5만원권, 배민 3만원권 및 미션 완료자 기프티콘
-              증정)<br></br>
-              -서포터즈 수료증 발급<br></br>
-              -비브 인스타그램 공식 계정 업로드<br></br>
-              <br></br>
-              <br></br>○ 지원 방법<br></br>
-              -구글 폼 접수 : https://url.kr/i4fgv7<br></br>
-              <br></br>
-              <br></br>○ 공식 카페/블로그 및 SNS<br></br>
-              -인스타그램 : @viiv.official_
-            </article>
-          </EventInfodiv>
-        </EventContentdiv>
-      </EventInfoContainer>
-    </PageContainer>
-  );
-};
 
 export default EventInfoPage;

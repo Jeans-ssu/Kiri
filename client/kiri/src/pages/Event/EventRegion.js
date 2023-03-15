@@ -1,18 +1,93 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
+import axios from '../../api/axios';
+import { Regions } from 'util/info';
+import { useSelector } from 'react-redux';
+import { selectTagWord } from 'store/modules/tagSlice';
 
 const EventRegion = () => {
+  const url = '/posts?division=지역';
   const [click, setClick] = useState(false);
   const [currentNav, setCurrentNav] = useState(-1);
-  const [interest, setInterest] = useState('IT'); // 지역 select
+  const [region, setRegion] = useState(''); // 지역 select
+  const [order, setOrder] = useState('최신순');
+  const [data, setData] = useState();
+  const result = useRef();
+  result.current = '';
+  const eventtag = useSelector(selectTagWord);
 
   const selectFilterHandler = () => {
     setClick(true);
   };
+
+  useEffect(() => {
+    getPost();
+  }, []);
+
+  const getPost = async () => {
+    try {
+      const response = await axios.get(url);
+      const resdata = response.data;
+      setData(resdata);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
+  };
+
+  function getCategory(region) {
+    if (eventtag !== '') {
+      console.log('tag가 이미 선택된 순간');
+      axios
+        .get(`${url}&category=${region}&eventList=${eventtag}`)
+        .then((res) => {
+          console.log('region', region);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log('tag선택안됨');
+      axios
+        .get(`${url}&category=${region}`)
+        .then((res) => {
+          console.log('categoryregion', region);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }
+
+  function getEvent() {
+    const eventtag = result.current.slice(0, -1);
+    console.log(eventtag);
+    if (region !== '') {
+      axios
+        .get(`${url}&category=${region}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log('지역이 없을때');
+      axios
+        .get(`${url}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }
 
   const field = ['축제', '전시', '공연', '강연', '대회', '기타'];
   const fieldClick = [false, false, false, false, false, false];
@@ -25,7 +100,13 @@ const EventRegion = () => {
   };
 
   const handleChangeInterest = (e) => {
-    setInterest(e.target.value);
+    console.log(e.target.value);
+    setRegion(e.target.value);
+    getCategory(e.target.value);
+  };
+
+  const handleChangeOrder = (e) => {
+    setOrder(e.target.value);
   };
 
   const filter = ['학교', '지역'];
@@ -54,45 +135,63 @@ const EventRegion = () => {
             );
           })}
           <div className="dropdown">
-            <SelectInput onChange={handleChangeInterest} value={interest}>
-              <option value="Seoul">전체</option>
-              <option value="Seoul">서울</option>
-              <option value="Busan">부산</option>
-              <option value="Incheon">인천</option>
-              <option value="Daejeon">대전</option>
-              <option value="Daegu">대구</option>
-              <option value="Ulsan">울산</option>
-              <option value="Gwangju">광주</option>
-              <option value="Gyeonggido">경기도</option>
-              <option value="Gangwondo">강원도</option>
-              <option value="Chungcheongbukdo">충청북도</option>
-              <option value="Chungcheongnamdo">충청남도</option>
-              <option value="Jeollabukdo">전라북도</option>
-              <option value="Jeollanamdo">전라남도</option>
-              <option value="Gyeongsangbukdo">경상북도</option>
-              <option value="Gyeongsangnamdo">경상남도</option>
-              <option value="Jeju">제주도</option>
-              <option value="Online">온라인</option>
+            <SelectInput onChange={handleChangeInterest} value={region}>
+              <option value="">전체</option>
+              {Regions.map((el, idx) => {
+                return (
+                  <option key={idx} value={el}>
+                    {el}
+                  </option>
+                );
+              })}
+              <option value="온라인">온라인</option>
             </SelectInput>
           </div>
         </SchoolRegionBox>
         <CheckboxDiv>
-          {field.map((el, idx) => (
+          {field.map((el) => (
             <>
               <EventTag
-                idx={idx}
                 tag={el}
                 selectNavHandler={selectNavHandler}
+                result={result}
+                getEvent={getEvent}
               />
             </>
           ))}
         </CheckboxDiv>
         <Bar />
-        <EventContent />
+        <EventOrderBox>
+          <OrderInput onChange={handleChangeOrder} value={order}>
+            <option value="최신순">최신순</option>
+            <option value="좋아요순">좋아요순</option>
+          </OrderInput>
+        </EventOrderBox>
+        <EventContent data={data} setData={setData} />
       </EventFieldPageContainer>
     </PageContainer>
   );
 };
+
+const EventOrderBox = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+`;
+
+const OrderInput = styled.select`
+  width: 85px;
+  height: 30px;
+  border: none;
+  border-radius: 3px;
+  padding-left: 5px;
+  margin-left: auto;
+  margin-right: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  &:focus {
+    outline: none;
+  }
+`;
 
 const EventFieldPageContainer = styled.div`
   /* color: ${({ theme }) => theme.colors.mainColor}; */
@@ -166,7 +265,7 @@ const SelectInput = styled.select`
   height: 30px;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 3px;
-  padding-left: 5px;
+  padding-left: 3px;
   &:focus {
     outline: none;
   }

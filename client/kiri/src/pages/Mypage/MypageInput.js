@@ -21,6 +21,15 @@ const MypageInputWrapper = styled.div`
   .value {
     font-weight: 400;
     width: 400px;
+    display: flex;
+    position: relative;
+    label {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      position: absolute;
+      right: 10px;
+    }
   }
   .conatiner {
     width: 75%;
@@ -162,12 +171,22 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
   const [editvalue, setEditvalue] = useState(userInfo[type]);
   const [isValid, setIsValid] = useState(true); //유효한지 여부
   const [isViewMode, setIsViewMode] = useState(false); //비밀번호 보기 모드
+  const [isSelectUniv, setIsSelectUniv] = useState(false); //학교 선택안함
 
   const [isOpen, setIsOpen] = useState(false); //학교 검색 모달
 
   useEffect(() => {
     setEditvalue(userInfo[type]);
   }, [userInfo]);
+
+  const handleChangeIsSelectUniv = () => {
+    setIsSelectUniv(!isSelectUniv);
+    if (!isSelectUniv) {
+      setUserInfo({ ...userInfo, univ: '선택안함' });
+    } else {
+      setIsOpen(true);
+    }
+  };
 
   const handleClickEditBtn = () => {
     setIsEditmode(!isEditmode);
@@ -195,7 +214,13 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
   };
 
   const handleChangeUserUniv = (univ) => {
-    setUserInfo({ ...userInfo, univ: univ });
+    if (!univ) {
+      setUserInfo({ ...userInfo, univ: '선택안함' });
+      setIsSelectUniv(true);
+    } else {
+      setUserInfo({ ...userInfo, univ: univ });
+      setIsSelectUniv(false);
+    }
   };
 
   return (
@@ -255,6 +280,17 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
       ) : (
         <div className="value">
           {type === 'interest' ? interestTypes[userInfo[type]] : userInfo[type]}
+          {type === 'univ' ? (
+            <label>
+              선택안함
+              <input
+                type="checkbox"
+                name="chose"
+                checked={isSelectUniv}
+                onChange={handleChangeIsSelectUniv}
+              />
+            </label>
+          ) : null}
         </div>
       )}
       {isEditmode ? (

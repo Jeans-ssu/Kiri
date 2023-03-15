@@ -13,7 +13,7 @@ import EventWritePage from 'pages/EventWrite/EventWritePage';
 import ReduxPage from 'pages/reduxPage';
 import EventPage from 'pages/Event/EventPage';
 import EventRegion from 'pages/Event/EventRegion';
-import Calendar from 'pages/Calendar/Calendar';
+import Calendar from 'pages/Calendar/CalendarPage';
 import PasswordChangePage from 'pages/PasswordChange/PasswordChangePage';
 import UserPage from 'pages/User/UserPage';
 

@@ -1,9 +1,39 @@
 import styled from 'styled-components';
 import { useRef } from 'react';
 import { Icon } from '@iconify/react';
+import axios from '../../api/axios';
+import { useSelector } from 'react-redux';
+import { selectAccessToken } from 'store/modules/authSlice';
+import { setAuthHeader } from 'api/setAuthHeader';
 
-const EventEtcInput = ({ link, setLink, img, setImg }) => {
+const EventEtcInput = ({ link, setLink, img, setImg, setImgList }) => {
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
+  const uploadImg = (formData) => {
+    axios
+      .post('/api/posts/image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setImgList(res.data);
+      })
+      .catch((err) => console.log('ERROR: ', err));
+  };
+
   const addImage = (e) => {
+    const formData = new FormData();
+    for (let i = 0; i < e.target.files.length; i++) {
+      formData.append('files', e.target.files[i]);
+    }
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
+    uploadImg(formData);
+
     const nowSelectImageList = e.target.files;
     const nowImageUrlList = [...img];
     for (let i = 0; i < nowSelectImageList.length; i++) {
@@ -16,12 +46,38 @@ const EventEtcInput = ({ link, setLink, img, setImg }) => {
       alert('이미지는 최대 10개만 첨부 가능합니다.');
     } else {
       setImg(nowImageUrlList);
+      console.log(nowImageUrlList);
     }
   };
 
   const handleChangeInput = (e) => {
     setLink(e.target.value);
   };
+
+  // const imageHandler = () => {
+  //   const input = document.createElement('input');
+
+  //   input.setAttribute('type', 'file');
+  //   input.setAttribute('accept', 'image/*');
+  //   input.click();
+
+  //   input.onchange = () => {
+  //     if (input.files) {
+  //       for (let i = 0; i < input.files.length; i++) {
+  //         const file = input.files[i];
+  //         setFile((prev) => {
+  //           return [...prev, file];
+  //         });
+  //       }
+  //       console.log('files', file);
+  //       const imageURL = URL.createObjectURL(file);
+  //       setImageUrl((prev) => {
+  //         return [...prev, imageURL];
+  //       });
+  //       console.log('imgurl', imageUrl);
+  //     }
+  //   };
+  // };
 
   const fileInput = useRef(null);
 

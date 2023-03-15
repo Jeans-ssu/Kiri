@@ -5,6 +5,10 @@ import EventTitleInput from './EventTitleInput';
 import EventInfoInput from './EventInfoInput';
 import EventExplainInput from './EventExplainInput';
 import EventEtcInput from './EventEtcInput';
+import axios from '../../api/axios';
+import { selectAccessToken } from 'store/modules/authSlice';
+import { setAuthHeader } from 'api/setAuthHeader';
+import { useSelector } from 'react-redux';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -35,6 +39,9 @@ const WriteBtn = styled.button`
 `;
 
 const EventWritePage = () => {
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
   const [title, setTitle] = useState('');
   const [info, setInfo] = useState({
     host: '',
@@ -46,13 +53,14 @@ const EventWritePage = () => {
     field: 'IT',
     startDate: '',
     endDate: '',
-    startTime: '',
-    endTime: '',
+    startTime: '00:00:00',
+    endTime: '00:00:00',
     location: '',
   });
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
+  const [imgList, setImgList] = useState();
   const [errorMessage, setErrorMessage] = useState({
     titleErrorMessage: '',
     hostErrorMessage: '',
@@ -64,6 +72,15 @@ const EventWritePage = () => {
     endDateErrorMessage: '',
     explainErrorMessage: '',
   });
+
+  const getImageID = () => {
+    const imgarr = [];
+    for (let i = 0; imgList.length > i; i++) {
+      imgarr.push(imgList[i].image_id);
+    }
+    console.log('imgarr', imgarr);
+    return imgarr;
+  };
 
   const titleRef = useRef();
   const hostRef = useRef();
@@ -183,15 +200,58 @@ const EventWritePage = () => {
           return { ...prev, titleErrorMessage: '' };
         });
       }
+    } else {
+      if (img.length === 0 || img.length === undefined) {
+        console.log('length = 0');
+        axios
+          .post('/api/posts', {
+            title: title,
+            scrap_count: 0,
+            email: info.email,
+            content: explain,
+            event: info.type,
+            local: info.region,
+            school: info.univ,
+            place: info.location,
+            organizer: info.host,
+            link: link,
+            contactNumber: info.tel,
+            imageIdList: null,
+            startPostTime: info.startDate + ' ' + info.startTime + ':00',
+            finishPostTime: info.endDate + ' ' + info.endTime + ':00',
+          })
+          .then(() => {
+            alert('등록이 완료되었습니다.');
+          })
+          .catch((err) => console.error(err));
+      } else {
+        // const config = {
+        //   headers: { 'content-type': 'multipart/form-data' },
+        // };
+        const imgarr = getImageID();
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('scrap_count', 0);
+        formData.append('email', info.email);
+        formData.append('content', explain);
+        formData.append('event', info.type);
+        formData.append('local', info.region);
+        formData.append('school', info.univ);
+        formData.append('place', info.location);
+        formData.append('organizer', info.host);
+        formData.append('link', link);
+        for (let i = 0; i < imgarr.length; i++) {
+          formData.append('imageIdList', imgarr[i]);
+        }
+        formData.append('contactNumber', info.tel);
+        formData.append('startPostTime', info.startDate + ' ' + info.startTime);
+        formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
+        axios
+          .post('/api/posts', formData)
+          .then(alert('등록이 완료되었습니다.'))
+          .catch((err) => console.error(err));
+      }
     }
-    const blob = new Blob([JSON.stringify({ title, ...info, explain, link })], {
-      type: 'application/json',
-    });
-    const formData = new FormData();
-    formData.append('data', blob);
-    formData.append('img', img.image);
-    //console.log('글 작성', { title, ...info, explain, link });
-    //axios POST - body에 formData
   };
 
   return (
@@ -226,6 +286,7 @@ const EventWritePage = () => {
           setLink={setLink}
           img={img}
           setImg={setImg}
+          setImgList={setImgList}
         />
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>

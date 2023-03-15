@@ -1,32 +1,64 @@
 import styled from 'styled-components';
-import { BsEyeFill } from 'react-icons/bs';
+import { BsFillSuitHeartFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router';
 
 const EventContent = ({ data }) => {
+
+  const navigate = useNavigate();
+
+  const handleOnClickEvent = (eventId) => {
+    navigate(`/event/${eventId}`);
+  };
+
+  const DDay = (expiry_date) => {
+    const now = new Date(); // 2022-11-25
+    const target = new Date(
+      expiry_date.slice(0, 4),
+      MakeDay(expiry_date.slice(5, 7)) - 1,
+      MakeDay(expiry_date.slice(8, 10))
+    );
+    const distance = target.getTime() - now.getTime();
+    const day = Math.floor(distance / (1000 * 60 * 60 * 24));
+    return day + 1;
+  };
+  const MakeDay = (data) => {
+    if (data.indexOf('0') === 0) {
+      return data.slice(1, 2);
+    } else {
+      return data;
+    }
+  };
+
   return (
     <Container>
       <EventListMain>
-        {data.length === 0 ? (
-          <NoEventContainer>검색 결과가 없습니다.</NoEventContainer>
-        ) : (
-          data?.map((el) => (
-            <EventContainer key={el}>
-              <EventList>
-                <h4>{el.title}</h4>
-                <p className="host">주최</p>
+        {data?.map((el, idx) => (
+          <EventContainer key={idx}>
+            <EventList onClick={() => handleOnClickEvent(el.post_id)}>
+              <h4>{el.title}</h4>
+              <p className="host">{el.post_id}</p>
+              <div className="flex">
+                <p className="dday">D-{DDay(el.startPostTime.slice(0, 10))}</p>
                 <div className="flex">
-                  <p className="dday">D-nn</p>
-                  <div className="flex">
-                    <BsEyeFill size="12" className="eyeicon" />
-                    <p className="watch">조회수</p>
-                  </div>
+                  <BsFillSuitHeartFill
+                    className="eyeicon"
+                    size="12"
+                    color="#ff6b6b"
+                  />
+                  <p className="watch">{el.scrap_count}</p>
                 </div>
-              </EventList>
-              <EventImg>
-                <img className="poster" alt="poster" src={el.imgUrl}></img>
-              </EventImg>
-            </EventContainer>
-          ))
-        )}
+              </div>
+            </EventList>
+            <EventImg>
+              <img
+                className="poster"
+                alt="poster"
+                src={el.imgUrl}
+                // src={`${process.env.PUBLIC_URL}/poster.jpg`}
+              ></img>
+            </EventImg>
+          </EventContainer>
+        ))}
       </EventListMain>
     </Container>
   );
@@ -47,6 +79,7 @@ const EventListMain = styled.main`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin: auto;
 `;
 
 const EventContainer = styled.div`
