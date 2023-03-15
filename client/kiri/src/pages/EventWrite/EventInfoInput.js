@@ -90,7 +90,6 @@ const EventInfoInput = ({
       ...info,
       [target]: e.target.value,
     });
-    console.log('info', info);
   };
 
   const handleSetUniv = (univName) => {
@@ -226,7 +225,6 @@ const EventInfoInput = ({
           ''
         )} */}
         <ErrorMessageBox className="start">
-          {' '}
           {errorMessage.startDateErrorMessage}
         </ErrorMessageBox>
         <ErrorMessageBox> {errorMessage.endDateErrorMessage}</ErrorMessageBox>
