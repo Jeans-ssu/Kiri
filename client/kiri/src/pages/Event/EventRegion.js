@@ -8,6 +8,7 @@ import axios from '../../api/axios';
 import { Regions } from 'util/info';
 import { useSelector } from 'react-redux';
 import { selectTagWord } from 'store/modules/tagSlice';
+import Pagination from 'components/Pagination';
 
 const EventRegion = () => {
   const url = '/posts?division=지역';
@@ -19,6 +20,17 @@ const EventRegion = () => {
   const result = useRef();
   result.current = '';
   const eventtag = useSelector(selectTagWord);
+
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  const postsData = (posts) => {
+    if (posts) {
+      const result = posts.slice(offset, offset + limit);
+      return result;
+    }
+  };
 
   const selectFilterHandler = () => {
     setClick(true);
@@ -167,11 +179,19 @@ const EventRegion = () => {
             <option value="좋아요순">좋아요순</option>
           </OrderInput>
         </EventOrderBox>
-        <EventContent data={data} setData={setData} />
+        <EventContent data={postsData(data)} />
       </EventFieldPageContainer>
+      <PaginationBox>
+        <Pagination page={page} totalPosts={data?.length} setPage={setPage} />
+      </PaginationBox>
     </PageContainer>
   );
 };
+
+const PaginationBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const EventOrderBox = styled.div`
   display: flex;

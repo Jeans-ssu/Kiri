@@ -9,6 +9,7 @@ import SearchUnivModal from 'components/SearchUnivModal';
 import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectTagWord } from 'store/modules/tagSlice';
+import Pagination from 'components/Pagination';
 
 const EventPage = () => {
   const url = '/posts?division=학교';
@@ -19,6 +20,17 @@ const EventPage = () => {
   const [data, setData] = useState();
   const result = useRef();
   result.current = '';
+
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  const postsData = (posts) => {
+    if (posts) {
+      const result = posts.slice(offset, offset + limit);
+      return result;
+    }
+  };
 
   //학교 검색 모달
   const [showUnivModal, setShowUnivModal] = useState(false);
@@ -194,11 +206,19 @@ const EventPage = () => {
             <option value="좋아요순">좋아요순</option>
           </SelectInput>
         </EventOrderBox>
-        <EventContent data={data} />
+        <EventContent data={postsData(data)} />
       </EventFieldPageContainer>
+      <PaginationBox>
+        <Pagination page={page} totalPosts={data?.length} setPage={setPage} />
+      </PaginationBox>
     </PageContainer>
   );
 };
+
+const PaginationBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const EventOrderBox = styled.div`
   display: flex;
