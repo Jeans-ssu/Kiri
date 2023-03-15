@@ -52,29 +52,28 @@ const EventContent = ({ data }) => {
                     <p className="watch">{el.scrap_count}</p>
                   </div>
                 </div>
-              </div>
-            </EventList>
-            <EventImg>
-              {el.imgUrl === null ? (
-                <ImgNull>
-                  <img
-                    className="logo"
-                    src={process.env.PUBLIC_URL + '/img/main_logo.svg'}
-                    alt="main logo"
-                  />
-                </ImgNull>
-              ) : (
-                <img className="poster" alt="poster" src={el.imgUrl}></img>
-              )}
-            </EventImg>
-          </EventContainer>
-        ))}
+              </EventList>
+              <EventImg>
+                {el.imgUrl === null ? (
+                  <ImgNull>
+                    <img
+                      className="logo"
+                      src={process.env.PUBLIC_URL + '/img/main_logo.svg'}
+                      alt="main logo"
+                    />
+                  </ImgNull>
+                ) : (
+                  <img className="poster" alt="poster" src={el.imgUrl}></img>
+                )}
+              </EventImg>
+            </EventContainer>
+          ))
+        )}
         {data?.length % 2 === 1 ? <div className="empty" /> : ''}
       </EventListMain>
     </Container>
   );
 };
-
 
 const NoEventContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.mainColor};
@@ -83,6 +82,7 @@ const NoEventContainer = styled.div`
   text-align: center;
   line-height: 400px;
   color: ${({ theme }) => theme.colors.gray};
+`;
 
 const ImgNull = styled.div`
   width: 150px;
