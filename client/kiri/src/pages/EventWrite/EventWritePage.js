@@ -217,8 +217,8 @@ const EventWritePage = () => {
             link: link,
             contactNumber: info.tel,
             imageIdList: null,
-            startPostTime: info.startDate + ' ' + info.startTime + ':00',
-            finishPostTime: info.endDate + ' ' + info.endTime + ':00',
+            startPostTime: info.startDate + ' ' + info.startTime,
+            finishPostTime: info.endDate + ' ' + info.endTime,
           })
           .then(() => {
             alert('등록이 완료되었습니다.');
