@@ -76,7 +76,7 @@ public class PostController {
         List<Long> imageIdList = savePost.getImageIdList();
 
 //        Post post = postMapper.saveToPost(savePost);
-        Post post = Post.builder()
+        /*Post post = Post.builder()
                 .title(savePost.getTitle())
                 .scrap_count(savePost.getScrap_count())
                 .content(savePost.getContent())
@@ -89,9 +89,9 @@ public class PostController {
                 .place(savePost.getPlace())
                 .startPostTime(savePost.getStartPostTime())
                 .finishPostTime(savePost.getFinishPostTime())
-                .build();
+                .build();*/
 
-        SaveResPost saveResPost = postService.updatePost(post, post_id, imageIdList);
+        SaveResPost saveResPost = postService.updatePost(savePost, post_id, imageIdList);
         return ResponseEntity.ok(saveResPost);
     }
 

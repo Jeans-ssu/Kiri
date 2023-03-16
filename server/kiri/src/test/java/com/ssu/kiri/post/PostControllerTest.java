@@ -188,7 +188,7 @@ class PostControllerTest {
 
 
         // 업데이트 할 Post 내용
-        SavePost savePost = createSavePost();
+        SavePost savePost = createUpdatePost();
         List<MultipartFile> updateAfterList = createMockMultipartFile2();
         List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
         List<Long> imageIdList2 = imageResDtoList2.stream()
@@ -233,7 +233,7 @@ class PostControllerTest {
 
 
         // 업데이트 할 Post 내용
-        SavePost savePost = createSavePost();
+        SavePost savePost = createUpdatePost();
 
 
         //when & then
@@ -272,7 +272,7 @@ class PostControllerTest {
 
         // 업데이트 할 Post 내용
         imageService.deleteUpdateImage(1L);
-        SavePost savePost = createSavePost();
+        SavePost savePost = createUpdatePost();
 
 
         //when & then
@@ -303,7 +303,7 @@ class PostControllerTest {
 
 
         // 업데이트 할 Post 내용
-        SavePost savePost = createSavePost();
+        SavePost savePost = createUpdatePost();
         List<MultipartFile> updateAfterList = createMockMultipartFile2();
         List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
         List<Long> imageIdList2 = imageResDtoList2.stream()
@@ -635,6 +635,21 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
 
+    }
+
+    private SavePost createUpdatePost() {
+        SavePost savePost = new SavePost();
+        savePost.setEmail("eee@eee.com");
+        savePost.setTitle("우주혜안");
+        savePost.setContent("우주게임");
+        savePost.setEvent("축제");
+        savePost.setLocal("대전");
+        savePost.setSchool("대전대학교");
+        savePost.setOrganizer("하마혜안");
+        savePost.setStartPostTime(LocalDateTime.parse("2022-11-23 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-23 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        return savePost;
     }
 
 }
