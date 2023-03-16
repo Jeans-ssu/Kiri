@@ -21,6 +21,8 @@ public class ClassifyPost {
     private String startPostTime; // 게시글 시작 날짜
 
     private int scrap_count; // 좋아요 수
+    private String event; // 행사 구분
+    private String organizer; // 주최
 
     @QueryProjection
     public ClassifyPost(Long post_id, String title, List<Image> image, LocalDateTime startPostTime, int count) {

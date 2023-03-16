@@ -259,6 +259,8 @@ public class PostService {
             classifyPost.setTitle(post.getTitle());
             classifyPost.setScrap_count(post.getScrap_count());
             classifyPost.setStartPostTime(post.getStartPostTime().toString());
+            classifyPost.setEvent(post.getEvent());
+            classifyPost.setOrganizer(post.getOrganizer());
             String thumbnail = imageService.getThumbnail(post.getId());
             if(thumbnail == null || thumbnail.isEmpty()) {
                 classifyPost.setImgUrl(null);

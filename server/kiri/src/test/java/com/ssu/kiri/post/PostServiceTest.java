@@ -396,7 +396,7 @@ class PostServiceTest {
         // post 리스트 등록
         for(int i=0; i<5; i++) {
 //            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
-            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "서울", "중앙대학교", "중앙대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "강연", "서울", "중앙대학교", "중앙대");
             List<MultipartFile> updateBeforeList = createMockMultipartFile1();
             List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
             List<Long> imageIdList = imageResDtoList.stream()
