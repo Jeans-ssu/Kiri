@@ -116,6 +116,11 @@ public class ScrapService {
     }
 
     public List<ScrapResCal> getScrap(String year, String month) {
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+        Long id = member.getId();
+        Member findMember = memberRepository.findById(id).get();
+
         if( (year == null || year.isEmpty() ) && ( month == null || month.isEmpty() ) ) {
             LocalDateTime now = LocalDateTime.now();
             int nowYear = now.getYear();
@@ -125,21 +130,29 @@ public class ScrapService {
             Integer nowIYear = Integer.valueOf(nowYear);
             Integer nowIMonth = Integer.valueOf(nowMonth);
 
-            List<ScrapResCal> scraps = scrapRepository.findScrapsByYearAndMonth(nowIYear, nowIMonth);
+            List<ScrapResCal> scraps = scrapRepository.findScrapsByYearAndMonth(nowIYear, nowIMonth,findMember);
             return scraps;
         }
 
         // 오늘 날짜가 게시글의 startDateTime의 Year과 Month보다 크거나 같고 FinishDateTime의 Year과 Month보다 작거나 같은 경우 가져옴
         Integer nowIYear = Integer.valueOf(year);
         Integer nowIMonth = Integer.valueOf(month);
-        List<ScrapResCal> scraps = scrapRepository.findScrapsByYearAndMonth(nowIYear, nowIMonth);
+        List<ScrapResCal> scraps = scrapRepository.findScrapsByYearAndMonth(nowIYear, nowIMonth,findMember);
         return scraps;
 
     }
 
-    public List<PostResCal> getScrapWithLocal(String year, String month) {
+    public List<PostResCal> getScrapWithLocal(String year, String month, String locale) {
 
-        String local = "서울";
+        String local;
+        if(locale == null || locale.isEmpty()) {
+            local = "서울";
+        }
+        else {
+            local = locale;
+        }
+
+
         if( (year == null || year.isEmpty() ) && ( month == null || month.isEmpty() ) ) {
             LocalDateTime now = LocalDateTime.now();
             int nowYear = now.getYear();

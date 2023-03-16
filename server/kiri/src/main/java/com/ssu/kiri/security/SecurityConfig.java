@@ -65,7 +65,7 @@ public class SecurityConfig {
 //                        .antMatchers("/logout","/extra/**","/member/**")
 //                        .access("hasRole('USER')")
 
-                        .antMatchers("/api/posts/**","/extra/**","/member/**")
+                        .antMatchers("/api/posts/**","/extra/**","/member/**","/calendar")
                         .authenticated()
 
                         .anyRequest() // 나머지 req들은 인증없이 허용

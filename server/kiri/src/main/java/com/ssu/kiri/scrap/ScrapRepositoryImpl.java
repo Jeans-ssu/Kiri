@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.QMember;
 import com.ssu.kiri.post.QPost;
 import com.ssu.kiri.scrap.dto.QScrapResCal;
@@ -24,7 +25,7 @@ public class ScrapRepositoryImpl implements ScrapCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<ScrapResCal> findScrapsByYearAndMonth(Integer year, Integer month) {
+    public List<ScrapResCal> findScrapsByYearAndMonth(Integer year, Integer month, Member findMember) {
 
         List<ScrapResCal> result = jpaQueryFactory.select(new QScrapResCal(
                         post.id,
@@ -39,7 +40,7 @@ public class ScrapRepositoryImpl implements ScrapCustomRepository {
                 .from(scrap)
                 .leftJoin(scrap.post, post)
                 .leftJoin(scrap.member, member)
-                .where(compareStart(year, month), compareFinish(year, month))
+                .where(compareStart(year, month), compareFinish(year, month), compareMember(findMember))
 //                .where(compareSY(year), compareSM(month), compareFY(year), compareFM(month))
 //                .offset(0)
 //                .limit(20)
@@ -145,6 +146,9 @@ public class ScrapRepositoryImpl implements ScrapCustomRepository {
         return scrap.finishMonth.goe(month);
     }
 
+    private BooleanExpression compareMember(Member findMember) {
+        return member.eq(findMember);
+    }
 
 
 }
