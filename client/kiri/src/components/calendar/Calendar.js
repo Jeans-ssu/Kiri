@@ -56,70 +56,70 @@ const RenderDays = () => {
   return <div className="days row">{days}</div>;
 };
 
-const events = [
-  {
-    post_id: 1,
-    title: '글로벌미디어 졸업전시',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '전시',
-    startScrapTime: '2023-03-05T10:10:10',
-    finishScrapTime: '2023-03-05T10:10:10',
-  },
-  {
-    post_id: 4,
-    title: '숭실대학교 대동제',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '축제',
-    startScrapTime: '2023-03-04T10:10:10',
-    finishScrapTime: '2023-03-05T10:10:10',
-  },
-  {
-    post_id: 5,
-    title: '숭대극회 연극',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '공연',
-    startScrapTime: '2023-03-16T10:10:10',
-    finishScrapTime: '2023-03-20T10:10:10',
-  },
-  {
-    post_id: 8,
-    title: '인공지능 경진대회',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '대회',
-    startScrapTime: '2023-03-26T10:10:10',
-    finishScrapTime: '2023-03-26T10:10:10',
-  },
-  {
-    post_id: 9,
-    title: '취업하는법',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '강연',
-    startScrapTime: '2023-03-31T10:10:10',
-    finishScrapTime: '2023-04-01T10:10:10',
-  },
-];
+// const events = [
+//   {
+//     post_id: 1,
+//     title: '글로벌미디어 졸업전시',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '전시',
+//     startScrapTime: '2023-03-05T10:10:10',
+//     finishScrapTime: '2023-03-05T10:10:10',
+//   },
+//   {
+//     post_id: 4,
+//     title: '숭실대학교 대동제',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '축제',
+//     startScrapTime: '2023-03-04T10:10:10',
+//     finishScrapTime: '2023-03-05T10:10:10',
+//   },
+//   {
+//     post_id: 5,
+//     title: '숭대극회 연극',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '공연',
+//     startScrapTime: '2023-03-16T10:10:10',
+//     finishScrapTime: '2023-03-20T10:10:10',
+//   },
+//   {
+//     post_id: 8,
+//     title: '인공지능 경진대회',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '대회',
+//     startScrapTime: '2023-03-26T10:10:10',
+//     finishScrapTime: '2023-03-26T10:10:10',
+//   },
+//   {
+//     post_id: 9,
+//     title: '취업하는법',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '강연',
+//     startScrapTime: '2023-03-31T10:10:10',
+//     finishScrapTime: '2023-04-01T10:10:10',
+//   },
+// ];
 
 //해당 날짜의 이벤트 객체들만 추출하는 함수
 const extractEvents = (date, arr) => {
   const extractedEvents = [];
   const formattedDate = format(date, 'MM/dd/yyyy');
-  arr.map((el) => {
+  arr?.map((el) => {
     let formattedStartScrapTime = format(
-      parseISO(el.startScrapTime),
+      parseISO(el.startPostTime),
       'MM/dd/yyyy'
     );
     let formattedFinishScrapTime = format(
-      parseISO(el.finishScrapTime),
+      parseISO(el.finishPostTime),
       'MM/dd/yyyy'
     );
     if (
@@ -136,8 +136,8 @@ const extractEvents = (date, arr) => {
       extractedEvents.push(el);
     } else if (
       //여러날인 경우
-      isAfter(date, parseISO(el.startScrapTime)) &&
-      isBefore(date, parseISO(el.finishScrapTime))
+      isAfter(date, parseISO(el.startPostTime)) &&
+      isBefore(date, parseISO(el.finishPostTime))
     ) {
       el.calDate = date;
       extractedEvents.push(el);
@@ -195,7 +195,7 @@ const RenderCells = ({
           >
             {formattedDate}
           </span>
-          {todayEvents.map((el, idx) => {
+          {todayEvents?.map((el, idx) => {
             return (
               <LikedEvent
                 key={idx}
@@ -205,8 +205,8 @@ const RenderCells = ({
                 title={el.title}
                 type={el.event}
                 school={el.school}
-                startTime={el.startScrapTime}
-                finishTime={el.finishScrapTime}
+                startTime={el.startPostTime}
+                finishTime={el.finishPostTime}
                 organizer={el.organizer}
               />
             );
@@ -225,7 +225,7 @@ const RenderCells = ({
   return <div className="body">{rows}</div>;
 };
 
-export const CalendarComponent = () => {
+export const CalendarComponent = ({ calType }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [likedEvents, setLikedEvents] = useState([]);
@@ -233,6 +233,7 @@ export const CalendarComponent = () => {
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
 
+  //TODO: 캘린더 타입에 따라 분기해서 요청
   const getMonthEvents = async () => {
     try {
       const response = await axios.get(
@@ -250,9 +251,9 @@ export const CalendarComponent = () => {
   };
 
   useEffect(() => {
-    getMonthEvents;
-    setLikedEvents(events);
-  }, [currentMonth]);
+    getMonthEvents();
+    //setLikedEvents(events);
+  }, [currentMonth, calType]);
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));

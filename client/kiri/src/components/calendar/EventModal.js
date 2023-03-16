@@ -139,6 +139,7 @@ const ExportBtnContainer = styled.div`
     color: ${({ theme }) => theme.colors.darkgray};
     a {
       color: ${({ theme }) => theme.colors.darkgray};
+      text-decoration: none;
       text-decoration-color: ${({ theme }) => theme.colors.darkgray};
       font-weight: 600;
       font-size: 12px;
