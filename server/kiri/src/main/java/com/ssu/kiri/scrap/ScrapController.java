@@ -44,18 +44,22 @@ public class ScrapController {
     }
 
     // 스크랩한 게시글 정보만 보여주기
-    @GetMapping(value = {"/calendar/{id}", "/calendar"})
+    @GetMapping(value = {"/calendar"})
     public ResponseEntity getScrap(@RequestParam(value = "year", required = false) String year,
-                                   @RequestParam(value = "month", required = false) String month,
-                                   @PathVariable(value = "id", required = false) Long member_id) {
-
-        if(member_id == null) {
-            List<PostResCal> scrap = scrapService.getScrapWithLocal(year, month);
-            return ResponseEntity.ok(scrap);
-        }
+                                   @RequestParam(value = "month", required = false) String month) {
 
         List<ScrapResCal> scrap = scrapService.getScrap(year, month);
+        return ResponseEntity.ok(scrap);
 
+    }
+
+
+    @GetMapping(value = "/scrap")
+    public ResponseEntity getScrapWithoutLogin(@RequestParam(value = "year", required = false) String year,
+                                               @RequestParam(value = "month", required = false) String month,
+                                               @RequestParam(value = "local", required = false) String local) {
+
+        List<PostResCal> scrap = scrapService.getScrapWithLocal(year, month, local);
         return ResponseEntity.ok(scrap);
     }
 

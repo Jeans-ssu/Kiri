@@ -189,20 +189,16 @@ class ScrapServiceTest {
         //when
 //        List<ScrapResCal> list = scrapService.getScrap(null, null);
 //        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
-//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
-//        List<ScrapResCal> list = scrapService.getScrap("2023", "3");
-//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
-        List<ScrapResCal> list = scrapService.getScrap("2022", "12");
+        List<ScrapResCal> list = scrapService.getScrap("2023", "3");
+//        List<ScrapResCal> list = scrapService.getScrap("2022", "12");
 //        List<ScrapResCal> list = scrapService.getScrap("2022", "10");
 
 
         //then
-//        assertThat(list.size()).isEqualTo(7);
-//        assertThat(list.size()).isEqualTo(7);
-//        assertThat(list.size()).isEqualTo(4);
-//        assertThat(list.size()).isEqualTo(3);
+//        assertThat(list.size()).isEqualTo(5);
 //        assertThat(list.size()).isEqualTo(6);
-        assertThat(list.size()).isEqualTo(2);
+        assertThat(list.size()).isEqualTo(5);
+//        assertThat(list.size()).isEqualTo(2);
 //        assertThat(list.size()).isEqualTo(0);
 
     }
@@ -338,7 +334,7 @@ class ScrapServiceTest {
 
 
     @WithAccount("creamyyyy")
-    @DisplayName("서울 지역 게시글의 정보 리스트 가져오기")
+    @DisplayName("지역별 게시글의 정보 리스트 가져오기")
     @Test
     public void getScrapTestWithoutLogin() throws Exception {
         //given
@@ -346,23 +342,23 @@ class ScrapServiceTest {
 
 
         //when
-//        List<ScrapResCal> list = scrapService.getScrap(null, null);
-//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
-//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
-//        List<ScrapResCal> list = scrapService.getScrap("2023", "3");
-//        List<ScrapResCal> list = scrapService.getScrap("2023", "1");
-        List<PostResCal> list = scrapService.getScrapWithLocal("2023", "3");
-//        List<ScrapResCal> list = scrapService.getScrap("2022", "10");
+//        List<PostResCal> list = scrapService.getScrapWithLocal(null, null, null);
+//        List<PostResCal> list = scrapService.getScrapWithLocal("2023", "1", "대전");
+//        List<PostResCal> list = scrapService.getScrapWithLocal("2023", "1", "서울");
+//        List<PostResCal> list = scrapService.getScrapWithLocal("2023", "3", "부산");
+//        List<PostResCal> list = scrapService.getScrapWithLocal("2022", "1", "서울");
+//        List<PostResCal> list = scrapService.getScrapWithLocal("2023", "3", "서울");
+        List<PostResCal> list = scrapService.getScrapWithLocal("2022", "10", "서울");
 
 
         //then
 //        assertThat(list.size()).isEqualTo(7);
-//        assertThat(list.size()).isEqualTo(7);
-//        assertThat(list.size()).isEqualTo(4);
-//        assertThat(list.size()).isEqualTo(3);
+//        assertThat(list.size()).isEqualTo(2);
+//        assertThat(list.size()).isEqualTo(6);
+//        assertThat(list.size()).isEqualTo(0);
+//        assertThat(list.size()).isEqualTo(0);
 //        assertThat(list.size()).isEqualTo(6);
         assertThat(list.size()).isEqualTo(0);
-//        assertThat(list.size()).isEqualTo(0);
 
     }
 
@@ -390,7 +386,7 @@ class ScrapServiceTest {
         savePost.setSchool(school);
         savePost.setOrganizer(organizer);
         savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2023-04-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         savePost.setEmail("kkk@kkk.com");
 
         return savePost;

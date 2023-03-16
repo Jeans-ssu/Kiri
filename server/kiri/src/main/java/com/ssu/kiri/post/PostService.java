@@ -102,7 +102,7 @@ public class PostService {
     }
 
     // 게시글 수정
-    public SaveResPost updatePost(Post post, Long id, List<Long> imageIdList) {
+    public SaveResPost updatePost(SavePost savePost, Long id, List<Long> imageIdList) {
         // update 를 해줘야 함. 그런데 member 의 내용은 바뀌지 않음. 수정은 인증된 사용자만 할 수 있으므로.
 
         Optional<Post> optPost = postRepository.findById(id);
@@ -111,7 +111,7 @@ public class PostService {
         }
         Post findPost = optPost.get();
 //        findPost.updatePost(post,id);
-        findPost.updatePost(post);
+        findPost.updatePost(savePost);
         Post savedPost = postRepository.save(findPost);
 
 
@@ -259,6 +259,8 @@ public class PostService {
             classifyPost.setTitle(post.getTitle());
             classifyPost.setScrap_count(post.getScrap_count());
             classifyPost.setStartPostTime(post.getStartPostTime().toString());
+            classifyPost.setEvent(post.getEvent());
+            classifyPost.setOrganizer(post.getOrganizer());
             String thumbnail = imageService.getThumbnail(post.getId());
             if(thumbnail == null || thumbnail.isEmpty()) {
                 classifyPost.setImgUrl(null);

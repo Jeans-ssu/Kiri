@@ -199,8 +199,8 @@ class ScrapControllerTest {
 //        info.add("month", "2");
 
         // 결과: post_id = 1,4,5,6,8
-        info.add("year", "2023");
-        info.add("month", "3");
+//        info.add("year", "2023");
+//        info.add("month", "3");
 
         // 결과: post_id = 8
 //        info.add("year", "2024");
@@ -218,8 +218,8 @@ class ScrapControllerTest {
         //then
         this.mockMvc.perform(
                         MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
-                                .get("/calendar/{id}",1) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
-                                .params(info)
+                                .get("/calendar") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+//                                .params(info)
                                 .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
                 )
                 .andExpect(status().isOk())
@@ -292,7 +292,7 @@ class ScrapControllerTest {
         for(int i=5; i<7; i++) {
 //            Post post3 = createBasicPost("title" + i, "content" + i, "전시", "서울", "중앙대학교",
 //                    "중앙대", "2022-02-25 12:10:00", "2022-08-25 12:10:00");
-            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "서울", "중앙대학교", "중앙대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "부산", "부산대학교", "부산대");
             SaveResPost savedPost = postService.savePost(savePost, null);
             list.add(savedPost.getPost_id());
         }
@@ -323,7 +323,7 @@ class ScrapControllerTest {
     }
 
     @WithAccount("creamyyyy")
-    @DisplayName("서울 지역 게시글 날짜별로 가져오기")
+    @DisplayName("지역 게시글 날짜별로 가져오기")
     @Test
     public void getScrapWithoutLogin() throws Exception {
         //given
@@ -331,33 +331,41 @@ class ScrapControllerTest {
 
         MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
 
-        // 결과: post_id = 1
+        // 결과: post_id = 1,2,3,4
 //        info.add("year", "2022");
 //        info.add("month", "11");
+//        info.add("local", null);
+//        info.add("local","서울");
 
-        // 결과: post_id = 1
+        // 결과: post_id = 1,2,3,4
 //        info.add("year", "2022");
 //        info.add("month", "12");
+//        info.add("local","서울");
 
-        // 결과: post_id = 1,2,3,6,7
+        // 결과: post_id = 5,6
 //        info.add("year", "2023");
 //        info.add("month", "1");
+//        info.add("local","부산");
 
-        // 결과: post_id = 1,2,3,4,5,6,8
+        // 결과: post_id = 7,8
 //        info.add("year", "2023");
 //        info.add("month", "2");
+//        info.add("local","대전");
 
-        // 결과: post_id = 1,4,5,6,8
-        info.add("year", "2023");
-        info.add("month", "3");
+        // 결과: post_id = 없음
+//        info.add("year", "2023");
+//        info.add("month", "5");
+//        info.add("local","서울");
 
-        // 결과: post_id = 8
+        // 결과: post_id = 없음
 //        info.add("year", "2024");
 //        info.add("month", "1");
+//        info.add("local","대전");
 
         // 결과: post_id = 없음
 //        info.add("year", "2024");
 //        info.add("month", "8");
+//        info.add("local","부산");
 
 
 
@@ -365,7 +373,7 @@ class ScrapControllerTest {
         //then
         this.mockMvc.perform(
                         MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
-                                .get("/calendar") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+                                .get("/scrap") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
 //                                .params(info)
                                 .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
                 )
@@ -384,7 +392,7 @@ class ScrapControllerTest {
         savePost.setSchool(school);
         savePost.setOrganizer(organizer);
         savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2023-04-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         savePost.setEmail("kkk@kkk.com");
 
         return savePost;

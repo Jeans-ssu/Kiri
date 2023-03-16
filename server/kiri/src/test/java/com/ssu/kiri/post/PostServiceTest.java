@@ -198,10 +198,12 @@ class PostServiceTest {
         SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
+        System.out.println("savedPost.getSavedImgList() = " + savedPost.getSavedImgList());
 
 
         // 업데이트 할 Post 내용
-        Post postTwo = createPostTwo();
+//        Post postTwo = createPostTwo();
+        SavePost updatePost = createUpdatePost();
         List<MultipartFile> updateAfterList = createMockMultipartFile2();
         List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
         List<Long> imageIdList2 = imageResDtoList2.stream()
@@ -210,7 +212,7 @@ class PostServiceTest {
 
 
         //when
-        SaveResPost saveResPost = postService.updatePost(postTwo, savedPostId ,imageIdList2);
+        SaveResPost saveResPost = postService.updatePost(updatePost, savedPostId ,imageIdList2);
 
         //then
         assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
@@ -219,7 +221,7 @@ class PostServiceTest {
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
         assertThat(member.getUsername()).isEqualTo("creamyyy");
-
+        assertThat(saveResPost.getTitle()).isEqualTo("우주혜안");
 
     }
 
@@ -235,10 +237,11 @@ class PostServiceTest {
         SaveResPost savedPost = postService.savePost(savePost, null);
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
-
+        System.out.println("업데이트 전 savedPost.getSavedImgList() = " + savedPost.getSavedImgList());
 
         // 업데이트 할 Post 내용
-        Post postTwo = createPostTwo();
+//        Post postTwo = createPostTwo();
+        SavePost updatePost = createUpdatePost();
         List<MultipartFile> updateAfterList = createMockMultipartFiles();
         List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
         List<Long> imageIdList2 = imageResDtoList2.stream()
@@ -247,7 +250,7 @@ class PostServiceTest {
 
 
         //when
-        SaveResPost saveResPost = postService.updatePost(postTwo, savedPostId ,imageIdList2);
+        SaveResPost saveResPost = postService.updatePost(updatePost, savedPostId ,imageIdList2);
 
         //then
         assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
@@ -256,6 +259,7 @@ class PostServiceTest {
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
         assertThat(member.getUsername()).isEqualTo("creamyyy");
+        assertThat(saveResPost.getTitle()).isEqualTo("우주혜안");
 
 
     }
@@ -277,13 +281,14 @@ class PostServiceTest {
         SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
-
+        System.out.println("업데이트 전 savedPost.getSavedImgList() = " + savedPost.getSavedImgList());
 
         // 업데이트 할 Post 내용
-        Post postTwo = createPostTwo();
+//        Post postTwo = createPostTwo();
+        SavePost updatePost = createUpdatePost();
 
         //when
-        SaveResPost saveResPost = postService.updatePost(postTwo, savedPostId ,null);
+        SaveResPost saveResPost = postService.updatePost(updatePost, savedPostId ,null);
 
         //then
         assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
@@ -292,7 +297,7 @@ class PostServiceTest {
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
         assertThat(member.getUsername()).isEqualTo("creamyyy");
-
+        assertThat(saveResPost.getTitle()).isEqualTo("우주혜안");
 
     }
 
@@ -312,13 +317,15 @@ class PostServiceTest {
         SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long savedPostId = savedPost.getPost_id();
         System.out.println("savedPostId = " + savedPostId);
+        System.out.println("업데이트 전 savedPost.getSavedImgList() = " + savedPost.getSavedImgList());
 
         // 저장된 포스트에서 이미지를 삭제하고 다시 저장(수정) 시도
         imageService.deleteUpdateImage(1L);
-        Post postTwo = createPostTwo();
+//        Post postTwo = createPostTwo();
+        SavePost updatePost = createUpdatePost();
 
         //when
-        SaveResPost saveResPost = postService.updatePost(postTwo, savedPostId ,null);
+        SaveResPost saveResPost = postService.updatePost(updatePost, savedPostId ,null);
 
         //then
         assertThat(saveResPost.getSavedImgList()).isNullOrEmpty();
@@ -326,6 +333,8 @@ class PostServiceTest {
         Long member_id = savedPost.getMember_id();
         Member member = memberRepository.findById(member_id).get();
         assertThat(member.getUsername()).isEqualTo("creamyyy");
+        assertThat(saveResPost.getTitle()).isEqualTo("우주혜안");
+        System.out.println("saveResPost.getSavedImgList() = " + saveResPost.getSavedImgList());
     }
 
 
@@ -387,7 +396,7 @@ class PostServiceTest {
         // post 리스트 등록
         for(int i=0; i<5; i++) {
 //            Post post1 = createBasicPost("title" + i, "content" + i, "강연", "서울", "숭실대학교", "숭실대");
-            SavePost savePost = createSavePost("title" + i, "content" + i, "축제", "서울", "중앙대학교", "중앙대");
+            SavePost savePost = createSavePost("title" + i, "content" + i, "강연", "서울", "중앙대학교", "중앙대");
             List<MultipartFile> updateBeforeList = createMockMultipartFile1();
             List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
             List<Long> imageIdList = imageResDtoList.stream()
@@ -646,6 +655,21 @@ class PostServiceTest {
         savePost.setOrganizer("하마");
         savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        return savePost;
+    }
+
+    private SavePost createUpdatePost() {
+        SavePost savePost = new SavePost();
+        savePost.setEmail("eee@eee.com");
+        savePost.setTitle("우주혜안");
+        savePost.setContent("우주게임");
+        savePost.setEvent("축제");
+        savePost.setLocal("대전");
+        savePost.setSchool("대전대학교");
+        savePost.setOrganizer("하마혜안");
+        savePost.setStartPostTime(LocalDateTime.parse("2022-11-23 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-23 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         return savePost;
     }

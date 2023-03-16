@@ -188,7 +188,7 @@ class PostControllerTest {
 
 
         // 업데이트 할 Post 내용
-        SavePost savePost = createSavePost();
+        SavePost savePost = createUpdatePost();
         List<MultipartFile> updateAfterList = createMockMultipartFile2();
         List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
         List<Long> imageIdList2 = imageResDtoList2.stream()
@@ -233,7 +233,7 @@ class PostControllerTest {
 
 
         // 업데이트 할 Post 내용
-        SavePost savePost = createSavePost();
+        SavePost savePost = createUpdatePost();
 
 
         //when & then
@@ -272,7 +272,7 @@ class PostControllerTest {
 
         // 업데이트 할 Post 내용
         imageService.deleteUpdateImage(1L);
-        SavePost savePost = createSavePost();
+        SavePost savePost = createUpdatePost();
 
 
         //when & then
@@ -303,7 +303,7 @@ class PostControllerTest {
 
 
         // 업데이트 할 Post 내용
-        SavePost savePost = createSavePost();
+        SavePost savePost = createUpdatePost();
         List<MultipartFile> updateAfterList = createMockMultipartFile2();
         List<ImageResDto> imageResDtoList2 = imageService.addFile(updateAfterList);
         List<Long> imageIdList2 = imageResDtoList2.stream()
@@ -392,11 +392,11 @@ class PostControllerTest {
 //        info.add("category", "숭실대학교");
 //        info.add("category", "중앙대학교");
 
-        info.add("division", "지역");
-        info.add("category", "전체");
-
-//        info.add("division", "학교");
+//        info.add("division", "지역");
 //        info.add("category", "전체");
+
+        info.add("division", "학교");
+        info.add("category", "전체");
 
 
 
@@ -405,10 +405,10 @@ class PostControllerTest {
         this.mockMvc.perform(
                         MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
                                 .get("/posts") // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
-                                .param("division","지역")
+//                                .param("division","지역")
 //                                .param("division","학교")
                                 .params(info)
-//                                .param("eventList", new String[]{"강연", "대회"})
+                                .param("eventList", new String[]{"강의", "축제"})
                                 .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
                 )
                 .andExpect(status().isOk())
@@ -635,6 +635,21 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
 
+    }
+
+    private SavePost createUpdatePost() {
+        SavePost savePost = new SavePost();
+        savePost.setEmail("eee@eee.com");
+        savePost.setTitle("우주혜안");
+        savePost.setContent("우주게임");
+        savePost.setEvent("축제");
+        savePost.setLocal("대전");
+        savePost.setSchool("대전대학교");
+        savePost.setOrganizer("하마혜안");
+        savePost.setStartPostTime(LocalDateTime.parse("2022-11-23 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-23 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        return savePost;
     }
 
 }

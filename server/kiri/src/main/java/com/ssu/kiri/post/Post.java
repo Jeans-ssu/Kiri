@@ -134,13 +134,13 @@ public class Post {
     }
 
 
-    public void updatePost(Post post) {
+    public void updatePost(SavePost post) {
 //        this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.event = event;
-        this.local = local;
-        this.school = school;
+        this.event = post.getEvent();
+        this.local = post.getLocal();
+        this.school = post.getSchool();
         this.link = post.getLink();
         this.place = post.getPlace();
         this.organizer = post.getOrganizer();
@@ -153,6 +153,8 @@ public class Post {
         this.startMonth = startPostTime.getMonthValue();
         this.finishYear = finishPostTime.getYear();
         this.finishMonth = finishPostTime.getMonthValue();
+
+        this.email = post.getEmail();
 
     }
 
