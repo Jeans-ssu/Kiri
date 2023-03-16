@@ -10,7 +10,7 @@ import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { selectAccessToken } from 'store/modules/authSlice';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 // const jwtToken = localStorage.getItem('Authorization');
 // const headers = {
 //   Authorization: jwtToken,
@@ -24,6 +24,9 @@ const EventInfoPage = () => {
   //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
   //   `${process.env.PUBLIC_URL}/poster.jpg`,
   // ];
+  const navigate = useNavigate();
+  const preID = useLocation().pathname.substring(7);
+
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
     post_id: 0,
@@ -50,10 +53,6 @@ const EventInfoPage = () => {
   const markHandler = () => {
     setMark(!mark);
   };
-
-  console.log('pre Url', useLocation().pathname);
-  const preID = useLocation().pathname.substring(7);
-  console.log('ID', preID);
 
   const settings = {
     dots: true,
@@ -181,7 +180,13 @@ const EventInfoPage = () => {
           </EventInfodiv>
         </EventContentdiv>
         <EditBox>
-          <EditBtn>수정</EditBtn>
+          <EditBtn
+            onClick={() => {
+              navigate(`/event/${data.post_id}/edit`);
+            }}
+          >
+            수정
+          </EditBtn>
           <DeleteBtn>삭제</DeleteBtn>
         </EditBox>
       </EventInfoContainer>
