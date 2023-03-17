@@ -8,6 +8,7 @@ const initialState = {
   region: '',
   univ: '',
   status: '',
+  memberId: '',
 };
 
 export const userSlice = createSlice({
@@ -21,6 +22,7 @@ export const userSlice = createSlice({
       state.region = action.payload.region;
       state.univ = action.payload.univ;
       state.status = action.payload.status;
+      state.memberId = action.payload.memberId;
     },
     DELETE_USER: (state) => {
       state.isLogin = false;
@@ -29,6 +31,7 @@ export const userSlice = createSlice({
       state.region = '';
       state.univ = '';
       state.status = '';
+      state.memberId = '';
     },
   },
   extraReducers: (builder) => {
@@ -39,5 +42,6 @@ export const userSlice = createSlice({
 export const { SET_USER, DELETE_USER } = userSlice.actions;
 export const selectIsLogin = (state) => state.user.isLogin;
 export const selectUserInfo = (state) => state.user;
+export const selectMemberId = (state) => state.memberId;
 
 export default userSlice.reducer;
