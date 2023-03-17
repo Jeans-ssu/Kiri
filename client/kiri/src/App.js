@@ -33,7 +33,7 @@ function App() {
           <Route path="/event" element={<EventPage />} />
           <Route path="/event/region" element={<EventRegion />} />
           <Route path="/event/:eventId" element={<EventInfoPage />} />
-          <Route path="/event/:eventId/edit" element={<EventEditPage />} />          
+          <Route path="/event/:eventId/edit" element={<EventEditPage />} />
           <Route path="/event/search" element={<EventSearchPage />} />
           <Route path="/event/write" element={<EventWritePage />} />
           <Route path="/redux" element={<ReduxPage />} />
