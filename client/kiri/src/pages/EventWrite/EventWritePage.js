@@ -9,6 +9,7 @@ import axios from '../../api/axios';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { useSelector } from 'react-redux';
+import PostModal from 'components/PostModal';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -42,6 +43,7 @@ const EventWritePage = () => {
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
 
+  const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');
   const [info, setInfo] = useState({
     host: '',
@@ -57,6 +59,7 @@ const EventWritePage = () => {
     endTime: '00:00:00',
     location: '',
   });
+  const [postid, setPostID] = useState();
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
@@ -217,17 +220,15 @@ const EventWritePage = () => {
             link: link,
             contactNumber: info.tel,
             imageIdList: null,
-            startPostTime: info.startDate + ' ' + info.startTime + ':00',
-            finishPostTime: info.endDate + ' ' + info.endTime + ':00',
+            startPostTime: info.startDate + ' ' + info.startTime,
+            finishPostTime: info.endDate + ' ' + info.endTime,
           })
-          .then(() => {
-            alert('등록이 완료되었습니다.');
+          .then((res) => {
+            setPostID(res.data.post_id);
+            setIsSuccess(true);
           })
           .catch((err) => console.error(err));
       } else {
-        // const config = {
-        //   headers: { 'content-type': 'multipart/form-data' },
-        // };
         const imgarr = getImageID();
         const formData = new FormData();
         formData.append('title', title);
@@ -252,7 +253,10 @@ const EventWritePage = () => {
         formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
         axios
           .post('/api/posts', formData)
-          .then(alert('등록이 완료되었습니다.'))
+          .then((res) => {
+            setPostID(res.data.post_id);
+            setIsSuccess(true);
+          })
           .catch((err) => console.error(err));
       }
     }
@@ -296,6 +300,11 @@ const EventWritePage = () => {
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
         </BtnContainer>
+        <PostModal
+          postid={postid}
+          isOpen={isSuccess}
+          setIsOpen={setIsSuccess}
+        />
       </EventWritePageContainer>
     </PageContainer>
   );
