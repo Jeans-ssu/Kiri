@@ -16,6 +16,7 @@ import EventRegion from 'pages/Event/EventRegion';
 import Calendar from 'pages/Calendar/CalendarPage';
 import PasswordChangePage from 'pages/PasswordChange/PasswordChangePage';
 import UserPage from 'pages/User/UserPage';
+import EventEditPage from 'pages/EventEdit/EventEditPage';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             path="/event/search/:searchWordParam"
             element={<EventSearchPage />}
           />
+          <Route path="/event/:eventId/edit" element={<EventEditPage />} />          
           <Route path="/event/write" element={<EventWritePage />} />
           <Route path="/redux" element={<ReduxPage />} />
           <Route path="/calendar" element={<Calendar />} />

@@ -10,7 +10,7 @@ import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { selectAccessToken } from 'store/modules/authSlice';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 // const jwtToken = localStorage.getItem('Authorization');
 // const headers = {
 //   Authorization: jwtToken,
@@ -24,6 +24,9 @@ const EventInfoPage = () => {
   //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
   //   `${process.env.PUBLIC_URL}/poster.jpg`,
   // ];
+  const navigate = useNavigate();
+  const preID = useLocation().pathname.substring(7);
+
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
     post_id: 0,
@@ -50,10 +53,6 @@ const EventInfoPage = () => {
   const markHandler = () => {
     setMark(!mark);
   };
-
-  console.log('pre Url', useLocation().pathname);
-  const preID = useLocation().pathname.substring(7);
-  console.log('ID', preID);
 
   const settings = {
     dots: true,
@@ -180,13 +179,51 @@ const EventInfoPage = () => {
             <article>{data.content}</article>
           </EventInfodiv>
         </EventContentdiv>
+        <EditBox>
+          <EditBtn
+            onClick={() => {
+              navigate(`/event/${data.post_id}/edit`);
+            }}
+          >
+            수정
+          </EditBtn>
+          <DeleteBtn>삭제</DeleteBtn>
+        </EditBox>
       </EventInfoContainer>
     </PageContainer>
   );
 };
 
+const EditBox = styled.div`
+  display: flex;
+  height: 50px;
+`;
+
+const EditBtn = styled.button`
+  margin-left: auto;
+  color: ${({ theme }) => theme.colors.darkgray};
+  margin-top: 20px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-decoration: underline;
+`;
+
+const DeleteBtn = styled.button`
+  margin-top: 20px;
+  margin-left: 10px;
+  width: 45px;
+  height: 30px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background-color: ${({ theme }) => theme.colors.red};
+  cursor: pointer;
+  color: white;
+`;
+
 const EventInfoContainer = styled.div`
-  padding: 0 40px 40px 40px;
+  padding: 0 40px 0 40px;
 `;
 
 const EventTopdiv = styled.div``;
