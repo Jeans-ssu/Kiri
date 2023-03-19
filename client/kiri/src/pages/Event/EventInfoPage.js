@@ -11,10 +11,12 @@ import { useSelector } from 'react-redux';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { selectUserInfo } from 'store/modules/userSlice';
 
 const EventInfoPage = () => {
   const navigate = useNavigate();
   const preID = useLocation().pathname.substring(7);
+  const loginID = useSelector(selectUserInfo);
 
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
@@ -58,6 +60,7 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
+      console.log('resdata', resdata.member_id);
       setData(resdata);
     } catch (error) {
       console.error('Error: ', error);
@@ -175,16 +178,20 @@ const EventInfoPage = () => {
             <article>{data.content}</article>
           </EventInfodiv>
         </EventContentdiv>
-        <EditBox>
-          <EditBtn
-            onClick={() => {
-              navigate(`/event/${data.post_id}/edit`);
-            }}
-          >
-            수정
-          </EditBtn>
-          <DeleteBtn onClick={HandleDelete}>삭제</DeleteBtn>
-        </EditBox>
+        {data.member_id === loginID.memberId ? (
+          <EditBox>
+            <EditBtn
+              onClick={() => {
+                navigate(`/event/${data.post_id}/edit`);
+              }}
+            >
+              수정
+            </EditBtn>
+            <DeleteBtn onClick={HandleDelete}>삭제</DeleteBtn>
+          </EditBox>
+        ) : (
+          ''
+        )}
       </EventInfoContainer>
     </PageContainer>
   );
