@@ -11,21 +11,12 @@ import { useSelector } from 'react-redux';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
-// const jwtToken = localStorage.getItem('Authorization');
-// const headers = {
-//   Authorization: jwtToken,
-// };
+import { selectUserInfo } from 'store/modules/userSlice';
 
 const EventInfoPage = () => {
-  // 나중에 이미지 배열로 수정 필요
-  // const posters = [
-  //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
-  //   `${process.env.PUBLIC_URL}/poster.jpg`,
-  //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
-  //   `${process.env.PUBLIC_URL}/poster.jpg`,
-  // ];
   const navigate = useNavigate();
   const preID = useLocation().pathname.substring(7);
+  const loginID = useSelector(selectUserInfo);
 
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
@@ -69,6 +60,7 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
+      console.log('resdata', resdata.member_id);
       setData(resdata);
     } catch (error) {
       console.error('Error: ', error);
@@ -109,6 +101,13 @@ const EventInfoPage = () => {
     } else {
       return data;
     }
+  };
+
+  const HandleDelete = () => {
+    axios.delete(`/api/posts/${preID}`).then(() => {
+      alert('게시글이 삭제되었습니다.');
+      history.back();
+    });
   };
 
   return (
@@ -179,16 +178,20 @@ const EventInfoPage = () => {
             <article>{data.content}</article>
           </EventInfodiv>
         </EventContentdiv>
-        <EditBox>
-          <EditBtn
-            onClick={() => {
-              navigate(`/event/${data.post_id}/edit`);
-            }}
-          >
-            수정
-          </EditBtn>
-          <DeleteBtn>삭제</DeleteBtn>
-        </EditBox>
+        {data.member_id === loginID.memberId ? (
+          <EditBox>
+            <EditBtn
+              onClick={() => {
+                navigate(`/event/${data.post_id}/edit`);
+              }}
+            >
+              수정
+            </EditBtn>
+            <DeleteBtn onClick={HandleDelete}>삭제</DeleteBtn>
+          </EditBox>
+        ) : (
+          ''
+        )}
       </EventInfoContainer>
     </PageContainer>
   );

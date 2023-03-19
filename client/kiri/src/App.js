@@ -37,7 +37,7 @@ function App() {
             path="/event/search/:searchWordParam"
             element={<EventSearchPage />}
           />
-          <Route path="/event/:eventId/edit" element={<EventEditPage />} />          
+          <Route path="/event/:eventId/edit" element={<EventEditPage />} />
           <Route path="/event/write" element={<EventWritePage />} />
           <Route path="/redux" element={<ReduxPage />} />
           <Route path="/calendar" element={<Calendar />} />
