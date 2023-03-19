@@ -10,20 +10,14 @@ import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { selectAccessToken } from 'store/modules/authSlice';
-import { useLocation } from 'react-router-dom';
-// const jwtToken = localStorage.getItem('Authorization');
-// const headers = {
-//   Authorization: jwtToken,
-// };
+import { useLocation, useNavigate } from 'react-router-dom';
+import { selectUserInfo } from 'store/modules/userSlice';
 
 const EventInfoPage = () => {
-  // 나중에 이미지 배열로 수정 필요
-  // const posters = [
-  //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
-  //   `${process.env.PUBLIC_URL}/poster.jpg`,
-  //   `${process.env.PUBLIC_URL}/img/event_cover.jpeg`,
-  //   `${process.env.PUBLIC_URL}/poster.jpg`,
-  // ];
+  const navigate = useNavigate();
+  const preID = useLocation().pathname.substring(7);
+  const loginID = useSelector(selectUserInfo);
+
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
     post_id: 0,
@@ -51,10 +45,6 @@ const EventInfoPage = () => {
     setMark(!mark);
   };
 
-  console.log('pre Url', useLocation().pathname);
-  const preID = useLocation().pathname.substring(7);
-  console.log('ID', preID);
-
   const settings = {
     dots: true,
     infinite: true,
@@ -70,6 +60,7 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
+      console.log('resdata', resdata.member_id);
       setData(resdata);
     } catch (error) {
       console.error('Error: ', error);
@@ -110,6 +101,13 @@ const EventInfoPage = () => {
     } else {
       return data;
     }
+  };
+
+  const HandleDelete = () => {
+    axios.delete(`/api/posts/${preID}`).then(() => {
+      alert('게시글이 삭제되었습니다.');
+      history.back();
+    });
   };
 
   return (
@@ -180,13 +178,55 @@ const EventInfoPage = () => {
             <article>{data.content}</article>
           </EventInfodiv>
         </EventContentdiv>
+        {data.member_id === loginID.memberId ? (
+          <EditBox>
+            <EditBtn
+              onClick={() => {
+                navigate(`/event/${data.post_id}/edit`);
+              }}
+            >
+              수정
+            </EditBtn>
+            <DeleteBtn onClick={HandleDelete}>삭제</DeleteBtn>
+          </EditBox>
+        ) : (
+          ''
+        )}
       </EventInfoContainer>
     </PageContainer>
   );
 };
 
+const EditBox = styled.div`
+  display: flex;
+  height: 50px;
+`;
+
+const EditBtn = styled.button`
+  margin-left: auto;
+  color: ${({ theme }) => theme.colors.darkgray};
+  margin-top: 20px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-decoration: underline;
+`;
+
+const DeleteBtn = styled.button`
+  margin-top: 20px;
+  margin-left: 10px;
+  width: 45px;
+  height: 30px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background-color: ${({ theme }) => theme.colors.red};
+  cursor: pointer;
+  color: white;
+`;
+
 const EventInfoContainer = styled.div`
-  padding: 0 40px 40px 40px;
+  padding: 0 40px 0 40px;
 `;
 
 const EventTopdiv = styled.div``;
