@@ -55,8 +55,8 @@ const EventWritePage = () => {
     field: 'IT',
     startDate: '',
     endDate: '',
-    startTime: '00:00:00',
-    endTime: '00:00:00',
+    startTime: '00:00',
+    endTime: '00:00',
     location: '',
   });
   const [postid, setPostID] = useState();
@@ -220,8 +220,8 @@ const EventWritePage = () => {
             link: link,
             contactNumber: info.tel,
             imageIdList: null,
-            startPostTime: info.startDate + ' ' + info.startTime,
-            finishPostTime: info.endDate + ' ' + info.endTime,
+            startPostTime: info.startDate + ' ' + info.startTime + ':00',
+            finishPostTime: info.endDate + ' ' + info.endTime + ':00',
           })
           .then((res) => {
             setPostID(res.data.post_id);
@@ -249,8 +249,14 @@ const EventWritePage = () => {
           }
         }
         formData.append('contactNumber', info.tel);
-        formData.append('startPostTime', info.startDate + ' ' + info.startTime);
-        formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
+        formData.append(
+          'startPostTime',
+          info.startDate + ' ' + info.startTime + ':00'
+        );
+        formData.append(
+          'finishPostTime',
+          info.endDate + ' ' + info.endTime + ':00'
+        );
         axios
           .post('/api/posts', formData)
           .then((res) => {
