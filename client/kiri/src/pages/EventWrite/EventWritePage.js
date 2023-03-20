@@ -261,7 +261,6 @@ const EventWritePage = () => {
       }
     }
   };
-
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
       <EventWritePageContainer>
@@ -301,6 +300,7 @@ const EventWritePage = () => {
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
         </BtnContainer>
         <PostModal
+          text={'등록'}
           postid={postid}
           isOpen={isSuccess}
           setIsOpen={setIsSuccess}

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-const PostModal = ({ isOpen, setIsOpen, postid }) => {
+const PostModal = ({ text, isOpen, setIsOpen, postid }) => {
   const openModalHandler = () => {
     setIsOpen(!isOpen);
   };
@@ -14,7 +14,7 @@ const PostModal = ({ isOpen, setIsOpen, postid }) => {
         <ModalBackdrop onClick={openModalHandler}>
           <ModalView onClick={(e) => e.stopPropagation()}>
             <ModalContent>
-              <div>게시물 등록 성공 :)</div>
+              <div>게시물 {text} 성공 :)</div>
             </ModalContent>
             <ModalBtns>
               <button
@@ -23,7 +23,7 @@ const PostModal = ({ isOpen, setIsOpen, postid }) => {
                   navigate(`/event/${postid}`);
                 }}
               >
-                내가 등록한 게시물 보러 가기
+                내가 {text}한 게시물 보러 가기
               </button>
             </ModalBtns>
           </ModalView>
