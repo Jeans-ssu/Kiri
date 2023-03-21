@@ -12,12 +12,14 @@ import { setAuthHeader } from 'api/setAuthHeader';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { selectUserInfo } from 'store/modules/userSlice';
+import PostRemoveModal from 'components/PostRemoveModal';
 
 const EventInfoPage = () => {
   const navigate = useNavigate();
   const preID = useLocation().pathname.substring(7);
   const loginID = useSelector(selectUserInfo);
 
+  const [isOpen, setIsOpen] = useState(false);
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
     post_id: 0,
@@ -34,7 +36,6 @@ const EventInfoPage = () => {
     place: null,
     savedImgList: [],
     startPostTime: '',
-    //01234567890123456789
     finishPostTime: '',
   });
 
@@ -105,7 +106,6 @@ const EventInfoPage = () => {
 
   const HandleDelete = () => {
     axios.delete(`/api/posts/${preID}`).then(() => {
-      alert('게시글이 삭제되었습니다.');
       history.back();
     });
   };
@@ -187,7 +187,18 @@ const EventInfoPage = () => {
             >
               수정
             </EditBtn>
-            <DeleteBtn onClick={HandleDelete}>삭제</DeleteBtn>
+            <DeleteBtn
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+            >
+              삭제
+            </DeleteBtn>
+            <PostRemoveModal
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              HandleDelete={HandleDelete}
+            />
           </EditBox>
         ) : (
           ''
