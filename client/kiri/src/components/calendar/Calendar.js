@@ -235,18 +235,34 @@ export const CalendarComponent = ({ calType }) => {
 
   //TODO: 캘린더 타입에 따라 분기해서 요청
   const getMonthEvents = async () => {
-    try {
-      const response = await axios.get(
-        `/calendar?year=${format(currentMonth, 'yyyy')}&month=${format(
-          currentMonth,
-          'M'
-        )}`
-      );
-      const data = response.data;
-      setLikedEvents(data);
-      //setLikedEvents(events);
-    } catch (error) {
-      console.error('ERROR: ', error);
+    console.log('calType: ', calType);
+    if (calType === 'liked') {
+      try {
+        const response = await axios.get(
+          `/calendar?year=${format(currentMonth, 'yyyy')}&month=${format(
+            currentMonth,
+            'M'
+          )}`
+        );
+        const data = response.data;
+        setLikedEvents(data);
+      } catch (error) {
+        console.error('ERROR: ', error);
+      }
+    } else {
+      //calType === 'region'
+      try {
+        const response = await axios.get(
+          `/scrap?year=${format(currentMonth, 'yyyy')}&month=${format(
+            currentMonth,
+            'M'
+          )}&local=서울`
+        );
+        const data = response.data;
+        setLikedEvents(data);
+      } catch (error) {
+        console.error('ERROR: ', error);
+      }
     }
   };
 
