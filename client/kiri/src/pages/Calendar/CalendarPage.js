@@ -12,7 +12,7 @@ const Calendar = () => {
       header
       footer
       margin_bottom={false}
-      padding="15px 0"
+      padding="15px 0 60px 0"
       page={'calendar'}
     >
       <Container>
