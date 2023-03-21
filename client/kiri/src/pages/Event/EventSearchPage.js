@@ -38,9 +38,9 @@ const EventSearchPage = () => {
   }
 
   return (
-    <PageContainer header footer>
+    <PageContainer header footer padding="20px 0" margin_bottom={false}>
       <EventKeywordPageContainer>
-        <h1>&apos;{searchWordParam}&apos; 검색 결과</h1>
+        <h1>{`"${searchWordParam}"의 검색 결과`}</h1>
         <EventListMain>
           <EventContent data={data} setData={setData} />
         </EventListMain>
@@ -55,6 +55,8 @@ const EventKeywordPageContainer = styled.div`
     padding-left: 30px;
     margin-bottom: 0;
     margin-top: 0;
+    font-size: 14px;
+    color: ${({ theme }) => theme.colors.gray};
   }
 
   .titlesearch {
@@ -70,7 +72,7 @@ const EventKeywordPageContainer = styled.div`
 
 const EventListMain = styled.main`
   display: flex;
-  justify-content: row;
+  justify-content: center;
   flex-wrap: wrap;
   margin-top: 30px;
 `;
