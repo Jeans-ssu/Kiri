@@ -11,6 +11,110 @@ import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { CreateIcsFile } from 'pages/Calendar/CreateIcsFile';
 
+const EventModal = ({
+  getMonthEvents,
+  isOpen,
+  setIsOpen,
+  eventId,
+  title,
+  type,
+  school,
+  startTime,
+  finishTime,
+  organizer,
+}) => {
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
+  const openModalHandler = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const navigate = useNavigate();
+  const handleClickLookBtn = () => {
+    navigate(`/event/${eventId}`);
+  };
+
+  const handleClickCancelBtn = () => {
+    axios
+      .post(`/extra/${eventId}`)
+      .then(() => {
+        console.log('좋아요 취소 성공');
+        getMonthEvents();
+      })
+      .catch((err) => console.log('ERROR: ', err));
+    openModalHandler();
+  };
+
+  return (
+    <ModalContainer>
+      {isOpen ? (
+        <ModalBackdrop onClick={openModalHandler}>
+          <ModalView onClick={(e) => e.stopPropagation()}>
+            <ModalHeader>
+              <IoMdClose onClick={openModalHandler} />
+            </ModalHeader>
+            <MainContent>
+              <div className="event">이벤트:</div>
+              <div className="title">{title}</div>
+              <div className="type school">
+                <EventTag color={eventColorMatcher(type)}>{type}</EventTag>
+                <span className="school">{school}</span>
+              </div>
+            </MainContent>
+            <DetailContent>
+              <div>
+                <span>장소: </span>장소
+              </div>
+              <div>
+                <span>날짜: </span>
+                {format(parseISO(startTime), 'yyyy/MM/dd') ===
+                format(parseISO(finishTime), 'yyyy/MM/dd')
+                  ? `${format(parseISO(startTime), 'yyyy/MM/dd')}`
+                  : `${format(parseISO(startTime), 'yyyy/MM/dd')} ~ ${format(
+                      parseISO(finishTime),
+                      'yyyy/MM/dd'
+                    )}`}
+              </div>
+              <div>
+                <span>주최: </span>
+                {organizer}
+              </div>
+            </DetailContent>
+            <EventBtnsContainer>
+              <button className="cancel" onClick={handleClickCancelBtn}>
+                <AiFillHeart />
+                좋아요 취소
+              </button>
+              <button className="look" onClick={handleClickLookBtn}>
+                <BiSearch />
+                자세히 보기
+              </button>
+            </EventBtnsContainer>
+            <ExportBtnContainer>
+              <button className="export">
+                <AiOutlineExport />
+                <a
+                  href={CreateIcsFile(
+                    format(parseISO(startTime), 'yyyyMMdd'),
+                    format(parseISO(finishTime), 'yyyyMMdd'),
+                    title,
+                    type,
+                    school
+                  )}
+                  download={`${title}.ics`}
+                >
+                  내보내기
+                </a>
+              </button>
+            </ExportBtnContainer>
+          </ModalView>
+        </ModalBackdrop>
+      ) : null}
+    </ModalContainer>
+  );
+};
+
 const ModalContainer = styled.div``;
 
 const ModalBackdrop = styled.div`
@@ -154,109 +258,5 @@ const ExportBtnContainer = styled.div`
     }
   }
 `;
-
-const EventModal = ({
-  getMonthEvents,
-  isOpen,
-  setIsOpen,
-  eventId,
-  title,
-  type,
-  school,
-  startTime,
-  finishTime,
-  organizer,
-}) => {
-  const accessToken = useSelector(selectAccessToken);
-  setAuthHeader(accessToken);
-
-  const openModalHandler = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const navigate = useNavigate();
-  const handleClickLookBtn = () => {
-    navigate(`/event/${eventId}`);
-  };
-
-  const handleClickCancelBtn = () => {
-    axios
-      .post(`/extra/${eventId}`)
-      .then(() => {
-        console.log('좋아요 취소 성공');
-        getMonthEvents();
-      })
-      .catch((err) => console.log('ERROR: ', err));
-    openModalHandler();
-  };
-
-  return (
-    <ModalContainer>
-      {isOpen ? (
-        <ModalBackdrop onClick={openModalHandler}>
-          <ModalView onClick={(e) => e.stopPropagation()}>
-            <ModalHeader>
-              <IoMdClose onClick={openModalHandler} />
-            </ModalHeader>
-            <MainContent>
-              <div className="event">이벤트:</div>
-              <div className="title">{title}</div>
-              <div className="type school">
-                <EventTag color={eventColorMatcher(type)}>{type}</EventTag>
-                <span className="school">{school}</span>
-              </div>
-            </MainContent>
-            <DetailContent>
-              <div>
-                <span>장소: </span>장소
-              </div>
-              <div>
-                <span>날짜: </span>
-                {format(parseISO(startTime), 'yyyy/MM/dd') ===
-                format(parseISO(finishTime), 'yyyy/MM/dd')
-                  ? `${format(parseISO(startTime), 'yyyy/MM/dd')}`
-                  : `${format(parseISO(startTime), 'yyyy/MM/dd')} ~ ${format(
-                      parseISO(finishTime),
-                      'yyyy/MM/dd'
-                    )}`}
-              </div>
-              <div>
-                <span>주최: </span>
-                {organizer}
-              </div>
-            </DetailContent>
-            <EventBtnsContainer>
-              <button className="cancel" onClick={handleClickCancelBtn}>
-                <AiFillHeart />
-                좋아요 취소
-              </button>
-              <button className="look" onClick={handleClickLookBtn}>
-                <BiSearch />
-                자세히 보기
-              </button>
-            </EventBtnsContainer>
-            <ExportBtnContainer>
-              <button className="export">
-                <AiOutlineExport />
-                <a
-                  href={CreateIcsFile(
-                    format(parseISO(startTime), 'yyyyMMdd'),
-                    format(parseISO(finishTime), 'yyyyMMdd'),
-                    title,
-                    type,
-                    school
-                  )}
-                  download={`${title}.ics`}
-                >
-                  내보내기
-                </a>
-              </button>
-            </ExportBtnContainer>
-          </ModalView>
-        </ModalBackdrop>
-      ) : null}
-    </ModalContainer>
-  );
-};
 
 export default EventModal;

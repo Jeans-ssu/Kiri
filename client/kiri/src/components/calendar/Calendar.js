@@ -268,7 +268,6 @@ export const CalendarComponent = ({ calType }) => {
 
   useEffect(() => {
     getMonthEvents();
-    //setLikedEvents(events);
   }, [currentMonth, calType]);
 
   const prevMonth = () => {
