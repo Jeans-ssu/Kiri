@@ -43,9 +43,7 @@ const ModalContent = styled.div`
   display: flex;
   justify-content: center;
   font-size: 13px;
-  padding: 30px 0;
-  margin: 0 15px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.mainColor};
+  padding: 40px 0 20px 0;
 `;
 
 const ModalBtns = styled.div`
