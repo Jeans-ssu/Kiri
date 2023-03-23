@@ -84,7 +84,6 @@ const EventInfoInput = ({
 }) => {
   //학교 찾기 모달
   const [isOpen, setIsOpen] = useState(false);
-
   const handleChangeInput = (e, target) => {
     setInfo({
       ...info,
@@ -98,7 +97,6 @@ const EventInfoInput = ({
       univ: univName,
     });
   };
-
   return (
     <EventInfoInputContainer>
       <InfoContainer>
@@ -119,7 +117,7 @@ const EventInfoInput = ({
         </InfoHeader>
         <InfoTextInput
           type="email"
-          value={info.email}
+          value={info?.email}
           onChange={(e) => handleChangeInput(e, 'email')}
           ref={emailRef}
         />
@@ -129,7 +127,7 @@ const EventInfoInput = ({
         <InfoHeader>연락처</InfoHeader>
         <InfoTextInput
           type="tel"
-          value={info.tel}
+          value={info?.tel}
           onChange={(e) => handleChangeInput(e, 'tel')}
         />
       </InfoContainer>
@@ -138,13 +136,13 @@ const EventInfoInput = ({
           지역 <span className="green">*</span>
         </InfoHeader>
         <InfoSelectInput
-          value={info.region}
+          value={info?.region}
           onChange={(e) => {
             handleChangeInput(e, 'region');
           }}
           ref={regionRef}
         >
-          <option value="선택">선택</option>
+          <option value="선택">{info?.region}</option>
           {Regions.map((el, idx) => {
             return (
               <option value={el} key={idx}>
@@ -159,7 +157,7 @@ const EventInfoInput = ({
         <InfoHeader>
           학교 <span className="green">*</span>
         </InfoHeader>
-        <InfoTextInput width="200px" readOnly value={info.univ} />
+        <InfoTextInput width="200px" readOnly value={info?.univ} />
         <SearchUnivBtn
           onClick={() => {
             setIsOpen(true);
@@ -183,7 +181,7 @@ const EventInfoInput = ({
           유형 <span className="green">*</span>
         </InfoHeader>
         <InfoSelectInput
-          value={info.type}
+          value={info?.type}
           onChange={(e) => {
             handleChangeInput(e, 'type');
           }}
@@ -207,14 +205,14 @@ const EventInfoInput = ({
         <InfoTextInput
           type="date"
           className="smallSize"
-          value={info.startDate}
+          value={info?.startDate}
           onChange={(e) => handleChangeInput(e, 'startDate')}
           ref={startDateRef}
         />
         <InfoTextInput
           type="date"
           className="smallSize"
-          value={info.endDate}
+          value={info?.endDate}
           onChange={(e) => handleChangeInput(e, 'endDate')}
           ref={endDateRef}
         />

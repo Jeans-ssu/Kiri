@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PageContainer from 'containers/PageContainer';
 import styled from 'styled-components';
 import EventTitleInput from './EventTitleInput';
@@ -51,21 +51,49 @@ const EventEditPage = () => {
     postID = url.slice(-7, -5);
   }
 
-  const [title, setTitle] = useState('');
+  useEffect(() => {
+    BasePost();
+  }, []);
+
+  const [base, setBase] = useState();
+  const BasePost = async () => {
+    await axios.get(`/posts/read/${postID}`).then((res) => {
+      setBase(res.data);
+      setTitle(res.data.title);
+      setInfo({
+        host: res.data.organizer,
+        tel: res.data.contactNumber,
+        email: res.data.email,
+        region: res.data.local, //지역
+        univ: res.data.school, //학교
+        type: res.data.event, //유형
+        startDate: res.data.startPostTime.slice(0, 10),
+        endDate: res.data.finishPostTime.slice(0, 10),
+        startTime: res.data.startPostTime.slice(11, 16),
+        endTime: res.data.finishPostTime.slice(11, 16),
+        location: res.data.place,
+      });
+      setLink(res.data.link);
+      setExplain(res.data.content);
+      console.log('baseData,current', base);
+    });
+  };
+
+  const [title, setTitle] = useState();
   const [info, setInfo] = useState({
-    host: '',
-    tel: '',
-    email: '',
-    region: '선택', //지역
-    univ: '', //학교
-    type: '선택', //유형
-    field: 'IT',
-    startDate: '',
-    endDate: '',
-    startTime: '00:00:00',
-    endTime: '00:00:00',
-    location: '',
+    host: base?.organizer,
+    tel: base?.contactNumber,
+    email: base?.email,
+    region: base?.local, //지역
+    univ: base?.school, //학교
+    type: base?.event, //유형
+    startDate: base?.startPostTime.slice(0, 10),
+    endDate: base?.finishPostTime.slice(0, 10),
+    startTime: base?.startPostTime.slice(11, 16),
+    endTime: base?.finishPostTime.slice(11, 16),
+    location: base?.place,
   });
+  console.log('info', info);
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
@@ -226,8 +254,8 @@ const EventEditPage = () => {
             link: link,
             contactNumber: info.tel,
             imageIdList: null,
-            startPostTime: info.startDate + ' ' + info.startTime,
-            finishPostTime: info.endDate + ' ' + info.endTime,
+            startPostTime: info.startDate + ' ' + info.startTime + ':00',
+            finishPostTime: info.endDate + ' ' + info.endTime + ':00',
           })
           .then(() => {
             alert('등록이 완료되었습니다.');
@@ -257,8 +285,12 @@ const EventEditPage = () => {
           }
         }
         formData.append('contactNumber', info.tel);
-        formData.append('startPostTime', info.startDate + ' ' + info.startTime);
-        formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
+        formData.append(
+          'startPostTime',
+          info.startDate + ' ' + info.startTime + ':00'
+        );
+        formData.append('finishPostTime', info.endDate + ' ' + info.endTime) +
+          ':00';
         axios
           .post('/api/posts', formData)
           .then(alert('등록이 완료되었습니다.'))
@@ -266,6 +298,8 @@ const EventEditPage = () => {
       }
     }
   };
+
+  console.log('base', base);
 
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
