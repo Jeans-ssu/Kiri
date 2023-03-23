@@ -11,12 +11,14 @@ import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
+import com.ssu.kiri.post.dto.response.DetailPost;
 import com.ssu.kiri.post.dto.response.MyPostDto;
 import com.ssu.kiri.post.dto.response.SaveResPost;
 import com.ssu.kiri.scrap.Scrap;
 import com.ssu.kiri.scrap.ScrapRepository;
 import com.ssu.kiri.scrap.ScrapService;
 import com.ssu.kiri.scrap.dto.ScrapReqAdd;
+import com.ssu.kiri.security.auth.PrincipalDetails;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
@@ -27,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,7 +68,7 @@ class PostServiceTest {
 
 //    @WithAccount("creamyyy")
 //    @BeforeEach
-//    void createPosts() {
+//    void createPosts() throws Exception {
 //
 //
 //    }
@@ -78,17 +81,17 @@ class PostServiceTest {
         memberRepository.deleteAll();
     }
 
-    @Test
-    public void testFiles() throws Exception {
-        //given
-        System.out.println("File's AbsolutePath = " + new File("").getAbsolutePath());
-        System.out.println("File.separator = " + File.separator);
-        //when
 
+    @Test
+    public void detailPostLogout() throws Exception {
+        //given
+        //when
         //then
 
-    }
+        DetailPost detailPost = postService.detailPost(1L, null);
+        assertThat(detailPost.getTitle()).isEqualTo("우주하마");
 
+    }
 
     // 게시글 상세보기 테스트
     @WithAccount("username")
@@ -108,15 +111,29 @@ class PostServiceTest {
 
         SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long post_id = savedPost.getPost_id();
+        System.out.println("post_id = " + post_id);
+
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+        if(member == null) {
+            System.out.println("회원가입한 멤버 정보를 찾지 못했습니다.");
+        }
+
+        ScrapReqAdd request = new ScrapReqAdd();
+        request.setStartScrapTime(LocalDateTime.parse("2023-01-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        request.setEndScrapTime(LocalDateTime.parse("2023-03-25 12:20:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        boolean isScrap = scrapService.addScrap(post_id, request);
 
         //when - 게시글 상세보기
-        SaveResPost saveResPost = postService.detailPost(post_id);
+        DetailPost detailPost = postService.detailPost(post_id, member);
 
         //then
-        assertThat(saveResPost.getPost_id()).isEqualTo(post_id);
-        assertThat(saveResPost.getSavedImgList().size()).isEqualTo(2);
-        assertThat(saveResPost.getTitle()).isEqualTo(savePost.getTitle());
-        assertThat(saveResPost.getTitle()).isEqualTo("혜안");
+        assertThat(detailPost.getPost_id()).isEqualTo(post_id);
+        assertThat(detailPost.getSavedImgList().size()).isEqualTo(2);
+        assertThat(detailPost.getTitle()).isEqualTo(savePost.getTitle());
+        assertThat(detailPost.getTitle()).isEqualTo("우주하마");
+        assertThat(detailPost.isScrap()).isEqualTo(true);
 
     }
 

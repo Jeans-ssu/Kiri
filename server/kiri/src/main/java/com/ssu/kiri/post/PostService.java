@@ -7,10 +7,7 @@ import com.ssu.kiri.image.ImageService;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.request.SavePost;
-import com.ssu.kiri.post.dto.response.ClassifyPost;
-import com.ssu.kiri.post.dto.response.MyPostDto;
-import com.ssu.kiri.post.dto.response.PostResCal;
-import com.ssu.kiri.post.dto.response.SaveResPost;
+import com.ssu.kiri.post.dto.response.*;
 import com.ssu.kiri.scrap.Scrap;
 import com.ssu.kiri.scrap.ScrapRepository;
 import com.ssu.kiri.scrap.ScrapService;
@@ -21,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +48,7 @@ public class PostService {
     }
 
     // 게시글 상세보기
-    public SaveResPost detailPost(Long id) {
+    public DetailPost detailPost(Long id, Member member) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 포스트를 상세보기할 수 없습니다."));
 
@@ -59,10 +57,27 @@ public class PostService {
                 .map(img -> img.getImgUrl())
                 .collect(Collectors.toList());
 
-        SaveResPost saveResPost = SaveResPost.ofWithImage(post, imgUrlList);
+        // 회원가입을 안한 경우
+        if(member == null) {
+            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList,false);
+            return detailPost;
+        }
+        else {
+            Long member_id = member.getId();
+            Member findMember = memberRepository.findById(member_id).orElseThrow(() -> new IllegalArgumentException());
 
-        return saveResPost;
+            Optional<Scrap> scrapOptional = scrapRepository.findByMemberAndPost(findMember, post);
+            boolean isScrap = scrapOptional.isPresent();
+            System.out.println("isScrap 값을 출력 = " + isScrap);
+            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList, isScrap);
+
+            return detailPost;
+        }
+
+
     }
+
+
 
     // 게시물 등록
     public SaveResPost savePost(SavePost post, List<Long> imageIdList) {
