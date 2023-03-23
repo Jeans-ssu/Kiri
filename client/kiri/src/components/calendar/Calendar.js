@@ -213,7 +213,10 @@ const RenderCells = ({
             );
           })}
           {todayEvents.length > 3 ? (
-            <AllLikedEvent leftEvents={todayEvents.length - 3} />
+            <AllLikedEvent
+              leftEvents={todayEvents.length - 3}
+              todayEvents={todayEvents}
+            />
           ) : null}
         </div>
       );

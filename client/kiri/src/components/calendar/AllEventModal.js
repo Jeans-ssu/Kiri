@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const AllEventModal = ({ isOpen, setIsOpen }) => {
+export const AllEventModal = ({ isOpen, setIsOpen, todayEvents }) => {
   const openModalHandler = () => {
     setIsOpen(!isOpen);
   };
@@ -8,7 +8,11 @@ export const AllEventModal = ({ isOpen, setIsOpen }) => {
     <AllEventModalContainer>
       {isOpen ? (
         <AllEventModalBackdrop onClick={openModalHandler}>
-          <AllEventModalView></AllEventModalView>
+          <AllEventModalView>
+            {todayEvents?.map((el, idx) => {
+              return <div key={idx}>{el.title}</div>;
+            })}
+          </AllEventModalView>
         </AllEventModalBackdrop>
       ) : null}
     </AllEventModalContainer>
@@ -32,7 +36,7 @@ const AllEventModalBackdrop = styled.div`
 
 const AllEventModalView = styled.div`
   width: 600px;
-  height: 300px;
+  height: 350px;
   background-color: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
     0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
