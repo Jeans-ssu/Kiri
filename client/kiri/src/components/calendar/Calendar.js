@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'api/axios';
 import { LikedEvent } from './LikedEvent';
+import { AllLikedEvent } from './AllLikedEvent';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
@@ -195,7 +196,7 @@ const RenderCells = ({
           >
             {formattedDate}
           </span>
-          {todayEvents?.map((el, idx) => {
+          {todayEvents.slice(0, 3)?.map((el, idx) => {
             return (
               <LikedEvent
                 key={idx}
@@ -211,6 +212,7 @@ const RenderCells = ({
               />
             );
           })}
+          {todayEvents.length > 3 ? <AllLikedEvent /> : null}
         </div>
       );
       day = addDays(day, 1);
