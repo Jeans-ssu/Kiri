@@ -212,7 +212,9 @@ const RenderCells = ({
               />
             );
           })}
-          {todayEvents.length > 3 ? <AllLikedEvent /> : null}
+          {todayEvents.length > 3 ? (
+            <AllLikedEvent leftEvents={todayEvents.length - 3} />
+          ) : null}
         </div>
       );
       day = addDays(day, 1);
@@ -377,7 +379,7 @@ const CalendarContainer = styled.div`
       font-weight: 600;
       padding: 10px 0 5px 10px;
     }
-    height: 120px;
+    height: 130px;
     &.today > span {
       color: ${({ theme }) => theme.colors.mainColor};
     }
