@@ -10,6 +10,8 @@ import com.ssu.kiri.infra.WithAccount;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.post.dto.response.SaveResPost;
+import com.ssu.kiri.scrap.ScrapService;
+import com.ssu.kiri.scrap.dto.ScrapReqAdd;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -63,6 +65,8 @@ class PostControllerTest {
     @Autowired MemberRepository memberRepository;
     @Autowired ImageRepository imageRepository;
     @Autowired ImageService imageService;
+    @Autowired
+    ScrapService scrapService;
 
     @BeforeEach
     public void setup() {
@@ -96,6 +100,13 @@ class PostControllerTest {
 
         SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long savedPostId = savedPost.getPost_id();
+
+        ScrapReqAdd request = new ScrapReqAdd();
+        request.setStartScrapTime(LocalDateTime.parse("2023-01-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        request.setEndScrapTime(LocalDateTime.parse("2023-03-25 12:20:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        boolean isScrap = scrapService.addScrap(savedPostId, request);
+
 
 
         // when

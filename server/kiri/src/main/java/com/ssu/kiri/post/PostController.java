@@ -11,6 +11,7 @@ import com.ssu.kiri.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,10 +34,15 @@ public class PostController {
 
     // 게시글 상세보기
     @GetMapping("/posts/read/{post-id}")
-    public ResponseEntity detailPost(@PathVariable("post-id") Long post_id) {
-        SaveResPost saveResPost = postService.detailPost(post_id);
-        return ResponseEntity.ok(saveResPost);
+    public ResponseEntity detailPost(@PathVariable("post-id") Long post_id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Member member = principalDetails.getMember();
+        if(member == null) {
+            DetailPost detailPost = postService.detailPost(post_id, null);
+        }
+        DetailPost detailPost = postService.detailPost(post_id, member);
+        return ResponseEntity.ok(detailPost);
     }
+
 
     // 게시글 등록
     @PostMapping("/api/posts")
