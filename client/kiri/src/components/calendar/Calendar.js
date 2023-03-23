@@ -232,7 +232,7 @@ const RenderCells = ({
   return <div className="body">{rows}</div>;
 };
 
-export const CalendarComponent = ({ calType }) => {
+export const CalendarComponent = ({ calType, region }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [likedEvents, setLikedEvents] = useState([]);
@@ -240,9 +240,7 @@ export const CalendarComponent = ({ calType }) => {
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
 
-  //TODO: 캘린더 타입에 따라 분기해서 요청
   const getMonthEvents = async () => {
-    console.log('calType: ', calType);
     if (calType === 'liked') {
       try {
         const response = await axios.get(
@@ -263,7 +261,7 @@ export const CalendarComponent = ({ calType }) => {
           `/scrap?year=${format(currentMonth, 'yyyy')}&month=${format(
             currentMonth,
             'M'
-          )}&local=서울`
+          )}&local=${region}`
         );
         const data = response.data;
         setLikedEvents(data);
@@ -275,7 +273,7 @@ export const CalendarComponent = ({ calType }) => {
 
   useEffect(() => {
     getMonthEvents();
-  }, [currentMonth, calType]);
+  }, [currentMonth, calType, region]);
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));

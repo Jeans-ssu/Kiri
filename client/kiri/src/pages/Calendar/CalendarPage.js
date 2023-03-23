@@ -3,9 +3,11 @@ import styled from 'styled-components';
 //import EventList from './EventList';
 import { CalendarComponent } from 'components/calendar/Calendar';
 import { useState } from 'react';
+import { Regions } from 'util/info';
 
 const Calendar = () => {
   const [calType, setCalType] = useState('liked'); //캘린더 타입 liked or region
+  const [region, setRegion] = useState('서울');
 
   return (
     <PageContainer
@@ -17,8 +19,13 @@ const Calendar = () => {
     >
       <Container>
         <CalendarBox>
-          <CalendarSelect calType={calType} setCalType={setCalType} />
-          <CalendarComponent calType={calType} />
+          <CalendarSelect
+            calType={calType}
+            setCalType={setCalType}
+            region={region}
+            setRegion={setRegion}
+          />
+          <CalendarComponent calType={calType} region={region} />
         </CalendarBox>
         {/* <EventBox>
           <EventList></EventList>
@@ -28,10 +35,14 @@ const Calendar = () => {
   );
 };
 
-const CalendarSelect = ({ calType, setCalType }) => {
+const CalendarSelect = ({ calType, setCalType, setRegion }) => {
   const handleClickCalTypeBtn = () => {
     if (calType === 'liked') setCalType('region');
     else setCalType('liked');
+  };
+
+  const handleChagneRegionSelect = (e) => {
+    setRegion(e.target.value);
   };
 
   return (
@@ -48,6 +59,17 @@ const CalendarSelect = ({ calType, setCalType }) => {
       >
         지역별 이벤트
       </button>
+      {calType === 'region' ? (
+        <select name="region" onChange={handleChagneRegionSelect}>
+          {Regions.map((el, idx) => {
+            return (
+              <option key={idx} value={el}>
+                {el}
+              </option>
+            );
+          })}
+        </select>
+      ) : null}
     </CalendarSelectContainer>
   );
 };
@@ -55,8 +77,10 @@ const CalendarSelect = ({ calType, setCalType }) => {
 const CalendarSelectContainer = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.mainColor};
   width: 950px;
+  height: 25px;
   padding: 10px 0;
   margin-bottom: 10px;
+  display: flex;
   button {
     margin: 0 3px;
     background-color: transparent;
@@ -70,6 +94,18 @@ const CalendarSelectContainer = styled.div`
   }
   button.current {
     color: ${({ theme }) => theme.colors.mainColor};
+  }
+  select {
+    outline: none;
+    font-size: 12px;
+    padding: 3px;
+    margin-bottom: 2px;
+    border: none;
+    &:hover {
+      cursor: pointer;
+    }
+    color: ${({ theme }) => theme.colors.darkgray};
+    font-weight: 600;
   }
 `;
 
