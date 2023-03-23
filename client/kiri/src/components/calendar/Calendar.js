@@ -115,11 +115,11 @@ const extractEvents = (date, arr) => {
   const formattedDate = format(date, 'MM/dd/yyyy');
   arr?.map((el) => {
     let formattedStartScrapTime = format(
-      parseISO(el.startScrapTime),
+      parseISO(el.startScrapTime || el.startPostTime),
       'MM/dd/yyyy'
     );
     let formattedFinishScrapTime = format(
-      parseISO(el.finishScrapTime),
+      parseISO(el.finishScrapTime || el.finishPostTime),
       'MM/dd/yyyy'
     );
     if (
@@ -136,8 +136,8 @@ const extractEvents = (date, arr) => {
       extractedEvents.push(el);
     } else if (
       //여러날인 경우
-      isAfter(date, parseISO(el.startScrapTime)) &&
-      isBefore(date, parseISO(el.finishScrapTime))
+      isAfter(date, parseISO(el.startScrapTime || el.startPostTime)) &&
+      isBefore(date, parseISO(el.finishScrapTime || el.finsihPostTime))
     ) {
       el.calDate = date;
       extractedEvents.push(el);
@@ -205,8 +205,8 @@ const RenderCells = ({
                 title={el.title}
                 type={el.event}
                 school={el.school}
-                startTime={el.startScrapTime}
-                finishTime={el.finishScrapTime}
+                startTime={el.startScrapTime || el.startPostTime}
+                finishTime={el.finishScrapTime || el.finishPostTime}
                 organizer={el.organizer}
               />
             );
