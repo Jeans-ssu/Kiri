@@ -9,6 +9,7 @@ import axios from '../../api/axios';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { useSelector } from 'react-redux';
+import PostModal from 'components/PostModal';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -51,6 +52,8 @@ const EventEditPage = () => {
     postID = url.slice(-7, -5);
   }
 
+  const [postid, setPostID] = useState();
+  const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');
   const [info, setInfo] = useState({
     host: '',
@@ -229,14 +232,12 @@ const EventEditPage = () => {
             startPostTime: info.startDate + ' ' + info.startTime,
             finishPostTime: info.endDate + ' ' + info.endTime,
           })
-          .then(() => {
-            alert('등록이 완료되었습니다.');
+          .then((res) => {
+            setPostID(res.data.post_id);
+            setIsSuccess(true);
           })
           .catch((err) => console.error(err));
       } else {
-        // const config = {
-        //   headers: { 'content-type': 'multipart/form-data' },
-        // };
         const imgarr = getImageID();
         const formData = new FormData();
         formData.append('title', title);
@@ -266,7 +267,6 @@ const EventEditPage = () => {
       }
     }
   };
-
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
       <EventWritePageContainer>
@@ -305,6 +305,12 @@ const EventEditPage = () => {
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
         </BtnContainer>
+        <PostModal
+          text={'수정'}
+          postid={postid}
+          isOpen={isSuccess}
+          setIsOpen={setIsSuccess}
+        />
       </EventWritePageContainer>
     </PageContainer>
   );
