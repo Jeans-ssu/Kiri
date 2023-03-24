@@ -16,7 +16,7 @@ const EventRegion = () => {
   const [currentNav, setCurrentNav] = useState(-1);
   const [region, setRegion] = useState(''); // 지역 select
   const [order, setOrder] = useState('최신순');
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const result = useRef();
   result.current = '';
   const eventtag = useSelector(selectTagWord);
@@ -182,7 +182,11 @@ const EventRegion = () => {
         <EventContent data={postsData(data)} />
       </EventFieldPageContainer>
       <PaginationBox>
-        <Pagination page={page} totalPosts={data?.length} setPage={setPage} />
+        {data?.length === 0 ? (
+          ''
+        ) : (
+          <Pagination page={page} totalPosts={data?.length} setPage={setPage} />
+        )}
       </PaginationBox>
     </PageContainer>
   );
