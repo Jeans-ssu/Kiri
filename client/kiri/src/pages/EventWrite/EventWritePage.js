@@ -55,8 +55,8 @@ const EventWritePage = () => {
     field: 'IT',
     startDate: '',
     endDate: '',
-    startTime: '00:00:00',
-    endTime: '00:00:00',
+    startTime: '00:00',
+    endTime: '00:00',
     location: '',
   });
   const [postid, setPostID] = useState();

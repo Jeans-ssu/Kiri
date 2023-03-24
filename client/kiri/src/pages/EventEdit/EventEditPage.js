@@ -75,6 +75,7 @@ const EventEditPage = () => {
       });
       setLink(res.data.link);
       setExplain(res.data.content);
+      setImg(res.data.savedImgList);
       console.log('baseData,current', base);
     });
   };
@@ -112,6 +113,7 @@ const EventEditPage = () => {
 
   const getImageID = () => {
     const imgarr = [];
+    console.log('imgList', imgList);
     for (let i = 0; imgList.length > i; i++) {
       imgarr.push(imgList[i].image_id);
     }
@@ -257,8 +259,9 @@ const EventEditPage = () => {
             startPostTime: info.startDate + ' ' + info.startTime + ':00',
             finishPostTime: info.endDate + ' ' + info.endTime + ':00',
           })
-          .then(() => {
-            alert('등록이 완료되었습니다.');
+          .then((res) => {
+            alert('수정이 완료되었습니다.');
+            console.log('res', res.data);
           })
           .catch((err) => console.error(err));
       } else {
@@ -266,6 +269,7 @@ const EventEditPage = () => {
         //   headers: { 'content-type': 'multipart/form-data' },
         // };
         const imgarr = getImageID();
+        console.log('imaarr', imgarr);
         const formData = new FormData();
         formData.append('title', title);
         formData.append('scrap_count', 0);
@@ -289,11 +293,13 @@ const EventEditPage = () => {
           'startPostTime',
           info.startDate + ' ' + info.startTime + ':00'
         );
-        formData.append('finishPostTime', info.endDate + ' ' + info.endTime) +
-          ':00';
+        formData.append(
+          'finishPostTime',
+          info.endDate + ' ' + info.endTime + ':00'
+        );
         axios
-          .post('/api/posts', formData)
-          .then(alert('등록이 완료되었습니다.'))
+          .post(`/api/posts/${postID}`, formData)
+          .then(alert('수정이 완료되었습니다.'))
           .catch((err) => console.error(err));
       }
     }
