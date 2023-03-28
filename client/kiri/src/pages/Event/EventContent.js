@@ -42,7 +42,10 @@ const EventContent = ({ data }) => {
                   <p className="host">{el.post_id}</p>
                   <div className="flex">
                     <p className="dday">
-                      D-{DDay(el.startPostTime.slice(0, 10))}
+                      D
+                      {DDay(el.startPostTime.slice(0, 10)) < 0
+                        ? '+' + Math.abs(DDay(el.startPostTime.slice(0, 10)))
+                        : '-' + DDay(el.startPostTime.slice(0, 10))}
                     </p>
                     <div className="flex">
                       <BsFillSuitHeartFill

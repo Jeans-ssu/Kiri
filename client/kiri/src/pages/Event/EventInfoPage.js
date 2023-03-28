@@ -96,6 +96,7 @@ const EventInfoPage = () => {
     const day = Math.floor(distance / (1000 * 60 * 60 * 24));
     return day + 1;
   };
+
   const MakeDay = (data) => {
     if (data.indexOf('0') === 0) {
       return data.slice(1, 2);
@@ -137,7 +138,10 @@ const EventInfoPage = () => {
           </EventUpdiv>
           <EventPerioddiv>
             <EventDdaydiv>
-              D-{DDay(data.startPostTime.slice(0, 10))}
+              D
+              {DDay(data.startPostTime.slice(0, 10)) < 0
+                ? '+' + Math.abs(DDay(data.startPostTime.slice(0, 10)))
+                : '-' + DDay(data.startPostTime.slice(0, 10))}
             </EventDdaydiv>
             <EventWriterdiv>{data.organizer}</EventWriterdiv>
             <EventTimediv>
