@@ -39,10 +39,20 @@ const WriteBtn = styled.button`
   }
 `;
 
-const EventWritePage = () => {
+const EventEditPage = () => {
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
 
+  const url = document.location.href;
+  let postID;
+  if (url.slice(-7, -6) === '/') {
+    // 10 미만
+    postID = url.slice(-6, -5);
+  } else {
+    postID = url.slice(-7, -5);
+  }
+
+  const [postid, setPostID] = useState();
   const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');
   const [info, setInfo] = useState({
@@ -55,11 +65,10 @@ const EventWritePage = () => {
     field: 'IT',
     startDate: '',
     endDate: '',
-    startTime: '00:00',
-    endTime: '00:00',
+    startTime: '00:00:00',
+    endTime: '00:00:00',
     location: '',
   });
-  const [postid, setPostID] = useState();
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
@@ -207,7 +216,7 @@ const EventWritePage = () => {
       if (img.length === 0 || img.length === undefined) {
         console.log('length = 0');
         axios
-          .post('/api/posts', {
+          .post(`/api/posts/${postID}`, {
             title: title,
             scrap_count: 0,
             email: info.email,
@@ -220,8 +229,8 @@ const EventWritePage = () => {
             link: link,
             contactNumber: info.tel,
             imageIdList: null,
-            startPostTime: info.startDate + ' ' + info.startTime + ':00',
-            finishPostTime: info.endDate + ' ' + info.endTime + ':00',
+            startPostTime: info.startDate + ' ' + info.startTime,
+            finishPostTime: info.endDate + ' ' + info.endTime,
           })
           .then((res) => {
             setPostID(res.data.post_id);
@@ -249,20 +258,11 @@ const EventWritePage = () => {
           }
         }
         formData.append('contactNumber', info.tel);
-        formData.append(
-          'startPostTime',
-          info.startDate + ' ' + info.startTime + ':00'
-        );
-        formData.append(
-          'finishPostTime',
-          info.endDate + ' ' + info.endTime + ':00'
-        );
+        formData.append('startPostTime', info.startDate + ' ' + info.startTime);
+        formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
         axios
           .post('/api/posts', formData)
-          .then((res) => {
-            setPostID(res.data.post_id);
-            setIsSuccess(true);
-          })
+          .then(alert('등록이 완료되었습니다.'))
           .catch((err) => console.error(err));
       }
     }
@@ -306,7 +306,7 @@ const EventWritePage = () => {
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
         </BtnContainer>
         <PostModal
-          text={'등록'}
+          text={'수정'}
           postid={postid}
           isOpen={isSuccess}
           setIsOpen={setIsSuccess}
@@ -316,4 +316,4 @@ const EventWritePage = () => {
   );
 };
 
-export default EventWritePage;
+export default EventEditPage;

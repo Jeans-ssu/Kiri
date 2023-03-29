@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
 import SearchUnivModal from 'components/SearchUnivModal';
 import axios from '../../api/axios';
+import { useSelector } from 'react-redux';
+import { selectTagWord } from 'store/modules/tagSlice';
+import Pagination from 'components/Pagination';
 
 const EventPage = () => {
   const url = '/posts?division=학교';
@@ -14,9 +17,20 @@ const EventPage = () => {
   const [currentNav, setCurrentNav] = useState(-1);
   const [searchuniv, setSearchUniv] = useState('');
   const [order, setOrder] = useState('최신순');
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const result = useRef();
   result.current = '';
+
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  const postsData = (posts) => {
+    if (posts) {
+      const result = posts.slice(offset, offset + limit);
+      return result;
+    }
+  };
 
   //학교 검색 모달
   const [showUnivModal, setShowUnivModal] = useState(false);
@@ -61,34 +75,63 @@ const EventPage = () => {
   const handleChangeOrder = (e) => {
     setOrder(e.target.value);
   };
+  const eventtag = useSelector(selectTagWord);
 
-  async function getCategory(univsearch) {
-    await axios
-      .get(`${url}&category=${univsearch}`)
-      .then((res) => {
-        console.log('categoryuniv', univsearch);
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  function getCategory(univsearch) {
+    console.log('학교에서의', eventtag);
+    if (eventtag !== '') {
+      console.log('tag가 이미 선택된 순간');
+      axios
+        .get(`${url}&category=${univsearch}&eventList=${eventtag}`)
+        .then((res) => {
+          console.log('categoryuniv', univsearch);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log('tag선택안됨');
+      axios
+        .get(`${url}&category=${univsearch}`)
+        .then((res) => {
+          console.log('categoryuniv', univsearch);
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }
 
-  async function getEvent() {
+  function getEvent() {
     const eventtag = result.current.slice(0, -1);
     console.log(eventtag);
-    await axios
-      .get(`${url}&event=${eventtag}`)
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (searchuniv !== '') {
+      axios
+        .get(`${url}&category=${searchuniv}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log("searchuniv = ''");
+      axios
+        .get(`${url}&eventList=${eventtag}`)
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }
 
   const removeUniv = () => {
     setSearchUniv('');
+    getCategory('');
   };
 
   const filter = ['학교', '지역'];
@@ -163,11 +206,23 @@ const EventPage = () => {
             <option value="좋아요순">좋아요순</option>
           </SelectInput>
         </EventOrderBox>
-        <EventContent data={data} setData={setData} />
+        <EventContent data={postsData(data)} />
       </EventFieldPageContainer>
+      <PaginationBox>
+        {data?.length === 0 ? (
+          ''
+        ) : (
+          <Pagination page={page} totalPosts={data?.length} setPage={setPage} />
+        )}
+      </PaginationBox>
     </PageContainer>
   );
 };
+
+const PaginationBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const EventOrderBox = styled.div`
   display: flex;

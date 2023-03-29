@@ -1,51 +1,13 @@
 import styled from 'styled-components';
 import { BsFillSuitHeartFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router';
 
-const dummydata = [
-  {
-    post_id: 1,
-    title: 'title1',
-    imgUrl:
-      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/3080e4a7-97fc-4169-85ee-44cd31a819d3test2.jpg',
-    startPostTime: '2023-11-06T12:10',
-    scrap_count: 0,
-  },
+const EventContent = ({ data }) => {
+  const navigate = useNavigate();
 
-  {
-    post_id: 2,
-    title: 'title2',
-    imgUrl:
-      'https://spring-kiri-bucket.s3.ap-northeast-2.amazonaws.com/76a60188-d5cd-4510-bb16-8104fe20ef21test2.jpg',
-    startPostTime: '2023-05-25T12:10',
-    scrap_count: 0,
-  },
-
-  {
-    post_id: 3,
-    title: 'title3',
-    imgUrl: null,
-    startPostTime: '2023-03-25T12:10',
-    scrap_count: 0,
-  },
-
-  {
-    post_id: 4,
-    title: 'title4',
-    imgUrl: null,
-    startPostTime: '2023-04-25T12:10',
-    scrap_count: 0,
-  },
-];
-//            Todo:  { data }
-const EventContent = () => {
-  // function dateFormat(date) {
-  //   const dateFormat2 = date.getFullYear() + '-'+((date.getMonth()+1)<9?"0"+(date.getMonth()))
-  //   }
-  // const dday = (day) => {
-  //   const today = new Date();
-  //   console.log('tdoay', today);
-  //   console.log('day', day);
-  // };
+  const handleOnClickEvent = (eventId) => {
+    navigate(`/event/${eventId}`);
+  };
 
   const DDay = (expiry_date) => {
     const now = new Date(); // 2022-11-25
@@ -69,46 +31,100 @@ const EventContent = () => {
   return (
     <Container>
       <EventListMain>
-        {dummydata.map((el, idx) => (
-          <EventContainer key={idx}>
-            <EventList>
-              <h4>{el.title}</h4>
-              <p className="host">{el.post_id}</p>
-              <div className="flex">
-                <p className="dday">D-{DDay(el.startPostTime.slice(0, 10))}</p>
-                <div className="flex">
-                  <BsFillSuitHeartFill
-                    className="eyeicon"
-                    size="12"
-                    color="#ff6b6b"
-                  />
-                  <p className="watch">{el.scrap_count}</p>
-                </div>
-              </div>
-            </EventList>
-            <EventImg>
-              <img
-                className="poster"
-                alt="poster"
-                //src={el.imgUrl}
-                src={`${process.env.PUBLIC_URL}/poster.jpg`}
-              ></img>
-            </EventImg>
-          </EventContainer>
-        ))}
+        {data !== undefined ? (
+          data?.length === 0 ? (
+            <NoEventContainer>검색 결과가 없습니다.</NoEventContainer>
+          ) : (
+            data?.map((el, idx) => (
+              <EventContainer key={idx}>
+                <EventList onClick={() => handleOnClickEvent(el.post_id)}>
+                  <h4>{el.title}</h4>
+                  <p className="host">{el.post_id}</p>
+                  <div className="flex">
+                    <p className="dday">
+                      D
+                      {DDay(el.startPostTime.slice(0, 10)) < 0
+                        ? '+' + Math.abs(DDay(el.startPostTime.slice(0, 10)))
+                        : '-' + DDay(el.startPostTime.slice(0, 10))}
+                    </p>
+                    <div className="flex">
+                      <BsFillSuitHeartFill
+                        className="eyeicon"
+                        size="12"
+                        color="#ff6b6b"
+                      />
+                      <p className="watch">{el.scrap_count}</p>
+                    </div>
+                  </div>
+                </EventList>
+                <EventImg>
+                  {el.imgUrl === null ? (
+                    <ImgNull>
+                      <img
+                        className="logo"
+                        src={process.env.PUBLIC_URL + '/img/main_logo.svg'}
+                        alt="main logo"
+                      />
+                    </ImgNull>
+                  ) : (
+                    <img className="poster" alt="poster" src={el.imgUrl}></img>
+                  )}
+                </EventImg>
+              </EventContainer>
+            ))
+          )
+        ) : (
+          <NoEventContainer>검색 결과가 없습니다.</NoEventContainer>
+        )}
+        {data?.length % 2 === 1 ? <div className="empty" /> : ''}
       </EventListMain>
     </Container>
   );
 };
 
+const NoEventContainer = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.mainColor};
+  width: 800px;
+  height: 400px;
+  text-align: center;
+  line-height: 400px;
+  color: ${({ theme }) => theme.colors.gray};
+`;
+
+const ImgNull = styled.div`
+  width: 150px;
+  height: 210px;
+  background-color: #d9d9d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Container = styled.div`
   display: flex;
+  .logo {
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const EventListMain = styled.main`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin: auto;
+
+  .empty {
+    width: 360px;
+    height: 210px;
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding-left: 30px;
+    padding: 10px;
+  }
 `;
 
 const EventContainer = styled.div`
