@@ -1,17 +1,95 @@
 import styled from 'styled-components';
+import format from 'date-fns/format';
+import getISODay from 'date-fns/getISODay';
+import parseISO from 'date-fns/parseISO';
+import eventColorMatcher from 'util/eventColorMatcher';
+import { IoMdClose } from 'react-icons/io';
+import { AiFillHeart } from 'react-icons/ai';
+import axios from '../../api/axios';
+import { setAuthHeader } from 'api/setAuthHeader';
+import { useSelector } from 'react-redux';
+import { selectAccessToken } from 'store/modules/authSlice';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
-export const AllEventModal = ({ isOpen, setIsOpen, todayEvents }) => {
+export const AllEventModal = ({ isOpen, setIsOpen, todayEvents, day }) => {
   const openModalHandler = () => {
     setIsOpen(!isOpen);
   };
+  const dayNum = getISODay(day);
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+
+  const [events, setEvents] = useState(todayEvents);
+
+  const accessToken = useSelector(selectAccessToken);
+
+  const navigate = useNavigate();
+
+  //TODO: 서버 에러 확인 필요
+  const handleClickLikeBtn = async (eventId) => {
+    setAuthHeader(accessToken);
+    axios
+      .post(`/extra/${eventId}`)
+      .then(() => {
+        //setIsOpen(!isOpen);
+        console.log('이벤트 좋아요 취소');
+      })
+      .catch((error) => {
+        console.error('ERROR: ', error);
+      });
+  };
+
   return (
     <AllEventModalContainer>
       {isOpen ? (
         <AllEventModalBackdrop onClick={openModalHandler}>
           <AllEventModalView>
-            {todayEvents?.map((el, idx) => {
-              return <div key={idx}>{el.title}</div>;
-            })}
+            <CloseBtn
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+            >
+              <IoMdClose />
+            </CloseBtn>
+            <div className="date">
+              {format(day, 'yyyy. MM. dd')} ({days[dayNum]})
+            </div>
+            <div className="events">
+              {events?.map((el) => {
+                return (
+                  <EventBox key={el.post_id}>
+                    <div className="tag">
+                      <EventTag color={eventColorMatcher(el.event)}>
+                        {el.event}
+                      </EventTag>
+                    </div>
+                    <div className="school">{el.school}</div>
+                    <div
+                      className="title"
+                      role="presentation"
+                      onClick={() => {
+                        navigate(`/event/${el.post_id}`);
+                      }}
+                    >
+                      {el.title}
+                    </div>
+                    <div className="days">
+                      {`${format(parseISO(el.startScrapTime), 'MM/dd')} ~
+                    ${format(parseISO(el.finishScrapTime), 'MM/dd')}`}
+                    </div>
+                    <div
+                      className="like"
+                      role="presentation"
+                      onClick={() => {
+                        handleClickLikeBtn(el.post_id);
+                      }}
+                    >
+                      <AiFillHeart />
+                    </div>
+                  </EventBox>
+                );
+              })}
+            </div>
           </AllEventModalView>
         </AllEventModalBackdrop>
       ) : null}
@@ -36,9 +114,104 @@ const AllEventModalBackdrop = styled.div`
 
 const AllEventModalView = styled.div`
   width: 600px;
-  height: 350px;
+  height: 400px;
   background-color: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
     0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
     0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
+
+  display: flex;
+  flex-direction: column;
+  padding: 0 30px;
+  box-sizing: border-box;
+  position: relative;
+
+  div.date {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.dark};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.lightgray};
+  }
+  div.events {
+    height: 310px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+  }
+  div.events::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const CloseBtn = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const EventBox = styled.div`
+  display: flex;
+  height: 40px;
+  box-sizing: border-box;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.lightgray};
+  align-items: center;
+  font-size: 13px;
+  padding: 0 12px;
+  color: ${({ theme }) => theme.colors.darkgray};
+  div.tag {
+    width: 40px;
+  }
+  div.school {
+    font-weight: 600;
+    width: 145px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  div.title {
+    width: 210px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 5px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  div.days {
+    white-space: nowrap;
+  }
+  div.like {
+    box-sizing: border-box;
+    margin-left: 15px;
+    svg {
+      fill: ${({ theme }) => theme.colors.gray};
+      width: 18px;
+      height: 18px;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
+
+const EventTag = styled.div`
+  background-color: ${({ color }) => color};
+  color: white;
+  font-size: 13px;
+  border-radius: 10px;
+  width: 32px;
+  box-sizing: border-box;
+  padding: 3px 6px;
+  font-size: 11px;
+  font-weight: 500;
 `;

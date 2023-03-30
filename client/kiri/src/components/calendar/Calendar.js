@@ -216,6 +216,7 @@ const RenderCells = ({
             <AllLikedEvent
               leftEvents={todayEvents.length - 3}
               todayEvents={todayEvents}
+              day={day}
             />
           ) : null}
         </div>

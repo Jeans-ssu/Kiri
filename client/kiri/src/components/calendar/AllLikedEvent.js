@@ -3,7 +3,7 @@ import { HiPlusSm } from 'react-icons/hi';
 import { useState } from 'react';
 import { AllEventModal } from './AllEventModal';
 
-export const AllLikedEvent = ({ leftEvents, todayEvents }) => {
+export const AllLikedEvent = ({ leftEvents, todayEvents, day }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -16,6 +16,7 @@ export const AllLikedEvent = ({ leftEvents, todayEvents }) => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         todayEvents={todayEvents}
+        day={day}
       />
     </AllLikedEventContainer>
   );
