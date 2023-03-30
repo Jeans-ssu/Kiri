@@ -9,7 +9,6 @@ import axios from '../../api/axios';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export const AllEventModal = ({ isOpen, setIsOpen, todayEvents, day }) => {
@@ -18,8 +17,6 @@ export const AllEventModal = ({ isOpen, setIsOpen, todayEvents, day }) => {
   };
   const dayNum = getISODay(day);
   const days = ['일', '월', '화', '수', '목', '금', '토'];
-
-  const [events, setEvents] = useState(todayEvents);
 
   const accessToken = useSelector(selectAccessToken);
 
@@ -55,7 +52,7 @@ export const AllEventModal = ({ isOpen, setIsOpen, todayEvents, day }) => {
               {format(day, 'yyyy. MM. dd')} ({days[dayNum]})
             </div>
             <div className="events">
-              {events?.map((el) => {
+              {todayEvents?.map((el) => {
                 return (
                   <EventBox key={el.post_id}>
                     <div className="tag">
@@ -74,8 +71,14 @@ export const AllEventModal = ({ isOpen, setIsOpen, todayEvents, day }) => {
                       {el.title}
                     </div>
                     <div className="days">
-                      {`${format(parseISO(el.startScrapTime), 'MM/dd')} ~
-                    ${format(parseISO(el.finishScrapTime), 'MM/dd')}`}
+                      {`${format(
+                        parseISO(el.startScrapTime || el.startPostTime),
+                        'MM/dd'
+                      )} ~
+                    ${format(
+                      parseISO(el.finishScrapTime || el.finishPostTime),
+                      'MM/dd'
+                    )}`}
                     </div>
                     <div
                       className="like"
