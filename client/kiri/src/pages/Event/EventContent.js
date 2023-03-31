@@ -38,6 +38,9 @@ const EventContent = ({ data }) => {
             data?.map((el, idx) => (
               <EventContainer key={idx}>
                 <EventList onClick={() => handleOnClickEvent(el.post_id)}>
+                  <EventTagBox>
+                    <EventTagSpan>{el.event}</EventTagSpan>
+                  </EventTagBox>
                   <h4>{el.title}</h4>
                   <p className="host">{el.post_id}</p>
                   <div className="flex">
@@ -78,6 +81,20 @@ const EventContent = ({ data }) => {
     </Container>
   );
 };
+
+const EventTagBox = styled.div`
+  background-color: #eaeaea;
+  font-size: 12px;
+  width: 35px;
+  height: 22px;
+  display: flex;
+  margin-bottom: 5px;
+  border-radius: 10px;
+`;
+
+const EventTagSpan = styled.span`
+  margin: auto;
+`;
 
 const NoEventContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.mainColor};
