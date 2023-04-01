@@ -13,6 +13,9 @@ import { selectAccessToken } from 'store/modules/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { selectUserInfo } from 'store/modules/userSlice';
 import PostRemoveModal from 'components/PostRemoveModal';
+import theme from 'styles/theme';
+
+const { yellow, blue, pink, orange, purple2, green_1 } = theme.colors;
 
 const EventInfoPage = () => {
   const navigate = useNavigate();
@@ -86,7 +89,7 @@ const EventInfoPage = () => {
   };
 
   const DDay = (expiry_date) => {
-    const now = new Date(); // 2022-11-25
+    const now = new Date();
     const target = new Date(
       expiry_date.slice(0, 4),
       MakeDay(expiry_date.slice(5, 7)) - 1,
@@ -119,7 +122,7 @@ const EventInfoPage = () => {
               <EventTitlediv>
                 <h1>{data.title}</h1>
               </EventTitlediv>
-              <EventTagBox>
+              <EventTagBox tag={data.event}>
                 <EventTagSpan>{data.event}</EventTagSpan>
               </EventTagBox>
               <EventSharediv>
@@ -140,7 +143,10 @@ const EventInfoPage = () => {
           </EventUpdiv>
           <EventPerioddiv>
             <EventDdaydiv>
-              D-{DDay(data.startPostTime.slice(0, 10))}
+              D
+              {DDay(data.startPostTime.slice(0, 10)) < 0
+                ? '+' + Math.abs(DDay(data.startPostTime.slice(0, 10)))
+                : '-' + DDay(data.startPostTime.slice(0, 10))}
             </EventDdaydiv>
             <EventWriterdiv>{data.organizer}</EventWriterdiv>
             <EventTimediv>
@@ -212,8 +218,21 @@ const EventInfoPage = () => {
 };
 
 const EventTagBox = styled.div`
-  background-color: #eaeaea;
+  background-color: ${(props) =>
+    props.tag === '축제'
+      ? yellow
+      : props.tag === '전시'
+      ? blue
+      : props.tag === '공연'
+      ? pink
+      : props.tag === '강연'
+      ? orange
+      : props.tag === '대회'
+      ? purple2
+      : green_1};
   font-size: 12px;
+  color: white;
+  font-weight: 600;
   width: 35px;
   height: 22px;
   display: flex;
