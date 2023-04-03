@@ -82,16 +82,14 @@ const EventModal = ({
               </div>
             </DetailContent>
             <EventBtnsContainer>
-              <button className="cancel" onClick={handleClickCancelBtn}>
+              {/* <button className="cancel" onClick={handleClickCancelBtn}>
                 <AiFillHeart />
                 좋아요 취소
-              </button>
+              </button> */}
               <button className="look" onClick={handleClickLookBtn}>
                 <BiSearch />
                 자세히 보기
               </button>
-            </EventBtnsContainer>
-            <ExportBtnContainer>
               <button className="export">
                 <AiOutlineExport />
                 <a
@@ -107,7 +105,8 @@ const EventModal = ({
                   내보내기
                 </a>
               </button>
-            </ExportBtnContainer>
+            </EventBtnsContainer>
+            <ExportBtnContainer></ExportBtnContainer>
           </ModalView>
         </ModalBackdrop>
       ) : null}
@@ -209,24 +208,37 @@ const EventBtnsContainer = styled.div`
   button {
     background-color: transparent;
     border: none;
-    font-weight: 600;
     display: flex;
     align-items: center;
     font-size: 12px;
-    svg {
-      width: 15px;
-      height: 15px;
-      margin-right: 2px;
+    font-weight: 600;
+    a {
+      font-weight: 600;
     }
     &:hover {
       cursor: pointer;
     }
   }
-  button.cancel {
-    color: ${({ theme }) => theme.colors.gray};
-  }
   button.look {
+    svg {
+      width: 15px;
+      height: 15px;
+      margin-right: 2px;
+    }
     color: ${({ theme }) => theme.colors.mainColor};
+  }
+  button.export {
+    a {
+      color: ${({ theme }) => theme.colors.darkgray};
+      text-decoration: none;
+      text-decoration-color: ${({ theme }) => theme.colors.darkgray};
+    }
+    svg {
+      margin: 2px;
+      width: 15px;
+      height: 15px;
+    }
+    color: ${({ theme }) => theme.colors.darkgray};
   }
 `;
 
