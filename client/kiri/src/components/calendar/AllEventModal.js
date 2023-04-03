@@ -4,11 +4,6 @@ import getISODay from 'date-fns/getISODay';
 import parseISO from 'date-fns/parseISO';
 import eventColorMatcher from 'util/eventColorMatcher';
 import { IoMdClose } from 'react-icons/io';
-import { AiFillHeart } from 'react-icons/ai';
-import axios from '../../api/axios';
-import { setAuthHeader } from 'api/setAuthHeader';
-import { useSelector } from 'react-redux';
-import { selectAccessToken } from 'store/modules/authSlice';
 import { useNavigate } from 'react-router';
 
 export const AllEventModal = ({ isOpen, setIsOpen, todayEvents, day }) => {
@@ -18,23 +13,7 @@ export const AllEventModal = ({ isOpen, setIsOpen, todayEvents, day }) => {
   const dayNum = getISODay(day);
   const days = ['일', '월', '화', '수', '목', '금', '토'];
 
-  const accessToken = useSelector(selectAccessToken);
-
   const navigate = useNavigate();
-
-  //TODO: 서버 에러 확인 필요
-  const handleClickLikeBtn = async (eventId) => {
-    setAuthHeader(accessToken);
-    axios
-      .post(`/extra/${eventId}`)
-      .then(() => {
-        //setIsOpen(!isOpen);
-        console.log('이벤트 좋아요 취소');
-      })
-      .catch((error) => {
-        console.error('ERROR: ', error);
-      });
-  };
 
   return (
     <AllEventModalContainer>
@@ -79,15 +58,6 @@ export const AllEventModal = ({ isOpen, setIsOpen, todayEvents, day }) => {
                       parseISO(el.finishScrapTime || el.finishPostTime),
                       'MM/dd'
                     )}`}
-                    </div>
-                    <div
-                      className="like"
-                      role="presentation"
-                      onClick={() => {
-                        handleClickLikeBtn(el.post_id);
-                      }}
-                    >
-                      <AiFillHeart />
                     </div>
                   </EventBox>
                 );
@@ -175,13 +145,13 @@ const EventBox = styled.div`
   }
   div.school {
     font-weight: 600;
-    width: 145px;
+    width: 160px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   div.title {
-    width: 210px;
+    width: 230px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -192,6 +162,7 @@ const EventBox = styled.div`
   }
   div.days {
     white-space: nowrap;
+    text-align: end;
   }
   div.like {
     box-sizing: border-box;
