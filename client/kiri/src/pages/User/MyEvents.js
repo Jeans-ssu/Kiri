@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
+import eventColorMatcher from 'util/eventColorMatcher';
 
 const MyEventsContainer = styled.div`
   width: 600px;
@@ -109,6 +110,7 @@ const MyEventContainer = styled.div`
 const MyEvent = ({ eventInfo }) => {
   const navigate = useNavigate();
 
+  //TODO: 이벤트 타입 api 수정 필요
   return (
     <MyEventContainer
       onClick={() => {
@@ -117,7 +119,12 @@ const MyEvent = ({ eventInfo }) => {
     >
       <div className="title">
         <span>{eventInfo.title}</span>
-        <span className="tag">{eventInfo.event}</span>
+        <span
+          className="tag"
+          style={{ backgroundColor: eventColorMatcher(eventInfo.event) }}
+        >
+          {eventInfo.event}
+        </span>
       </div>
       <div className="time">{`${eventInfo.startPostTime.slice(
         0,
