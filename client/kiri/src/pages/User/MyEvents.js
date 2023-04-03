@@ -18,8 +18,11 @@ const MyEventsContentWrapper = styled.div`
   height: 400px;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 5px;
-  overflow-y: auto;
-  overflow: overlay;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const EventGuideMsg = styled.div`
