@@ -3,16 +3,14 @@ import { IoMdClose } from 'react-icons/io';
 import { useNavigate } from 'react-router';
 import eventColorMatcher from 'util/eventColorMatcher';
 import { parseISO, format } from 'date-fns';
-import { AiFillHeart, AiOutlineExport } from 'react-icons/ai';
+import { AiOutlineExport } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
-import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { CreateIcsFile } from 'pages/Calendar/CreateIcsFile';
 
 const EventModal = ({
-  getMonthEvents,
   isOpen,
   setIsOpen,
   eventId,
@@ -33,17 +31,6 @@ const EventModal = ({
   const navigate = useNavigate();
   const handleClickLookBtn = () => {
     navigate(`/event/${eventId}`);
-  };
-
-  const handleClickCancelBtn = () => {
-    axios
-      .post(`/extra/${eventId}`)
-      .then(() => {
-        console.log('좋아요 취소 성공');
-        getMonthEvents();
-      })
-      .catch((err) => console.log('ERROR: ', err));
-    openModalHandler();
   };
 
   return (
