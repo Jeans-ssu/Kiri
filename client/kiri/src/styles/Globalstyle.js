@@ -6,6 +6,7 @@ const GlobalStyle = createGlobalStyle`
       'Nanum Gothic', 'Malgun Gothic', sans-serif;
     margin: 0;
     padding: 0;
+    overflow: overlay;
   }
   
   a {
