@@ -165,7 +165,7 @@ const SigninInputs = () => {
             name="email"
             type="text"
             value={email}
-            placeholder="abcd@gmail.com"
+            placeholder="helloword@email.com"
             onChange={handleChangeInput}
             className={validation.email ? 'validate' : null}
           />

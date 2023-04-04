@@ -352,7 +352,7 @@ const SignupInputs = () => {
           <SignupInput
             name="email"
             value={email}
-            placeholder="abcd@gmail.com"
+            placeholder="helloworld@email.com"
             onChange={handleChangeInput}
             className={validation.email ? 'validate' : null}
           />
