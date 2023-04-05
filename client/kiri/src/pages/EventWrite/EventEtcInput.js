@@ -6,7 +6,15 @@ import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 
-const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
+const EventEtcInput = ({
+  link,
+  setLink,
+  img,
+  setImg,
+  imgList,
+  setImgList,
+  errorMessage,
+}) => {
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
@@ -76,7 +84,9 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
         <LinkInput type="url" value={link} onChange={handleChangeInput} />
       </EtcContainer>
       <EtcContainer>
-        <EtcHeader>이미지</EtcHeader>
+        <EtcHeader>
+          이미지 <span className="green">*</span>{' '}
+        </EtcHeader>
         <label className="label" htmlFor="input-file">
           파일 선택
         </label>
@@ -90,6 +100,7 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
           onChange={addImage}
           style={{ display: 'none' }}
         />
+        <ErrorMessageBox> {errorMessage.imgErrorMessage}</ErrorMessageBox>
       </EtcContainer>
       <PreviewBox>
         <GridImageBox>
@@ -121,6 +132,14 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
     </EventEtcInputContainer>
   );
 };
+const ErrorMessageBox = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.red};
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+`;
 
 const EventEtcInputContainer = styled.div`
   display: flex;
@@ -154,6 +173,11 @@ const EtcHeader = styled.div`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.dark};
   width: 70px;
+  .green {
+    color: ${({ theme }) => theme.colors.mainColor};
+    font-size: 18px;
+    margin-left: 3px;
+  }
 `;
 const LinkInput = styled.input`
   width: 350px;
