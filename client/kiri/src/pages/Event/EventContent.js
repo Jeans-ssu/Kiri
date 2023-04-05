@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import { BsFillSuitHeartFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router';
+import theme from 'styles/theme';
+
+const { yellow, blue, pink, orange, purple2, green_1 } = theme.colors;
 
 const EventContent = ({ data }) => {
   const navigate = useNavigate();
@@ -38,14 +41,17 @@ const EventContent = ({ data }) => {
             data?.map((el, idx) => (
               <EventContainer key={idx}>
                 <EventList onClick={() => handleOnClickEvent(el.post_id)}>
-                  <EventTagBox>
+                  <EventTagBox tag={el.event}>
                     <EventTagSpan>{el.event}</EventTagSpan>
                   </EventTagBox>
                   <h4>{el.title}</h4>
                   <p className="host">{el.post_id}</p>
                   <div className="flex">
                     <p className="dday">
-                      D-{DDay(el.startPostTime.slice(0, 10))}
+                      D
+                      {DDay(el.startPostTime.slice(0, 10)) < 0
+                        ? '+' + Math.abs(DDay(el.startPostTime.slice(0, 10)))
+                        : '-' + DDay(el.startPostTime.slice(0, 10))}
                     </p>
                     <div className="flex">
                       <BsFillSuitHeartFill
@@ -83,7 +89,19 @@ const EventContent = ({ data }) => {
 };
 
 const EventTagBox = styled.div`
-  background-color: #eaeaea;
+  background-color: ${(props) =>
+    props.tag === '축제'
+      ? yellow
+      : props.tag === '전시'
+      ? blue
+      : props.tag === '공연'
+      ? pink
+      : props.tag === '강연'
+      ? orange
+      : props.tag === '대회'
+      ? purple2
+      : green_1};
+  color: white;
   font-size: 12px;
   width: 35px;
   height: 22px;
