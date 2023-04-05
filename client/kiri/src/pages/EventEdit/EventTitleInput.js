@@ -44,10 +44,11 @@ const ErrorMessageBox = styled.div`
   margin-left: 3px;
 `;
 
-const EventTitleInput = ({ Title, setTitle, titleRef, errorMessage }) => {
+const EventTitleInput = ({ title, setTitle, titleRef, errorMessage }) => {
   const handleChangeInput = (e) => {
     setTitle(e.target.value);
   };
+  console.log('title', title);
   return (
     <EventTitleInputContainer>
       <TitleHeader>
@@ -55,7 +56,7 @@ const EventTitleInput = ({ Title, setTitle, titleRef, errorMessage }) => {
         <span className="green">*</span>
         <ErrorMessageBox> {errorMessage.titleErrorMessage}</ErrorMessageBox>
       </TitleHeader>
-      <TitleInput value={Title} onChange={handleChangeInput} ref={titleRef} />
+      <TitleInput value={title} onChange={handleChangeInput} ref={titleRef} />
     </EventTitleInputContainer>
   );
 };
