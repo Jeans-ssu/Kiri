@@ -10,6 +10,10 @@ const PageContainerBox = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #f2f2f2;
+  @media screen and (max-width: 767px) {
+    min-width: 350px;
+    overflow-y: auto;
+  }
 `;
 
 const ContentContainer = styled.div`
@@ -21,9 +25,12 @@ const ContentContainer = styled.div`
   &.none {
     margin-bottom: 0;
   }
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    margin-bottom: 0;
+  }
 `;
 
-//TODO: 헤더, 푸터 추가
 const PageContainer = ({
   children,
   header,
