@@ -61,7 +61,7 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
-      console.log('resdata', resdata);
+      console.log('resdata', resdata.member_id);
       setData(resdata);
     } catch (error) {
       console.error('Error: ', error);
@@ -119,9 +119,6 @@ const EventInfoPage = () => {
               <EventTitlediv>
                 <h1>{data.title}</h1>
               </EventTitlediv>
-              <EventTagBox>
-                <EventTagSpan>{data.event}</EventTagSpan>
-              </EventTagBox>
               <EventSharediv>
                 <FiShare2 size="27" />
               </EventSharediv>
@@ -211,21 +208,6 @@ const EventInfoPage = () => {
   );
 };
 
-const EventTagBox = styled.div`
-  background-color: #eaeaea;
-  font-size: 12px;
-  width: 35px;
-  height: 22px;
-  display: flex;
-  margin-bottom: 5px;
-  border-radius: 10px;
-  margin: auto 10px;
-`;
-
-const EventTagSpan = styled.span`
-  margin: auto;
-`;
-
 const EditBox = styled.div`
   display: flex;
   height: 50px;
@@ -280,6 +262,7 @@ const EventTitlediv = styled.div`
 const EventSharediv = styled.div`
   display: flex;
   align-items: center;
+  margin-left: 20px;
   cursor: pointer;
 `;
 
