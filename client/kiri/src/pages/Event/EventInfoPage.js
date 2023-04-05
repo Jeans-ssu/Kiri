@@ -12,12 +12,17 @@ import { setAuthHeader } from 'api/setAuthHeader';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { selectUserInfo } from 'store/modules/userSlice';
+import PostRemoveModal from 'components/PostRemoveModal';
+import theme from 'styles/theme';
+
+const { yellow, blue, pink, orange, purple2, green_1 } = theme.colors;
 
 const EventInfoPage = () => {
   const navigate = useNavigate();
   const preID = useLocation().pathname.substring(7);
   const loginID = useSelector(selectUserInfo);
 
+  const [isOpen, setIsOpen] = useState(false);
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
     post_id: 0,
@@ -34,7 +39,6 @@ const EventInfoPage = () => {
     place: null,
     savedImgList: [],
     startPostTime: '',
-    //01234567890123456789
     finishPostTime: '',
   });
 
@@ -60,7 +64,7 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
-      console.log('resdata', resdata.member_id);
+      console.log('resdata', resdata);
       setData(resdata);
     } catch (error) {
       console.error('Error: ', error);
@@ -85,7 +89,7 @@ const EventInfoPage = () => {
   };
 
   const DDay = (expiry_date) => {
-    const now = new Date(); // 2022-11-25
+    const now = new Date();
     const target = new Date(
       expiry_date.slice(0, 4),
       MakeDay(expiry_date.slice(5, 7)) - 1,
@@ -105,7 +109,6 @@ const EventInfoPage = () => {
 
   const HandleDelete = () => {
     axios.delete(`/api/posts/${preID}`).then(() => {
-      alert('게시글이 삭제되었습니다.');
       history.back();
     });
   };
@@ -119,6 +122,9 @@ const EventInfoPage = () => {
               <EventTitlediv>
                 <h1>{data.title}</h1>
               </EventTitlediv>
+              <EventTagBox tag={data.event}>
+                <EventTagSpan>{data.event}</EventTagSpan>
+              </EventTagBox>
               <EventSharediv>
                 <FiShare2 size="27" />
               </EventSharediv>
@@ -137,7 +143,10 @@ const EventInfoPage = () => {
           </EventUpdiv>
           <EventPerioddiv>
             <EventDdaydiv>
-              D-{DDay(data.startPostTime.slice(0, 10))}
+              D
+              {DDay(data.startPostTime.slice(0, 10)) < 0
+                ? '+' + Math.abs(DDay(data.startPostTime.slice(0, 10)))
+                : '-' + DDay(data.startPostTime.slice(0, 10))}
             </EventDdaydiv>
             <EventWriterdiv>{data.organizer}</EventWriterdiv>
             <EventTimediv>
@@ -187,7 +196,18 @@ const EventInfoPage = () => {
             >
               수정
             </EditBtn>
-            <DeleteBtn onClick={HandleDelete}>삭제</DeleteBtn>
+            <DeleteBtn
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+            >
+              삭제
+            </DeleteBtn>
+            <PostRemoveModal
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              HandleDelete={HandleDelete}
+            />
           </EditBox>
         ) : (
           ''
@@ -196,6 +216,34 @@ const EventInfoPage = () => {
     </PageContainer>
   );
 };
+
+const EventTagBox = styled.div`
+  background-color: ${(props) =>
+    props.tag === '축제'
+      ? yellow
+      : props.tag === '전시'
+      ? blue
+      : props.tag === '공연'
+      ? pink
+      : props.tag === '강연'
+      ? orange
+      : props.tag === '대회'
+      ? purple2
+      : green_1};
+  font-size: 12px;
+  color: white;
+  font-weight: 600;
+  width: 35px;
+  height: 22px;
+  display: flex;
+  margin-bottom: 5px;
+  border-radius: 10px;
+  margin: auto 10px;
+`;
+
+const EventTagSpan = styled.span`
+  margin: auto;
+`;
 
 const EditBox = styled.div`
   display: flex;
@@ -251,7 +299,6 @@ const EventTitlediv = styled.div`
 const EventSharediv = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 20px;
   cursor: pointer;
 `;
 

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
-import MainCarousel from './MainCarousel';
-import MainEvents from './MainEvents';
-import SelectedEvents from './SelectedEvents';
-import BestEvents from './BestEvents';
+// import MainCarousel from './MainCarousel';
+// import MainEvents from './MainEvents';
+// import SelectedEvents from './SelectedEvents';
+// import BestEvents from './BestEvents';
 
 const MainPageContainer = styled.div`
   color: ${({ theme }) => theme.colors.mainColor};
@@ -39,10 +39,10 @@ const MainPage = () => {
           </span>{' '}
           - 이제 <span className="green">끼리끼리</span> 모이자!
         </MainPageHeader>
-        <MainCarousel />
+        {/* <MainCarousel />
         <MainEvents />
         <SelectedEvents />
-        <BestEvents />
+        <BestEvents /> */}
       </MainPageContainer>
     </PageContainer>
   );

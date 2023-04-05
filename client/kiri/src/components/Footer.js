@@ -11,18 +11,24 @@ const Foot = styled.footer`
   width: 100%;
   box-sizing: border-box;
   height: 100px;
+  color: #bfbfbf;
+
+  a {
+    color: #bfbfbf;
+    text-decoration: none;
+    font-weight: 500;
+  }
 
   img {
     margin-left: 40px;
     padding-right: 10px;
     padding-top: 10px;
     margin-bottom: 10px;
-    border-right: solid 1px ${({ theme }) => theme.colors.green_1};
+    border-right: 1px solid #bfbfbf;
   }
 
   p {
     text-align: left;
-    color: ${({ theme }) => theme.colors.green_1};
   }
 
   p span {
@@ -30,11 +36,6 @@ const Foot = styled.footer`
     margin-left: 20px;
     font-weight: light;
     font-size: 11px;
-  }
-
-  p span a {
-    text-decoration-line: none;
-    color: ${({ theme }) => theme.colors.green_1};
   }
 
   div.version {
@@ -64,9 +65,13 @@ const Footer = () => {
           </a>
         </span>
         <br />
-        <span>Made by: 정노은, 김수진, 김정우</span>
+        <span>
+          <a href="https://github.com/jungnoeun">@jungnoeun </a>
+          <a href="https://github.com/SujinKim1127">@SujinKim1127 </a>
+          <a href="https://github.com/jwo0o0">@jwo0o0 </a>
+        </span>
         <br />
-        <span>Copyright @ Kiri</span>
+        <span>Copyright 2023. Kiri. All rights reserved.</span>
       </p>
       <div className="version">version 1.0.0</div>
     </Foot>

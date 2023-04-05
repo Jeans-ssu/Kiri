@@ -2,6 +2,9 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { setTagMode, setTagWord } from 'store/modules/tagSlice';
+import theme from 'styles/theme';
+
+const { yellow, blue, pink, orange, purple2, green_1 } = theme.colors;
 
 export const EventTag = ({ tag, result, getEvent }) => {
   const [check, setCheck] = useState(false);
@@ -35,11 +38,13 @@ export const EventTag = ({ tag, result, getEvent }) => {
         type="checkbox"
         value={tag}
         id={tag}
+        tag={tag}
       />
       <FilterLable
         className={check ? 'focused' : ''}
         onClick={lineCheck}
         htmlFor={tag}
+        tag={tag}
       >
         {tag}
       </FilterLable>
@@ -67,7 +72,6 @@ const FilterLable = styled.label`
     color: #59b89d;
     font-weight: 700;
     width: 40px;
-    background-color: ${({ theme }) => theme.colors.mainColor};
     color: white;
   }
 `;
@@ -75,10 +79,20 @@ const FilterLable = styled.label`
 const FilterInput = styled.input`
   appearance: none;
   &:checked + ${FilterLable} {
-    color: #59b89d;
     font-weight: 700;
     width: 40px;
-    background-color: ${({ theme }) => theme.colors.mainColor};
+    background-color: ${(props) =>
+      props.tag === '축제'
+        ? yellow
+        : props.tag === '전시'
+        ? blue
+        : props.tag === '공연'
+        ? pink
+        : props.tag === '강연'
+        ? orange
+        : props.tag === '대회'
+        ? purple2
+        : green_1};
     color: white;
     :after {
       opacity: 1;
