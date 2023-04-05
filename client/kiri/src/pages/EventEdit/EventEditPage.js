@@ -81,7 +81,6 @@ const EventEditPage = () => {
     });
   };
 
-  const [title, setTitle] = useState();
   const [postid, setPostID] = useState();
   const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');

@@ -236,25 +236,42 @@ const EventWritePage = () => {
           })
           .catch((err) => console.error(err));
 
-      const imgarr = getImageID();
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('scrap_count', 0);
-      formData.append('email', info.email);
-      formData.append('content', explain);
-      formData.append('event', info.type);
-      formData.append('local', info.region);
-      formData.append('school', info.univ);
-      formData.append('place', info.location);
-      formData.append('organizer', info.host);
-      formData.append('link', link);
-      if (imgarr.length === 1) {
-        formData.append('imageIdList[]', [Number(imgarr)]);
-      } else {
-        for (let i = 0; i < imgarr.length; i++) {
-          formData.append('imageIdList[]', Number(imgarr[i]));
-        }
+        const imgarr = getImageID();
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('scrap_count', 0);
+        formData.append('email', info.email);
+        formData.append('content', explain);
+        formData.append('event', info.type);
+        formData.append('local', info.region);
+        formData.append('school', info.univ);
+        formData.append('place', info.location);
+        formData.append('organizer', info.host);
+        formData.append('link', link);
+        if (imgarr.length === 1) {
+          formData.append('imageIdList[]', [Number(imgarr)]);
+        } else {
+          for (let i = 0; i < imgarr.length; i++) {
+            formData.append('imageIdList[]', Number(imgarr[i]));
+          }
 
+          formData.append('contactNumber', info.tel);
+          formData.append(
+            'startPostTime',
+            info.startDate + ' ' + info.startTime + ':00'
+          );
+          formData.append(
+            'finishPostTime',
+            info.endDate + ' ' + info.endTime + ':00'
+          );
+          axios
+            .post('/api/posts', formData)
+            .then((res) => {
+              setPostID(res.data.post_id);
+              setIsSuccess(true);
+            })
+            .catch((err) => console.error(err));
+        }
         formData.append('contactNumber', info.tel);
         formData.append(
           'startPostTime',
@@ -272,22 +289,6 @@ const EventWritePage = () => {
           })
           .catch((err) => console.error(err));
       }
-      formData.append('contactNumber', info.tel);
-      formData.append(
-        'startPostTime',
-        info.startDate + ' ' + info.startTime + ':00'
-      );
-      formData.append(
-        'finishPostTime',
-        info.endDate + ' ' + info.endTime + ':00'
-      );
-      axios
-        .post('/api/posts', formData)
-        .then((res) => {
-          setPostID(res.data.post_id);
-          setIsSuccess(true);
-        })
-        .catch((err) => console.error(err));
     }
   };
   return (
