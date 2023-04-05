@@ -28,6 +28,7 @@ const ContentContainer = styled.div`
   @media screen and (max-width: 767px) {
     width: 100%;
     margin-bottom: 0;
+    padding: 20px 0;
   }
 `;
 
