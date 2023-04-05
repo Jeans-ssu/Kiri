@@ -5,6 +5,7 @@ import Header from '../components/Header';
 
 const PageContainerBox = styled.div`
   min-height: 100vh;
+  min-width: 1096px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,9 +14,7 @@ const PageContainerBox = styled.div`
 
 const ContentContainer = styled.div`
   flex: 1;
-  width: 100%;
-  max-width: 1024px;
-  min-width: 375px;
+  width: 1024px;
   background-color: white;
   margin-bottom: 30px;
   padding: ${(props) => (props.padding ? props.padding : '40px 0')};

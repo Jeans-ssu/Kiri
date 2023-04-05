@@ -165,7 +165,7 @@ const SigninInputs = () => {
             name="email"
             type="text"
             value={email}
-            placeholder="abcd@gmail.com"
+            placeholder="helloword@email.com"
             onChange={handleChangeInput}
             className={validation.email ? 'validate' : null}
           />
@@ -177,6 +177,20 @@ const SigninInputs = () => {
               id="check"
               className={validation.password ? 'validate' : null}
             />
+          </InputHeader>
+          <label htmlFor="signininput">
+            <SigninInput
+              name="password"
+              type={isViewMode ? 'text' : 'password'}
+              value={password}
+              onChange={handleChangeInput}
+              className={validation.password ? 'validate' : null}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleClickSigninBtn();
+                }
+              }}
+            />
             <ViewPasswordBtn_
               onClick={() => {
                 setIsViewMode(!isViewMode);
@@ -184,19 +198,7 @@ const SigninInputs = () => {
             >
               <AiFillEye />
             </ViewPasswordBtn_>
-          </InputHeader>
-          <SigninInput
-            name="password"
-            type={isViewMode ? 'text' : 'password'}
-            value={password}
-            onChange={handleChangeInput}
-            className={validation.password ? 'validate' : null}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                handleClickSigninBtn();
-              }
-            }}
-          />
+          </label>
         </InputContainer>
         <BtnContainer>
           <MoveToSignupBtn onClick={handleClickMoveToSignupBtn}>

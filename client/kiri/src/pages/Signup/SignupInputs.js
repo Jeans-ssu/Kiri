@@ -23,6 +23,14 @@ export const InputContainer = styled.div`
   &.hide {
     display: none;
   }
+  label {
+    position: relative;
+    button {
+      position: absolute;
+      right: 0;
+      top: 25%;
+    }
+  }
 `;
 
 export const InputHeader = styled.div`
@@ -344,7 +352,7 @@ const SignupInputs = () => {
           <SignupInput
             name="email"
             value={email}
-            placeholder="abcd@gmail.com"
+            placeholder="helloworld@email.com"
             onChange={handleChangeInput}
             className={validation.email ? 'validate' : null}
           />
@@ -359,6 +367,15 @@ const SignupInputs = () => {
               id="check"
               className={validation.password ? 'validate' : null}
             />
+          </InputHeader>
+          <label htmlFor="signupinputs">
+            <SignupInput
+              name="password"
+              type={isViewMode ? 'text' : 'password'}
+              value={password}
+              onChange={handleChangeInput}
+              className={validation.password ? 'validate' : null}
+            />
             <ViewPasswordBtn_
               onClick={() => {
                 setIsViewMode(!isViewMode);
@@ -366,14 +383,7 @@ const SignupInputs = () => {
             >
               <AiFillEye />
             </ViewPasswordBtn_>
-          </InputHeader>
-          <SignupInput
-            name="password"
-            type={isViewMode ? 'text' : 'password'}
-            value={password}
-            onChange={handleChangeInput}
-            className={validation.password ? 'validate' : null}
-          />
+          </label>
           <ValidationMsg>영문,숫자 8-16글자</ValidationMsg>
         </InputContainer>
         <InputContainer>
@@ -383,6 +393,15 @@ const SignupInputs = () => {
               id="check"
               className={validation.Vpassword ? 'validate' : null}
             />
+          </InputHeader>
+          <label htmlFor="signupinputs">
+            <SignupInput
+              name="Vpassword"
+              type={isViewMode_ ? 'text' : 'password'}
+              value={Vpassword}
+              onChange={handleChangeInput}
+              className={validation.password ? 'validate' : null}
+            />
             <ViewPasswordBtn_
               onClick={() => {
                 setIsViewMode_(!isViewMode_);
@@ -390,14 +409,7 @@ const SignupInputs = () => {
             >
               <AiFillEye />
             </ViewPasswordBtn_>
-          </InputHeader>
-          <SignupInput
-            name="Vpassword"
-            type={isViewMode_ ? 'text' : 'password'}
-            value={Vpassword}
-            onChange={handleChangeInput}
-            className={validation.password ? 'validate' : null}
-          />
+          </label>
         </InputContainer>
         <InputContainer>
           <InputHeader>소속</InputHeader>

@@ -19,7 +19,7 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        console.log('uploadImg', res.data);
         setImgList(res.data);
       })
       .catch((err) => console.log('ERROR: ', err));
@@ -34,9 +34,9 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
     for (let i = 0; i < imgArr.current.length; i++) {
       formData.append('files', imgArr.current[i]);
     }
-    // for (let value of formData.values()) {
-    //   console.log(value);
-    // }
+    for (let value of formData.values()) {
+      console.log('formdata', value);
+    }
     uploadImg(formData);
 
     const nowSelectImageList = e.target.files;
@@ -62,11 +62,17 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
   const fileInput = useRef(null);
 
   const deleteImg = (idx) => {
-    img.splice(idx, 1);
-    imgList.splice(idx, 1);
+    console.log('delete img', img);
+    console.log('delte imglist', imgList);
+    img?.splice(idx, 1);
+    imgList?.splice(idx, 1);
     imgArr.current.splice(idx, 1);
     setImg([...img]);
-    setImgList([...imgList]);
+    if (imgList === undefined) {
+      setImgList([]);
+    } else {
+      setImgList([...imgList]);
+    }
   };
 
   return (
