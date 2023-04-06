@@ -243,66 +243,42 @@ const EventEditPage = () => {
         });
       }
     } else {
-      if (img.length === 0 || img.length === undefined) {
-        console.log('length = 0');
-        axios
-          .post(`/api/posts/${postID}`, {
-            title: title,
-            scrap_count: 0,
-            email: info.email,
-            content: explain,
-            event: info.type,
-            local: info.region,
-            school: info.univ,
-            place: info.location,
-            organizer: info.host,
-            link: link,
-            contactNumber: info.tel,
-            imageIdList: null,
-            startPostTime: info.startDate + ' ' + info.startTime + ':00',
-            finishPostTime: info.endDate + ' ' + info.endTime + ':00',
-          })
-          .then((res) => {
-            alert('수정이 완료되었습니다.');
-            setPostID(res.data.post_id);
-            setIsSuccess(true);
-          })
-          .catch((err) => console.error(err));
+      const imgarr = getImageID();
+      console.log('imaarr', imgarr);
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('scrap_count', 0);
+      formData.append('email', info.email);
+      formData.append('content', explain);
+      formData.append('event', info.type);
+      formData.append('local', info.region);
+      formData.append('school', info.univ);
+      formData.append('place', info.location);
+      formData.append('organizer', info.host);
+      formData.append('link', link);
+      if (imgarr.length === 1) {
+        formData.append('imageIdList[]', [Number(imgarr)]);
       } else {
-        const imgarr = getImageID();
-        console.log('imaarr', imgarr);
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('scrap_count', 0);
-        formData.append('email', info.email);
-        formData.append('content', explain);
-        formData.append('event', info.type);
-        formData.append('local', info.region);
-        formData.append('school', info.univ);
-        formData.append('place', info.location);
-        formData.append('organizer', info.host);
-        formData.append('link', link);
-        if (imgarr.length === 1) {
-          formData.append('imageIdList[]', [Number(imgarr)]);
-        } else {
-          for (let i = 0; i < imgarr.length; i++) {
-            formData.append('imageIdList[]', Number(imgarr[i]));
-          }
+        for (let i = 0; i < imgarr.length; i++) {
+          formData.append('imageIdList[]', Number(imgarr[i]));
         }
-        formData.append('contactNumber', info.tel);
-        formData.append(
-          'startPostTime',
-          info.startDate + ' ' + info.startTime + ':00'
-        );
-        formData.append(
-          'finishPostTime',
-          info.endDate + ' ' + info.endTime + ':00'
-        );
-        axios
-          .post(`/api/posts/${postID}`, formData)
-          .then(alert('수정이 완료되었습니다.'))
-          .catch((err) => console.error(err));
       }
+      formData.append('contactNumber', info.tel);
+      formData.append(
+        'startPostTime',
+        info.startDate + ' ' + info.startTime + ':00'
+      );
+      formData.append(
+        'finishPostTime',
+        info.endDate + ' ' + info.endTime + ':00'
+      );
+      axios
+        .post(`/api/posts/${postID}`, formData)
+        .then((res) => {
+          setPostID(res.data.post_id);
+          setIsSuccess(true);
+        })
+        .catch((err) => console.error(err));
     }
   };
 
