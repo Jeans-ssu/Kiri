@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { FaUserCircle } from 'react-icons/fa';
 import { AppBar, ListItemButton, ListItemText, Toolbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -8,6 +9,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from '@mui/material/Divider';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
 
 const HOME = '홈';
 const EVENT = '이벤트';
@@ -21,6 +24,7 @@ export const MobileHeader = () => {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     const { pathname } = location;
@@ -45,6 +49,14 @@ export const MobileHeader = () => {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseAnchor = () => {
+    setAnchorEl(null);
   };
 
   const container =
@@ -107,9 +119,26 @@ export const MobileHeader = () => {
   return (
     <MobileHeaderContinaer sx={{ display: 'flex' }}>
       <StyledAppbar component="nav">
-        <Toolbar>
+        <StyledToolbar>
           <MobileMenuIcon onClick={handleDrawerToggle} />
-        </Toolbar>
+          <div>
+            <UserMenuBtn onClick={handleMenu}>
+              <FaUserCircle />
+            </UserMenuBtn>
+            <StyledMenu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              keepMounted
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              open={Boolean(anchorEl)}
+              onClose={handleCloseAnchor}
+            >
+              <MenuItem onClick={handleCloseAnchor}>로그인</MenuItem>
+              <MenuItem onClick={handleCloseAnchor}>마이페이지</MenuItem>
+            </StyledMenu>
+          </div>
+        </StyledToolbar>
       </StyledAppbar>
       <Box component="nav">
         <Drawer
@@ -178,5 +207,36 @@ const StyledDrawerList = styled(List)`
   }
   li.selected {
     color: ${({ theme }) => theme.colors.mainColor};
+  }
+`;
+
+const UserMenuBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: ${({ theme }) => theme.colors.darkgray};
+  }
+`;
+
+const StyledToolbar = styled(Toolbar)`
+  justify-content: space-between;
+`;
+
+const StyledMenu = styled(Menu)`
+  div.MuiMenu-paper {
+    box-shadow: none;
+    border: 1px solid ${({ theme }) => theme.colors.lightgray};
+  }
+  ul {
+    padding: 0;
+  }
+  li {
+    font-size: 12px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.darkgray};
+    padding: 0 16px;
   }
 `;
