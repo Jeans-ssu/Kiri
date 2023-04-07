@@ -14,6 +14,7 @@ import axios from '../api/axios';
 import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
 import NeedLoginModal from './NeedLoginModal';
 import { persistor } from 'store/store';
+import { MobileHeader } from './MobileHeader';
 
 //redux-persist 저장값 초기화
 const purge = async () => {
@@ -70,7 +71,7 @@ const Header = ({ page }) => {
   };
 
   return (
-    <>
+    <HeaderContainer>
       <Main>
         <div className="left">
           <Logo>
@@ -130,9 +131,19 @@ const Header = ({ page }) => {
         </div>
         <NeedLoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
       </Main>
-    </>
+      <MobileHeader id="mobile" />
+    </HeaderContainer>
   );
 };
+
+const HeaderContainer = styled.div`
+  width: 100%;
+  @media screen and (min-width: 768px) {
+    div#mobile {
+      display: none;
+    }
+  }
+`;
 
 const Main = styled.div`
   display: flex;
@@ -185,6 +196,9 @@ const Main = styled.div`
     display: flex;
     align-items: center;
     margin-right: 80px;
+  }
+  @media screen and (max-width: 767px) {
+    display: none;
   }
 `;
 
