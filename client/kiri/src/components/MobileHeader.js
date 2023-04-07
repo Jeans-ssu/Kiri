@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { AppBar, ListItemButton, ListItemText, Toolbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -16,7 +16,32 @@ const WRITE = '글쓰기';
 
 export const MobileHeader = () => {
   const navItems = [HOME, CALENDAR, EVENT, WRITE];
+
+  const location = useLocation();
+
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
+  useEffect(() => {
+    const { pathname } = location;
+    if (pathname.startsWith('/calendar')) {
+      setSelectedIndex(1);
+      return;
+    }
+    if (pathname.startsWith('/event/write')) {
+      setSelectedIndex(navItems.indexOf(WRITE));
+      return;
+    }
+    if (pathname.startsWith('/event')) {
+      setSelectedIndex(navItems.indexOf(EVENT));
+      return;
+    }
+
+    if (pathname.startsWith('/')) {
+      setSelectedIndex(navItems.indexOf(HOME));
+      return;
+    }
+  }, [location]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -61,7 +86,11 @@ export const MobileHeader = () => {
       <StyledDrawerList>
         {navItems.map((item, idx) => {
           return (
-            <ListItem key={idx} disablePadding>
+            <ListItem
+              key={idx}
+              disablePadding
+              className={selectedIndex === idx ? 'selected' : null}
+            >
               <ListItemButton
                 sx={{ textAlign: 'center' }}
                 onClick={handleClickDrawerListItem}
@@ -144,7 +173,10 @@ const StyledDrawerList = styled(List)`
   li {
     color: ${({ theme }) => theme.colors.dark};
     &:hover {
-      background-color: ${({ theme }) => theme.colors.green_2};
+      background-color: ${({ theme }) => theme.colors.light};
     }
+  }
+  li.selected {
+    color: ${({ theme }) => theme.colors.mainColor};
   }
 `;
