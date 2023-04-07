@@ -9,6 +9,14 @@ const EventInfoInputContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.mainColor};
   margin: 15px 0;
   padding: 15px 15px 5px 15px;
+  @media screen and (max-width: 767px) {
+    width: 100% - 15px;
+    .smallSize {
+      display: flex;
+      flex-direction: row;
+      margin-right: 5px;
+    }
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -22,7 +30,22 @@ const InfoContainer = styled.div`
   .univ {
     margin-left: -2px;
   }
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 15px;
+    .start {
+      margin-left: -13px;
+    }
+
+    .univ {
+      margin-left: -2px;
+    }
+  }
 `;
+
 const InfoHeader = styled.div`
   width: 85px;
   font-weight: 600;
@@ -30,7 +53,13 @@ const InfoHeader = styled.div`
   .green {
     color: ${({ theme }) => theme.colors.mainColor};
   }
+  @media screen and (max-width: 767px) {
+    width: 85px;
+    margin-bottom: 5px;
+    margin-right: auto;
+  }
 `;
+
 const InfoTextInput = styled.input`
   box-sizing: border-box;
   width: ${(props) => props.width || '300px'};
@@ -47,7 +76,35 @@ const InfoTextInput = styled.input`
     width: 140px;
     margin-right: 20px;
   }
+  @media screen and (max-width: 767px) {
+    width: ${(props) => props.width || '100%'};
+    margin-bottom: 5px;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    &.smallSize {
+      display: flex;
+      width: 140px;
+      margin-right: 7px;
+    }
+  }
 `;
+
+const InfoSmallBox = styled.div`
+  display: flex;
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    margin-right: auto;
+  }
+`;
+
+const SchoolBox = styled.div`
+  display: flex;
+  @media screen and (max-width: 767px) {
+    margin-right: auto;
+  }
+`;
+
 const InfoSelectInput = styled.select`
   width: 120px;
   height: 30px;
@@ -59,6 +116,10 @@ const InfoSelectInput = styled.select`
   &:focus {
     border: 1px solid ${({ theme }) => theme.colors.mainColor};
   }
+  @media screen and (max-width: 767px) {
+    width: 120px;
+    margin-right: auto;
+  }
 `;
 
 const ErrorMessageBox = styled.div`
@@ -68,6 +129,35 @@ const ErrorMessageBox = styled.div`
   display: flex;
   align-items: center;
   margin-left: 5px;
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+`;
+
+const ErrorMessageMobileBox = styled.div`
+  display: none;
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.red};
+    display: flex;
+    margin-right: auto;
+    margin-bottom: 2px;
+    &.date {
+      font-size: 12px;
+    }
+    &.start {
+      margin-right: 5px;
+    }
+  }
+`;
+
+const MobileFlex = styled.div`
+  display: flex;
+  @media screen and (max-width: 767px) {
+    margin-left: 15px;
+    margin-right: auto;
+  }
 `;
 
 const EventInfoInput = ({
@@ -103,6 +193,9 @@ const EventInfoInput = ({
         <InfoHeader>
           주최/단체 <span className="green">*</span>
         </InfoHeader>
+        <ErrorMessageMobileBox>
+          {errorMessage.hostErrorMessage}
+        </ErrorMessageMobileBox>
         <InfoTextInput
           type="text"
           value={info.host}
@@ -115,6 +208,9 @@ const EventInfoInput = ({
         <InfoHeader>
           이메일 <span className="green">*</span>
         </InfoHeader>
+        <ErrorMessageMobileBox>
+          {errorMessage.emailErrorMessage}
+        </ErrorMessageMobileBox>
         <InfoTextInput
           type="email"
           value={info?.email}
@@ -135,6 +231,9 @@ const EventInfoInput = ({
         <InfoHeader>
           지역 <span className="green">*</span>
         </InfoHeader>
+        <ErrorMessageMobileBox>
+          {errorMessage.regionErrorMessage}
+        </ErrorMessageMobileBox>
         <InfoSelectInput
           value={info?.region}
           onChange={(e) => {
@@ -157,16 +256,21 @@ const EventInfoInput = ({
         <InfoHeader>
           학교 <span className="green">*</span>
         </InfoHeader>
-        <InfoTextInput width="200px" readOnly value={info?.univ} />
-        <SearchUnivBtn
-          onClick={() => {
-            setIsOpen(true);
-          }}
-          ref={univRef}
-        >
-          <FiSearch />
-          찾아보기
-        </SearchUnivBtn>
+        <ErrorMessageMobileBox>
+          {errorMessage.univErrorMessage}
+        </ErrorMessageMobileBox>
+        <SchoolBox>
+          <InfoTextInput width="200px" readOnly value={info?.univ} />
+          <SearchUnivBtn
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            ref={univRef}
+          >
+            <FiSearch />
+            찾아보기
+          </SearchUnivBtn>
+        </SchoolBox>
         <SearchUnivModal
           isOpen={isOpen}
           setIsOpen={setIsOpen}
@@ -180,6 +284,9 @@ const EventInfoInput = ({
         <InfoHeader>
           유형 <span className="green">*</span>
         </InfoHeader>
+        <ErrorMessageMobileBox>
+          {errorMessage.typeErrorMessage}
+        </ErrorMessageMobileBox>
         <InfoSelectInput
           value={info?.type}
           onChange={(e) => {
@@ -202,26 +309,37 @@ const EventInfoInput = ({
         <InfoHeader>
           날짜 <span className="green">*</span>
         </InfoHeader>
-        <InfoTextInput
-          type="date"
-          className="smallSize"
-          value={info?.startDate}
-          onChange={(e) => handleChangeInput(e, 'startDate')}
-          ref={startDateRef}
-        />
-        <InfoTextInput
-          type="date"
-          className="smallSize"
-          value={info?.endDate}
-          onChange={(e) => handleChangeInput(e, 'endDate')}
-          ref={endDateRef}
-        />
-        {/* {errorMessage.startDateErrorMessage === '' &&
+        <MobileFlex>
+          <ErrorMessageMobileBox className="start date">
+            {errorMessage.startDateErrorMessage}
+          </ErrorMessageMobileBox>
+          <ErrorMessageMobileBox className="date">
+            {errorMessage.endDateErrorMessage}
+          </ErrorMessageMobileBox>
+        </MobileFlex>
+        <InfoSmallBox>
+          <InfoTextInput
+            type="date"
+            className="smallSize"
+            value={info?.startDate}
+            onChange={(e) => handleChangeInput(e, 'startDate')}
+            ref={startDateRef}
+          />
+          <InfoTextInput
+            type="date"
+            className="smallSize"
+            value={info?.endDate}
+            onChange={(e) => handleChangeInput(e, 'endDate')}
+            ref={endDateRef}
+          />
+          {/* {errorMessage.startDateErrorMessage === '' &&
         errorMessage.endDateErrorMessage === '' ? (
           <ErrorMessageBox>날짜를 입력해주세요</ErrorMessageBox>
         ) : (
           ''
         )} */}
+        </InfoSmallBox>
+
         <ErrorMessageBox className="start">
           {errorMessage.startDateErrorMessage}
         </ErrorMessageBox>
@@ -229,18 +347,20 @@ const EventInfoInput = ({
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>시간</InfoHeader>
-        <InfoTextInput
-          type="time"
-          className="smallSize"
-          value={info.startTime}
-          onChange={(e) => handleChangeInput(e, 'startTime')}
-        />
-        <InfoTextInput
-          type="time"
-          className="smallSize"
-          value={info.endTime}
-          onChange={(e) => handleChangeInput(e, 'endTime')}
-        />
+        <InfoSmallBox>
+          <InfoTextInput
+            type="time"
+            className="smallSize"
+            value={info.startTime}
+            onChange={(e) => handleChangeInput(e, 'startTime')}
+          />
+          <InfoTextInput
+            type="time"
+            className="smallSize"
+            value={info.endTime}
+            onChange={(e) => handleChangeInput(e, 'endTime')}
+          />
+        </InfoSmallBox>
       </InfoContainer>
       <InfoContainer>
         <InfoHeader>장소</InfoHeader>

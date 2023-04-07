@@ -4,6 +4,9 @@ const EventExplainInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 const ExplainHeader = styled.div`
