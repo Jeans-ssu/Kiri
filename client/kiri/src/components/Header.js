@@ -129,9 +129,17 @@ const Header = ({ page }) => {
             )}
           </Profile>
         </div>
-        <NeedLoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
       </Main>
-      <MobileHeader id="mobile" />
+      <MobileHeader
+        id="mobile"
+        handleClickLogout={handleClickLogout}
+        isOpenLoginModal={isOpen}
+        setIsOpenLoginModal={setIsOpen}
+        handleOnKeyPressEnter={handleOnKeyPressEnter}
+        handleChangeSearchword={handleChangeSearchword}
+        serachWord={serachWord}
+      />
+      <NeedLoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </HeaderContainer>
   );
 };
@@ -247,7 +255,7 @@ const Searchdiv = styled.div`
   }
 `;
 
-const SearchInput = styled.input`
+export const SearchInput = styled.input`
   width: 100%;
   height: 38px;
   background: #f5f5f5;

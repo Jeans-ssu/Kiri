@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { FaUserCircle } from 'react-icons/fa';
+import { FiSearch } from 'react-icons/fi';
 import { AppBar, ListItemButton, ListItemText, Toolbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -11,20 +12,31 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import { useSelector } from 'react-redux';
+import { selectIsLogin } from 'store/modules/userSlice';
+import { SearchInput } from './Header';
 
 const HOME = '홈';
 const EVENT = '이벤트';
 const CALENDAR = '캘린더';
 const WRITE = '글쓰기';
 
-export const MobileHeader = () => {
+export const MobileHeader = ({
+  handleClickLogout,
+  setIsOpenLoginModal,
+  handleOnKeyPressEnter,
+  handleChangeSearchword,
+  serachWord,
+}) => {
   const navItems = [HOME, CALENDAR, EVENT, WRITE];
 
   const location = useLocation();
 
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const isLogin = useSelector(selectIsLogin);
+
+  const [mobileOpen, setMobileOpen] = useState(false); //왼쪽 바 메뉴 오픈 여부
+  const [selectedIndex, setSelectedIndex] = useState(null); //현재 페이지에 따라 index
+  const [anchorEl, setAnchorEl] = useState(null); //오른쪽 드롭다운 메뉴
 
   useEffect(() => {
     const { pathname } = location;
@@ -55,8 +67,22 @@ export const MobileHeader = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleCloseAnchor = () => {
+  //오른쪽 메뉴 드롭다운 클릭시 처리
+  const handleCloseAnchor = (type) => {
     setAnchorEl(null);
+    if (type === 'logout') {
+      handleClickLogout();
+    }
+    if (type === 'signin') {
+      navigate('/signin');
+    }
+    if (type === 'mypage') {
+      if (isLogin) {
+        navigate('/mypage');
+      } else {
+        setIsOpenLoginModal(true);
+      }
+    }
   };
 
   const container =
@@ -64,6 +90,7 @@ export const MobileHeader = () => {
 
   const navigate = useNavigate();
 
+  //왼쪽 바 메뉴 선택시 처리
   const handleClickDrawerListItem = (e) => {
     switch (e.target.textContent) {
       case HOME:
@@ -83,6 +110,7 @@ export const MobileHeader = () => {
     }
   };
 
+  //왼쪽 바 메뉴
   const drawer = (
     <StyledDrawerContainer
       onClick={handleDrawerToggle}
@@ -121,6 +149,16 @@ export const MobileHeader = () => {
       <StyledAppbar component="nav">
         <StyledToolbar>
           <MobileMenuIcon onClick={handleDrawerToggle} />
+          <SearchInputContainer>
+            <FiSearch size="22" />
+            <SearchInput
+              type="text"
+              placeholder="이벤트를 검색해보세요"
+              onKeyPress={handleOnKeyPressEnter}
+              onChange={handleChangeSearchword}
+              value={serachWord}
+            />
+          </SearchInputContainer>
           <div>
             <UserMenuBtn onClick={handleMenu}>
               <FaUserCircle />
@@ -134,8 +172,30 @@ export const MobileHeader = () => {
               open={Boolean(anchorEl)}
               onClose={handleCloseAnchor}
             >
-              <MenuItem onClick={handleCloseAnchor}>로그인</MenuItem>
-              <MenuItem onClick={handleCloseAnchor}>마이페이지</MenuItem>
+              {isLogin ? (
+                <MenuItem
+                  onClick={() => {
+                    handleCloseAnchor('logout');
+                  }}
+                >
+                  로그아웃
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  onClick={() => {
+                    handleCloseAnchor('signin');
+                  }}
+                >
+                  로그인
+                </MenuItem>
+              )}
+              <MenuItem
+                onClick={() => {
+                  handleCloseAnchor('mypage');
+                }}
+              >
+                마이페이지
+              </MenuItem>
             </StyledMenu>
           </div>
         </StyledToolbar>
@@ -194,6 +254,18 @@ const LogoContainer = styled.div`
   padding: 14px 0;
   img {
     width: 100px;
+  }
+`;
+
+const SearchInputContainer = styled.div`
+  display: flex;
+  width: 250px;
+  position: relative;
+  svg {
+    position: absolute;
+    left: 8px;
+    top: 7px;
+    color: ${({ theme }) => theme.colors.darkgray};
   }
 `;
 
