@@ -17,7 +17,7 @@ const EventWritePageContainer = styled.div`
   padding: 0px 60px;
   @media screen and (max-width: 767px) {
     min-width: 300px;
-    width: 90%;
+    width: 90%-20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
