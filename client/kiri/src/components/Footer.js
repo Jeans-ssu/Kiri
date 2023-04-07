@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const Foot = styled.footer`
   display: flex;
+  align-items: center;
   padding: 10px;
   font-size: 14px;
   font-weight: 400;
@@ -11,6 +12,9 @@ const Foot = styled.footer`
   width: 100%;
   box-sizing: border-box;
   height: 100px;
+  @media screen and (max-width: 767px) {
+    height: 80px;
+  }
   color: #bfbfbf;
 
   a {
@@ -21,10 +25,16 @@ const Foot = styled.footer`
 
   img {
     margin-left: 40px;
-    padding-right: 10px;
-    padding-top: 10px;
-    margin-bottom: 10px;
+    padding: 5px 10px 5px 0;
     border-right: 1px solid #bfbfbf;
+    width: 60px;
+    height: 60px;
+    @media screen and (max-width: 767px) {
+      margin-left: 10px;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2em;
+    }
   }
 
   p {
@@ -49,8 +59,6 @@ const Footer = () => {
       <img
         id="logo"
         src={`${process.env.PUBLIC_URL}/kiri_logo_white.png`}
-        width="70"
-        height="70"
         alt="logo"
       />
       <p>
