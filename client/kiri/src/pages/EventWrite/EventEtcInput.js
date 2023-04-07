@@ -186,6 +186,9 @@ const LinkInput = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 3px;
   outline: none;
+  @media screen and (max-width: 767px) {
+    width: 65vw;
+  }
 `;
 
 const ImgInput = styled.input`
@@ -212,12 +215,23 @@ const PreviewBox = styled.div`
   .X {
     font-size: 17px;
   }
+  @media screen and (max-width: 767px) {
+    margin-left: 10px;
+    width: 82vw;
+    .X {
+      font-size: 15px;
+    }
+  }
 `;
 
 const GridImageBox = styled.div`
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   grid-gap: 18px 18px;
+  @media screen and (max-width: 767px) {
+    grid-gap: 18px 18px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 `;
 
 const GridBox = styled.div`
@@ -230,6 +244,10 @@ const GridImagePreview = styled.img`
   transform: translate(50, 50);
   object-fit: cover;
   margin: auto;
+  @media screen and (max-width: 767px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const GridRemoveBtn = styled.button`
@@ -239,6 +257,9 @@ const GridRemoveBtn = styled.button`
   cursor: pointer;
   margin-left: 2px;
   padding: 0;
+  @media screen and (max-width: 767px) {
+    margin-left: 0px;
+  }
 `;
 
 export default EventEtcInput;
