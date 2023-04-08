@@ -17,44 +17,6 @@ import { SET_TOKEN } from 'store/modules/authSlice';
 import { SET_USER } from 'store/modules/userSlice';
 import { SigninFailModal } from 'components/SignupinModal';
 
-const SigninInputsContainer = styled.div`
-  margin-top: 30px;
-`;
-
-const SigninBtn = styled(SubmitBtn)``;
-
-const BtnContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const MoveToSignupBtn = styled.button`
-  background-color: transparent;
-  border: none;
-  color: ${({ theme }) => theme.colors.darkgray};
-  display: flex;
-  align-items: center;
-  padding: 0;
-  span {
-    padding-top: 2px;
-  }
-  &:hover {
-    cursor: pointer;
-    color: ${({ theme }) => theme.colors.mainColor};
-  }
-`;
-
-const ViewPasswordBtn_ = styled(ViewPasswordBtn)`
-  position: absolute;
-  right: 0;
-`;
-
-const InitialState = {
-  email: '',
-  password: '',
-};
-
 const SigninInputs = () => {
   const [userInput, setUserInput] = useState(InitialState);
   const { email, password } = userInput;
@@ -211,6 +173,46 @@ const SigninInputs = () => {
       <SigninFailModal isOpen={isOpen} setIsOpen={setIsOpen} message={errMsg} />
     </>
   );
+};
+
+const SigninInputsContainer = styled.div`
+  margin-top: 30px;
+  @media screen and (max-width: 767px) {
+  }
+`;
+
+const SigninBtn = styled(SubmitBtn)``;
+
+const BtnContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const MoveToSignupBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.darkgray};
+  display: flex;
+  align-items: center;
+  padding: 0;
+  span {
+    padding-top: 2px;
+  }
+  &:hover {
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.mainColor};
+  }
+`;
+
+const ViewPasswordBtn_ = styled(ViewPasswordBtn)`
+  position: absolute;
+  right: 0;
+`;
+
+const InitialState = {
+  email: '',
+  password: '',
 };
 
 export default SigninInputs;
