@@ -121,6 +121,9 @@ const NoEventContainer = styled.div`
   text-align: center;
   line-height: 400px;
   color: ${({ theme }) => theme.colors.gray};
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 const ImgNull = styled.div`
@@ -157,6 +160,10 @@ const EventListMain = styled.main`
     padding-left: 30px;
     padding: 10px;
   }
+  @media screen and (max-width: 767px) {
+    min-width: 350px;
+    width: 90%;
+  }
 `;
 
 const EventContainer = styled.div`
@@ -171,6 +178,19 @@ const EventContainer = styled.div`
 
   &:hover {
     background-color: #f5f5f5;
+  }
+
+  @media screen and (max-width: 767px) {
+    justify-content: center;
+    margin: auto;
+    width: 100%;
+    min-width: 350px;
+  }
+
+  @media screen and (max-width: 395px) {
+    min-width: 350px;
+    justify-content: center;
+    margin: auto;
   }
 `;
 
@@ -206,6 +226,11 @@ const EventList = styled.div`
     margin-left: 10px;
     margin-top: 2.8px;
     color: #737373;
+  }
+
+  @media screen and (max-width: 395px) {
+    width: 40%;
+    margin-left: -15px;
   }
 `;
 
