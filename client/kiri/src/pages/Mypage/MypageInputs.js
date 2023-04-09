@@ -8,32 +8,6 @@ import { selectAccessToken } from 'store/modules/authSlice';
 import axios from '../../api/axios';
 import { setAuthHeader } from 'api/setAuthHeader';
 
-const MypageInputsContainer = styled.div``;
-
-const BtnWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-`;
-
-const EditInfoBtn = styled.button`
-  width: 120px;
-  height: 40px;
-  background-color: ${({ theme }) => theme.colors.mainColor};
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
-  color: white;
-  border-radius: 20px;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  &:hover {
-    cursor: pointer;
-    background-color: #44cf95;
-    transform: translateY(-3px);
-    transition: all 0.3s;
-  }
-`;
-
 const MypageInputs = () => {
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
@@ -127,5 +101,36 @@ const MypageInputs = () => {
     </MypageInputsContainer>
   );
 };
+
+const MypageInputsContainer = styled.div``;
+
+const BtnWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const EditInfoBtn = styled.button`
+  width: 120px;
+  height: 40px;
+  background-color: ${({ theme }) => theme.colors.mainColor};
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  border-radius: 20px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  &:hover {
+    cursor: pointer;
+    background-color: #44cf95;
+    transform: translateY(-3px);
+    transition: all 0.3s;
+  }
+  @media screen and (max-width: 767px) {
+    width: 100px;
+    height: 35px;
+    font-size: 14px;
+  }
+`;
 
 export default MypageInputs;

@@ -1,6 +1,37 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 
+const UserInfo = ({ userInfo }) => {
+  const navigate = useNavigate();
+
+  return (
+    <UserInfoConatiner>
+      <ProfileCircleContainer>
+        <img
+          src={process.env.PUBLIC_URL + '/img/profile_circle_green.svg'}
+          alt="profile_circle"
+        />
+      </ProfileCircleContainer>
+      <InfoConatiner>
+        <div className="section one">
+          <span className="nickname">{userInfo.username}</span>
+          <button
+            className="edit"
+            onClick={() => {
+              navigate('/mypage/edit');
+            }}
+          >
+            개인정보수정
+          </button>
+        </div>
+        <div className="section">
+          <span className="email">{userInfo.email}</span>
+        </div>
+      </InfoConatiner>
+    </UserInfoConatiner>
+  );
+};
+
 const UserInfoConatiner = styled.div`
   width: 600px;
   height: 80px;
@@ -8,6 +39,9 @@ const UserInfoConatiner = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 5px;
   display: flex;
+  @media screen and (max-width: 767px) {
+    width: 360px;
+  }
 `;
 
 const ProfileCircleContainer = styled.div`
@@ -53,36 +87,5 @@ const InfoConatiner = styled.div`
     }
   }
 `;
-
-const UserInfo = ({ userInfo }) => {
-  const navigate = useNavigate();
-
-  return (
-    <UserInfoConatiner>
-      <ProfileCircleContainer>
-        <img
-          src={process.env.PUBLIC_URL + '/img/profile_circle_green.svg'}
-          alt="profile_circle"
-        />
-      </ProfileCircleContainer>
-      <InfoConatiner>
-        <div className="section one">
-          <span className="nickname">{userInfo.username}</span>
-          <button
-            className="edit"
-            onClick={() => {
-              navigate('/mypage/edit');
-            }}
-          >
-            개인정보수정
-          </button>
-        </div>
-        <div className="section">
-          <span className="email">{userInfo.email}</span>
-        </div>
-      </InfoConatiner>
-    </UserInfoConatiner>
-  );
-};
 
 export default UserInfo;

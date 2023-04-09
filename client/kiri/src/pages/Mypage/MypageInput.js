@@ -6,130 +6,6 @@ import { Regions, Status } from 'util/info';
 import SearchUnivModal from 'components/SearchUnivModal';
 import { useNavigate } from 'react-router';
 
-const MypageInputWrapper = styled.div`
-  height: 20px;
-  padding: 20px 0;
-  border-bottom: 1px solid #d9d9d9;
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  color: ${({ theme }) => theme.colors.darkgray};
-  .type {
-    font-weight: 700;
-    width: 80px;
-  }
-  .value {
-    font-weight: 400;
-    width: 400px;
-    display: flex;
-    position: relative;
-    label {
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      position: absolute;
-      right: 10px;
-    }
-  }
-  .conatiner {
-    width: 75%;
-  }
-  .input {
-    font-weight: 400;
-    display: flex;
-    position: relative;
-    align-items: center;
-  }
-  .input > svg {
-    color: ${({ theme }) => theme.colors.red};
-    position: absolute;
-    right: 10%;
-    visibility: hidden;
-    &.notValid {
-      visibility: visible;
-    }
-  }
-`;
-
-export const ViewPasswordBtn = styled.button`
-  background-color: transparent;
-  border: none;
-  color: ${({ theme }) => theme.colors.gray};
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const EditBtn = styled.button`
-  background-color: transparent;
-  border: none;
-  font-size: 14px;
-  font-weight: 400;
-  text-decoration: underline;
-  color: ${({ theme }) => theme.colors.mainColor};
-  &:hover {
-    cursor: pointer;
-  }
-  &.hide {
-    visibility: hidden;
-  }
-`;
-
-const SaveBtn = styled.button`
-  width: 60px;
-  height: 25px;
-  background-color: ${({ theme }) => theme.colors.mainColor};
-  border: none;
-  font-size: 14px;
-  font-weight: 600;
-  color: white;
-  border-radius: 3px;
-  &:hover {
-    cursor: pointer;
-    background-color: #44cf95;
-  }
-  &.hide {
-    display: none;
-  }
-`;
-
-const EditInput = styled.input`
-  width: 90%;
-  height: 20px;
-  border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.mainColor};
-  font-size: 16px;
-  font-weight: 400;
-  color: ${({ theme }) => theme.colors.darkgray};
-  &:focus {
-    outline: none;
-  }
-  &.notValid {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.red};
-  }
-`;
-
-const SelectInput = styled.select`
-  width: 90%;
-  height: 30px;
-  border: 1px solid ${({ theme }) => theme.colors.lightgray};
-  border-radius: 5px;
-  padding-left: 5px;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const ValidationMsg = styled.div`
-  font-size: 11px;
-  color: ${({ theme }) => theme.colors.gray};
-  margin-top: 5px;
-  display: none;
-  &.password {
-    display: block;
-  }
-`;
-
 const interestTypes = {
   Etc: '기타',
   IT: 'IT',
@@ -337,5 +213,138 @@ const PasswordInput = () => {
     </MypageInputWrapper>
   );
 };
+
+const MypageInputWrapper = styled.div`
+  height: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid #d9d9d9;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: ${({ theme }) => theme.colors.darkgray};
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
+  .type {
+    font-weight: 700;
+    width: 80px;
+  }
+  .value {
+    font-weight: 400;
+    width: 400px;
+    display: flex;
+    position: relative;
+    label {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      position: absolute;
+      right: 10px;
+    }
+    @media screen and (max-width: 767px) {
+      width: 240px;
+    }
+  }
+  .conatiner {
+    width: 75%;
+  }
+  .input {
+    font-weight: 400;
+    display: flex;
+    position: relative;
+    align-items: center;
+  }
+  .input > svg {
+    color: ${({ theme }) => theme.colors.red};
+    position: absolute;
+    right: 10%;
+    visibility: hidden;
+    &.notValid {
+      visibility: visible;
+    }
+  }
+`;
+
+export const ViewPasswordBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.gray};
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const EditBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: underline;
+  color: ${({ theme }) => theme.colors.mainColor};
+  &:hover {
+    cursor: pointer;
+  }
+  &.hide {
+    visibility: hidden;
+  }
+`;
+
+const SaveBtn = styled.button`
+  width: 60px;
+  height: 25px;
+  background-color: ${({ theme }) => theme.colors.mainColor};
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  border-radius: 3px;
+  &:hover {
+    cursor: pointer;
+    background-color: #44cf95;
+  }
+  &.hide {
+    display: none;
+  }
+`;
+
+const EditInput = styled.input`
+  width: 90%;
+  height: 20px;
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.mainColor};
+  font-size: 16px;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.darkgray};
+  &:focus {
+    outline: none;
+  }
+  &.notValid {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.red};
+  }
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
+`;
+
+const SelectInput = styled.select`
+  width: 90%;
+  height: 30px;
+  border: 1px solid ${({ theme }) => theme.colors.lightgray};
+  border-radius: 5px;
+  padding-left: 5px;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const ValidationMsg = styled.div`
+  font-size: 11px;
+  color: ${({ theme }) => theme.colors.gray};
+  margin-top: 5px;
+  display: none;
+  &.password {
+    display: block;
+  }
+`;
 
 export { PasswordInput, MypageInput };
