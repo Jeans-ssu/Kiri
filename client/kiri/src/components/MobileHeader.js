@@ -234,6 +234,7 @@ const MobileHeaderContinaer = styled(Box)`
 
 const StyledAppbar = styled(AppBar)`
   box-sizing: border-box;
+  min-height: 59px;
   height: 59px;
   background-color: white !important;
   box-shadow: none !important;
@@ -295,6 +296,10 @@ const UserMenuBtn = styled.button`
 
 const StyledToolbar = styled(Toolbar)`
   justify-content: space-between;
+  height: 58px;
+  @media screen and (min-width: 600px) {
+    min-height: 58px !important;
+  }
 `;
 
 const StyledMenu = styled(Menu)`
