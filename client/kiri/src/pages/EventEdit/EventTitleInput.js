@@ -33,6 +33,9 @@ const TitleInput = styled.input`
   &:focus {
     border: 1px solid ${({ theme }) => theme.colors.mainColor};
   }
+  @media screen and (max-width: 767px) {
+    width: 93vw;
+  }
 `;
 
 const ErrorMessageBox = styled.div`

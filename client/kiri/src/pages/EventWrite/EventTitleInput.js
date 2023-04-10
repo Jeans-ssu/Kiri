@@ -37,7 +37,7 @@ const TitleInput = styled.input`
     border: 1px solid ${({ theme }) => theme.colors.mainColor};
   }
   @media screen and (max-width: 767px) {
-    width: 100%;
+    width: 93vw;
   }
 `;
 
