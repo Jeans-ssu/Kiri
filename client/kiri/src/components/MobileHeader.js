@@ -53,7 +53,7 @@ export const MobileHeader = ({
       return;
     }
 
-    if (pathname.startsWith('/')) {
+    if (pathname === '/') {
       setSelectedIndex(navItems.indexOf(HOME));
       return;
     }
@@ -149,6 +149,19 @@ export const MobileHeader = ({
       <StyledAppbar component="nav">
         <StyledToolbar>
           <MobileMenuIcon onClick={handleDrawerToggle} />
+          <MiddleMenuList>
+            {navItems.map((el, idx) => {
+              return (
+                <MiddleMenuBtn
+                  key={idx}
+                  className={selectedIndex === idx ? 'selected' : null}
+                  onClick={handleClickDrawerListItem}
+                >
+                  {el}
+                </MiddleMenuBtn>
+              );
+            })}
+          </MiddleMenuList>
           <SearchInputContainer>
             <FiSearch size="22" />
             <SearchInput
@@ -247,6 +260,9 @@ const MobileMenuIcon = styled(MenuIcon)`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (min-width: 600px) {
+    display: none !important;
+  }
 `;
 
 const StyledDrawerContainer = styled(Box)``;
@@ -315,5 +331,41 @@ const StyledMenu = styled(Menu)`
     font-weight: 600;
     color: ${({ theme }) => theme.colors.darkgray};
     padding: 0 16px;
+    @media screen and (min-width: 600px) {
+      padding: 15px 16px;
+    }
+  }
+`;
+
+const MiddleMenuList = styled.div`
+  @media screen and (max-width: 599px) {
+    display: none;
+  }
+  flex: 0.8;
+  display: flex;
+  justify-content: center;
+`;
+
+const MiddleMenuBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  width: 100%;
+  height: 59px;
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.dark};
+  margin: 0 8px;
+  white-space: nowrap;
+  &:hover {
+    cursor: pointer;
+    border-bottom: 3px solid ${({ theme }) => theme.colors.mainColor};
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+      box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+      border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+      color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+  &.selected {
+    border-bottom: 3px solid ${({ theme }) => theme.colors.mainColor};
   }
 `;
