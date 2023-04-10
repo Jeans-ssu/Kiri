@@ -121,6 +121,9 @@ const NoEventContainer = styled.div`
   text-align: center;
   line-height: 400px;
   color: ${({ theme }) => theme.colors.gray};
+  @media screen and (max-width: 767px) {
+    width: 90vw;
+  }
 `;
 
 const ImgNull = styled.div`
