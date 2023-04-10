@@ -160,6 +160,11 @@ const EventListMain = styled.main`
     padding-left: 30px;
     padding: 10px;
   }
+
+  @media screen and (max-width: 767px) {
+    width: 90vw;
+    justify-content: space-between;
+  }
 `;
 
 const EventContainer = styled.div`
@@ -175,6 +180,13 @@ const EventContainer = styled.div`
   &:hover {
     background-color: #f5f5f5;
   }
+  @media screen and (max-width: 767px) {
+    width: 40vw;
+    margin: 0;
+  }
+  @media screen and (max-width: 600px) {
+    width: 90vw;
+  }
 `;
 
 const EventList = styled.div`
@@ -185,6 +197,7 @@ const EventList = styled.div`
     margin-top: 0px;
     margin-bottom: 0px;
     cursor: pointer;
+    color: ${({ theme }) => theme.colors.dark};
   }
 
   .host {
@@ -209,6 +222,15 @@ const EventList = styled.div`
     margin-left: 10px;
     margin-top: 2.8px;
     color: #737373;
+  }
+  @media screen and (max-width: 767px) {
+    h4 {
+      font-size: 13px;
+      margin-right: 5px;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    flex: 1;
   }
 `;
 
