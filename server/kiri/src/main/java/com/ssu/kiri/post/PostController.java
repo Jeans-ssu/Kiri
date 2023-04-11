@@ -50,20 +50,6 @@ public class PostController {
 
         List<Long> imageIdList = savePost.getImageIdList();
 
-        /*Post post = Post.builder()
-                .title(savePost.getTitle())
-                .scrap_count(savePost.getScrap_count())
-                .content(savePost.getContent())
-                .event(savePost.getEvent())
-                .school(savePost.getSchool())
-                .local(savePost.getLocal())
-                .organizer(savePost.getOrganizer())
-                .link(savePost.getLink())
-                .place(savePost.getPlace())
-                .startPostTime(savePost.getStartPostTime())
-                .finishPostTime(savePost.getFinishPostTime())
-                .build();
-*/
         SaveResPost saveResPost = postService.savePost(savePost, imageIdList);
 
         //=====================이거 꼭 써야 하나?======================//
@@ -80,22 +66,6 @@ public class PostController {
                                      @Valid @RequestBody SavePost savePost) {
 
         List<Long> imageIdList = savePost.getImageIdList();
-
-//        Post post = postMapper.saveToPost(savePost);
-        /*Post post = Post.builder()
-                .title(savePost.getTitle())
-                .scrap_count(savePost.getScrap_count())
-                .content(savePost.getContent())
-                .event(savePost.getEvent())
-                .school(savePost.getSchool())
-                .local(savePost.getLocal())
-                .organizer(savePost.getOrganizer())
-                .link(savePost.getLink())
-                .contactNumber(savePost.getContactNumber())
-                .place(savePost.getPlace())
-                .startPostTime(savePost.getStartPostTime())
-                .finishPostTime(savePost.getFinishPostTime())
-                .build();*/
 
         SaveResPost saveResPost = postService.updatePost(savePost, post_id, imageIdList);
         return ResponseEntity.ok(saveResPost);

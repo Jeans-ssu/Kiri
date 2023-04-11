@@ -57,9 +57,13 @@ public class PostService {
                 .map(img -> img.getImgUrl())
                 .collect(Collectors.toList());
 
+        List<Long> imgIdList = imageList.stream()
+                .map(img -> img.getId())
+                .collect(Collectors.toList());
+
         // 회원가입을 안한 경우
         if(member == null) {
-            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList,false);
+            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList,false, imgIdList);
             return detailPost;
         }
         else {
@@ -68,8 +72,8 @@ public class PostService {
 
             Optional<Scrap> scrapOptional = scrapRepository.findByMemberAndPost(findMember, post);
             boolean isScrap = scrapOptional.isPresent();
-            System.out.println("isScrap 값을 출력 = " + isScrap);
-            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList, isScrap);
+            //System.out.println("isScrap 값을 출력 = " + isScrap);
+            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList, isScrap, imgIdList);
 
             return detailPost;
         }
@@ -299,7 +303,7 @@ public class PostService {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
-        System.out.println("========================================================================================");
+        //System.out.println("========================================================================================");
         List<Post> posts = postRepository.findAllByMember(member);
         List<MyPostDto> myPostDto = convertToMyPost(posts);
         return myPostDto;
@@ -315,6 +319,7 @@ public class PostService {
             myPostDto.setScrap_count(post.getScrap_count());
             myPostDto.setStartPostTime(post.getStartPostTime().toString());
             myPostDto.setFinishPostTime(post.getFinishPostTime().toString());
+            myPostDto.setEvent(post.getEvent());
 
             String thumbnail = imageService.getThumbnail(post.getId());
             if(thumbnail == null || thumbnail.isEmpty()) {
