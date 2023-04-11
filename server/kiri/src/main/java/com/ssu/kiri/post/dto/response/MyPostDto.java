@@ -17,4 +17,5 @@ public class MyPostDto {
     private String finishPostTime; // 게시글 시작 날짜
 
     private int scrap_count; // 좋아요 수
+    private String event; // 이벤트 타입
 }

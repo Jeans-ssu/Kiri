@@ -299,7 +299,7 @@ public class PostService {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
-        System.out.println("========================================================================================");
+        //System.out.println("========================================================================================");
         List<Post> posts = postRepository.findAllByMember(member);
         List<MyPostDto> myPostDto = convertToMyPost(posts);
         return myPostDto;
@@ -315,6 +315,7 @@ public class PostService {
             myPostDto.setScrap_count(post.getScrap_count());
             myPostDto.setStartPostTime(post.getStartPostTime().toString());
             myPostDto.setFinishPostTime(post.getFinishPostTime().toString());
+            myPostDto.setEvent(post.getEvent());
 
             String thumbnail = imageService.getThumbnail(post.getId());
             if(thumbnail == null || thumbnail.isEmpty()) {
