@@ -68,7 +68,7 @@ public class PostService {
 
             Optional<Scrap> scrapOptional = scrapRepository.findByMemberAndPost(findMember, post);
             boolean isScrap = scrapOptional.isPresent();
-            System.out.println("isScrap 값을 출력 = " + isScrap);
+            //System.out.println("isScrap 값을 출력 = " + isScrap);
             DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList, isScrap);
 
             return detailPost;
