@@ -93,9 +93,12 @@ const FilterLable = styled.label`
   }
 
   @media screen and (max-width: 767px) {
-    margin: 0 8px 8px 0;
+    margin: 0 0px 4px 0;
+    width: 30px;
+    height: 24px;
+    font-size: 12px;
   }
-  @media screen and (max-width: 445px) {
+  /* @media screen and (max-width: 445px) {
     &.lecture {
       margin-left: 7px;
     }
@@ -113,7 +116,7 @@ const FilterLable = styled.label`
     &.performance {
       margin-right: 100px;
     }
-  }
+  } */
 `;
 
 const FilterInput = styled.input`
