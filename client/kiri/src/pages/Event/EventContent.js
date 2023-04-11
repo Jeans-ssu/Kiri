@@ -122,7 +122,7 @@ const NoEventContainer = styled.div`
   line-height: 400px;
   color: ${({ theme }) => theme.colors.gray};
   @media screen and (max-width: 767px) {
-// front/fix/mobileEvent
+    // front/fix/mobileEvent
     width: 100%;
     // dev-front
     // width: 90vw;
@@ -165,12 +165,11 @@ const EventListMain = styled.main`
   }
 
   @media screen and (max-width: 767px) {
-  // << front/fix/mobileEvent
-      min-width: 350px;
+    // << front/fix/mobileEvent
+    min-width: 350px;
     width: 90%;
-  
-  
-  // dev-front
+
+    // dev-front
     width: 90vw;
     justify-content: space-between;
   }
@@ -189,7 +188,7 @@ const EventContainer = styled.div`
   &:hover {
     background-color: #f5f5f5;
   }
-// << front/fix/mobileEvent
+  // << front/fix/mobileEvent
   @media screen and (max-width: 767px) {
     justify-content: center;
     margin: auto;
@@ -201,15 +200,15 @@ const EventContainer = styled.div`
     min-width: 350px;
     justify-content: center;
     margin: auto;
-    }
-// dev-front
-//  @media screen and (max-width: 767px) {
+  }
+  // dev-front
+  //  @media screen and (max-width: 767px) {
   //  width: 40vw;
-   // margin: 0;
- // }
-//  @media screen and (max-width: 600px) {//
- //   width: 90vw;
- // }
+  // margin: 0;
+  // }
+  //  @media screen and (max-width: 600px) {//
+  //   width: 90vw;
+  // }
 `;
 
 const EventList = styled.div`
@@ -247,20 +246,20 @@ const EventList = styled.div`
     color: #737373;
   }
 
-// mobileEvent
+  // mobileEvent
   @media screen and (max-width: 395px) {
     width: 40%;
     margin-left: -15px;
-// dev-front
-//  @media screen and (max-width: 767px) {
- //   h4 {
-  //    font-size: 13px;
-  //    margin-right: 5px;
- //   }
- // }
- // @media screen and (max-width: 600px) {
- //   flex: 1;
-//
+    // dev-front
+    //  @media screen and (max-width: 767px) {
+    //   h4 {
+    //    font-size: 13px;
+    //    margin-right: 5px;
+    //   }
+    // }
+    // @media screen and (max-width: 600px) {
+    //   flex: 1;
+    //
   }
 `;
 
