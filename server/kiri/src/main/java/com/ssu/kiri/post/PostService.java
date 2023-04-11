@@ -57,9 +57,13 @@ public class PostService {
                 .map(img -> img.getImgUrl())
                 .collect(Collectors.toList());
 
+        List<Long> imgIdList = imageList.stream()
+                .map(img -> img.getId())
+                .collect(Collectors.toList());
+
         // 회원가입을 안한 경우
         if(member == null) {
-            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList,false);
+            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList,false, imgIdList);
             return detailPost;
         }
         else {
@@ -69,7 +73,7 @@ public class PostService {
             Optional<Scrap> scrapOptional = scrapRepository.findByMemberAndPost(findMember, post);
             boolean isScrap = scrapOptional.isPresent();
             //System.out.println("isScrap 값을 출력 = " + isScrap);
-            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList, isScrap);
+            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList, isScrap, imgIdList);
 
             return detailPost;
         }
