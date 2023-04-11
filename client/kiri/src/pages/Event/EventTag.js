@@ -98,25 +98,6 @@ const FilterLable = styled.label`
     height: 24px;
     font-size: 12px;
   }
-  /* @media screen and (max-width: 445px) {
-    &.lecture {
-      margin-left: 7px;
-    }
-    &.performance {
-      margin-right: 150px;
-    }
-  }
-  @media screen and (max-width: 374px) {
-    &.lecture {
-      margin-left: 7px;
-    }
-    &.etc {
-      margin-left: 0px;
-    }
-    &.performance {
-      margin-right: 100px;
-    }
-  } */
 `;
 
 const FilterInput = styled.input`

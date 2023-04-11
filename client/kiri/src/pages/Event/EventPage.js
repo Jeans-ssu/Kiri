@@ -191,7 +191,7 @@ const EventPage = () => {
             </SchoolSearchContainer>
           </MobileFlex>
         </TopBox>
-        <CheckboxDiv>
+        <CheckboxDiv className="tagbox">
           {field.map((el) => (
             <>
               <EventTag
@@ -301,12 +301,18 @@ const SchoolRegionBox = styled.div`
 
 const TopBox = styled.div`
   display: flex;
+  @media screen and (max-width: 767px) {
+    margin-left: -15px;
+  }
 `;
 
 const Bar = styled.hr`
   width: 95%;
   border: 0px;
   border-top: 1px solid ${({ theme }) => theme.colors.lightgray};
+  @media screen and (max-width: 767px) {
+    width: 96%;
+  }
 `;
 
 const SchoolSearchContainer = styled.div`
@@ -378,6 +384,7 @@ const CheckboxDiv = styled.div`
   }
   @media screen and (max-width: 767px) {
     margin-bottom: 0;
+    margin-left: 5px;
   }
 `;
 
