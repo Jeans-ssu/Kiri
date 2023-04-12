@@ -121,6 +121,12 @@ const FilterInput = styled.input`
     :after {
       opacity: 1;
     }
+    @media screen and (max-width: 767px) {
+      margin: 0 0px 4px 0;
+      width: 30px;
+      height: 24px;
+      font-size: 12px;
+    }
   }
 
   &:focus + ${FilterLable} {
