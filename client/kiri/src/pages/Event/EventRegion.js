@@ -246,6 +246,7 @@ const EventFieldPageContainer = styled.div`
   .dropdown {
     display: flex;
     margin-left: 33px;
+    margin-top: -2.5px;
   }
 `;
 
