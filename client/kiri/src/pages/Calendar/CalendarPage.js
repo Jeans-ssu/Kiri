@@ -1,6 +1,5 @@
 import PageContainer from 'containers/PageContainer';
 import styled from 'styled-components';
-//import EventList from './EventList';
 import { CalendarComponent } from 'components/calendar/Calendar';
 import { useState } from 'react';
 import { Regions } from 'util/info';
@@ -27,9 +26,6 @@ const Calendar = () => {
           />
           <CalendarComponent calType={calType} region={region} />
         </CalendarBox>
-        {/* <EventBox>
-          <EventList></EventList>
-        </EventBox> */}
       </Container>
     </PageContainer>
   );
