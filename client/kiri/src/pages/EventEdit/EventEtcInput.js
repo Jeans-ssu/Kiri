@@ -1,15 +1,44 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 
-const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
+const EventEtcInput = ({
+  link,
+  setLink,
+  img,
+  setImg,
+  imgList,
+  setImgList,
+  setRemoveIdx,
+  remove,
+}) => {
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
+  console.log('imgIdList', imgList);
+
+  const url = document.location.href;
+  let postID;
+  if (url.slice(-7, -6) === '/') {
+    // 10 미만
+    postID = url.slice(-6, -5);
+  } else {
+    postID = url.slice(-7, -5);
+  }
+
+  useEffect(() => {
+    BasePost();
+  }, []);
+
+  const BasePost = async () => {
+    await axios.get(`/posts/read/${postID}`).then((res) => {
+      setImgList(res.data.imgIdList);
+    });
+  };
 
   const uploadImg = (formData) => {
     axios
@@ -20,7 +49,7 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
       })
       .then((res) => {
         console.log('uploadImg', res.data);
-        setImgList(res.data);
+        setImgList((prev) => [...prev, res.data]);
       })
       .catch((err) => console.log('ERROR: ', err));
   };
@@ -64,6 +93,9 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
   const deleteImg = (idx) => {
     console.log('delete img', img);
     console.log('delte imglist', imgList);
+    remove.current.push(imgList[idx]);
+    console.log('remove.current', remove.current);
+    setRemoveIdx((prev) => [...prev, imgList[idx]]);
     img?.splice(idx, 1);
     imgList?.splice(idx, 1);
     imgArr.current.splice(idx, 1);

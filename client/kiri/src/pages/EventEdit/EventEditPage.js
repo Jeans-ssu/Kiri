@@ -77,11 +77,15 @@ const EventEditPage = () => {
       setLink(res.data.link);
       setExplain(res.data.content);
       setImg(res.data.savedImgList);
-      console.log('baseData,current', base);
+      setImgList(res.data.imgIdList);
+      console.log('baseData,current', res.data);
     });
   };
 
+  const remove = useRef([]);
   const [postid, setPostID] = useState();
+  const [removeidx, setRemoveIdx] = useState([]);
+  console.log('rmeaskdfl', removeidx);
   const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');
   const [info, setInfo] = useState({
@@ -116,9 +120,18 @@ const EventEditPage = () => {
 
   const getImageID = () => {
     const imgarr = [];
-    console.log('imgList', imgList);
+    console.log('imgListClick', imgList);
     for (let i = 0; imgList.length > i; i++) {
-      imgarr.push(imgList[i].image_id);
+      const type = typeof imgList[i];
+      console.log('type', type);
+      if (type === 'object') {
+        console.log('array');
+        for (let j = 0; j < imgList[i].length; j++) {
+          imgarr.push(imgList[i][j].image_id);
+        }
+      } else {
+        imgarr.push(imgList[i]);
+      }
     }
     console.log('imgarr', imgarr);
     return imgarr;
@@ -244,6 +257,16 @@ const EventEditPage = () => {
       }
     } else {
       const imgarr = getImageID();
+      console.log('removecurrent', remove.current);
+      for (let i = 0; i < remove.current.length; i++) {
+        axios
+          .delete(`/api/posts/image/update/${remove.current[i]}`)
+          .then((res) => {
+            console.log('api res', res);
+          })
+          .catch((err) => console.log('Delete ERROR: ', err));
+      }
+
       console.log('imaarr', imgarr);
       const formData = new FormData();
       formData.append('title', title);
@@ -316,6 +339,8 @@ const EventEditPage = () => {
           setImg={setImg}
           imgList={imgList}
           setImgList={setImgList}
+          setRemoveIdx={setRemoveIdx}
+          remove={remove}
         />
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
