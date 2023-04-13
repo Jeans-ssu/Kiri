@@ -218,6 +218,10 @@ const EventWritePage = () => {
         setErrorMessage((prev) => {
           return { ...prev, imgErrorMessage: '이미지를 첨부해주세요.' };
         });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, imgErrorMessage: '' };
+        });
       }
     } else {
       const imgarr = getImageID();
