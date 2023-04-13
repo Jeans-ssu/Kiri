@@ -245,8 +245,8 @@ const EventFieldPageContainer = styled.div`
 
   .dropdown {
     display: flex;
-    align-items: center;
     margin-left: 33px;
+    margin-top: -2.5px;
   }
 `;
 
@@ -256,6 +256,12 @@ const SchoolRegionBox = styled.div`
     padding-left: 30px;
     margin-bottom: 10px;
     margin-top: 0;
+  }
+  @media screen and (max-width: 767px) {
+    margin-left: -15px;
+    h2 {
+      margin-bottom: 0px;
+    }
   }
 `;
 
@@ -276,6 +282,10 @@ const CheckboxDiv = styled.div`
     width: 40px;
     background-color: ${({ theme }) => theme.colors.mainColor};
     color: white;
+  }
+  @media screen and (max-width: 767px) {
+    margin-bottom: 0;
+    margin-left: 5px;
   }
 `;
 
