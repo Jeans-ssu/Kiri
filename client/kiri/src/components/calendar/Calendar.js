@@ -307,7 +307,9 @@ export const CalendarComponent = ({ calType, region }) => {
 
 const CalendarContainer = styled.div`
   width: 950px;
-  //border: 1px solid black;
+  @media screen and (max-width: 767px) {
+    width: 96%;
+  }
   div.row {
     display: flex;
   }
@@ -327,6 +329,9 @@ const CalendarContainer = styled.div`
         font-weight: 600;
         padding-right: 5px;
         text-align: end;
+        @media screen and (max-width: 767px) {
+          font-size: 1.3em;
+        }
       }
     }
     svg {
@@ -344,6 +349,9 @@ const CalendarContainer = styled.div`
       }
     }
     margin: 8px 0;
+    @media screen and (max-width: 767px) {
+      margin: 4px 0;
+    }
   }
   div.days {
     border-left: 1px solid transparent;
@@ -360,6 +368,9 @@ const CalendarContainer = styled.div`
       font-size: 14px;
       font-weight: 600;
       color: ${({ theme }) => theme.colors.darkgray};
+      @media screen and (max-width: 767px) {
+        font-size: 0.8em;
+      }
     }
     div.weekend {
       color: ${({ theme }) => theme.colors.gray};
@@ -380,8 +391,15 @@ const CalendarContainer = styled.div`
       font-size: 13px;
       font-weight: 600;
       padding: 10px 0 5px 10px;
+      @media screen and (max-width: 767px) {
+        padding: 5px 0 5px 5px;
+        font-size: 0.7em;
+      }
     }
     height: 130px;
+    @media screen and (max-width: 767px) {
+      height: 50px;
+    }
     &.today > span {
       color: ${({ theme }) => theme.colors.mainColor};
     }

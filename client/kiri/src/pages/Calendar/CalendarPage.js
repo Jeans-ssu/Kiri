@@ -107,6 +107,13 @@ const CalendarSelectContainer = styled.div`
     color: ${({ theme }) => theme.colors.darkgray};
     font-weight: 600;
   }
+  @media screen and (max-width: 767px) {
+    width: 96%;
+    padding: 0 0 5px 0;
+    button {
+      font-size: 0.8em;
+    }
+  }
 `;
 
 const Container = styled.div``;
@@ -117,7 +124,5 @@ const CalendarBox = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-//const EventBox = styled.div``;
 
 export default Calendar;

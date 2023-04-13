@@ -39,9 +39,27 @@ export const EventTag = ({ tag, result, getEvent }) => {
         value={tag}
         id={tag}
         tag={tag}
+        className={`${
+          tag === '강연'
+            ? 'lecture'
+            : tag === '기타'
+            ? ' etc'
+            : tag === '공연'
+            ? 'performance'
+            : ''
+        }`}
       />
       <FilterLable
-        className={check ? 'focused' : ''}
+        className={`${check ? 'focused ' : ''} 
+        ${
+          tag === '강연'
+            ? 'lecture'
+            : tag === '기타'
+            ? ' etc'
+            : tag === '공연'
+            ? 'performance'
+            : ''
+        }        `}
         onClick={lineCheck}
         htmlFor={tag}
         tag={tag}
@@ -71,8 +89,14 @@ const FilterLable = styled.label`
     opacity: 0;
     color: #59b89d;
     font-weight: 700;
-    width: 40px;
     color: white;
+  }
+
+  @media screen and (max-width: 767px) {
+    margin: 0 0px 4px 0;
+    width: 30px;
+    height: 24px;
+    font-size: 12px;
   }
 `;
 
@@ -97,11 +121,22 @@ const FilterInput = styled.input`
     :after {
       opacity: 1;
     }
+    @media screen and (max-width: 767px) {
+      margin: 0 0px 4px 0;
+      width: 30px;
+      height: 24px;
+      font-size: 12px;
+    }
   }
 
   &:focus + ${FilterLable} {
     &:before {
       outline: 2px solid blue;
+    }
+  }
+  @media screen and (max-width: 374px) {
+    .contest {
+      margin-left: 100px;
     }
   }
 `;

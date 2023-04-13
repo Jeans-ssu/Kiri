@@ -15,6 +15,15 @@ const EventWritePageContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0px 60px;
+  @media screen and (max-width: 767px) {
+    min-width: 300px;
+    width: 80%-40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    margin: auto;
+  }
 `;
 
 const BtnContainer = styled.div`
@@ -271,7 +280,7 @@ const EventWritePage = () => {
   };
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
-      <EventWritePageContainer>
+      <EventWritePageContainer className="pagecontainer">
         <EventTitleInput
           title={title}
           setTitle={setTitle}

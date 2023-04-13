@@ -15,6 +15,15 @@ const EventWritePageContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0px 60px;
+  @media screen and (max-width: 767px) {
+    min-width: 300px;
+    width: 80%-40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    margin: auto;
+  }
 `;
 
 const BtnContainer = styled.div`
@@ -120,7 +129,6 @@ const EventEditPage = () => {
 
   const getImageID = () => {
     const imgarr = [];
-    console.log('imgListClick', imgList);
     for (let i = 0; imgList.length > i; i++) {
       const type = typeof imgList[i];
       console.log('type', type);
@@ -267,7 +275,6 @@ const EventEditPage = () => {
           .catch((err) => console.log('Delete ERROR: ', err));
       }
 
-      console.log('imaarr', imgarr);
       const formData = new FormData();
       formData.append('title', title);
       formData.append('scrap_count', 0);

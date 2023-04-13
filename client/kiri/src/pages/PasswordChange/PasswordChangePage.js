@@ -76,11 +76,11 @@ const SaveChangeBtn = styled.button`
   margin-top: 15px;
   width: 100px;
   height: 35px;
-  background-color: ${({ theme }) => theme.colors.green_1};
+  background-color: ${({ theme }) => theme.colors.green_2};
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.darkgray};
+  color: ${({ theme }) => theme.colors.dark};
   &:hover {
     cursor: pointer;
   }

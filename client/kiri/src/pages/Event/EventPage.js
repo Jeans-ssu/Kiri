@@ -141,53 +141,57 @@ const EventPage = () => {
     <PageContainer header footer page={'event'}>
       <EventFieldPageContainer>
         <TopBox>
-          <SchoolRegionBox>
-            {filter.map((el, idx) => {
-              return (
-                <Link
-                  className="filterLink"
-                  key={idx}
-                  to={`/event` + `${eventlink[idx]}`}
-                >
-                  <FilterLi
+          <MobileFlex>
+            <SchoolRegionBox>
+              {filter.map((el, idx) => {
+                return (
+                  <Link
+                    className="filterLink"
                     key={idx}
-                    className={`${el === '학교' ? 'school' : 'hide'}
-                  `}
-                    onClick={() => selectFilterHandler(idx)}
+                    to={`/event` + `${eventlink[idx]}`}
                   >
-                    <h2>{el}</h2>
-                  </FilterLi>
-                </Link>
-              );
-            })}
-          </SchoolRegionBox>
-          <SchoolSearchContainer>
-            <Searchdiv>
-              <FaSearch size="17" className="searchicon" />
-              <SearchInput
-                type="text"
-                id="text"
-                placeholder="원하는 학교를 검색해보세요"
-                value={searchuniv}
-              ></SearchInput>
-              <OpenSearchModalBtn>
-                {searchuniv === '' ? (
-                  <Findtxt onClick={handleClickSearchUnivBtn}>찾아보기</Findtxt>
-                ) : (
-                  <Removetxt onClick={removeUniv}>선택안함</Removetxt>
-                )}
-              </OpenSearchModalBtn>
-            </Searchdiv>
-            <SearchUnivModal
-              isOpen={showUnivModal}
-              setIsOpen={setShowUnivModal}
-              setUserUniv={setUserUniv}
-              getCategory={getCategory}
-              filter={filter[0]}
-            />
-          </SchoolSearchContainer>
+                    <FilterLi
+                      key={idx}
+                      className={`${el === '학교' ? 'school' : 'hide'}
+                  `}
+                      onClick={() => selectFilterHandler(idx)}
+                    >
+                      <h2>{el}</h2>
+                    </FilterLi>
+                  </Link>
+                );
+              })}
+            </SchoolRegionBox>
+            <SchoolSearchContainer>
+              <Searchdiv>
+                <FaSearch size="17" className="searchicon" />
+                <SearchInput
+                  type="text"
+                  id="text"
+                  placeholder="원하는 학교를 검색해보세요"
+                  value={searchuniv}
+                ></SearchInput>
+                <OpenSearchModalBtn>
+                  {searchuniv === '' ? (
+                    <Findtxt onClick={handleClickSearchUnivBtn}>
+                      찾아보기
+                    </Findtxt>
+                  ) : (
+                    <Removetxt onClick={removeUniv}>선택안함</Removetxt>
+                  )}
+                </OpenSearchModalBtn>
+              </Searchdiv>
+              <SearchUnivModal
+                isOpen={showUnivModal}
+                setIsOpen={setShowUnivModal}
+                setUserUniv={setUserUniv}
+                getCategory={getCategory}
+                filter={filter[0]}
+              />
+            </SchoolSearchContainer>
+          </MobileFlex>
         </TopBox>
-        <CheckboxDiv>
+        <CheckboxDiv className="tagbox">
           {field.map((el) => (
             <>
               <EventTag
@@ -218,6 +222,15 @@ const EventPage = () => {
     </PageContainer>
   );
 };
+
+const MobileFlex = styled.div`
+  display: flex;
+  @media screen and (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    min-width: 350px;
+  }
+`;
 
 const PaginationBox = styled.div`
   display: flex;
@@ -288,18 +301,27 @@ const SchoolRegionBox = styled.div`
 
 const TopBox = styled.div`
   display: flex;
+  @media screen and (max-width: 767px) {
+    margin-left: -15px;
+  }
 `;
 
 const Bar = styled.hr`
   width: 95%;
   border: 0px;
   border-top: 1px solid ${({ theme }) => theme.colors.lightgray};
+  @media screen and (max-width: 767px) {
+    width: 96%;
+  }
 `;
 
 const SchoolSearchContainer = styled.div`
   padding-left: 18px;
   display: flex;
   align-items: center;
+  @media screen and (max-width: 767px) {
+    padding-left: 14px;
+  }
 `;
 
 const Searchdiv = styled.div`
@@ -309,10 +331,15 @@ const Searchdiv = styled.div`
   .searchicon {
     position: absolute;
     margin-left: 12px;
-    margin-top: 7px;
+    margin-top: -1px;
   }
   svg {
     fill: ${({ theme }) => theme.colors.mainColor};
+  }
+  @media screen and (max-width: 767px) {
+    .searchicon {
+      margin-top: 8px;
+    }
   }
 `;
 
@@ -324,6 +351,7 @@ const SearchInput = styled.input`
   width: 240px;
   color: black;
   margin-left: 5px;
+  margin-top: -10px;
   display: flex;
   align-items: center;
   &:active,
@@ -335,6 +363,10 @@ const SearchInput = styled.input`
   ::placeholder {
     font-weight: 500;
     font-size: 12px;
+  }
+  @media screen and (max-width: 767px) {
+    margin-top: 0;
+    width: 90%;
   }
 `;
 
@@ -349,6 +381,10 @@ const CheckboxDiv = styled.div`
     width: 40px;
     background-color: ${({ theme }) => theme.colors.mainColor};
     color: white;
+  }
+  @media screen and (max-width: 767px) {
+    margin-bottom: 0;
+    margin-left: 5px;
   }
 `;
 
@@ -368,11 +404,18 @@ const OpenSearchModalBtn = styled.button`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (max-width: 767px) {
+    margin-left: 10px;
+  }
 `;
 
 const Findtxt = styled.div`
   color: ${({ theme }) => theme.colors.mainColor};
   font-weight: 600;
+  margin-top: -10px;
+  @media screen and (max-width: 767px) {
+    margin-top: 0;
+  }
 `;
 
 const Removetxt = styled.div`

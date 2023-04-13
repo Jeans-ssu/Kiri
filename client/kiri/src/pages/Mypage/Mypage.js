@@ -17,6 +17,10 @@ export const MypageHeader = styled.div`
   font-size: 28px;
   font-weight: 700;
   margin: 10px 0;
+  @media screen and (max-width: 767px) {
+    margin: 15px 0;
+    font-size: 24px;
+  }
 `;
 
 const Mypage = () => {

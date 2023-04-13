@@ -313,22 +313,44 @@ const EventBookmarkdiv = styled.div`
 const EventPerioddiv = styled.div`
   display: flex;
   font-size: 18px;
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+  }
 `;
 
-const EventDdaydiv = styled.div``;
+const EventDdaydiv = styled.div`
+  @media screen and (max-width: 767px) {
+    margin-bottom: 5px;
+  }
+`;
 
 const EventWriterdiv = styled.div`
   margin-left: 15px;
+  @media screen and (max-width: 767px) {
+    margin: 0;
+    margin-bottom: 5px;
+  }
 `;
 
 const EventTimediv = styled.div`
   margin-left: auto;
   display: flex;
+  @media screen and (max-width: 767px) {
+    margin: 0;
+    flex-direction: column;
+    margin-bottom: 5px;
+  }
 `;
 
 const EventContentdiv = styled.div`
   display: flex;
   margin-top: 30px;
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+  }
 `;
 
 const EventPosterdiv = styled.div`
@@ -336,10 +358,21 @@ const EventPosterdiv = styled.div`
   img {
     width: 400px;
   }
+  @media screen and (max-width: 767px) {
+    img {
+      width: 100%;
+    }
+    margin: auto;
+    width: 100%;
+  }
 `;
 
 const EventInfodiv = styled.div`
   margin-left: 40px;
+  @media screen and (max-width: 767px) {
+    margin-top: 35px;
+    margin-left: 0;
+  }
 `;
 
 export default EventInfoPage;
