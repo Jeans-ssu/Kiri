@@ -31,6 +31,6 @@ jobs:
         run: |
           aws s3 sync \
             --region ap-northeast-2 \
-            build s3://kiri-test-deploy \
+            build s3://kiriuniv.com \
             --delete
         working-directory: ./client/kiri
