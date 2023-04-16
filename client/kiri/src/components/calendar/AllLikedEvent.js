@@ -50,4 +50,8 @@ const AllLikedEventContainer = styled.div`
       text-decoration: underline;
     }
   }
+
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
 `;
