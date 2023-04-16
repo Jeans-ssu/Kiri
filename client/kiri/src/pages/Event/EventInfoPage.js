@@ -185,7 +185,14 @@ const EventInfoPage = () => {
             </Slider>
           </EventPosterdiv>
           <EventInfodiv>
-            <article>{data.content}</article>
+            <article>
+              {data.content
+                ?.replace(/(?:\r\n|\n)/g, '\r\n')
+                .split('\r\n')
+                .map((item) => (
+                  <p key={item}>{item}</p>
+                ))}
+            </article>
           </EventInfodiv>
         </EventContentdiv>
         {data.member_id === loginID.memberId ? (
