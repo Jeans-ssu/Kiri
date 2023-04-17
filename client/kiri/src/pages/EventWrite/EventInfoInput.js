@@ -171,7 +171,6 @@ const EventInfoInput = ({
   info,
   setInfo,
   hostRef,
-  emailRef,
   regionRef,
   univRef,
   typeRef,
@@ -217,21 +216,12 @@ const EventInfoInput = ({
           </ErrorMessageWebBox>
         </InfoContainer>
         <InfoContainer>
-          <InfoHeader>
-            이메일 <span className="green">*</span>
-          </InfoHeader>
-          <ErrorMessageMobileBox>
-            {errorMessage.emailErrorMessage}
-          </ErrorMessageMobileBox>
+          <InfoHeader>이메일</InfoHeader>
           <InfoTextInput
             type="email"
             value={info.email}
             onChange={(e) => handleChangeInput(e, 'email')}
-            ref={emailRef}
           />
-          <ErrorMessageWebBox>
-            {errorMessage.emailErrorMessage}
-          </ErrorMessageWebBox>
         </InfoContainer>
         <InfoContainer>
           <InfoHeader>연락처</InfoHeader>

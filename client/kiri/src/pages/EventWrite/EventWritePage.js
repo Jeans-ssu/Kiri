@@ -76,7 +76,6 @@ const EventWritePage = () => {
   const [errorMessage, setErrorMessage] = useState({
     titleErrorMessage: '',
     hostErrorMessage: '',
-    emailErrorMessage: '',
     regionErrorMessage: '',
     univErrorMessage: '',
     typeErrorMessage: '',
@@ -97,7 +96,6 @@ const EventWritePage = () => {
 
   const titleRef = useRef();
   const hostRef = useRef();
-  const emailRef = useRef();
   const regionRef = useRef();
   const univRef = useRef();
   const typeRef = useRef();
@@ -109,7 +107,6 @@ const EventWritePage = () => {
     if (
       title === '' ||
       info.host === '' ||
-      info.email === '' ||
       info.region === '선택' ||
       info.univ === '' ||
       info.type === '선택' ||
@@ -183,16 +180,6 @@ const EventWritePage = () => {
           return { ...prev, regionErrorMessage: '' };
         });
       }
-      if (info.email === '') {
-        emailRef.current && emailRef.current.focus();
-        setErrorMessage((prev) => {
-          return { ...prev, emailErrorMessage: '이메일을 입력해주세요.' };
-        });
-      } else {
-        setErrorMessage((prev) => {
-          return { ...prev, emailErrorMessage: '' };
-        });
-      }
       if (info.host === '') {
         hostRef.current && hostRef.current.focus();
         setErrorMessage((prev) => {
@@ -224,6 +211,7 @@ const EventWritePage = () => {
         });
       }
     } else {
+      console.log('등록');
       const imgarr = getImageID();
       const formData = new FormData();
       formData.append('title', title);
@@ -291,7 +279,6 @@ const EventWritePage = () => {
           info={info}
           setInfo={setInfo}
           hostRef={hostRef}
-          emailRef={emailRef}
           regionRef={regionRef}
           univRef={univRef}
           typeRef={typeRef}

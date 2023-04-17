@@ -171,7 +171,6 @@ const EventInfoInput = ({
   info,
   setInfo,
   hostRef,
-  emailRef,
   regionRef,
   univRef,
   typeRef,
@@ -213,19 +212,12 @@ const EventInfoInput = ({
           <ErrorMessageBox> {errorMessage.hostErrorMessage}</ErrorMessageBox>
         </InfoContainer>
         <InfoContainer>
-          <InfoHeader>
-            이메일 <span className="green">*</span>
-          </InfoHeader>
-          <ErrorMessageMobileBox>
-            {errorMessage.emailErrorMessage}
-          </ErrorMessageMobileBox>
+          <InfoHeader>이메일</InfoHeader>
           <InfoTextInput
             type="email"
             value={info?.email}
             onChange={(e) => handleChangeInput(e, 'email')}
-            ref={emailRef}
           />
-          <ErrorMessageBox> {errorMessage.emailErrorMessage}</ErrorMessageBox>
         </InfoContainer>
         <InfoContainer>
           <InfoHeader>연락처</InfoHeader>
@@ -340,14 +332,7 @@ const EventInfoInput = ({
               onChange={(e) => handleChangeInput(e, 'endDate')}
               ref={endDateRef}
             />
-            {/* {errorMessage.startDateErrorMessage === '' &&
-        errorMessage.endDateErrorMessage === '' ? (
-          <ErrorMessageBox>날짜를 입력해주세요</ErrorMessageBox>
-        ) : (
-          ''
-        )} */}
           </InfoSmallBox>
-
           <ErrorMessageBox className="start">
             {errorMessage.startDateErrorMessage}
           </ErrorMessageBox>
