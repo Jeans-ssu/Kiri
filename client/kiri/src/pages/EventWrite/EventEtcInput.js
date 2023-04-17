@@ -132,6 +132,7 @@ const EventEtcInput = ({
     </EventEtcInputContainer>
   );
 };
+
 const ErrorMessageBox = styled.div`
   font-size: 14px;
   font-weight: 500;

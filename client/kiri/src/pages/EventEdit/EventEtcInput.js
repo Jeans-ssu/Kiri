@@ -15,6 +15,7 @@ const EventEtcInput = ({
   setImgList,
   setRemoveIdx,
   remove,
+  errorMessage,
 }) => {
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
@@ -128,6 +129,7 @@ const EventEtcInput = ({
           onChange={addImage}
           style={{ display: 'none' }}
         />
+        <ErrorMessageBox> {errorMessage.imgErrorMessage}</ErrorMessageBox>
       </EtcContainer>
       <PreviewBox>
         <GridImageBox>
@@ -159,6 +161,15 @@ const EventEtcInput = ({
     </EventEtcInputContainer>
   );
 };
+
+const ErrorMessageBox = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.red};
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+`;
 
 const EventEtcInputContainer = styled.div`
   display: flex;

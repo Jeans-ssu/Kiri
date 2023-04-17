@@ -110,7 +110,6 @@ const EventEditPage = () => {
     endTime: base?.finishPostTime.slice(11, 16),
     location: base?.place,
   });
-  console.log('info', info);
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
@@ -125,6 +124,7 @@ const EventEditPage = () => {
     startDateErrorMessage: '',
     endDateErrorMessage: '',
     explainErrorMessage: '',
+    imgErrorMessage: '',
   });
 
   const getImageID = () => {
@@ -156,6 +156,7 @@ const EventEditPage = () => {
   const explainRef = useRef();
 
   const handleClickWriteBtn = () => {
+    const imgarr = getImageID();
     if (
       title === '' ||
       info.host === '' ||
@@ -165,7 +166,8 @@ const EventEditPage = () => {
       info.type === '선택' ||
       info.startDate === '' ||
       info.endDate === '' ||
-      explain === ''
+      explain === '' ||
+      imgarr.length === 0
     ) {
       if (explain === '') {
         explainRef.current && explainRef.current.focus();
@@ -263,8 +265,17 @@ const EventEditPage = () => {
           return { ...prev, titleErrorMessage: '' };
         });
       }
+      if (img.length === 0 || img.length === undefined) {
+        console.log('length = 0');
+        setErrorMessage((prev) => {
+          return { ...prev, imgErrorMessage: '이미지를 첨부해주세요.' };
+        });
+      } else {
+        setErrorMessage((prev) => {
+          return { ...prev, imgErrorMessage: '' };
+        });
+      }
     } else {
-      const imgarr = getImageID();
       console.log('removecurrent', remove.current);
       for (let i = 0; i < remove.current.length; i++) {
         axios
@@ -274,6 +285,7 @@ const EventEditPage = () => {
           })
           .catch((err) => console.log('Delete ERROR: ', err));
       }
+      console.log('imglenght', imgarr);
 
       const formData = new FormData();
       formData.append('title', title);
@@ -348,6 +360,7 @@ const EventEditPage = () => {
           setImgList={setImgList}
           setRemoveIdx={setRemoveIdx}
           remove={remove}
+          errorMessage={errorMessage}
         />
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>

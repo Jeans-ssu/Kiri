@@ -115,7 +115,9 @@ const EventWritePage = () => {
       info.type === '선택' ||
       info.startDate === '' ||
       info.endDate === '' ||
-      explain === ''
+      explain === '' ||
+      img.length === 0 ||
+      img.length === undefined
     ) {
       if (explain === '') {
         explainRef.current && explainRef.current.focus();
