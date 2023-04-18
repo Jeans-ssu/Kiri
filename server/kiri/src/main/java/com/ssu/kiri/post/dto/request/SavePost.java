@@ -26,7 +26,7 @@ public class SavePost {
 
     private int scrap_count; // 스크랩 수
 
-    @NotBlank
+//    @NotBlank
     @Email
     private String email;
 
