@@ -336,7 +336,7 @@ const EventEditPage = () => {
           remove={remove}
         />
         <BtnContainer>
-          <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
+          <WriteBtn onClick={handleClickWriteBtn}>수정하기</WriteBtn>
         </BtnContainer>
         <PostModal
           text={'수정'}
