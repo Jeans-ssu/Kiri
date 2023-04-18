@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { IoMdClose } from 'react-icons/io';
 import { useNavigate } from 'react-router';
 import eventColorMatcher from 'util/eventColorMatcher';
-import { parseISO, format } from 'date-fns';
+import { parseISO, format, addDays } from 'date-fns';
 import { AiOutlineExport } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
@@ -82,7 +82,7 @@ const EventModal = ({
                 <a
                   href={CreateIcsFile(
                     format(parseISO(startTime), 'yyyyMMdd'),
-                    format(parseISO(finishTime), 'yyyyMMdd'),
+                    format(addDays(parseISO(finishTime), 1), 'yyyyMMdd'),
                     title,
                     type,
                     school

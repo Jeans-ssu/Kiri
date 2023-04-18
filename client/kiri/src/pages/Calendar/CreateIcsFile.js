@@ -1,4 +1,5 @@
 export const CreateIcsFile = (startDate, endDate, title, type, school) => {
+  let icsFile = null;
   let test =
     'BEGIN:VCALENDAR\n' +
     'CALSCALE:GREGORIAN\n' +
@@ -23,7 +24,15 @@ export const CreateIcsFile = (startDate, endDate, title, type, school) => {
     '\n' +
     'END:VEVENT\n' +
     'END:VCALENDAR';
-  const data = new File([test], { type: 'text/plain' });
-  const icsFile = window.URL.createObjectURL(data);
+
+  let data = new File([test], { type: 'text/plain' });
+
+  // If we are replacing a previously generated file we need to
+  // manually revoke the object URL to avoid memory leaks.
+  if (icsFile !== null) {
+    window.URL.revokeObjectURL(icsFile);
+  }
+  icsFile = window.URL.createObjectURL(data);
+
   return icsFile;
 };
