@@ -85,7 +85,7 @@ const EventEtcInput = ({
       </EtcContainer>
       <EtcContainer>
         <EtcHeader>
-          이미지 <span className="green">*</span>{' '}
+          이미지 <span className="green">*</span>
         </EtcHeader>
         <label className="label" htmlFor="input-file">
           파일 선택
@@ -126,7 +126,7 @@ const EventEtcInput = ({
                     </GridBox>
                   );
                 })
-            : ''}{' '}
+            : ''}
         </GridImageBox>
       </PreviewBox>
     </EventEtcInputContainer>
