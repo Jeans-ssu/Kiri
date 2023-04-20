@@ -115,7 +115,9 @@ const EventEtcInput = ({
         <LinkInput type="url" value={link} onChange={handleChangeInput} />
       </EtcContainer>
       <EtcContainer>
-        <EtcHeader>이미지</EtcHeader>
+        <EtcHeader>
+          이미지 <span className="green">*</span>
+        </EtcHeader>
         <label className="label" htmlFor="input-file">
           파일 선택
         </label>
@@ -203,6 +205,11 @@ const EtcHeader = styled.div`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.dark};
   width: 70px;
+  .green {
+    color: ${({ theme }) => theme.colors.mainColor};
+    font-size: 18px;
+    margin-left: 3px;
+  }
 `;
 const LinkInput = styled.input`
   width: 350px;
