@@ -13,6 +13,9 @@ import { selectAccessToken } from 'store/modules/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { selectUserInfo } from 'store/modules/userSlice';
 import PostRemoveModal from 'components/PostRemoveModal';
+import theme from 'styles/theme';
+
+const { yellow, blue, pink, orange, purple2, green_1 } = theme.colors;
 
 const EventInfoPage = () => {
   const navigate = useNavigate();
@@ -61,8 +64,9 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
-      console.log('resdata', resdata.member_id);
+      console.log('resdata', resdata);
       setData(resdata);
+      setMark(resdata.scrap);
     } catch (error) {
       console.error('Error: ', error);
     }
@@ -86,7 +90,7 @@ const EventInfoPage = () => {
   };
 
   const DDay = (expiry_date) => {
-    const now = new Date(); // 2022-11-25
+    const now = new Date();
     const target = new Date(
       expiry_date.slice(0, 4),
       MakeDay(expiry_date.slice(5, 7)) - 1,
@@ -120,6 +124,9 @@ const EventInfoPage = () => {
               <EventTitlediv>
                 <h1>{data.title}</h1>
               </EventTitlediv>
+              <EventTagBox tag={data.event}>
+                <EventTagSpan>{data.event}</EventTagSpan>
+              </EventTagBox>
               <EventSharediv>
                 <FiShare2 size="27" />
               </EventSharediv>
@@ -179,7 +186,14 @@ const EventInfoPage = () => {
             </Slider>
           </EventPosterdiv>
           <EventInfodiv>
-            <article>{data.content}</article>
+            <article>
+              {data.content
+                ?.replace(/(?:\r\n|\n)/g, '\r\n')
+                .split('\r\n')
+                .map((item) => (
+                  <p key={item}>{item}</p>
+                ))}
+            </article>
           </EventInfodiv>
         </EventContentdiv>
         {data.member_id === loginID.memberId ? (
@@ -211,6 +225,34 @@ const EventInfoPage = () => {
     </PageContainer>
   );
 };
+
+const EventTagBox = styled.div`
+  background-color: ${(props) =>
+    props.tag === '축제'
+      ? yellow
+      : props.tag === '전시'
+      ? blue
+      : props.tag === '공연'
+      ? pink
+      : props.tag === '강연'
+      ? orange
+      : props.tag === '대회'
+      ? purple2
+      : green_1};
+  font-size: 12px;
+  color: white;
+  font-weight: 600;
+  width: 35px;
+  height: 22px;
+  display: flex;
+  margin-bottom: 5px;
+  border-radius: 10px;
+  margin: auto 10px;
+`;
+
+const EventTagSpan = styled.span`
+  margin: auto;
+`;
 
 const EditBox = styled.div`
   display: flex;
@@ -280,22 +322,44 @@ const EventBookmarkdiv = styled.div`
 const EventPerioddiv = styled.div`
   display: flex;
   font-size: 18px;
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+  }
 `;
 
-const EventDdaydiv = styled.div``;
+const EventDdaydiv = styled.div`
+  @media screen and (max-width: 767px) {
+    margin-bottom: 5px;
+  }
+`;
 
 const EventWriterdiv = styled.div`
   margin-left: 15px;
+  @media screen and (max-width: 767px) {
+    margin: 0;
+    margin-bottom: 5px;
+  }
 `;
 
 const EventTimediv = styled.div`
   margin-left: auto;
   display: flex;
+  @media screen and (max-width: 767px) {
+    margin: 0;
+    flex-direction: column;
+    margin-bottom: 5px;
+  }
 `;
 
 const EventContentdiv = styled.div`
   display: flex;
   margin-top: 30px;
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+  }
 `;
 
 const EventPosterdiv = styled.div`
@@ -303,10 +367,21 @@ const EventPosterdiv = styled.div`
   img {
     width: 400px;
   }
+  @media screen and (max-width: 767px) {
+    img {
+      width: 100%;
+    }
+    margin: auto;
+    width: 100%;
+  }
 `;
 
 const EventInfodiv = styled.div`
   margin-left: 40px;
+  @media screen and (max-width: 767px) {
+    margin-top: 35px;
+    margin-left: 0;
+  }
 `;
 
 export default EventInfoPage;

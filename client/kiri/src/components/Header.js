@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FaSearch, FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle } from 'react-icons/fa';
+import { FiSearch } from 'react-icons/fi';
 import styled from 'styled-components';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +14,7 @@ import axios from '../api/axios';
 import { selectAccessToken, DELETE_TOKEN } from 'store/modules/authSlice';
 import NeedLoginModal from './NeedLoginModal';
 import { persistor } from 'store/store';
+import { MobileHeader } from './MobileHeader';
 
 //redux-persist 저장값 초기화
 const purge = async () => {
@@ -69,9 +71,9 @@ const Header = ({ page }) => {
   };
 
   return (
-    <>
+    <HeaderContainer>
       <Main>
-        <TabMenu>
+        <div className="left">
           <Logo>
             <Link to="/">
               <img
@@ -80,26 +82,29 @@ const Header = ({ page }) => {
               />
             </Link>
           </Logo>
-          {menuArr.map((el, idx) => {
-            return (
-              <Link className="menulink" key={idx} to={`/` + `${menu[idx]}`}>
-                <SubMenu
+          <div className="menuscontainer">
+            {menuArr.map((el, idx) => {
+              return (
+                <Link
+                  className={`menulink ${pageidx === idx ? 'focused' : ''}`}
                   key={idx}
-                  className={`${pageidx === idx ? 'focused' : ''}`}
+                  to={`/` + `${menu[idx]}`}
                 >
-                  {el.name}
-                </SubMenu>
-              </Link>
-            );
-          })}
+                  <SubMenu key={idx}>{el.name}</SubMenu>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+        <div className="right">
           <Searchdiv>
-            <FaSearch size="17" className="searchicon" />
+            <FiSearch size="24" className="searchicon" />
             <SearchInput
               type="text"
               id="text"
               onKeyPress={handleOnKeyPressEnter}
               onChange={handleChangeSearchword}
-              placeholder="검색어를 입력하세요"
+              placeholder="이벤트를 검색해 보세요"
               value={serachWord}
             ></SearchInput>
           </Searchdiv>
@@ -123,19 +128,86 @@ const Header = ({ page }) => {
               </Link>
             )}
           </Profile>
-        </TabMenu>
-        <NeedLoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        </div>
       </Main>
-    </>
+      <MobileHeader
+        id="mobile"
+        handleClickLogout={handleClickLogout}
+        isOpenLoginModal={isOpen}
+        setIsOpenLoginModal={setIsOpen}
+        handleOnKeyPressEnter={handleOnKeyPressEnter}
+        handleChangeSearchword={handleChangeSearchword}
+        serachWord={serachWord}
+      />
+      <NeedLoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
+    </HeaderContainer>
   );
 };
+
+const HeaderContainer = styled.div`
+  width: 100%;
+  @media screen and (min-width: 768px) {
+    div#mobile {
+      display: none;
+    }
+  }
+`;
 
 const Main = styled.div`
   display: flex;
   width: 100%;
-  height: 55px;
+  height: 60px;
   position: relative;
   background-color: white;
+  justify-content: space-between;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.lightgray};
+  box-sizing: border-box;
+  div.left div.right {
+    height: 100%;
+  }
+  div.left {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    margin-left: 80px;
+    .menuscontainer {
+      display: flex;
+      height: 60px;
+      .menulink {
+        width: 80px;
+        margin: 0 20px;
+        height: 60px;
+        box-sizing: border-box;
+        line-height: 56px;
+        border-bottom: 3px solid transparent;
+        &:hover {
+          transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+            box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+            border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+            color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+          border-bottom: 3px solid ${({ theme }) => theme.colors.mainColor};
+        }
+        &.focused {
+          transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+            box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+            border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+            color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+          border-bottom: 3px solid ${({ theme }) => theme.colors.mainColor};
+        }
+        color: ${({ theme }) => theme.colors.dark};
+        font-weight: 700;
+        text-decoration: none;
+      }
+    }
+  }
+  div.right {
+    display: flex;
+    align-items: center;
+    margin-right: 80px;
+  }
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
 `;
 
 const Logo = styled.div`
@@ -146,8 +218,7 @@ const Logo = styled.div`
   cursor: pointer;
   text-align: center;
   white-space: nowrap;
-  padding-bottom: 15px;
-  margin-right: 100px;
+  margin-right: 40px;
   a {
     text-decoration: none;
     color: ${({ theme }) => theme.colors.mainColor};
@@ -158,46 +229,10 @@ const Logo = styled.div`
   }
 `;
 
-const TabMenu = styled.ul`
-  position: sticky;
-  background-color: white;
-  color: black;
-  font-weight: bold;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  height: 40px;
-
-  list-style: none;
-  border-bottom: 1px solid rgb(0, 0, 0, 0.1);
-
-  .focused {
-    border-bottom: 5px solid ${({ theme }) => theme.colors.mainColor};
-  }
-
-  .search {
-    margin-top: 5px;
-  }
-
-  .hide {
-    border-bottom: none;
-  }
-
-  .menulink {
-    text-decoration: none;
-    color: ${({ theme }) => theme.colors.dark};
-    font-weight: 700;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-  }
-`;
-
 const SubMenu = styled.div`
   margin-right: 100px;
   cursor: pointer;
-  width: 80px;
+  width: 100%;
   text-align: center;
   border: none;
   white-space: nowrap;
@@ -208,24 +243,25 @@ const SubMenu = styled.div`
 
 const Searchdiv = styled.div`
   display: flex;
-
+  width: 300px;
+  position: relative;
   .searchicon {
     position: absolute;
-    margin-left: 12px;
-    margin-top: 4px;
+    left: 8px;
+    top: 6px;
   }
   svg {
-    fill: ${({ theme }) => theme.colors.darkgray};
+    color: ${({ theme }) => theme.colors.darkgray};
   }
 `;
 
-const SearchInput = styled.input`
+export const SearchInput = styled.input`
+  width: 100%;
+  height: 38px;
   background: #f5f5f5;
   border: none;
   border-radius: 3px;
-  padding: 7.8px 9.1px 7.8px 32px;
-  margin-left: 5px;
-  margin-bottom: 14px;
+  padding: 0 15px 0 40px;
   display: flex;
   outline: none;
 `;
@@ -235,7 +271,6 @@ const Login = styled.button`
   border: none;
   margin-left: 20px;
   margin-right: 20px;
-  margin-bottom: 14px;
   cursor: pointer;
   font-weight: bold;
   font-size: 16px;

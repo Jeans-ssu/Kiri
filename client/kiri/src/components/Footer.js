@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const Foot = styled.footer`
   display: flex;
+  align-items: center;
   padding: 10px;
   font-size: 14px;
   font-weight: 400;
@@ -11,18 +12,33 @@ const Foot = styled.footer`
   width: 100%;
   box-sizing: border-box;
   height: 100px;
+  @media screen and (max-width: 767px) {
+    height: 80px;
+  }
+  color: #bfbfbf;
+
+  a {
+    color: #bfbfbf;
+    text-decoration: none;
+    font-weight: 500;
+  }
 
   img {
     margin-left: 40px;
-    padding-right: 10px;
-    padding-top: 10px;
-    margin-bottom: 10px;
-    border-right: solid 1px ${({ theme }) => theme.colors.green_1};
+    padding: 5px 10px 5px 0;
+    border-right: 1px solid #bfbfbf;
+    width: 60px;
+    height: 60px;
+    @media screen and (max-width: 767px) {
+      margin-left: 10px;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2em;
+    }
   }
 
   p {
     text-align: left;
-    color: ${({ theme }) => theme.colors.green_1};
   }
 
   p span {
@@ -30,11 +46,6 @@ const Foot = styled.footer`
     margin-left: 20px;
     font-weight: light;
     font-size: 11px;
-  }
-
-  p span a {
-    text-decoration-line: none;
-    color: ${({ theme }) => theme.colors.green_1};
   }
 
   div.version {
@@ -48,8 +59,6 @@ const Footer = () => {
       <img
         id="logo"
         src={`${process.env.PUBLIC_URL}/kiri_logo_white.png`}
-        width="70"
-        height="70"
         alt="logo"
       />
       <p>
@@ -64,9 +73,13 @@ const Footer = () => {
           </a>
         </span>
         <br />
-        <span>Made by: 정노은, 김수진, 김정우</span>
+        <span>
+          <a href="https://github.com/jungnoeun">@jungnoeun </a>
+          <a href="https://github.com/SujinKim1127">@SujinKim1127 </a>
+          <a href="https://github.com/jwo0o0">@jwo0o0 </a>
+        </span>
         <br />
-        <span>Copyright @ Kiri</span>
+        <span>Copyright 2023. Kiri. All rights reserved.</span>
       </p>
       <div className="version">version 1.0.0</div>
     </Foot>

@@ -15,6 +15,15 @@ const EventWritePageContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0px 60px;
+  @media screen and (max-width: 767px) {
+    min-width: 300px;
+    width: 80%-40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    margin: auto;
+  }
 `;
 
 const BtnContainer = styled.div`
@@ -67,13 +76,13 @@ const EventWritePage = () => {
   const [errorMessage, setErrorMessage] = useState({
     titleErrorMessage: '',
     hostErrorMessage: '',
-    emailErrorMessage: '',
     regionErrorMessage: '',
     univErrorMessage: '',
     typeErrorMessage: '',
     startDateErrorMessage: '',
     endDateErrorMessage: '',
     explainErrorMessage: '',
+    imgErrorMessage: '',
   });
 
   const getImageID = () => {
@@ -87,7 +96,6 @@ const EventWritePage = () => {
 
   const titleRef = useRef();
   const hostRef = useRef();
-  const emailRef = useRef();
   const regionRef = useRef();
   const univRef = useRef();
   const typeRef = useRef();
@@ -99,13 +107,14 @@ const EventWritePage = () => {
     if (
       title === '' ||
       info.host === '' ||
-      info.email === '' ||
       info.region === '선택' ||
       info.univ === '' ||
       info.type === '선택' ||
       info.startDate === '' ||
       info.endDate === '' ||
-      explain === ''
+      explain === '' ||
+      img.length === 0 ||
+      img.length === undefined
     ) {
       if (explain === '') {
         explainRef.current && explainRef.current.focus();
@@ -173,16 +182,6 @@ const EventWritePage = () => {
           return { ...prev, regionErrorMessage: '' };
         });
       }
-      if (info.email === '') {
-        emailRef.current && emailRef.current.focus();
-        setErrorMessage((prev) => {
-          return { ...prev, emailErrorMessage: '이메일을 입력해주세요.' };
-        });
-      } else {
-        setErrorMessage((prev) => {
-          return { ...prev, emailErrorMessage: '' };
-        });
-      }
       if (info.host === '') {
         hostRef.current && hostRef.current.focus();
         setErrorMessage((prev) => {
@@ -203,51 +202,37 @@ const EventWritePage = () => {
           return { ...prev, titleErrorMessage: '' };
         });
       }
-    } else {
       if (img.length === 0 || img.length === undefined) {
         console.log('length = 0');
-        axios
-          .post('/api/posts', {
-            title: title,
-            scrap_count: 0,
-            email: info.email,
-            content: explain,
-            event: info.type,
-            local: info.region,
-            school: info.univ,
-            place: info.location,
-            organizer: info.host,
-            link: link,
-            contactNumber: info.tel,
-            imageIdList: null,
-            startPostTime: info.startDate + ' ' + info.startTime + ':00',
-            finishPostTime: info.endDate + ' ' + info.endTime + ':00',
-          })
-          .then((res) => {
-            setPostID(res.data.post_id);
-            setIsSuccess(true);
-          })
-          .catch((err) => console.error(err));
+        setErrorMessage((prev) => {
+          return { ...prev, imgErrorMessage: '이미지를 첨부해주세요.' };
+        });
       } else {
-        const imgarr = getImageID();
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('scrap_count', 0);
-        formData.append('email', info.email);
-        formData.append('content', explain);
-        formData.append('event', info.type);
-        formData.append('local', info.region);
-        formData.append('school', info.univ);
-        formData.append('place', info.location);
-        formData.append('organizer', info.host);
-        formData.append('link', link);
-        if (imgarr.length === 1) {
-          formData.append('imageIdList[]', [Number(imgarr)]);
-        } else {
-          for (let i = 0; i < imgarr.length; i++) {
-            formData.append('imageIdList[]', Number(imgarr[i]));
-          }
+        setErrorMessage((prev) => {
+          return { ...prev, imgErrorMessage: '' };
+        });
+      }
+    } else {
+      console.log('등록');
+      const imgarr = getImageID();
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('scrap_count', 0);
+      formData.append('email', info.email);
+      formData.append('content', explain);
+      formData.append('event', info.type);
+      formData.append('local', info.region);
+      formData.append('school', info.univ);
+      formData.append('place', info.location);
+      formData.append('organizer', info.host);
+      formData.append('link', link);
+      if (imgarr.length === 1) {
+        formData.append('imageIdList[]', [Number(imgarr)]);
+      } else {
+        for (let i = 0; i < imgarr.length; i++) {
+          formData.append('imageIdList[]', Number(imgarr[i]));
         }
+
         formData.append('contactNumber', info.tel);
         formData.append(
           'startPostTime',
@@ -265,11 +250,27 @@ const EventWritePage = () => {
           })
           .catch((err) => console.error(err));
       }
+      formData.append('contactNumber', info.tel);
+      formData.append(
+        'startPostTime',
+        info.startDate + ' ' + info.startTime + ':00'
+      );
+      formData.append(
+        'finishPostTime',
+        info.endDate + ' ' + info.endTime + ':00'
+      );
+      axios
+        .post('/api/posts', formData)
+        .then((res) => {
+          setPostID(res.data.post_id);
+          setIsSuccess(true);
+        })
+        .catch((err) => console.error(err));
     }
   };
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
-      <EventWritePageContainer>
+      <EventWritePageContainer className="pagecontainer">
         <EventTitleInput
           title={title}
           setTitle={setTitle}
@@ -280,7 +281,6 @@ const EventWritePage = () => {
           info={info}
           setInfo={setInfo}
           hostRef={hostRef}
-          emailRef={emailRef}
           regionRef={regionRef}
           univRef={univRef}
           typeRef={typeRef}
@@ -301,6 +301,7 @@ const EventWritePage = () => {
           setImg={setImg}
           imgList={imgList}
           setImgList={setImgList}
+          errorMessage={errorMessage}
         />
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>

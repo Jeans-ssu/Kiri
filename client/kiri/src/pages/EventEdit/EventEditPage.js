@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PageContainer from 'containers/PageContainer';
 import styled from 'styled-components';
 import EventTitleInput from './EventTitleInput';
@@ -15,6 +15,15 @@ const EventWritePageContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0px 60px;
+  @media screen and (max-width: 767px) {
+    min-width: 300px;
+    width: 80%-40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    margin: auto;
+  }
 `;
 
 const BtnContainer = styled.div`
@@ -52,22 +61,54 @@ const EventEditPage = () => {
     postID = url.slice(-7, -5);
   }
 
+  useEffect(() => {
+    BasePost();
+  }, []);
+
+  const [base, setBase] = useState();
+  const BasePost = async () => {
+    await axios.get(`/posts/read/${postID}`).then((res) => {
+      setBase(res.data);
+      setTitle(res.data.title);
+      setInfo({
+        host: res.data.organizer,
+        tel: res.data.contactNumber,
+        email: res.data.email,
+        region: res.data.local, //지역
+        univ: res.data.school, //학교
+        type: res.data.event, //유형
+        startDate: res.data.startPostTime.slice(0, 10),
+        endDate: res.data.finishPostTime.slice(0, 10),
+        startTime: res.data.startPostTime.slice(11, 16),
+        endTime: res.data.finishPostTime.slice(11, 16),
+        location: res.data.place,
+      });
+      setLink(res.data.link);
+      setExplain(res.data.content);
+      setImg(res.data.savedImgList);
+      setImgList(res.data.imgIdList);
+      console.log('baseData,current', res.data);
+    });
+  };
+
+  const remove = useRef([]);
   const [postid, setPostID] = useState();
+  const [removeidx, setRemoveIdx] = useState([]);
+  console.log('rmeaskdfl', removeidx);
   const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');
   const [info, setInfo] = useState({
-    host: '',
-    tel: '',
-    email: '',
-    region: '선택', //지역
-    univ: '', //학교
-    type: '선택', //유형
-    field: 'IT',
-    startDate: '',
-    endDate: '',
-    startTime: '00:00:00',
-    endTime: '00:00:00',
-    location: '',
+    host: base?.organizer,
+    tel: base?.contactNumber,
+    email: base?.email,
+    region: base?.local, //지역
+    univ: base?.school, //학교
+    type: base?.event, //유형
+    startDate: base?.startPostTime.slice(0, 10),
+    endDate: base?.finishPostTime.slice(0, 10),
+    startTime: base?.startPostTime.slice(11, 16),
+    endTime: base?.finishPostTime.slice(11, 16),
+    location: base?.place,
   });
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
@@ -76,19 +117,28 @@ const EventEditPage = () => {
   const [errorMessage, setErrorMessage] = useState({
     titleErrorMessage: '',
     hostErrorMessage: '',
-    emailErrorMessage: '',
     regionErrorMessage: '',
     univErrorMessage: '',
     typeErrorMessage: '',
     startDateErrorMessage: '',
     endDateErrorMessage: '',
     explainErrorMessage: '',
+    imgErrorMessage: '',
   });
 
   const getImageID = () => {
     const imgarr = [];
     for (let i = 0; imgList.length > i; i++) {
-      imgarr.push(imgList[i].image_id);
+      const type = typeof imgList[i];
+      console.log('type', type);
+      if (type === 'object') {
+        console.log('array');
+        for (let j = 0; j < imgList[i].length; j++) {
+          imgarr.push(imgList[i][j].image_id);
+        }
+      } else {
+        imgarr.push(imgList[i]);
+      }
     }
     console.log('imgarr', imgarr);
     return imgarr;
@@ -96,7 +146,6 @@ const EventEditPage = () => {
 
   const titleRef = useRef();
   const hostRef = useRef();
-  const emailRef = useRef();
   const regionRef = useRef();
   const univRef = useRef();
   const typeRef = useRef();
@@ -105,16 +154,17 @@ const EventEditPage = () => {
   const explainRef = useRef();
 
   const handleClickWriteBtn = () => {
+    const imgarr = getImageID();
     if (
       title === '' ||
       info.host === '' ||
-      info.email === '' ||
       info.region === '선택' ||
       info.univ === '' ||
       info.type === '선택' ||
       info.startDate === '' ||
       info.endDate === '' ||
-      explain === ''
+      explain === '' ||
+      imgarr.length === 0
     ) {
       if (explain === '') {
         explainRef.current && explainRef.current.focus();
@@ -182,16 +232,6 @@ const EventEditPage = () => {
           return { ...prev, regionErrorMessage: '' };
         });
       }
-      if (info.email === '') {
-        emailRef.current && emailRef.current.focus();
-        setErrorMessage((prev) => {
-          return { ...prev, emailErrorMessage: '이메일을 입력해주세요.' };
-        });
-      } else {
-        setErrorMessage((prev) => {
-          return { ...prev, emailErrorMessage: '' };
-        });
-      }
       if (info.host === '') {
         hostRef.current && hostRef.current.focus();
         setErrorMessage((prev) => {
@@ -212,61 +252,65 @@ const EventEditPage = () => {
           return { ...prev, titleErrorMessage: '' };
         });
       }
-    } else {
       if (img.length === 0 || img.length === undefined) {
         console.log('length = 0');
-        axios
-          .post(`/api/posts/${postID}`, {
-            title: title,
-            scrap_count: 0,
-            email: info.email,
-            content: explain,
-            event: info.type,
-            local: info.region,
-            school: info.univ,
-            place: info.location,
-            organizer: info.host,
-            link: link,
-            contactNumber: info.tel,
-            imageIdList: null,
-            startPostTime: info.startDate + ' ' + info.startTime,
-            finishPostTime: info.endDate + ' ' + info.endTime,
-          })
-          .then((res) => {
-            setPostID(res.data.post_id);
-            setIsSuccess(true);
-          })
-          .catch((err) => console.error(err));
+        setErrorMessage((prev) => {
+          return { ...prev, imgErrorMessage: '이미지를 첨부해주세요.' };
+        });
       } else {
-        const imgarr = getImageID();
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('scrap_count', 0);
-        formData.append('email', info.email);
-        formData.append('content', explain);
-        formData.append('event', info.type);
-        formData.append('local', info.region);
-        formData.append('school', info.univ);
-        formData.append('place', info.location);
-        formData.append('organizer', info.host);
-        formData.append('link', link);
-        if (imgarr.length === 1) {
-          formData.append('imageIdList[]', [Number(imgarr)]);
-        } else {
-          for (let i = 0; i < imgarr.length; i++) {
-            formData.append('imageIdList[]', Number(imgarr[i]));
-          }
-        }
-        formData.append('contactNumber', info.tel);
-        formData.append('startPostTime', info.startDate + ' ' + info.startTime);
-        formData.append('finishPostTime', info.endDate + ' ' + info.endTime);
-        axios
-          .post('/api/posts', formData)
-          .then(alert('등록이 완료되었습니다.'))
-          .catch((err) => console.error(err));
+        setErrorMessage((prev) => {
+          return { ...prev, imgErrorMessage: '' };
+        });
       }
+    } else {
+      console.log('removecurrent', remove.current);
+      for (let i = 0; i < remove.current.length; i++) {
+        axios
+          .delete(`/api/posts/image/update/${remove.current[i]}`)
+          .then((res) => {
+            console.log('api res', res);
+          })
+          .catch((err) => console.log('Delete ERROR: ', err));
+      }
+      console.log('imglenght', imgarr);
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('scrap_count', 0);
+      formData.append('email', info.email);
+      formData.append('content', explain);
+      formData.append('event', info.type);
+      formData.append('local', info.region);
+      formData.append('school', info.univ);
+      formData.append('place', info.location);
+      formData.append('organizer', info.host);
+      formData.append('link', link);
+      if (imgarr.length === 1) {
+        formData.append('imageIdList[]', [Number(imgarr)]);
+      } else {
+        for (let i = 0; i < imgarr.length; i++) {
+          formData.append('imageIdList[]', Number(imgarr[i]));
+        }
+      }
+      formData.append('contactNumber', info.tel);
+      formData.append(
+        'startPostTime',
+        info.startDate + ' ' + info.startTime + ':00'
+      );
+      formData.append(
+        'finishPostTime',
+        info.endDate + ' ' + info.endTime + ':00'
+      );
+      axios
+        .post(`/api/posts/${postID}`, formData)
+        .then((res) => {
+          setPostID(res.data.post_id);
+          setIsSuccess(true);
+        })
+        .catch((err) => console.error(err));
     }
   };
+
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
       <EventWritePageContainer>
@@ -280,7 +324,6 @@ const EventEditPage = () => {
           info={info}
           setInfo={setInfo}
           hostRef={hostRef}
-          emailRef={emailRef}
           regionRef={regionRef}
           univRef={univRef}
           typeRef={typeRef}
@@ -301,9 +344,12 @@ const EventEditPage = () => {
           setImg={setImg}
           imgList={imgList}
           setImgList={setImgList}
+          setRemoveIdx={setRemoveIdx}
+          remove={remove}
+          errorMessage={errorMessage}
         />
         <BtnContainer>
-          <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
+          <WriteBtn onClick={handleClickWriteBtn}>수정하기</WriteBtn>
         </BtnContainer>
         <PostModal
           text={'수정'}

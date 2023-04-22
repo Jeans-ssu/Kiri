@@ -17,44 +17,6 @@ import { SET_TOKEN } from 'store/modules/authSlice';
 import { SET_USER } from 'store/modules/userSlice';
 import { SigninFailModal } from 'components/SignupinModal';
 
-const SigninInputsContainer = styled.div`
-  margin-top: 30px;
-`;
-
-const SigninBtn = styled(SubmitBtn)``;
-
-const BtnContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const MoveToSignupBtn = styled.button`
-  background-color: transparent;
-  border: none;
-  color: ${({ theme }) => theme.colors.darkgray};
-  display: flex;
-  align-items: center;
-  padding: 0;
-  span {
-    padding-top: 2px;
-  }
-  &:hover {
-    cursor: pointer;
-    color: ${({ theme }) => theme.colors.mainColor};
-  }
-`;
-
-const ViewPasswordBtn_ = styled(ViewPasswordBtn)`
-  position: absolute;
-  right: 0;
-`;
-
-const InitialState = {
-  email: '',
-  password: '',
-};
-
 const SigninInputs = () => {
   const [userInput, setUserInput] = useState(InitialState);
   const { email, password } = userInput;
@@ -165,7 +127,7 @@ const SigninInputs = () => {
             name="email"
             type="text"
             value={email}
-            placeholder="abcd@gmail.com"
+            placeholder="helloword@email.com"
             onChange={handleChangeInput}
             className={validation.email ? 'validate' : null}
           />
@@ -177,6 +139,20 @@ const SigninInputs = () => {
               id="check"
               className={validation.password ? 'validate' : null}
             />
+          </InputHeader>
+          <label htmlFor="signininput">
+            <SigninInput
+              name="password"
+              type={isViewMode ? 'text' : 'password'}
+              value={password}
+              onChange={handleChangeInput}
+              className={validation.password ? 'validate' : null}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleClickSigninBtn();
+                }
+              }}
+            />
             <ViewPasswordBtn_
               onClick={() => {
                 setIsViewMode(!isViewMode);
@@ -184,19 +160,7 @@ const SigninInputs = () => {
             >
               <AiFillEye />
             </ViewPasswordBtn_>
-          </InputHeader>
-          <SigninInput
-            name="password"
-            type={isViewMode ? 'text' : 'password'}
-            value={password}
-            onChange={handleChangeInput}
-            className={validation.password ? 'validate' : null}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                handleClickSigninBtn();
-              }
-            }}
-          />
+          </label>
         </InputContainer>
         <BtnContainer>
           <MoveToSignupBtn onClick={handleClickMoveToSignupBtn}>
@@ -209,6 +173,46 @@ const SigninInputs = () => {
       <SigninFailModal isOpen={isOpen} setIsOpen={setIsOpen} message={errMsg} />
     </>
   );
+};
+
+const SigninInputsContainer = styled.div`
+  margin-top: 30px;
+  @media screen and (max-width: 767px) {
+  }
+`;
+
+const SigninBtn = styled(SubmitBtn)``;
+
+const BtnContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const MoveToSignupBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.darkgray};
+  display: flex;
+  align-items: center;
+  padding: 0;
+  span {
+    padding-top: 2px;
+  }
+  &:hover {
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.mainColor};
+  }
+`;
+
+const ViewPasswordBtn_ = styled(ViewPasswordBtn)`
+  position: absolute;
+  right: 0;
+`;
+
+const InitialState = {
+  email: '',
+  password: '',
 };
 
 export default SigninInputs;

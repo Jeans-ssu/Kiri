@@ -3,6 +3,9 @@ import styled from 'styled-components';
 const EventTitleInputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 const TitleHeader = styled.div`
@@ -33,6 +36,9 @@ const TitleInput = styled.input`
   &:focus {
     border: 1px solid ${({ theme }) => theme.colors.mainColor};
   }
+  @media screen and (max-width: 767px) {
+    width: 93vw;
+  }
 `;
 
 const ErrorMessageBox = styled.div`
@@ -49,7 +55,7 @@ const EventTitleInput = ({ Title, setTitle, titleRef, errorMessage }) => {
     setTitle(e.target.value);
   };
   return (
-    <EventTitleInputContainer>
+    <EventTitleInputContainer className="titlecontainer">
       <TitleHeader>
         <div className="title">제목</div>
         <span className="green">*</span>

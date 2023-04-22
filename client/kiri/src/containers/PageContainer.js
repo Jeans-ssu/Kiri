@@ -5,26 +5,33 @@ import Header from '../components/Header';
 
 const PageContainerBox = styled.div`
   min-height: 100vh;
+  min-width: 1096px;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #f2f2f2;
+  @media screen and (max-width: 767px) {
+    min-width: 350px;
+    overflow-y: auto;
+  }
 `;
 
 const ContentContainer = styled.div`
   flex: 1;
-  width: 100%;
-  max-width: 1024px;
-  min-width: 375px;
+  width: 1024px;
   background-color: white;
   margin-bottom: 30px;
   padding: ${(props) => (props.padding ? props.padding : '40px 0')};
   &.none {
     margin-bottom: 0;
   }
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    margin-bottom: 0;
+    padding: 20px 0;
+  }
 `;
 
-//TODO: 헤더, 푸터 추가
 const PageContainer = ({
   children,
   header,

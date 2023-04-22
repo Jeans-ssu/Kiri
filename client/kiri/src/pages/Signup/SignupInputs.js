@@ -9,153 +9,6 @@ import { SignupSuccessModal, SignupFailModal } from 'components/SignupinModal';
 import SearchUnivModal from 'components/SearchUnivModal';
 import { Regions } from 'util/info';
 
-const SignupInputsContainer = styled.div`
-  margin-top: 30px;
-`;
-
-export const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-  div.column {
-    display: flex;
-  }
-  &.hide {
-    display: none;
-  }
-`;
-
-export const InputHeader = styled.div`
-  color: ${({ theme }) => theme.colors.dark};
-  font-size: 14px;
-  margin-bottom: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  svg#check {
-    margin-left: 5px;
-    visibility: hidden;
-    fill: ${({ theme }) => theme.colors.mainColor};
-  }
-  svg#check.validate {
-    visibility: visible;
-  }
-  label {
-    display: flex;
-    align-items: center;
-    margin-right: 80px;
-    font-size: 11px;
-  }
-`;
-
-export const SignupInput = styled.input`
-  box-sizing: border-box;
-  width: ${(props) => (props.short ? '320px' : '400px')};
-  height: 40px;
-  border: 1px solid ${({ theme }) => theme.colors.lightgray};
-  border-radius: 5px;
-  padding: 0 10px;
-  color: ${({ theme }) => theme.colors.dark};
-  background-color: transparent !important;
-  &:focus,
-  &.validate {
-    outline: none;
-    border: 1px solid ${({ theme }) => theme.colors.mainColor};
-  }
-`;
-
-const InputMsg = styled.div`
-  padding-top: 5px;
-  font-size: 12px;
-  color: ${({ theme }) => theme.colors.red};
-  display: none;
-  &.show {
-    display: block;
-  }
-`;
-
-const SelectInput = styled.select`
-  width: 400px;
-  height: 40px;
-  border: 1px solid ${({ theme }) => theme.colors.lightgray};
-  border-radius: 5px;
-  padding-left: 5px;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const OpenSearchModalBtn = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 80px;
-  background-color: transparent;
-  border: none;
-  color: ${({ theme }) => theme.colors.mainColor};
-  font-weight: 600;
-  &:hover {
-    cursor: pointer;
-  }
-  &:disabled {
-    color: ${({ theme }) => theme.colors.gray};
-  }
-`;
-
-export const SubmitBtn = styled.button`
-  width: 200px;
-  height: 40px;
-  border-radius: 40px;
-  border: none;
-  background-color: ${({ theme }) => theme.colors.mainColor};
-  margin-top: 30px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.light};
-  font-size: 15px;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  &:hover {
-    cursor: pointer;
-    background-color: #44cf95;
-    transform: translateY(-3px);
-    transition: all 0.3s;
-  }
-`;
-
-const ViewPasswordBtn_ = styled(ViewPasswordBtn)`
-  position: absolute;
-  right: 0;
-`;
-
-const ValidationMsg = styled.div`
-  font-size: 11px;
-  color: ${({ theme }) => theme.colors.gray};
-  margin-top: 5px;
-`;
-
-const InitialState = {
-  nickName: '',
-  email: '',
-  password: '',
-  Vpassword: '',
-  status: '대학생',
-  region: '서울',
-  univ: '',
-};
-
-const ValidationInitialState = {
-  nickName: false,
-  email: false,
-  password: false,
-  Vpassword: false,
-};
-
-export const checkEmail = (email) => {
-  var check =
-    /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-  return check.test(email);
-};
-
 const SignupInputs = () => {
   const [userInput, setUserInput] = useState(InitialState); //닉네임, 이메일, 비밀번호, 소속, 지역
   const { nickName, email, password, Vpassword } = userInput;
@@ -344,7 +197,7 @@ const SignupInputs = () => {
           <SignupInput
             name="email"
             value={email}
-            placeholder="abcd@gmail.com"
+            placeholder="helloworld@email.com"
             onChange={handleChangeInput}
             className={validation.email ? 'validate' : null}
           />
@@ -359,6 +212,15 @@ const SignupInputs = () => {
               id="check"
               className={validation.password ? 'validate' : null}
             />
+          </InputHeader>
+          <label htmlFor="signupinputs">
+            <SignupInput
+              name="password"
+              type={isViewMode ? 'text' : 'password'}
+              value={password}
+              onChange={handleChangeInput}
+              className={validation.password ? 'validate' : null}
+            />
             <ViewPasswordBtn_
               onClick={() => {
                 setIsViewMode(!isViewMode);
@@ -366,14 +228,7 @@ const SignupInputs = () => {
             >
               <AiFillEye />
             </ViewPasswordBtn_>
-          </InputHeader>
-          <SignupInput
-            name="password"
-            type={isViewMode ? 'text' : 'password'}
-            value={password}
-            onChange={handleChangeInput}
-            className={validation.password ? 'validate' : null}
-          />
+          </label>
           <ValidationMsg>영문,숫자 8-16글자</ValidationMsg>
         </InputContainer>
         <InputContainer>
@@ -383,6 +238,15 @@ const SignupInputs = () => {
               id="check"
               className={validation.Vpassword ? 'validate' : null}
             />
+          </InputHeader>
+          <label htmlFor="signupinputs">
+            <SignupInput
+              name="Vpassword"
+              type={isViewMode_ ? 'text' : 'password'}
+              value={Vpassword}
+              onChange={handleChangeInput}
+              className={validation.password ? 'validate' : null}
+            />
             <ViewPasswordBtn_
               onClick={() => {
                 setIsViewMode_(!isViewMode_);
@@ -390,14 +254,7 @@ const SignupInputs = () => {
             >
               <AiFillEye />
             </ViewPasswordBtn_>
-          </InputHeader>
-          <SignupInput
-            name="Vpassword"
-            type={isViewMode_ ? 'text' : 'password'}
-            value={Vpassword}
-            onChange={handleChangeInput}
-            className={validation.password ? 'validate' : null}
-          />
+          </label>
         </InputContainer>
         <InputContainer>
           <InputHeader>소속</InputHeader>
@@ -455,6 +312,176 @@ const SignupInputs = () => {
       <SignupFailModal isOpen={isFailed} setIsOpen={setIsFailed} />
     </>
   );
+};
+
+const SignupInputsContainer = styled.div`
+  margin-top: 30px;
+`;
+
+export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  div.column {
+    display: flex;
+  }
+  &.hide {
+    display: none;
+  }
+  label {
+    position: relative;
+    button {
+      position: absolute;
+      right: 0;
+      top: 25%;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    width: 300px;
+  }
+`;
+
+export const InputHeader = styled.div`
+  color: ${({ theme }) => theme.colors.dark};
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  svg#check {
+    margin-left: 5px;
+    visibility: hidden;
+    fill: ${({ theme }) => theme.colors.mainColor};
+  }
+  svg#check.validate {
+    visibility: visible;
+  }
+  label {
+    display: flex;
+    align-items: center;
+    margin-right: 80px;
+    font-size: 11px;
+    @media screen and (max-width: 767px) {
+      margin-right: 62px;
+    }
+  }
+`;
+
+export const SignupInput = styled.input`
+  box-sizing: border-box;
+  width: ${(props) => (props.short ? '320px' : '400px')};
+  height: 40px;
+  border: 1px solid ${({ theme }) => theme.colors.lightgray};
+  border-radius: 5px;
+  padding: 0 10px;
+  color: ${({ theme }) => theme.colors.dark};
+  background-color: transparent !important;
+  &:focus,
+  &.validate {
+    outline: none;
+    border: 1px solid ${({ theme }) => theme.colors.mainColor};
+  }
+  @media screen and (max-width: 767px) {
+    width: 300px;
+  }
+`;
+
+const InputMsg = styled.div`
+  padding-top: 5px;
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.red};
+  display: none;
+  &.show {
+    display: block;
+  }
+`;
+
+const SelectInput = styled.select`
+  width: 400px;
+  height: 40px;
+  border: 1px solid ${({ theme }) => theme.colors.lightgray};
+  border-radius: 5px;
+  padding-left: 5px;
+  &:focus {
+    outline: none;
+  }
+  @media screen and (max-width: 767px) {
+    width: 300px;
+  }
+`;
+
+const OpenSearchModalBtn = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 80px;
+  background-color: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.mainColor};
+  font-weight: 600;
+  &:hover {
+    cursor: pointer;
+  }
+  &:disabled {
+    color: ${({ theme }) => theme.colors.gray};
+  }
+  @media screen and (max-width: 767px) {
+    font-size: 11px;
+  }
+`;
+
+export const SubmitBtn = styled.button`
+  width: 200px;
+  height: 40px;
+  border-radius: 40px;
+  border: none;
+  background-color: ${({ theme }) => theme.colors.mainColor};
+  margin-top: 30px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.light};
+  font-size: 15px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  &:hover {
+    cursor: pointer;
+    background-color: #44cf95;
+    transform: translateY(-3px);
+    transition: all 0.3s;
+  }
+`;
+
+const ViewPasswordBtn_ = styled(ViewPasswordBtn)`
+  position: absolute;
+  right: 0;
+`;
+
+const ValidationMsg = styled.div`
+  font-size: 11px;
+  color: ${({ theme }) => theme.colors.gray};
+  margin-top: 5px;
+`;
+
+const InitialState = {
+  nickName: '',
+  email: '',
+  password: '',
+  Vpassword: '',
+  status: '대학생',
+  region: '서울',
+  univ: '',
+};
+
+const ValidationInitialState = {
+  nickName: false,
+  email: false,
+  password: false,
+  Vpassword: false,
+};
+
+export const checkEmail = (email) => {
+  var check =
+    /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+  return check.test(email);
 };
 
 export default SignupInputs;

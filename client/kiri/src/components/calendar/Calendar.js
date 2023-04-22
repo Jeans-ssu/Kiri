@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'api/axios';
 import { LikedEvent } from './LikedEvent';
+import { AllLikedEvent } from './AllLikedEvent';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
@@ -56,70 +57,70 @@ const RenderDays = () => {
   return <div className="days row">{days}</div>;
 };
 
-const events = [
-  {
-    post_id: 1,
-    title: '글로벌미디어 졸업전시',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '전시',
-    startScrapTime: '2023-03-05T10:10:10',
-    finishScrapTime: '2023-03-05T10:10:10',
-  },
-  {
-    post_id: 4,
-    title: '숭실대학교 대동제',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '축제',
-    startScrapTime: '2023-03-04T10:10:10',
-    finishScrapTime: '2023-03-05T10:10:10',
-  },
-  {
-    post_id: 5,
-    title: '숭대극회 연극',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '공연',
-    startScrapTime: '2023-03-16T10:10:10',
-    finishScrapTime: '2023-03-20T10:10:10',
-  },
-  {
-    post_id: 8,
-    title: '인공지능 경진대회',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '대회',
-    startScrapTime: '2023-03-26T10:10:10',
-    finishScrapTime: '2023-03-26T10:10:10',
-  },
-  {
-    post_id: 9,
-    title: '취업하는법',
-    organizer: '숭실대',
-    school: '숭실대학교',
-    local: '서울',
-    event: '강연',
-    startScrapTime: '2023-03-31T10:10:10',
-    finishScrapTime: '2023-04-01T10:10:10',
-  },
-];
+// const events = [
+//   {
+//     post_id: 1,
+//     title: '글로벌미디어 졸업전시',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '전시',
+//     startScrapTime: '2023-03-05T10:10:10',
+//     finishScrapTime: '2023-03-05T10:10:10',
+//   },
+//   {
+//     post_id: 4,
+//     title: '숭실대학교 대동제',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '축제',
+//     startScrapTime: '2023-03-04T10:10:10',
+//     finishScrapTime: '2023-03-05T10:10:10',
+//   },
+//   {
+//     post_id: 5,
+//     title: '숭대극회 연극',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '공연',
+//     startScrapTime: '2023-03-16T10:10:10',
+//     finishScrapTime: '2023-03-20T10:10:10',
+//   },
+//   {
+//     post_id: 8,
+//     title: '인공지능 경진대회',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '대회',
+//     startScrapTime: '2023-03-26T10:10:10',
+//     finishScrapTime: '2023-03-26T10:10:10',
+//   },
+//   {
+//     post_id: 9,
+//     title: '취업하는법',
+//     organizer: '숭실대',
+//     school: '숭실대학교',
+//     local: '서울',
+//     event: '강연',
+//     startScrapTime: '2023-03-31T10:10:10',
+//     finishScrapTime: '2023-04-01T10:10:10',
+//   },
+// ];
 
 //해당 날짜의 이벤트 객체들만 추출하는 함수
 const extractEvents = (date, arr) => {
   const extractedEvents = [];
   const formattedDate = format(date, 'MM/dd/yyyy');
-  arr.map((el) => {
+  arr?.map((el) => {
     let formattedStartScrapTime = format(
-      parseISO(el.startScrapTime),
+      parseISO(el.startScrapTime || el.startPostTime),
       'MM/dd/yyyy'
     );
     let formattedFinishScrapTime = format(
-      parseISO(el.finishScrapTime),
+      parseISO(el.finishScrapTime || el.finishPostTime),
       'MM/dd/yyyy'
     );
     if (
@@ -136,8 +137,8 @@ const extractEvents = (date, arr) => {
       extractedEvents.push(el);
     } else if (
       //여러날인 경우
-      isAfter(date, parseISO(el.startScrapTime)) &&
-      isBefore(date, parseISO(el.finishScrapTime))
+      isAfter(date, parseISO(el.startScrapTime || el.startPostTime)) &&
+      isBefore(date, parseISO(el.finishScrapTime || el.finsihPostTime))
     ) {
       el.calDate = date;
       extractedEvents.push(el);
@@ -195,7 +196,7 @@ const RenderCells = ({
           >
             {formattedDate}
           </span>
-          {todayEvents.map((el, idx) => {
+          {todayEvents.slice(0, 3)?.map((el, idx) => {
             return (
               <LikedEvent
                 key={idx}
@@ -205,12 +206,19 @@ const RenderCells = ({
                 title={el.title}
                 type={el.event}
                 school={el.school}
-                startTime={el.startScrapTime}
-                finishTime={el.finishScrapTime}
+                startTime={el.startScrapTime || el.startPostTime}
+                finishTime={el.finishScrapTime || el.finishPostTime}
                 organizer={el.organizer}
               />
             );
           })}
+          {todayEvents.length > 3 ? (
+            <AllLikedEvent
+              leftEvents={todayEvents.length - 3}
+              todayEvents={todayEvents}
+              day={day}
+            />
+          ) : null}
         </div>
       );
       day = addDays(day, 1);
@@ -225,7 +233,7 @@ const RenderCells = ({
   return <div className="body">{rows}</div>;
 };
 
-export const CalendarComponent = () => {
+export const CalendarComponent = ({ calType, region }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [likedEvents, setLikedEvents] = useState([]);
@@ -234,25 +242,39 @@ export const CalendarComponent = () => {
   setAuthHeader(accessToken);
 
   const getMonthEvents = async () => {
-    try {
-      const response = await axios.get(
-        `/calendar?year=${format(currentMonth, 'yyyy')}&month=${format(
-          currentMonth,
-          'M'
-        )}`
-      );
-      const data = response.data;
-      setLikedEvents(data);
-      //setLikedEvents(events);
-    } catch (error) {
-      console.error('ERROR: ', error);
+    if (calType === 'liked') {
+      try {
+        const response = await axios.get(
+          `/calendar?year=${format(currentMonth, 'yyyy')}&month=${format(
+            currentMonth,
+            'M'
+          )}`
+        );
+        const data = response.data;
+        setLikedEvents(data);
+      } catch (error) {
+        console.error('ERROR: ', error);
+      }
+    } else {
+      //calType === 'region'
+      try {
+        const response = await axios.get(
+          `/scrap?year=${format(currentMonth, 'yyyy')}&month=${format(
+            currentMonth,
+            'M'
+          )}&local=${region}`
+        );
+        const data = response.data;
+        setLikedEvents(data);
+      } catch (error) {
+        console.error('ERROR: ', error);
+      }
     }
   };
 
   useEffect(() => {
-    getMonthEvents;
-    setLikedEvents(events);
-  }, [currentMonth]);
+    getMonthEvents();
+  }, [currentMonth, calType, region]);
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
@@ -285,7 +307,9 @@ export const CalendarComponent = () => {
 
 const CalendarContainer = styled.div`
   width: 950px;
-  //border: 1px solid black;
+  @media screen and (max-width: 767px) {
+    width: 96%;
+  }
   div.row {
     display: flex;
   }
@@ -305,6 +329,9 @@ const CalendarContainer = styled.div`
         font-weight: 600;
         padding-right: 5px;
         text-align: end;
+        @media screen and (max-width: 767px) {
+          font-size: 1.3em;
+        }
       }
     }
     svg {
@@ -322,6 +349,9 @@ const CalendarContainer = styled.div`
       }
     }
     margin: 8px 0;
+    @media screen and (max-width: 767px) {
+      margin: 4px 0;
+    }
   }
   div.days {
     border-left: 1px solid transparent;
@@ -338,6 +368,9 @@ const CalendarContainer = styled.div`
       font-size: 14px;
       font-weight: 600;
       color: ${({ theme }) => theme.colors.darkgray};
+      @media screen and (max-width: 767px) {
+        font-size: 0.8em;
+      }
     }
     div.weekend {
       color: ${({ theme }) => theme.colors.gray};
@@ -358,8 +391,15 @@ const CalendarContainer = styled.div`
       font-size: 13px;
       font-weight: 600;
       padding: 10px 0 5px 10px;
+      @media screen and (max-width: 767px) {
+        padding: 5px 0 5px 5px;
+        font-size: 0.7em;
+      }
     }
-    height: 120px;
+    height: 130px;
+    @media screen and (max-width: 767px) {
+      height: 50px;
+    }
     &.today > span {
       color: ${({ theme }) => theme.colors.mainColor};
     }

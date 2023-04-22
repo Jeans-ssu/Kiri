@@ -2,14 +2,104 @@ import styled from 'styled-components';
 import { IoMdClose } from 'react-icons/io';
 import { useNavigate } from 'react-router';
 import eventColorMatcher from 'util/eventColorMatcher';
-import { parseISO, format } from 'date-fns';
-import { AiFillHeart, AiOutlineExport } from 'react-icons/ai';
+import { parseISO, format, addDays } from 'date-fns';
+import { AiOutlineExport } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
-import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { CreateIcsFile } from 'pages/Calendar/CreateIcsFile';
+
+const EventModal = ({
+  isOpen,
+  setIsOpen,
+  eventId,
+  title,
+  type,
+  school,
+  startTime,
+  finishTime,
+  organizer,
+}) => {
+  const accessToken = useSelector(selectAccessToken);
+  setAuthHeader(accessToken);
+
+  const openModalHandler = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const navigate = useNavigate();
+  const handleClickLookBtn = () => {
+    navigate(`/event/${eventId}`);
+  };
+
+  return (
+    <ModalContainer>
+      {isOpen ? (
+        <ModalBackdrop onClick={openModalHandler}>
+          <ModalView onClick={(e) => e.stopPropagation()}>
+            <ModalHeader>
+              <IoMdClose onClick={openModalHandler} />
+            </ModalHeader>
+            <MainContent>
+              <div className="event">이벤트:</div>
+              <div className="title">{title}</div>
+              <div className="type school">
+                <EventTag color={eventColorMatcher(type)}>{type}</EventTag>
+                <span className="school">{school}</span>
+              </div>
+            </MainContent>
+            <DetailContent>
+              <div>
+                <span>장소: </span>장소
+              </div>
+              <div>
+                <span>날짜: </span>
+                {format(parseISO(startTime), 'yyyy/MM/dd') ===
+                format(parseISO(finishTime), 'yyyy/MM/dd')
+                  ? `${format(parseISO(startTime), 'yyyy/MM/dd')}`
+                  : `${format(parseISO(startTime), 'yyyy/MM/dd')} ~ ${format(
+                      parseISO(finishTime),
+                      'yyyy/MM/dd'
+                    )}`}
+              </div>
+              <div>
+                <span>주최: </span>
+                {organizer}
+              </div>
+            </DetailContent>
+            <EventBtnsContainer>
+              {/* <button className="cancel" onClick={handleClickCancelBtn}>
+                <AiFillHeart />
+                좋아요 취소
+              </button> */}
+              <button className="look" onClick={handleClickLookBtn}>
+                <BiSearch />
+                자세히 보기
+              </button>
+              <button className="export">
+                <AiOutlineExport />
+                <a
+                  href={CreateIcsFile(
+                    format(parseISO(startTime), 'yyyyMMdd'),
+                    format(addDays(parseISO(finishTime), 1), 'yyyyMMdd'),
+                    title,
+                    type,
+                    school
+                  )}
+                  download={`${title}.ics`}
+                >
+                  내보내기
+                </a>
+              </button>
+            </EventBtnsContainer>
+            <ExportBtnContainer></ExportBtnContainer>
+          </ModalView>
+        </ModalBackdrop>
+      ) : null}
+    </ModalContainer>
+  );
+};
 
 const ModalContainer = styled.div``;
 
@@ -105,24 +195,37 @@ const EventBtnsContainer = styled.div`
   button {
     background-color: transparent;
     border: none;
-    font-weight: 600;
     display: flex;
     align-items: center;
     font-size: 12px;
-    svg {
-      width: 15px;
-      height: 15px;
-      margin-right: 2px;
+    font-weight: 600;
+    a {
+      font-weight: 600;
     }
     &:hover {
       cursor: pointer;
     }
   }
-  button.cancel {
-    color: ${({ theme }) => theme.colors.gray};
-  }
   button.look {
+    svg {
+      width: 15px;
+      height: 15px;
+      margin-right: 2px;
+    }
     color: ${({ theme }) => theme.colors.mainColor};
+  }
+  button.export {
+    a {
+      color: ${({ theme }) => theme.colors.darkgray};
+      text-decoration: none;
+      text-decoration-color: ${({ theme }) => theme.colors.darkgray};
+    }
+    svg {
+      margin: 2px;
+      width: 15px;
+      height: 15px;
+    }
+    color: ${({ theme }) => theme.colors.darkgray};
   }
 `;
 
@@ -139,6 +242,7 @@ const ExportBtnContainer = styled.div`
     color: ${({ theme }) => theme.colors.darkgray};
     a {
       color: ${({ theme }) => theme.colors.darkgray};
+      text-decoration: none;
       text-decoration-color: ${({ theme }) => theme.colors.darkgray};
       font-weight: 600;
       font-size: 12px;
@@ -153,109 +257,5 @@ const ExportBtnContainer = styled.div`
     }
   }
 `;
-
-const EventModal = ({
-  getMonthEvents,
-  isOpen,
-  setIsOpen,
-  eventId,
-  title,
-  type,
-  school,
-  startTime,
-  finishTime,
-  organizer,
-}) => {
-  const accessToken = useSelector(selectAccessToken);
-  setAuthHeader(accessToken);
-
-  const openModalHandler = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const navigate = useNavigate();
-  const handleClickLookBtn = () => {
-    navigate(`/event/${eventId}`);
-  };
-
-  const handleClickCancelBtn = () => {
-    axios
-      .post(`/extra/${eventId}`)
-      .then(() => {
-        console.log('좋아요 취소 성공');
-        getMonthEvents();
-      })
-      .catch((err) => console.log('ERROR: ', err));
-    openModalHandler();
-  };
-
-  return (
-    <ModalContainer>
-      {isOpen ? (
-        <ModalBackdrop onClick={openModalHandler}>
-          <ModalView onClick={(e) => e.stopPropagation()}>
-            <ModalHeader>
-              <IoMdClose onClick={openModalHandler} />
-            </ModalHeader>
-            <MainContent>
-              <div className="event">이벤트:</div>
-              <div className="title">{title}</div>
-              <div className="type school">
-                <EventTag color={eventColorMatcher(type)}>{type}</EventTag>
-                <span className="school">{school}</span>
-              </div>
-            </MainContent>
-            <DetailContent>
-              <div>
-                <span>장소: </span>장소
-              </div>
-              <div>
-                <span>날짜: </span>
-                {format(parseISO(startTime), 'yyyy/MM/dd') ===
-                format(parseISO(finishTime), 'yyyy/MM/dd')
-                  ? `${format(parseISO(startTime), 'yyyy/MM/dd')}`
-                  : `${format(parseISO(startTime), 'yyyy/MM/dd')} ~ ${format(
-                      parseISO(finishTime),
-                      'yyyy/MM/dd'
-                    )}`}
-              </div>
-              <div>
-                <span>주최: </span>
-                {organizer}
-              </div>
-            </DetailContent>
-            <EventBtnsContainer>
-              <button className="cancel" onClick={handleClickCancelBtn}>
-                <AiFillHeart />
-                좋아요 취소
-              </button>
-              <button className="look" onClick={handleClickLookBtn}>
-                <BiSearch />
-                자세히 보기
-              </button>
-            </EventBtnsContainer>
-            <ExportBtnContainer>
-              <button className="export">
-                <AiOutlineExport />
-                <a
-                  href={CreateIcsFile(
-                    format(parseISO(startTime), 'yyyyMMdd'),
-                    format(parseISO(finishTime), 'yyyyMMdd'),
-                    title,
-                    type,
-                    school
-                  )}
-                  download={`${title}.ics`}
-                >
-                  내보내기
-                </a>
-              </button>
-            </ExportBtnContainer>
-          </ModalView>
-        </ModalBackdrop>
-      ) : null}
-    </ModalContainer>
-  );
-};
 
 export default EventModal;

@@ -1,15 +1,45 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 
-const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
+const EventEtcInput = ({
+  link,
+  setLink,
+  img,
+  setImg,
+  imgList,
+  setImgList,
+  setRemoveIdx,
+  remove,
+  errorMessage,
+}) => {
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
+  console.log('imgIdList', imgList);
+
+  const url = document.location.href;
+  let postID;
+  if (url.slice(-7, -6) === '/') {
+    // 10 미만
+    postID = url.slice(-6, -5);
+  } else {
+    postID = url.slice(-7, -5);
+  }
+
+  useEffect(() => {
+    BasePost();
+  }, []);
+
+  const BasePost = async () => {
+    await axios.get(`/posts/read/${postID}`).then((res) => {
+      setImgList(res.data.imgIdList);
+    });
+  };
 
   const uploadImg = (formData) => {
     axios
@@ -19,8 +49,8 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
-        setImgList(res.data);
+        console.log('uploadImg', res.data);
+        setImgList((prev) => [...prev, res.data]);
       })
       .catch((err) => console.log('ERROR: ', err));
   };
@@ -34,9 +64,9 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
     for (let i = 0; i < imgArr.current.length; i++) {
       formData.append('files', imgArr.current[i]);
     }
-    // for (let value of formData.values()) {
-    //   console.log(value);
-    // }
+    for (let value of formData.values()) {
+      console.log('formdata', value);
+    }
     uploadImg(formData);
 
     const nowSelectImageList = e.target.files;
@@ -62,11 +92,20 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
   const fileInput = useRef(null);
 
   const deleteImg = (idx) => {
-    img.splice(idx, 1);
-    imgList.splice(idx, 1);
+    console.log('delete img', img);
+    console.log('delte imglist', imgList);
+    remove.current.push(imgList[idx]);
+    console.log('remove.current', remove.current);
+    setRemoveIdx((prev) => [...prev, imgList[idx]]);
+    img?.splice(idx, 1);
+    imgList?.splice(idx, 1);
     imgArr.current.splice(idx, 1);
     setImg([...img]);
-    setImgList([...imgList]);
+    if (imgList === undefined) {
+      setImgList([]);
+    } else {
+      setImgList([...imgList]);
+    }
   };
 
   return (
@@ -76,7 +115,9 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
         <LinkInput type="url" value={link} onChange={handleChangeInput} />
       </EtcContainer>
       <EtcContainer>
-        <EtcHeader>이미지</EtcHeader>
+        <EtcHeader>
+          이미지 <span className="green">*</span>
+        </EtcHeader>
         <label className="label" htmlFor="input-file">
           파일 선택
         </label>
@@ -90,6 +131,7 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
           onChange={addImage}
           style={{ display: 'none' }}
         />
+        <ErrorMessageBox> {errorMessage.imgErrorMessage}</ErrorMessageBox>
       </EtcContainer>
       <PreviewBox>
         <GridImageBox>
@@ -121,6 +163,15 @@ const EventEtcInput = ({ link, setLink, img, setImg, imgList, setImgList }) => {
     </EventEtcInputContainer>
   );
 };
+
+const ErrorMessageBox = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.red};
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+`;
 
 const EventEtcInputContainer = styled.div`
   display: flex;
@@ -154,6 +205,11 @@ const EtcHeader = styled.div`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.dark};
   width: 70px;
+  .green {
+    color: ${({ theme }) => theme.colors.mainColor};
+    font-size: 18px;
+    margin-left: 3px;
+  }
 `;
 const LinkInput = styled.input`
   width: 350px;
@@ -162,6 +218,9 @@ const LinkInput = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 3px;
   outline: none;
+  @media screen and (max-width: 767px) {
+    width: 65vw;
+  }
 `;
 
 const ImgInput = styled.input`
@@ -188,12 +247,23 @@ const PreviewBox = styled.div`
   .X {
     font-size: 17px;
   }
+  @media screen and (max-width: 767px) {
+    margin-left: 10px;
+    width: 82vw;
+    .X {
+      font-size: 15px;
+    }
+  }
 `;
 
 const GridImageBox = styled.div`
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   grid-gap: 18px 18px;
+  @media screen and (max-width: 767px) {
+    grid-gap: 18px 18px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 `;
 
 const GridBox = styled.div`
@@ -206,6 +276,10 @@ const GridImagePreview = styled.img`
   transform: translate(50, 50);
   object-fit: cover;
   margin: auto;
+  @media screen and (max-width: 767px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const GridRemoveBtn = styled.button`
@@ -215,6 +289,9 @@ const GridRemoveBtn = styled.button`
   cursor: pointer;
   margin-left: 2px;
   padding: 0;
+  @media screen and (max-width: 767px) {
+    margin-left: 0px;
+  }
 `;
 
 export default EventEtcInput;

@@ -21,6 +21,12 @@ const WithdrawWrapper = styled.div`
     margin-top: 10px;
     font-size: 12px;
     color: ${({ theme }) => theme.colors.gray};
+    @media screen and (max-width: 767px) {
+      font-size: 11px;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
   }
 `;
 
@@ -36,6 +42,11 @@ const WitdhdrawBtn = styled.button`
   &:hover {
     cursor: pointer;
     background-color: #ff8787;
+  }
+  @media screen and (max-width: 767px) {
+    width: 60px;
+    height: 25px;
+    font-size: 11px;
   }
 `;
 
