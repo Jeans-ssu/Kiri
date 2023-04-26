@@ -24,7 +24,7 @@ public class ImageController {
     @PostMapping(value = "/api/posts/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity createImage(@RequestPart(value = "files") List<MultipartFile> multipartFiles) throws IOException {
 
-        System.out.println("ImageController 실행!!!!!!!");
+        //System.out.println("ImageController 실행!!!!!!!");
         // member 인가
 //        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        Member member = principalDetails.getMember();
