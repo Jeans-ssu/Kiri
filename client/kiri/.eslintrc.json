@@ -28,7 +28,8 @@
       {
         "labelAttributes": ["htmlFor"]
       }
-    ]
+    ],
+    "no-unused-vars": "off"
   },
   "settings": {
     "import/resolver": {
