@@ -63,7 +63,7 @@ public class ImageService {
             imageRepository.save(image); // 변경한 image 를 다시 repository에 다시 저장해줌
             savedImgUrlList.add(image.getImgUrl());
         }
-        System.out.println("savedImgUrlList = " + savedImgUrlList);
+        //System.out.println("savedImgUrlList = " + savedImgUrlList);
 
         return savedImgUrlList;
 
@@ -134,7 +134,7 @@ public class ImageService {
                     .imgUrl(imgUrl)
                     .build();
 
-            System.out.println("image 객체 생성!!!!!!!!!");
+            //System.out.println("image 객체 생성!!!!!!!!!");
 
             imageRepository.save(newImage);
             ImageResDto imageResDto = ImageResDto.of(newImage);
@@ -209,7 +209,7 @@ public class ImageService {
 
         // 이미지를 삭제하기 앞서 post 의 imageList 에서 삭제하려는 이미지를 remove해준다.
         image.deleteImageInPost();
-        System.out.println("image.getPost().getImageList() = " + image.getPost().getImageList());
+        //System.out.println("image.getPost().getImageList() = " + image.getPost().getImageList());
 
         String filepath = image.getFilepath();
         // S3에서 파일 삭제

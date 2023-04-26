@@ -101,17 +101,17 @@ public class PostService {
         // post 저장
         Post savedPost = postRepository.save(newPost);
 
-        System.out.println("등록할 이미지가 없는 경우 뭐라 나오냐 imageIdList = " + imageIdList);
+        //System.out.println("등록할 이미지가 없는 경우 뭐라 나오냐 imageIdList = " + imageIdList);
         // post에 이미지가 있는 경우
         if(imageIdList == null || imageIdList.isEmpty()) {
-            System.out.println("등록할 이미지가 없는 거 확인");
+            //System.out.println("등록할 이미지가 없는 거 확인");
             SaveResPost saveResPost = SaveResPost.of(savedPost);
             return saveResPost;
         }
 
 
         // post에 이미지가 있는 경우
-        System.out.println("PostService 에서의 imageIdList = " + imageIdList);
+        //System.out.println("PostService 에서의 imageIdList = " + imageIdList);
         // image 에 post 저장
         List<String> savedImageUrlList = imageService.savePost(savedPost, imageIdList);
 
@@ -197,7 +197,7 @@ public class PostService {
         if(category == null || category.isEmpty()) {
             if(eventList == null || eventList.isEmpty()) {
 //                if(mySchool == null || mySchool.isEmpty()) {
-                System.out.println("category: null, eventList = null, mySchool: null (학교 미지정)");
+                //System.out.println("category: null, eventList = null, mySchool: null (학교 미지정)");
                 List<Post> all = postRepository.findAll();
                 List<ClassifyPost> allClassifyPosts = convertToClassify(all);
                 return allClassifyPosts;
@@ -214,18 +214,18 @@ public class PostService {
             if(category != null || !category.isEmpty()) {
 
                 if(category.equals("전체")) {
-                    System.out.println("category: 전체, eventList = null, 학교 또는 지역 미지정");
+                    //System.out.println("category: 전체, eventList = null, 학교 또는 지역 미지정");
                     List<Post> allSchool = postRepository.findAll();
                     List<ClassifyPost> allClassifyPosts = convertToClassify(allSchool);
                     return allClassifyPosts;
                 }
                 if(division.equals("학교")) {
-                    System.out.println("category: OO대학교, eventList = null, 학교만 지정");
+                    //System.out.println("category: OO대학교, eventList = null, 학교만 지정");
                     List<Post> posts = postRepository.findAllBySchool(category);
                     List<ClassifyPost> classifyPosts = convertToClassify(posts);
                     return classifyPosts;
                 } else if(division.equals("지역")) {
-                    System.out.println("category: 서울, eventList = null, 지역만 지정");
+                    //System.out.println("category: 서울, eventList = null, 지역만 지정");
                     List<Post> posts = postRepository.findAllByLocal(category);
                     List<ClassifyPost> classifyPosts = convertToClassify(posts);
                     return classifyPosts;
@@ -236,7 +236,7 @@ public class PostService {
         // 3. eventList만 있는 경우 -> 강연, 강의, 축제 ... 리스트
         if(category == null || category.isEmpty()) {
             if(eventList != null || !eventList.isEmpty()) {
-                System.out.println("category: null, eventList = 존재, eventList만 지정");
+                //System.out.println("category: null, eventList = 존재, eventList만 지정");
                 List<Post> posts = postRepository.findAllByEventIn(eventList);
                 List<ClassifyPost> classifyPosts = convertToClassify(posts);
                 return classifyPosts;

@@ -45,7 +45,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 //        System.out.println("인증이나 권한이 필요한 주소 요청이 됨");
 
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
-        System.out.println("jwtHeader = " + jwtHeader);
+        //System.out.println("jwtHeader = " + jwtHeader);
 
 
         // header 가 있는지 확인인
@@ -58,7 +58,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String jwtToken = request.getHeader(JwtProperties.HEADER_STRING)
                 .replace(JwtProperties.TOKEN_PREFIX,"");
 
-        System.out.println("jwtToken = " + jwtToken);
+        //System.out.println("jwtToken = " + jwtToken);
 
         // 로그아웃 시 TokenExpiredException 에러 처리
 //        String email;
@@ -73,14 +73,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 //        }
 
         // 현재시간과 JWT 만료시간 체크
-        System.out.println("now = "+ LocalDateTime.now());
-        System.out.println("JWT.getExpiresAt() = " + JWT.decode(jwtToken).getExpiresAt());
+        //System.out.println("now = "+ LocalDateTime.now());
+        //System.out.println("JWT.getExpiresAt() = " + JWT.decode(jwtToken).getExpiresAt());
 
         String email = null;
         if(jwtTokenProvider.validationToken(jwtToken)) {
             email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build()
                     .verify(jwtToken).getClaim("email").asString();
-            System.out.println("email = " + email);
+            //System.out.println("email = " + email);
         }
 
         // email 이 제대로 들어왔으면, 서명이 정상적으로 동작한 것.

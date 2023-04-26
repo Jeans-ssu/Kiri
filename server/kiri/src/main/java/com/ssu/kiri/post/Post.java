@@ -64,10 +64,10 @@ public class Post {
 
     public void changeMember(Member member) {
         this.member = member;
-        System.out.println("member.getPostList() = " + member.getPostList());
-        if(member.getPostList() == null){
-            System.out.println("member의 Post리스트가 널인지 테스트!!");
-        }
+        //System.out.println("member.getPostList() = " + member.getPostList());
+//        if(member.getPostList() == null){
+//            System.out.println("member의 Post리스트가 널인지 테스트!!");
+//        }
         member.getPostList().add(this);
     }
 
