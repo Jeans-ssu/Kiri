@@ -37,7 +37,7 @@ public class Post {
     private String title; // 글 제목
     private int scrap_count; // 스크랩 수
 
-    @Column(length = 10000)
+    @Column(length = 100000)
     private String content; // 글 내용
 
 //    private String category; // 큰 카테고리 (지역, 학교 둘 중 택 1)
