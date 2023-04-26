@@ -176,7 +176,7 @@ const RenderCells = ({
           ) : null}
           <MobileLikedEvents
             onClick={() => {
-              console.log(formattedDate);
+              //console.log(formattedDate);
               handleClickMobileLikedEvents(day);
             }}
           >
