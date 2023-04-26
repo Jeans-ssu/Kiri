@@ -76,7 +76,7 @@ public class Scrap {
 
 
     public void deleteScrapInMemberAndPost() {
-        System.out.println("member와 post에서 scrap 삭제되는 지 확인");
+        //System.out.println("member와 post에서 scrap 삭제되는 지 확인");
         this.getMember().getScrapList().remove(this);
         this.getPost().getScrapList().remove(this);
     }

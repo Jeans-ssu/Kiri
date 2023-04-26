@@ -47,9 +47,9 @@ public class ScrapService {
             scrap.deleteScrapInMemberAndPost();
             scrapRepository.delete(scrap);
 
-            System.out.println("좋아요 취소 실행됨!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            //System.out.println("좋아요 취소 실행됨!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             post.minusScrapCount();
-            System.out.println("findMember.getScrapList()" + findMember.getScrapList());
+            //System.out.println("findMember.getScrapList()" + findMember.getScrapList());
 
             return false;
         }
@@ -61,7 +61,7 @@ public class ScrapService {
         Scrap scrap = Scrap.updateMemberAndPostWithScrap(findMember, post, requestDto);
 
         Scrap savedScrap = scrapRepository.save(scrap);
-        System.out.println("좋아요 실행됨!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //System.out.println("좋아요 실행됨!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         return true;
     }
@@ -109,7 +109,7 @@ public class ScrapService {
     // 로그인한 회원이 이미 좋아요를 했는지 확인
     private boolean isAlreadyScrap(Member member, Post post) {
         Optional<Scrap> byMemberAndPost = scrapRepository.findByMemberAndPost(member, post);
-        System.out.println("byMemberAndPost.isPresent() = " + byMemberAndPost.isPresent());
+        //System.out.println("byMemberAndPost.isPresent() = " + byMemberAndPost.isPresent());
         return scrapRepository.findByMemberAndPost(member, post).isPresent();
 //        Scrap scrap = scrapRepository.findByMemberAndPost(member, post).orElseThrow();
 //        return scrap;
