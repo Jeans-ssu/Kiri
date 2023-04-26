@@ -22,7 +22,6 @@ export const EventTag = ({ tag, result, getEvent }) => {
       res += el.value + ',';
     });
     result.current = res;
-    console.log('resultcurrent', result.current);
     dispatch(setTagWord(result.current.slice(0, -1)));
     dispatch(setTagMode(true));
   }
