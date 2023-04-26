@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
-import { FiShare2 } from 'react-icons/fi';
-import { BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
+//import { FiShare2 } from 'react-icons/fi';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useState, useEffect } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -113,8 +113,6 @@ const EventInfoPage = () => {
     });
   };
 
-  console.log('data', data);
-
   return (
     <PageContainer header footer>
       <EventInfoContainer>
@@ -127,19 +125,15 @@ const EventInfoPage = () => {
               <EventTagBox tag={data.event}>
                 <EventTagSpan>{data.event}</EventTagSpan>
               </EventTagBox>
-              <EventSharediv>
+              {/* <EventSharediv>
                 <FiShare2 size="27" />
-              </EventSharediv>
+              </EventSharediv> */}
             </div>
             <EventBookmarkdiv onClick={() => markHandler()}>
               {mark ? (
-                <BsFillSuitHeartFill
-                  onClick={scrap}
-                  size="27"
-                  color="#ff6b6b"
-                />
+                <AiFillHeart onClick={scrap} size="27" color="#ff6b6b" />
               ) : (
-                <BsSuitHeart onClick={scrap} size="27" />
+                <AiOutlineHeart onClick={scrap} size="27" />
               )}
             </EventBookmarkdiv>
           </EventUpdiv>
@@ -183,33 +177,35 @@ const EventInfoPage = () => {
           <EventInfodiv>
             <DetailInfoBox>
               <table>
-                <tr>
-                  <td className="title">주최</td>
-                  <td className="info">{data.organizer}</td>
-                </tr>
-                <tr>
-                  <td className="title">이메일</td>
-                  <td className="info">{data.email}</td>
-                </tr>
-                <tr>
-                  <td className="title">지역</td>
-                  <td className="info">{data.local}</td>
-                </tr>
-                <tr>
-                  <td className="title">장소</td>
-                  <td className="info">{data.place}</td>
-                </tr>
-                <tr>
-                  <td className="title">학교</td>
-                  <td className="info">{data.school}</td>
-                </tr>
-                <tr>
-                  <td className="title">시간</td>
-                  <td className="info">
-                    {data.startPostTime.slice(11, 16)}&nbsp;~&nbsp;
-                    {data.finishPostTime.slice(11, 16)}
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td className="title">주최</td>
+                    <td className="info">{data.organizer}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">이메일</td>
+                    <td className="info">{data.email}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">지역</td>
+                    <td className="info">{data.local}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">장소</td>
+                    <td className="info">{data.place}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">학교</td>
+                    <td className="info">{data.school}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">시간</td>
+                    <td className="info">
+                      {data.startPostTime.slice(11, 16)}&nbsp;~&nbsp;
+                      {data.finishPostTime.slice(11, 16)}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </DetailInfoBox>
             <hr />
@@ -351,13 +347,16 @@ const EventBookmarkdiv = styled.div`
 
 const EventPerioddiv = styled.div`
   display: flex;
-  font-size: 18px;
+  font-size: 16px;
+  margin-top: 10px;
   @media screen and (max-width: 767px) {
     flex-direction: column;
   }
 `;
 
 const EventDdaydiv = styled.div`
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.mainColor};
   @media screen and (max-width: 767px) {
     margin-bottom: 5px;
   }
@@ -365,6 +364,7 @@ const EventDdaydiv = styled.div`
 
 const EventWriterdiv = styled.div`
   margin-left: 15px;
+  color: ${({ theme }) => theme.colors.dark};
   @media screen and (max-width: 767px) {
     margin: 0;
     margin-bottom: 5px;
@@ -374,6 +374,7 @@ const EventWriterdiv = styled.div`
 const EventTimediv = styled.div`
   margin-left: auto;
   display: flex;
+  color: ${({ theme }) => theme.colors.dark};
   @media screen and (max-width: 767px) {
     margin: 0;
     flex-direction: column;
