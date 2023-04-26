@@ -28,7 +28,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     // Security Session(Authentication(내부 UserDetails))
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println(" PrincipalDetailsService loadUserByUsername 실행!!");
+        //System.out.println(" PrincipalDetailsService loadUserByUsername 실행!!");
         Optional<Member> byEmail = memberRepository.findByEmail(email);
         // byEmail != null
         if(byEmail.isPresent()) {
