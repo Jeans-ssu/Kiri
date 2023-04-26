@@ -136,7 +136,6 @@ const SignupInputs = () => {
 
   //학교 설정
   const setUserUniv = (univName) => {
-    console.log(univName);
     setUserInput({ ...userInput, univ: univName });
   };
 

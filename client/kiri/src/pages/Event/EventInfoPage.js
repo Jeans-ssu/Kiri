@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
-import { FiShare2 } from 'react-icons/fi';
-import { BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
+//import { FiShare2 } from 'react-icons/fi';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useState, useEffect } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -64,7 +64,6 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
-      console.log('resdata', resdata);
       setData(resdata);
       setMark(resdata.scrap);
     } catch (error) {
@@ -127,19 +126,15 @@ const EventInfoPage = () => {
               <EventTagBox tag={data.event}>
                 <EventTagSpan>{data.event}</EventTagSpan>
               </EventTagBox>
-              <EventSharediv>
+              {/* <EventSharediv>
                 <FiShare2 size="27" />
-              </EventSharediv>
+              </EventSharediv> */}
             </div>
             <EventBookmarkdiv onClick={() => markHandler()}>
               {mark ? (
-                <BsFillSuitHeartFill
-                  onClick={scrap}
-                  size="27"
-                  color="#ff6b6b"
-                />
+                <AiFillHeart onClick={scrap} size="27" color="#ff6b6b" />
               ) : (
-                <BsSuitHeart onClick={scrap} size="27" />
+                <AiOutlineHeart onClick={scrap} size="27" />
               )}
             </EventBookmarkdiv>
           </EventUpdiv>
@@ -152,20 +147,15 @@ const EventInfoPage = () => {
             </EventDdaydiv>
             <EventWriterdiv>{data.organizer}</EventWriterdiv>
             <EventTimediv>
-              <div className="start">
-                {data.startPostTime.slice(0, 10)}
-                &nbsp;
-                {data.startPostTime.slice(11, 19)}
-              </div>
+              <div className="start">{data.startPostTime.slice(0, 10)}</div>
               <div className="finish">
                 {data.startPostTime.slice(0, 10) ===
                 data.finishPostTime.slice(0, 10) ? (
-                  <div>&nbsp;~&nbsp;{data.finishPostTime.slice(11, 19)}</div>
+                  ''
                 ) : (
                   <div>
                     &nbsp;~&nbsp;
-                    {data.finishPostTime.slice(0, 10)}&nbsp;
-                    {data.finishPostTime.slice(11, 19)}
+                    {data.finishPostTime.slice(0, 10)}
                   </div>
                 )}
               </div>
@@ -186,14 +176,51 @@ const EventInfoPage = () => {
             </Slider>
           </EventPosterdiv>
           <EventInfodiv>
-            <article>
-              {data.content
-                ?.replace(/(?:\r\n|\n)/g, '\r\n')
-                .split('\r\n')
-                .map((item) => (
-                  <p key={item}>{item}</p>
-                ))}
-            </article>
+            <DetailInfoBox>
+              <table>
+                <tbody>
+                  <tr>
+                    <td className="title">주최</td>
+                    <td className="info">{data.organizer}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">이메일</td>
+                    <td className="info">{data.email}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">지역</td>
+                    <td className="info">{data.local}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">장소</td>
+                    <td className="info">{data.place}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">학교</td>
+                    <td className="info">{data.school}</td>
+                  </tr>
+                  <tr>
+                    <td className="title">시간</td>
+                    <td className="info">
+                      {data.startPostTime.slice(11, 16)}&nbsp;~&nbsp;
+                      {data.finishPostTime.slice(11, 16)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </DetailInfoBox>
+            <hr />
+            <InfoBox>
+              <span>상세 내용</span>
+              <article>
+                {data.content
+                  ?.replace(/(?:\r\n|\n)/g, '\r\n')
+                  .split('\r\n')
+                  .map((item) => (
+                    <p key={item}>{item}</p>
+                  ))}
+              </article>
+            </InfoBox>
           </EventInfodiv>
         </EventContentdiv>
         {data.member_id === loginID.memberId ? (
@@ -321,13 +348,16 @@ const EventBookmarkdiv = styled.div`
 
 const EventPerioddiv = styled.div`
   display: flex;
-  font-size: 18px;
+  font-size: 16px;
+  margin-top: 10px;
   @media screen and (max-width: 767px) {
     flex-direction: column;
   }
 `;
 
 const EventDdaydiv = styled.div`
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.mainColor};
   @media screen and (max-width: 767px) {
     margin-bottom: 5px;
   }
@@ -335,6 +365,7 @@ const EventDdaydiv = styled.div`
 
 const EventWriterdiv = styled.div`
   margin-left: 15px;
+  color: ${({ theme }) => theme.colors.dark};
   @media screen and (max-width: 767px) {
     margin: 0;
     margin-bottom: 5px;
@@ -344,6 +375,7 @@ const EventWriterdiv = styled.div`
 const EventTimediv = styled.div`
   margin-left: auto;
   display: flex;
+  color: ${({ theme }) => theme.colors.dark};
   @media screen and (max-width: 767px) {
     margin: 0;
     flex-direction: column;
@@ -381,6 +413,40 @@ const EventInfodiv = styled.div`
   @media screen and (max-width: 767px) {
     margin-top: 35px;
     margin-left: 0;
+  }
+
+  hr {
+    width: 504px;
+  }
+`;
+
+const DetailInfoBox = styled.div`
+  td.info {
+    padding-left: 20px;
+  }
+
+  td.title {
+    font-weight: 600;
+  }
+  td {
+    padding-bottom: 10px;
+  }
+`;
+
+const InfoBox = styled.div`
+  margin-top: 15px;
+  span {
+    color: ${({ theme }) => theme.colors.mainColor};
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  span {
+    margin-top: 10px;
+  }
+
+  p {
+    margin-top: 5px;
   }
 `;
 

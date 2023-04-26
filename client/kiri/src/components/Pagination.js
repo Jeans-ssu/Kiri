@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 const Pagination = ({ totalPosts, page, setPage }) => {
   const paginationLimit = 10;
   const pageCount = Math.ceil(totalPosts / paginationLimit);
-  console.log('pageCount', pageCount);
   const pageNumberarr = [];
   const [currpage, setCurrPage] = useState(page);
   for (let i = 0; i < pageCount; i++) {
     pageNumberarr.push(i + 1);
   }
-  console.log('pagination', pageNumberarr);
   const firstNum = currpage - (currpage % 5) + 1;
   const lastNum = currpage - (currpage % 5) + 5;
 
@@ -25,7 +24,7 @@ const Pagination = ({ totalPosts, page, setPage }) => {
             }}
             disabled={page === 1}
           >
-            &lt;
+            <MdKeyboardArrowLeft />
           </ArrowButton>
         </div>
         <div className="numberbox">
@@ -97,7 +96,7 @@ const Pagination = ({ totalPosts, page, setPage }) => {
             }}
             disabled={page === pageCount}
           >
-            &gt;
+            <MdKeyboardArrowRight />
           </ArrowButton>
         </div>
       </BoxContainer>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
 import { useEffect, useRef, useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FiSearch } from 'react-icons/fi';
 import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
@@ -14,7 +14,7 @@ import Pagination from 'components/Pagination';
 const EventPage = () => {
   const url = '/posts?division=학교';
   const [click, setClick] = useState(false);
-  const [currentNav, setCurrentNav] = useState(-1);
+  const [currentNav, setCurrentNav] = useState(-1); // eslint-disable-line no-unused-vars
   const [searchuniv, setSearchUniv] = useState('');
   const [order, setOrder] = useState('최신순');
   const [data, setData] = useState([]);
@@ -36,7 +36,6 @@ const EventPage = () => {
   const [showUnivModal, setShowUnivModal] = useState(false);
 
   const setUserUniv = (univName) => {
-    console.log(univName);
     setSearchUniv(univName);
   };
 
@@ -65,7 +64,6 @@ const EventPage = () => {
     setCurrentNav(idx);
     setClick(!click);
     fieldClick[idx] = !fieldClick[idx];
-    console.log(field[idx], fieldClick, currentNav);
   };
 
   const handleClickSearchUnivBtn = () => {
@@ -78,24 +76,19 @@ const EventPage = () => {
   const eventtag = useSelector(selectTagWord);
 
   function getCategory(univsearch) {
-    console.log('학교에서의', eventtag);
     if (eventtag !== '') {
-      console.log('tag가 이미 선택된 순간');
       axios
         .get(`${url}&category=${univsearch}&eventList=${eventtag}`)
         .then((res) => {
-          console.log('categoryuniv', univsearch);
           setData(res.data);
         })
         .catch((error) => {
           console.error(error);
         });
     } else {
-      console.log('tag선택안됨');
       axios
         .get(`${url}&category=${univsearch}`)
         .then((res) => {
-          console.log('categoryuniv', univsearch);
           setData(res.data);
         })
         .catch((error) => {
@@ -106,7 +99,6 @@ const EventPage = () => {
 
   function getEvent() {
     const eventtag = result.current.slice(0, -1);
-    console.log(eventtag);
     if (searchuniv !== '') {
       axios
         .get(`${url}&category=${searchuniv}&eventList=${eventtag}`)
@@ -117,7 +109,6 @@ const EventPage = () => {
           console.error(error);
         });
     } else {
-      console.log("searchuniv = ''");
       axios
         .get(`${url}&eventList=${eventtag}`)
         .then((res) => {
@@ -164,12 +155,13 @@ const EventPage = () => {
             </SchoolRegionBox>
             <SchoolSearchContainer>
               <Searchdiv>
-                <FaSearch size="17" className="searchicon" />
+                <FiSearch size="17" className="searchicon" />
                 <SearchInput
                   type="text"
                   id="text"
                   placeholder="원하는 학교를 검색해보세요"
                   value={searchuniv}
+                  readOnly
                 ></SearchInput>
                 <OpenSearchModalBtn>
                   {searchuniv === '' ? (
@@ -192,16 +184,17 @@ const EventPage = () => {
           </MobileFlex>
         </TopBox>
         <CheckboxDiv className="tagbox">
-          {field.map((el) => (
-            <>
+          {field.map((el, idx) => {
+            return (
               <EventTag
+                key={idx}
                 tag={el}
                 selectNavHandler={selectNavHandler}
                 result={result}
                 getEvent={getEvent}
               />
-            </>
-          ))}
+            );
+          })}
         </CheckboxDiv>
         <Bar />
         <EventOrderBox>
@@ -331,10 +324,10 @@ const Searchdiv = styled.div`
   .searchicon {
     position: absolute;
     margin-left: 12px;
-    margin-top: -1px;
+    margin-top: -2px;
   }
   svg {
-    fill: ${({ theme }) => theme.colors.mainColor};
+    color: ${({ theme }) => theme.colors.mainColor};
   }
   @media screen and (max-width: 767px) {
     .searchicon {
@@ -377,8 +370,7 @@ const CheckboxDiv = styled.div`
   align-items: center;
   .focused {
     color: #59b89d;
-    font-weight: 700;
-    width: 40px;
+    width: 34px;
     background-color: ${({ theme }) => theme.colors.mainColor};
     color: white;
   }

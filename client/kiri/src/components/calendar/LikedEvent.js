@@ -20,6 +20,9 @@ const LikedEventContainer = styled.div`
     cursor: pointer;
     background-color: ${({ theme }) => theme.colors.lightgray};
   }
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
 `;
 
 export const LikedEvent = ({
