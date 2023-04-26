@@ -13,8 +13,8 @@ import Pagination from 'components/Pagination';
 const EventRegion = () => {
   const url = '/posts?division=지역';
   const [click, setClick] = useState(false);
-  const [currentNav, setCurrentNav] = useState(-1);
-  const [region, setRegion] = useState(''); // 지역 select
+  const [currentNav, setCurrentNav] = useState(-1); // eslint-disable-line no-unused-vars
+  const [region, setRegion] = useState('');
   const [order, setOrder] = useState('최신순');
   const [data, setData] = useState([]);
   const result = useRef();
@@ -52,22 +52,18 @@ const EventRegion = () => {
 
   function getCategory(region) {
     if (eventtag !== '') {
-      console.log('tag가 이미 선택된 순간');
       axios
         .get(`${url}&category=${region}&eventList=${eventtag}`)
         .then((res) => {
-          console.log('region', region);
           setData(res.data);
         })
         .catch((error) => {
           console.error(error);
         });
     } else {
-      console.log('tag선택안됨');
       axios
         .get(`${url}&category=${region}`)
         .then((res) => {
-          console.log('categoryregion', region);
           setData(res.data);
         })
         .catch((error) => {
@@ -78,7 +74,6 @@ const EventRegion = () => {
 
   function getEvent() {
     const eventtag = result.current.slice(0, -1);
-    console.log(eventtag);
     if (region !== '') {
       axios
         .get(`${url}&category=${region}&eventList=${eventtag}`)
@@ -89,7 +84,6 @@ const EventRegion = () => {
           console.error(error);
         });
     } else {
-      console.log('지역이 없을때');
       axios
         .get(`${url}&eventList=${eventtag}`)
         .then((res) => {
@@ -108,11 +102,9 @@ const EventRegion = () => {
     setCurrentNav(idx);
     setClick(!click);
     fieldClick[idx] = !fieldClick[idx];
-    console.log(field[idx], fieldClick, currentNav);
   };
 
   const handleChangeInterest = (e) => {
-    console.log(e.target.value);
     setRegion(e.target.value);
     getCategory(e.target.value);
   };

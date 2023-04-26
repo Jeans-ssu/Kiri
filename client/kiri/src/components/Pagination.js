@@ -4,13 +4,11 @@ import styled from 'styled-components';
 const Pagination = ({ totalPosts, page, setPage }) => {
   const paginationLimit = 10;
   const pageCount = Math.ceil(totalPosts / paginationLimit);
-  console.log('pageCount', pageCount);
   const pageNumberarr = [];
   const [currpage, setCurrPage] = useState(page);
   for (let i = 0; i < pageCount; i++) {
     pageNumberarr.push(i + 1);
   }
-  console.log('pagination', pageNumberarr);
   const firstNum = currpage - (currpage % 5) + 1;
   const lastNum = currpage - (currpage % 5) + 5;
 

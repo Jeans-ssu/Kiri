@@ -87,23 +87,21 @@ const EventEditPage = () => {
       setExplain(res.data.content);
       setImg(res.data.savedImgList);
       setImgList(res.data.imgIdList);
-      console.log('baseData,current', res.data);
     });
   };
 
   const remove = useRef([]);
   const [postid, setPostID] = useState();
-  const [removeidx, setRemoveIdx] = useState([]);
-  console.log('rmeaskdfl', removeidx);
+  const [removeidx, setRemoveIdx] = useState([]); // eslint-disable-line no-unused-vars
   const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');
   const [info, setInfo] = useState({
     host: base?.organizer,
     tel: base?.contactNumber,
     email: base?.email,
-    region: base?.local, //지역
-    univ: base?.school, //학교
-    type: base?.event, //유형
+    region: base?.local,
+    univ: base?.school,
+    type: base?.event,
     startDate: base?.startPostTime.slice(0, 10),
     endDate: base?.finishPostTime.slice(0, 10),
     startTime: base?.startPostTime.slice(11, 16),
@@ -130,9 +128,7 @@ const EventEditPage = () => {
     const imgarr = [];
     for (let i = 0; imgList.length > i; i++) {
       const type = typeof imgList[i];
-      console.log('type', type);
       if (type === 'object') {
-        console.log('array');
         for (let j = 0; j < imgList[i].length; j++) {
           imgarr.push(imgList[i][j].image_id);
         }
@@ -140,7 +136,6 @@ const EventEditPage = () => {
         imgarr.push(imgList[i]);
       }
     }
-    console.log('imgarr', imgarr);
     return imgarr;
   };
 
@@ -253,7 +248,6 @@ const EventEditPage = () => {
         });
       }
       if (img.length === 0 || img.length === undefined) {
-        console.log('length = 0');
         setErrorMessage((prev) => {
           return { ...prev, imgErrorMessage: '이미지를 첨부해주세요.' };
         });
@@ -263,16 +257,11 @@ const EventEditPage = () => {
         });
       }
     } else {
-      console.log('removecurrent', remove.current);
       for (let i = 0; i < remove.current.length; i++) {
         axios
           .delete(`/api/posts/image/update/${remove.current[i]}`)
-          .then((res) => {
-            console.log('api res', res);
-          })
           .catch((err) => console.log('Delete ERROR: ', err));
       }
-      console.log('imglenght', imgarr);
 
       const formData = new FormData();
       formData.append('title', title);

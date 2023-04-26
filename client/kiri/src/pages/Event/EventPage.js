@@ -14,7 +14,7 @@ import Pagination from 'components/Pagination';
 const EventPage = () => {
   const url = '/posts?division=학교';
   const [click, setClick] = useState(false);
-  const [currentNav, setCurrentNav] = useState(-1);
+  const [currentNav, setCurrentNav] = useState(-1); // eslint-disable-line no-unused-vars
   const [searchuniv, setSearchUniv] = useState('');
   const [order, setOrder] = useState('최신순');
   const [data, setData] = useState([]);
@@ -36,7 +36,6 @@ const EventPage = () => {
   const [showUnivModal, setShowUnivModal] = useState(false);
 
   const setUserUniv = (univName) => {
-    console.log(univName);
     setSearchUniv(univName);
   };
 
@@ -65,7 +64,6 @@ const EventPage = () => {
     setCurrentNav(idx);
     setClick(!click);
     fieldClick[idx] = !fieldClick[idx];
-    console.log(field[idx], fieldClick, currentNav);
   };
 
   const handleClickSearchUnivBtn = () => {
@@ -78,24 +76,19 @@ const EventPage = () => {
   const eventtag = useSelector(selectTagWord);
 
   function getCategory(univsearch) {
-    console.log('학교에서의', eventtag);
     if (eventtag !== '') {
-      console.log('tag가 이미 선택된 순간');
       axios
         .get(`${url}&category=${univsearch}&eventList=${eventtag}`)
         .then((res) => {
-          console.log('categoryuniv', univsearch);
           setData(res.data);
         })
         .catch((error) => {
           console.error(error);
         });
     } else {
-      console.log('tag선택안됨');
       axios
         .get(`${url}&category=${univsearch}`)
         .then((res) => {
-          console.log('categoryuniv', univsearch);
           setData(res.data);
         })
         .catch((error) => {
@@ -106,7 +99,6 @@ const EventPage = () => {
 
   function getEvent() {
     const eventtag = result.current.slice(0, -1);
-    console.log(eventtag);
     if (searchuniv !== '') {
       axios
         .get(`${url}&category=${searchuniv}&eventList=${eventtag}`)
@@ -117,7 +109,6 @@ const EventPage = () => {
           console.error(error);
         });
     } else {
-      console.log("searchuniv = ''");
       axios
         .get(`${url}&eventList=${eventtag}`)
         .then((res) => {

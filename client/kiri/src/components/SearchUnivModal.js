@@ -140,7 +140,6 @@ const SearchUnivModal = ({
     setIsOpen(!isOpen);
     if (filter === '학교') {
       getCategory(selectedUniv);
-      console.log('selectuniv', selectedUniv);
     }
   };
 

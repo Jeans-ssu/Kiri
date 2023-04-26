@@ -90,7 +90,6 @@ const EventWritePage = () => {
     for (let i = 0; imgList.length > i; i++) {
       imgarr.push(imgList[i].image_id);
     }
-    console.log('imgarr', imgarr);
     return imgarr;
   };
 
@@ -203,7 +202,6 @@ const EventWritePage = () => {
         });
       }
       if (img.length === 0 || img.length === undefined) {
-        console.log('length = 0');
         setErrorMessage((prev) => {
           return { ...prev, imgErrorMessage: '이미지를 첨부해주세요.' };
         });
@@ -213,7 +211,6 @@ const EventWritePage = () => {
         });
       }
     } else {
-      console.log('등록');
       const imgarr = getImageID();
       const formData = new FormData();
       formData.append('title', title);
