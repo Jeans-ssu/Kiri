@@ -51,7 +51,6 @@ const EventTitleInput = ({ title, setTitle, titleRef, errorMessage }) => {
   const handleChangeInput = (e) => {
     setTitle(e.target.value);
   };
-  console.log('title', title);
   return (
     <EventTitleInputContainer>
       <TitleHeader>

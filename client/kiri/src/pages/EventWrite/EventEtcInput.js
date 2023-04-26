@@ -27,7 +27,6 @@ const EventEtcInput = ({
         },
       })
       .then((res) => {
-        console.log(res.data);
         setImgList(res.data);
       })
       .catch((err) => console.log('ERROR: ', err));
@@ -36,15 +35,11 @@ const EventEtcInput = ({
   const addImage = (e) => {
     const formData = new FormData();
     for (let i = 0; i < e.target.files.length; i++) {
-      console.log('e.target.files', e.target.files[i]);
       imgArr.current.push(e.target.files[i]);
     }
     for (let i = 0; i < imgArr.current.length; i++) {
       formData.append('files', imgArr.current[i]);
     }
-    // for (let value of formData.values()) {
-    //   console.log(value);
-    // }
     uploadImg(formData);
 
     const nowSelectImageList = e.target.files;
@@ -54,12 +49,10 @@ const EventEtcInput = ({
       nowImageUrlList.push(nowImageUrl);
     }
     if (nowImageUrlList.length > 10) {
-      console.log('length 10 이상임');
       setImg(nowImageUrlList.slice(0, 10));
       alert('이미지는 최대 10개만 첨부 가능합니다.');
     } else {
       setImg(nowImageUrlList);
-      console.log(nowImageUrlList);
     }
   };
 

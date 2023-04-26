@@ -20,7 +20,6 @@ const EventEtcInput = ({
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
-  console.log('imgIdList', imgList);
 
   const url = document.location.href;
   let postID;
@@ -49,7 +48,6 @@ const EventEtcInput = ({
         },
       })
       .then((res) => {
-        console.log('uploadImg', res.data);
         setImgList((prev) => [...prev, res.data]);
       })
       .catch((err) => console.log('ERROR: ', err));
@@ -58,14 +56,10 @@ const EventEtcInput = ({
   const addImage = (e) => {
     const formData = new FormData();
     for (let i = 0; i < e.target.files.length; i++) {
-      console.log('e.target.files', e.target.files[i]);
       imgArr.current.push(e.target.files[i]);
     }
     for (let i = 0; i < imgArr.current.length; i++) {
       formData.append('files', imgArr.current[i]);
-    }
-    for (let value of formData.values()) {
-      console.log('formdata', value);
     }
     uploadImg(formData);
 
@@ -76,12 +70,10 @@ const EventEtcInput = ({
       nowImageUrlList.push(nowImageUrl);
     }
     if (nowImageUrlList.length > 10) {
-      console.log('length 10 이상임');
       setImg(nowImageUrlList.slice(0, 10));
       alert('이미지는 최대 10개만 첨부 가능합니다.');
     } else {
       setImg(nowImageUrlList);
-      console.log(nowImageUrlList);
     }
   };
 
@@ -92,10 +84,7 @@ const EventEtcInput = ({
   const fileInput = useRef(null);
 
   const deleteImg = (idx) => {
-    console.log('delete img', img);
-    console.log('delte imglist', imgList);
     remove.current.push(imgList[idx]);
-    console.log('remove.current', remove.current);
     setRemoveIdx((prev) => [...prev, imgList[idx]]);
     img?.splice(idx, 1);
     imgList?.splice(idx, 1);
