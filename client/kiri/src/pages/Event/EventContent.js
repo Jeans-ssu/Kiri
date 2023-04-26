@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { BsFillSuitHeartFill } from 'react-icons/bs';
+import { AiFillHeart } from 'react-icons/ai';
 import { useNavigate } from 'react-router';
 import theme from 'styles/theme';
 
@@ -45,8 +45,8 @@ const EventContent = ({ data }) => {
                     <EventTagSpan>{el.event}</EventTagSpan>
                   </EventTagBox>
                   <h4>{el.title}</h4>
-                  <p className="host">{el.post_id}</p>
-                  <div className="flex">
+                  <p className="host">{el.organizer}</p>
+                  <div className="flex info">
                     <p className="dday">
                       D
                       {DDay(el.startPostTime.slice(0, 10)) < 0
@@ -54,9 +54,9 @@ const EventContent = ({ data }) => {
                         : '-' + DDay(el.startPostTime.slice(0, 10))}
                     </p>
                     <div className="flex">
-                      <BsFillSuitHeartFill
+                      <AiFillHeart
                         className="eyeicon"
-                        size="12"
+                        size="16"
                         color="#ff6b6b"
                       />
                       <p className="watch">{el.scrap_count}</p>
@@ -222,6 +222,10 @@ const EventList = styled.div`
     color: ${({ theme }) => theme.colors.dark};
   }
 
+  div.info {
+    align-items: center;
+  }
+
   .host {
     font-size: 14px;
     color: #636363;
@@ -242,7 +246,6 @@ const EventList = styled.div`
 
   .eyeicon {
     margin-left: 10px;
-    margin-top: 2.8px;
     color: #737373;
   }
 
