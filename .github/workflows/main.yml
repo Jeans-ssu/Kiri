@@ -9,14 +9,18 @@ jobs:
     steps:
       - name: Checkout source code.
         uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./client/kiri
       - name: Setting .env
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
           echo "REACT_APP_OPEN_API=${{ secrets.REACT_APP_OPEN_API }}" >> .env
           cat .env
-      - name: Install dependencies
-        run: npm install
         working-directory: ./client/kiri
+        env:
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          REACT_APP_OPEN_API: ${{ secrets.REACT_APP_OPEN_API }}
       - name: Build
         run: npm run build
         working-directory: ./client/kiri
