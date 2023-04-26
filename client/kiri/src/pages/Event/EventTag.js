@@ -73,22 +73,21 @@ export const EventTag = ({ tag, result, getEvent }) => {
 const FilterLable = styled.label`
   text-align: left;
   cursor: pointer;
-  width: 40px;
-  height: 32px;
+  width: 34px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
-  font-size: 14px;
+  padding: 2px 8px;
+  font-size: 12px;
   list-style: none;
   border-radius: 15px;
-  margin: 0 8px 0px 0;
+  margin: 0 2px 0px 0;
   background-color: #eaeaea;
 
   &:after {
     opacity: 0;
     color: #59b89d;
-    font-weight: 700;
     color: white;
   }
 
@@ -103,8 +102,7 @@ const FilterLable = styled.label`
 const FilterInput = styled.input`
   appearance: none;
   &:checked + ${FilterLable} {
-    font-weight: 700;
-    width: 40px;
+    width: 34px;
     background-color: ${(props) =>
       props.tag === '축제'
         ? yellow

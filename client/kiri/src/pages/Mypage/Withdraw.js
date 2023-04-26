@@ -54,7 +54,7 @@ const Withdraw = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleWithdraw = () => {
-    console.log('탈퇴!');
+    //console.log('탈퇴!');
   };
 
   return (
