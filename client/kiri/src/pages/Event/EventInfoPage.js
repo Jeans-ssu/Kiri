@@ -188,8 +188,8 @@ const EventInfoPage = () => {
               {data.content
                 ?.replace(/(?:\r\n|\n)/g, '\r\n')
                 .split('\r\n')
-                .map((item) => (
-                  <p key={item}>{item}</p>
+                .map((item, idx) => (
+                  <p key={idx}>{item}</p>
                 ))}
             </article>
           </EventInfodiv>
