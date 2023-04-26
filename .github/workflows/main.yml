@@ -1,4 +1,3 @@
-#주석
 name: client
 on:
   push:
@@ -10,6 +9,11 @@ jobs:
     steps:
       - name: Checkout source code.
         uses: actions/checkout@v3
+      - name: Setting .env
+        run: |
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+          echo "REACT_APP_OPEN_API=${{ secrets.REACT_APP_OPEN_API }}" >> .env
+          cat.env
       - name: Install dependencies
         run: npm install
         working-directory: ./client/kiri
