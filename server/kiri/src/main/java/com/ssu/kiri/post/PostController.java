@@ -49,14 +49,7 @@ public class PostController {
     public ResponseEntity savePost(@Valid @RequestBody SavePost savePost) {
 
         List<Long> imageIdList = savePost.getImageIdList();
-
         SaveResPost saveResPost = postService.savePost(savePost, imageIdList);
-
-        //=====================이거 꼭 써야 하나?======================//
-//        saveResPost.setMember_id(saveResPost.getMember().getId());
-        //=====================이거 꼭 써야 하나?======================//
-
-
         return ResponseEntity.ok(saveResPost);
     }
 

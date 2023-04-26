@@ -50,7 +50,7 @@ public class SaveResPost {
                 post.getContactNumber(), post.getLink(), post.getPlace(), imageList,
                 post.getStartPostTime(), post.getFinishPostTime(), post.getEmail());
 
-        System.out.println("Post 저장 후 반환할 DTO 의 imageList = " + imageList);
+        //System.out.println("Post 저장 후 반환할 DTO 의 imageList = " + imageList);
 
         return saveResPost;
     }
