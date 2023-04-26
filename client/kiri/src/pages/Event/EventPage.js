@@ -161,6 +161,7 @@ const EventPage = () => {
                   id="text"
                   placeholder="원하는 학교를 검색해보세요"
                   value={searchuniv}
+                  readOnly
                 ></SearchInput>
                 <OpenSearchModalBtn>
                   {searchuniv === '' ? (
