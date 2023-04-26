@@ -23,7 +23,7 @@ import { AllLikedEvent } from './AllLikedEvent';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
-import { AiFillHeart } from 'react-icons/ai';
+//import { AiFillHeart } from 'react-icons/ai';
 
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
@@ -101,7 +101,7 @@ const RenderCells = ({
   selectedDate,
   onDateClick,
   likedEvents,
-  mobileSelectedDate,
+  //mobileSelectedDate,
   setMobileSelectedDate,
 }) => {
   const monthStart = startOfMonth(currentMonth); //오늘이 속한 달의 시작일
