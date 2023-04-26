@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 const Pagination = ({ totalPosts, page, setPage }) => {
   const paginationLimit = 10;
@@ -23,7 +24,7 @@ const Pagination = ({ totalPosts, page, setPage }) => {
             }}
             disabled={page === 1}
           >
-            &lt;
+            <MdKeyboardArrowLeft />
           </ArrowButton>
         </div>
         <div className="numberbox">
@@ -95,7 +96,7 @@ const Pagination = ({ totalPosts, page, setPage }) => {
             }}
             disabled={page === pageCount}
           >
-            &gt;
+            <MdKeyboardArrowRight />
           </ArrowButton>
         </div>
       </BoxContainer>
