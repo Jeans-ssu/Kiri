@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
 import { useEffect, useRef, useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FiSearch } from 'react-icons/fi';
 import { EventTag } from './EventTag';
 import { Link } from 'react-router-dom';
 import EventContent from './EventContent';
@@ -155,7 +155,7 @@ const EventPage = () => {
             </SchoolRegionBox>
             <SchoolSearchContainer>
               <Searchdiv>
-                <FaSearch size="17" className="searchicon" />
+                <FiSearch size="17" className="searchicon" />
                 <SearchInput
                   type="text"
                   id="text"
@@ -323,10 +323,10 @@ const Searchdiv = styled.div`
   .searchicon {
     position: absolute;
     margin-left: 12px;
-    margin-top: -1px;
+    margin-top: -2px;
   }
   svg {
-    fill: ${({ theme }) => theme.colors.mainColor};
+    color: ${({ theme }) => theme.colors.mainColor};
   }
   @media screen and (max-width: 767px) {
     .searchicon {
@@ -369,8 +369,7 @@ const CheckboxDiv = styled.div`
   align-items: center;
   .focused {
     color: #59b89d;
-    font-weight: 700;
-    width: 40px;
+    width: 34px;
     background-color: ${({ theme }) => theme.colors.mainColor};
     color: white;
   }

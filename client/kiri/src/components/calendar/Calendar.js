@@ -23,6 +23,7 @@ import { AllLikedEvent } from './AllLikedEvent';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
+import { AiFillHeart } from 'react-icons/ai';
 
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
@@ -56,59 +57,6 @@ const RenderDays = () => {
   }
   return <div className="days row">{days}</div>;
 };
-
-// const events = [
-//   {
-//     post_id: 1,
-//     title: '글로벌미디어 졸업전시',
-//     organizer: '숭실대',
-//     school: '숭실대학교',
-//     local: '서울',
-//     event: '전시',
-//     startScrapTime: '2023-03-05T10:10:10',
-//     finishScrapTime: '2023-03-05T10:10:10',
-//   },
-//   {
-//     post_id: 4,
-//     title: '숭실대학교 대동제',
-//     organizer: '숭실대',
-//     school: '숭실대학교',
-//     local: '서울',
-//     event: '축제',
-//     startScrapTime: '2023-03-04T10:10:10',
-//     finishScrapTime: '2023-03-05T10:10:10',
-//   },
-//   {
-//     post_id: 5,
-//     title: '숭대극회 연극',
-//     organizer: '숭실대',
-//     school: '숭실대학교',
-//     local: '서울',
-//     event: '공연',
-//     startScrapTime: '2023-03-16T10:10:10',
-//     finishScrapTime: '2023-03-20T10:10:10',
-//   },
-//   {
-//     post_id: 8,
-//     title: '인공지능 경진대회',
-//     organizer: '숭실대',
-//     school: '숭실대학교',
-//     local: '서울',
-//     event: '대회',
-//     startScrapTime: '2023-03-26T10:10:10',
-//     finishScrapTime: '2023-03-26T10:10:10',
-//   },
-//   {
-//     post_id: 9,
-//     title: '취업하는법',
-//     organizer: '숭실대',
-//     school: '숭실대학교',
-//     local: '서울',
-//     event: '강연',
-//     startScrapTime: '2023-03-31T10:10:10',
-//     finishScrapTime: '2023-04-01T10:10:10',
-//   },
-// ];
 
 //해당 날짜의 이벤트 객체들만 추출하는 함수
 const extractEvents = (date, arr) => {
@@ -153,6 +101,8 @@ const RenderCells = ({
   selectedDate,
   onDateClick,
   likedEvents,
+  mobileSelectedDate,
+  setMobileSelectedDate,
 }) => {
   const monthStart = startOfMonth(currentMonth); //오늘이 속한 달의 시작일
   const monthEnd = endOfMonth(monthStart); //오늘이 속한 달의 마지막일
@@ -163,6 +113,11 @@ const RenderCells = ({
   let days = [];
   let day = startDate;
   let formattedDate = '';
+
+  const handleClickMobileLikedEvents = (today) => {
+    setMobileSelectedDate(today);
+    console.log(today);
+  };
 
   while (day <= endDate) {
     for (let i = 0; i < 7; i++) {
@@ -219,6 +174,14 @@ const RenderCells = ({
               day={day}
             />
           ) : null}
+          <MobileLikedEvents
+            onClick={() => {
+              //console.log(formattedDate);
+              handleClickMobileLikedEvents(day);
+            }}
+          >
+            <div>{todayEvents.length}</div>
+          </MobileLikedEvents>
         </div>
       );
       day = addDays(day, 1);
@@ -237,6 +200,8 @@ export const CalendarComponent = ({ calType, region }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [likedEvents, setLikedEvents] = useState([]);
+  //모바일 버전 선택된 날짜 - 기본은 오늘
+  const [mobileSelectedDate, setMobileSelectedDate] = useState(new Date());
 
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
@@ -300,6 +265,8 @@ export const CalendarComponent = ({ calType, region }) => {
         selectedDate={selectedDate}
         onDateClick={onDateClick}
         likedEvents={likedEvents}
+        mobileSelectedDate={mobileSelectedDate}
+        setMobileSelectedDate={setMobileSelectedDate}
       />
     </CalendarContainer>
   );
@@ -406,5 +373,23 @@ const CalendarContainer = styled.div`
   }
   div.cell.disabled {
     background-color: ${({ theme }) => theme.colors.light};
+  }
+`;
+
+const MobileLikedEvents = styled.div`
+  display: none;
+  @media screen and (max-width: 767px) {
+    text-align: center;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    div {
+      font-size: 11px;
+      border: 1px solid ${({ theme }) => theme.colors.lightgray};
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      border-radius: 50%;
+    }
   }
 `;

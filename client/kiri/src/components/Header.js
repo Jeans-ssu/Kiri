@@ -219,6 +219,7 @@ const Logo = styled.div`
   text-align: center;
   white-space: nowrap;
   margin-right: 40px;
+  margin-top: 5px;
   a {
     text-decoration: none;
     color: ${({ theme }) => theme.colors.mainColor};

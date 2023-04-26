@@ -113,6 +113,8 @@ const EventInfoPage = () => {
     });
   };
 
+  console.log('data', data);
+
   return (
     <PageContainer header footer>
       <EventInfoContainer>
@@ -150,20 +152,15 @@ const EventInfoPage = () => {
             </EventDdaydiv>
             <EventWriterdiv>{data.organizer}</EventWriterdiv>
             <EventTimediv>
-              <div className="start">
-                {data.startPostTime.slice(0, 10)}
-                &nbsp;
-                {data.startPostTime.slice(11, 19)}
-              </div>
+              <div className="start">{data.startPostTime.slice(0, 10)}</div>
               <div className="finish">
                 {data.startPostTime.slice(0, 10) ===
                 data.finishPostTime.slice(0, 10) ? (
-                  <div>&nbsp;~&nbsp;{data.finishPostTime.slice(11, 19)}</div>
+                  ''
                 ) : (
                   <div>
                     &nbsp;~&nbsp;
-                    {data.finishPostTime.slice(0, 10)}&nbsp;
-                    {data.finishPostTime.slice(11, 19)}
+                    {data.finishPostTime.slice(0, 10)}
                   </div>
                 )}
               </div>
@@ -184,14 +181,49 @@ const EventInfoPage = () => {
             </Slider>
           </EventPosterdiv>
           <EventInfodiv>
-            <article>
-              {data.content
-                ?.replace(/(?:\r\n|\n)/g, '\r\n')
-                .split('\r\n')
-                .map((item, idx) => (
-                  <p key={idx}>{item}</p>
-                ))}
-            </article>
+            <DetailInfoBox>
+              <table>
+                <tr>
+                  <td className="title">주최</td>
+                  <td className="info">{data.organizer}</td>
+                </tr>
+                <tr>
+                  <td className="title">이메일</td>
+                  <td className="info">{data.email}</td>
+                </tr>
+                <tr>
+                  <td className="title">지역</td>
+                  <td className="info">{data.local}</td>
+                </tr>
+                <tr>
+                  <td className="title">장소</td>
+                  <td className="info">{data.place}</td>
+                </tr>
+                <tr>
+                  <td className="title">학교</td>
+                  <td className="info">{data.school}</td>
+                </tr>
+                <tr>
+                  <td className="title">시간</td>
+                  <td className="info">
+                    {data.startPostTime.slice(11, 16)}&nbsp;~&nbsp;
+                    {data.finishPostTime.slice(11, 16)}
+                  </td>
+                </tr>
+              </table>
+            </DetailInfoBox>
+            <hr />
+            <InfoBox>
+              <span>상세 내용</span>
+              <article>
+                {data.content
+                  ?.replace(/(?:\r\n|\n)/g, '\r\n')
+                  .split('\r\n')
+                  .map((item) => (
+                    <p key={item}>{item}</p>
+                  ))}
+              </article>
+            </InfoBox>
           </EventInfodiv>
         </EventContentdiv>
         {data.member_id === loginID.memberId ? (
@@ -379,6 +411,40 @@ const EventInfodiv = styled.div`
   @media screen and (max-width: 767px) {
     margin-top: 35px;
     margin-left: 0;
+  }
+
+  hr {
+    width: 504px;
+  }
+`;
+
+const DetailInfoBox = styled.div`
+  td.info {
+    padding-left: 20px;
+  }
+
+  td.title {
+    font-weight: 600;
+  }
+  td {
+    padding-bottom: 10px;
+  }
+`;
+
+const InfoBox = styled.div`
+  margin-top: 15px;
+  span {
+    color: ${({ theme }) => theme.colors.mainColor};
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  span {
+    margin-top: 10px;
+  }
+
+  p {
+    margin-top: 5px;
   }
 `;
 
