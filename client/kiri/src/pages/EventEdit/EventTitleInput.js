@@ -58,7 +58,11 @@ const EventTitleInput = ({ title, setTitle, titleRef, errorMessage }) => {
         <span className="green">*</span>
         <ErrorMessageBox> {errorMessage.titleErrorMessage}</ErrorMessageBox>
       </TitleHeader>
-      <TitleInput value={title} onChange={handleChangeInput} ref={titleRef} />
+      <TitleInput
+        value={title || ''}
+        onChange={handleChangeInput}
+        ref={titleRef}
+      />
     </EventTitleInputContainer>
   );
 };
