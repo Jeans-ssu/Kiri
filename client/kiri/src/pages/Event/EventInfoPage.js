@@ -110,7 +110,7 @@ const EventInfoPage = () => {
 
   const HandleDelete = () => {
     axios.delete(`/api/posts/${preID}`).then(() => {
-      history.back();
+      navigate(`/event`);
     });
   };
 
