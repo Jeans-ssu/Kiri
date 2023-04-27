@@ -205,7 +205,7 @@ const EventInfoInput = ({
           </ErrorMessageMobileBox>
           <InfoTextInput
             type="text"
-            value={info.host}
+            value={info?.host}
             onChange={(e) => handleChangeInput(e, 'host')}
             ref={hostRef}
           />
@@ -344,13 +344,13 @@ const EventInfoInput = ({
             <InfoTextInput
               type="time"
               className="smallSize"
-              value={info.startTime}
+              value={info?.startTime}
               onChange={(e) => handleChangeInput(e, 'startTime')}
             />
             <InfoTextInput
               type="time"
               className="smallSize"
-              value={info.endTime}
+              value={info?.endTime}
               onChange={(e) => handleChangeInput(e, 'endTime')}
             />
           </InfoSmallBox>
@@ -359,7 +359,7 @@ const EventInfoInput = ({
           <InfoHeader>장소</InfoHeader>
           <InfoTextInput
             type="text"
-            value={info.location}
+            value={info?.location}
             onChange={(e) => handleChangeInput(e, 'location')}
           />
         </InfoContainer>
