@@ -21,7 +21,7 @@ const EventWritePageContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 10px;
+    padding: 0px;
     margin: auto;
   }
 `;

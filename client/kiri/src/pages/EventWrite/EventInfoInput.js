@@ -7,7 +7,8 @@ import { FiSearch } from 'react-icons/fi';
 
 const MobileContainer = styled.div`
   @media screen and (max-width: 767px) {
-    margin-left: -10px;
+    margin: 0 auto;
+    width: 90%;
   }
 `;
 
@@ -16,7 +17,6 @@ const EventInfoInputContainer = styled.div`
   margin: 15px 0;
   padding: 15px 15px 5px 15px;
   @media screen and (max-width: 767px) {
-    width: 87%;
     .smallSize {
       display: flex;
       flex-direction: row;
