@@ -138,6 +138,10 @@ const ErrorMessageBox = styled.div`
 const EventEtcInputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 767px) {
+    margin: 15px auto;
+    width: 90%;
+  }
 `;
 
 const EtcContainer = styled.div`

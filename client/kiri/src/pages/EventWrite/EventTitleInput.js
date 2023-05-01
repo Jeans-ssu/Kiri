@@ -4,7 +4,8 @@ const EventTitleInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   @media screen and (max-width: 767px) {
-    width: 100%;
+    margin: 0 auto;
+    width: 90%;
   }
 `;
 
@@ -37,7 +38,6 @@ const TitleInput = styled.input`
     border: 1px solid ${({ theme }) => theme.colors.mainColor};
   }
   @media screen and (max-width: 767px) {
-    width: 93vw;
   }
 `;
 
