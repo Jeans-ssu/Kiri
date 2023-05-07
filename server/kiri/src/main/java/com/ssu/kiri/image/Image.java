@@ -19,6 +19,7 @@ public class Image {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Column(length = 1500)
     private String imgUrl; // 파일 url
     private String filename; // 파일 이름
     private String filepath; // 포스팅 사진 경로 + 이름
