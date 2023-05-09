@@ -24,6 +24,10 @@ import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 //import { AiFillHeart } from 'react-icons/ai';
+import { MobileLikedEvents } from './MobileLikedEvents';
+import { MobileLikedEventsList } from './MobileLikedEventList';
+import { SavedDate } from './SavedDate';
+import { selectIsLogin } from 'store/modules/userSlice';
 
 const RenderHeader = ({ currentMonth, prevMonth, nextMonth }) => {
   return (
@@ -101,8 +105,9 @@ const RenderCells = ({
   selectedDate,
   onDateClick,
   likedEvents,
-  //mobileSelectedDate,
   setMobileSelectedDate,
+  mobileLikedEvents,
+  setMobileLikedEvents,
 }) => {
   const monthStart = startOfMonth(currentMonth); //오늘이 속한 달의 시작일
   const monthEnd = endOfMonth(monthStart); //오늘이 속한 달의 마지막일
@@ -114,75 +119,72 @@ const RenderCells = ({
   let day = startDate;
   let formattedDate = '';
 
-  const handleClickMobileLikedEvents = (today) => {
-    setMobileSelectedDate(today);
-    console.log(today);
-  };
-
   while (day <= endDate) {
     for (let i = 0; i < 7; i++) {
       formattedDate = format(day, 'd');
       const cloneDay = day;
       const todayEvents = extractEvents(day, likedEvents);
       days.push(
-        <div
-          role="presentation"
-          className={`col cell ${
-            !isSameMonth(day, monthStart)
-              ? 'disabled'
-              : isSameDay(day, selectedDate)
-              ? 'selected'
-              : format(currentMonth, 'M') !== format(day, 'M')
-              ? 'not-valid'
-              : 'valid'
-          }
-          ${isToday(day) ? 'today' : ''}`}
+        <SavedDate
           key={day}
-          onClick={() => {
-            onDateClick(cloneDay);
-          }}
+          today={day}
+          todayEvents={todayEvents}
+          setMobileSelectedDate={setMobileSelectedDate}
+          extractEvents={extractEvents}
+          setMobileLikedEvents={setMobileLikedEvents}
         >
-          <span
-            className={
-              format(currentMonth, 'M') !== format(day, 'M')
-                ? 'text not-valid'
-                : 'text'
+          <div
+            role="presentation"
+            className={`col cell ${
+              !isSameMonth(day, monthStart)
+                ? 'disabled'
+                : isSameDay(day, selectedDate)
+                ? 'selected'
+                : format(currentMonth, 'M') !== format(day, 'M')
+                ? 'not-valid'
+                : 'valid'
             }
-          >
-            {formattedDate}
-          </span>
-          {todayEvents.slice(0, 3)?.map((el, idx) => {
-            return (
-              <LikedEvent
-                key={idx}
-                getMonthEvents={getMonthEvents}
-                eventId={el.post_id}
-                isSameMonth={isSameMonth(day, monthStart)}
-                title={el.title}
-                type={el.event}
-                school={el.school}
-                startTime={el.startScrapTime || el.startPostTime}
-                finishTime={el.finishScrapTime || el.finishPostTime}
-                organizer={el.organizer}
-              />
-            );
-          })}
-          {todayEvents.length > 3 ? (
-            <AllLikedEvent
-              leftEvents={todayEvents.length - 3}
-              todayEvents={todayEvents}
-              day={day}
-            />
-          ) : null}
-          <MobileLikedEvents
+          ${isToday(day) ? 'today' : ''}`}
+            key={day}
             onClick={() => {
-              //console.log(formattedDate);
-              handleClickMobileLikedEvents(day);
+              onDateClick(cloneDay);
             }}
           >
-            <div>{todayEvents.length}</div>
-          </MobileLikedEvents>
-        </div>
+            <span
+              className={
+                format(currentMonth, 'M') !== format(day, 'M')
+                  ? 'text not-valid'
+                  : 'text'
+              }
+            >
+              {formattedDate}
+            </span>
+            {todayEvents.slice(0, 3)?.map((el, idx) => {
+              return (
+                <LikedEvent
+                  key={idx}
+                  getMonthEvents={getMonthEvents}
+                  eventId={el.post_id}
+                  isSameMonth={isSameMonth(day, monthStart)}
+                  title={el.title}
+                  type={el.event}
+                  school={el.school}
+                  startTime={el.startScrapTime || el.startPostTime}
+                  finishTime={el.finishScrapTime || el.finishPostTime}
+                  organizer={el.organizer}
+                />
+              );
+            })}
+            {todayEvents.length > 3 ? (
+              <AllLikedEvent
+                leftEvents={todayEvents.length - 3}
+                todayEvents={todayEvents}
+                day={day}
+              />
+            ) : null}
+            <MobileLikedEvents eventCnt={todayEvents.length} today={day} />
+          </div>
+        </SavedDate>
       );
       day = addDays(day, 1);
     }
@@ -202,12 +204,17 @@ export const CalendarComponent = ({ calType, region }) => {
   const [likedEvents, setLikedEvents] = useState([]);
   //모바일 버전 선택된 날짜 - 기본은 오늘
   const [mobileSelectedDate, setMobileSelectedDate] = useState(new Date());
+  //모바일 버전 선택된 날짜의 이벤트들
+  const [mobileLikedEvents, setMobileLikedEvents] = useState([]);
+
+  const isLogin = useSelector(selectIsLogin);
 
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
 
   const getMonthEvents = async () => {
-    if (calType === 'liked') {
+    if (calType === 'liked' && isLogin) {
+      //캘린더가 좋아요한 이벤트이고 로그인한 상태이면
       try {
         const response = await axios.get(
           `/calendar?year=${format(currentMonth, 'yyyy')}&month=${format(
@@ -267,6 +274,13 @@ export const CalendarComponent = ({ calType, region }) => {
         likedEvents={likedEvents}
         mobileSelectedDate={mobileSelectedDate}
         setMobileSelectedDate={setMobileSelectedDate}
+        mobileLikedEvents={mobileLikedEvents}
+        setMobileLikedEvents={setMobileLikedEvents}
+      />
+      <MobileLikedEventsList
+        today={mobileSelectedDate}
+        events={mobileLikedEvents}
+        calType={calType}
       />
     </CalendarContainer>
   );
@@ -373,23 +387,5 @@ const CalendarContainer = styled.div`
   }
   div.cell.disabled {
     background-color: ${({ theme }) => theme.colors.light};
-  }
-`;
-
-const MobileLikedEvents = styled.div`
-  display: none;
-  @media screen and (max-width: 767px) {
-    text-align: center;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    div {
-      font-size: 11px;
-      border: 1px solid ${({ theme }) => theme.colors.lightgray};
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      border-radius: 50%;
-    }
   }
 `;

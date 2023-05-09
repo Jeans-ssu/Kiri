@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { CalendarComponent } from 'components/calendar/Calendar';
 import { useState } from 'react';
 import { Regions } from 'util/info';
+import { useSelector } from 'react-redux';
+import { selectIsLogin } from 'store/modules/userSlice';
 
 const Calendar = () => {
   const [calType, setCalType] = useState('liked'); //캘린더 타입 liked or region
@@ -32,6 +34,9 @@ const Calendar = () => {
 };
 
 const CalendarSelect = ({ calType, setCalType, setRegion }) => {
+  //로그인 여부
+  const isLogin = useSelector(selectIsLogin);
+
   const handleClickCalTypeBtn = () => {
     if (calType === 'liked') setCalType('region');
     else setCalType('liked');
@@ -44,7 +49,9 @@ const CalendarSelect = ({ calType, setCalType, setRegion }) => {
   return (
     <CalendarSelectContainer>
       <button
-        className={calType === 'liked' ? 'current' : null}
+        className={`${calType === 'liked' ? 'current' : null} ${
+          isLogin ? null : 'hide'
+        }`}
         onClick={handleClickCalTypeBtn}
       >
         좋아요한 이벤트
@@ -52,6 +59,7 @@ const CalendarSelect = ({ calType, setCalType, setRegion }) => {
       <button
         className={calType === 'region' ? 'current' : null}
         onClick={handleClickCalTypeBtn}
+        id="region"
       >
         지역별 이벤트
       </button>
@@ -88,8 +96,16 @@ const CalendarSelectContainer = styled.div`
       cursor: pointer;
     }
   }
+  button.hide {
+    display: none;
+  }
   button.current {
     color: ${({ theme }) => theme.colors.mainColor};
+  }
+  button#region {
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
   }
   select {
     outline: none;
@@ -108,6 +124,9 @@ const CalendarSelectContainer = styled.div`
     padding: 0 0 5px 0;
     button {
       font-size: 0.8em;
+    }
+    button.hide {
+      display: none;
     }
   }
 `;
