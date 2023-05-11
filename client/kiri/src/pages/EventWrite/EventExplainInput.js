@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { selectOcrMode, selectOcrResult } from 'store/modules/ocrSlice';
+import { useEffect } from 'react';
 
 const EventExplainInputContainer = styled.div`
   display: flex;
@@ -52,6 +55,10 @@ const EventExplainInput = ({
   explainRef,
   errorMessage,
 }) => {
+  const ocrResult = useSelector(selectOcrResult);
+  const ocrMode = useSelector(selectOcrMode);
+
+  useEffect(() => {}, [ocrMode]);
   const handleChangeInput = (e) => {
     setExplain(e.target.value);
   };
@@ -68,6 +75,7 @@ const EventExplainInput = ({
         onChange={handleChangeInput}
         ref={explainRef}
       />
+      {ocrResult}
     </EventExplainInputContainer>
   );
 };
