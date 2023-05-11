@@ -58,7 +58,9 @@ const EventExplainInput = ({
   const ocrResult = useSelector(selectOcrResult);
   const ocrMode = useSelector(selectOcrMode);
 
-  useEffect(() => {}, [ocrMode]);
+  useEffect(() => {
+    setExplain(ocrResult);
+  }, [ocrMode]);
   const handleChangeInput = (e) => {
     setExplain(e.target.value);
   };
@@ -75,7 +77,6 @@ const EventExplainInput = ({
         onChange={handleChangeInput}
         ref={explainRef}
       />
-      {ocrResult}
     </EventExplainInputContainer>
   );
 };
