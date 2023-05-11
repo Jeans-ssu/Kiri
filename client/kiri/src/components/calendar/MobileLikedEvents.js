@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { selectIsLogin } from 'store/modules/userSlice';
 
-export const MobileLikedEvents = ({ eventCnt, today }) => {
-  const [day] = useState(today);
-
+export const MobileLikedEvents = ({ eventCnt }) => {
   const isLogin = useSelector(selectIsLogin);
 
   useEffect(() => {}, []);

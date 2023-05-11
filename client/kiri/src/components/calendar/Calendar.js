@@ -106,7 +106,6 @@ const RenderCells = ({
   onDateClick,
   likedEvents,
   setMobileSelectedDate,
-  mobileLikedEvents,
   setMobileLikedEvents,
 }) => {
   const monthStart = startOfMonth(currentMonth); //오늘이 속한 달의 시작일

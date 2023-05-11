@@ -4,7 +4,6 @@ import axios from 'api/axios';
 import { format } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { selectIsLogin } from 'store/modules/userSlice';
-import theme from 'styles/theme';
 
 export const SavedDate = ({
   children,

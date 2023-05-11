@@ -11,7 +11,6 @@ export const MobileLikedEventsList = ({
   events,
   calType,
 }) => {
-  const [date] = useState(today);
   const [likedEvents, setLikedEvents] = useState([]);
   const navigate = useNavigate();
 
