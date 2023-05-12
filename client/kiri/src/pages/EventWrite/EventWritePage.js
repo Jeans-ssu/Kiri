@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PageContainer from 'containers/PageContainer';
 import styled from 'styled-components';
 import EventTitleInput from './EventTitleInput';
@@ -8,8 +8,9 @@ import EventEtcInput from './EventEtcInput';
 import axios from '../../api/axios';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PostModal from 'components/PostModal';
+import { setOcrResult } from 'store/modules/ocrSlice';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -51,6 +52,12 @@ const WriteBtn = styled.button`
 const EventWritePage = () => {
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setOcrResult(''));
+  }, []);
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');
