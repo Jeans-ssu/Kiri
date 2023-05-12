@@ -19,7 +19,7 @@ const EventEtcInput = ({
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
 
-  const [imageUrl, setImageUrl] = useState(null);
+  const [file, setFile] = useState();
 
   const uploadImg = (formData) => {
     axios
@@ -56,15 +56,8 @@ const EventEtcInput = ({
     } else {
       setImg(nowImageUrlList);
     }
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setImageUrl(reader.result);
-    };
-    reader.onerror = (error) => {
-      console.log(error);
-    };
+
+    setFile(e.target.files);
   };
 
   const handleChangeInput = (e) => {
@@ -117,7 +110,7 @@ const EventEtcInput = ({
                       el={el}
                       idx={idx}
                       deleteImg={deleteImg}
-                      imageUrl={imageUrl}
+                      file={file}
                     />
                   );
                 })
@@ -128,7 +121,7 @@ const EventEtcInput = ({
                       el={el}
                       idx={idx}
                       deleteImg={deleteImg}
-                      imageUrl={imageUrl}
+                      file={file}
                     />
                   );
                 })

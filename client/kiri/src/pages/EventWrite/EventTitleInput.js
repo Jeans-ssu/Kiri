@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { selectOcrMode, selectOcrResult } from 'store/modules/ocrSlice';
+import { useEffect } from 'react';
 
 const EventTitleInputContainer = styled.div`
   display: flex;
@@ -50,7 +53,17 @@ const ErrorMessageBox = styled.div`
   margin-left: 3px;
 `;
 
-const EventTitleInput = ({ Title, setTitle, titleRef, errorMessage }) => {
+const EventTitleInput = ({ title, setTitle, titleRef, errorMessage }) => {
+  const ocrResult = useSelector(selectOcrResult);
+  const ocrMode = useSelector(selectOcrMode);
+
+  useEffect(() => {
+    if (ocrResult.length !== 0) {
+      setTitle(JSON.parse(ocrResult)?.title);
+      console.log('title', JSON.parse(ocrResult)?.title);
+    }
+  }, [ocrMode]);
+
   const handleChangeInput = (e) => {
     setTitle(e.target.value);
   };
@@ -61,7 +74,11 @@ const EventTitleInput = ({ Title, setTitle, titleRef, errorMessage }) => {
         <span className="green">*</span>
         <ErrorMessageBox> {errorMessage.titleErrorMessage}</ErrorMessageBox>
       </TitleHeader>
-      <TitleInput value={Title} onChange={handleChangeInput} ref={titleRef} />
+      <TitleInput
+        value={title || ''}
+        onChange={handleChangeInput}
+        ref={titleRef}
+      />
     </EventTitleInputContainer>
   );
 };

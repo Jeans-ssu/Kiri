@@ -1,9 +1,15 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Regions, EventCategory } from 'util/info';
 import SearchUnivModal from 'components/SearchUnivModal';
 import { SearchUnivBtn } from 'components/buttons/SearchUnivBtn';
 import { FiSearch } from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectOcrMode,
+  selectOcrResult,
+  setOcrMode,
+} from 'store/modules/ocrSlice';
 
 const MobileContainer = styled.div`
   @media screen and (max-width: 767px) {
@@ -181,6 +187,29 @@ const EventInfoInput = ({
   //학교 찾기 모달
   const [isOpen, setIsOpen] = useState(false);
 
+  const ocrResult = useSelector(selectOcrResult);
+  const ocrMode = useSelector(selectOcrMode);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (ocrResult.length !== 0) {
+      console.log('true?', ocrMode);
+      console.log(ocrResult);
+      setInfo({
+        host: JSON.parse(ocrResult)?.host,
+        tel: JSON.parse(ocrResult)?.contact,
+        univ: JSON.parse(ocrResult)?.university,
+        startDate: JSON.parse(ocrResult)?.startDate,
+        endDate: JSON.parse(ocrResult)?.endDate,
+        startTime: JSON.parse(ocrResult)?.startTime,
+        endTime: JSON.parse(ocrResult)?.endTime,
+        location: JSON.parse(ocrResult)?.location,
+      });
+      dispatch(setOcrMode(false));
+      console.log('after false');
+    }
+  }, [ocrMode]);
+
   const handleChangeInput = (e, target) => {
     setInfo({
       ...info,
@@ -207,7 +236,7 @@ const EventInfoInput = ({
           </ErrorMessageMobileBox>
           <InfoTextInput
             type="text"
-            value={info.host}
+            value={info.host || ''}
             onChange={(e) => handleChangeInput(e, 'host')}
             ref={hostRef}
           />
@@ -219,7 +248,7 @@ const EventInfoInput = ({
           <InfoHeader>이메일</InfoHeader>
           <InfoTextInput
             type="email"
-            value={info.email}
+            value={info.email || ''}
             onChange={(e) => handleChangeInput(e, 'email')}
           />
         </InfoContainer>
@@ -227,7 +256,7 @@ const EventInfoInput = ({
           <InfoHeader>연락처</InfoHeader>
           <InfoTextInput
             type="tel"
-            value={info.tel}
+            value={info.tel || ''}
             onChange={(e) => handleChangeInput(e, 'tel')}
           />
         </InfoContainer>
@@ -267,7 +296,7 @@ const EventInfoInput = ({
           </ErrorMessageMobileBox>
 
           <SchoolBox>
-            <InfoTextInput width="200px" readOnly value={info.univ} />
+            <InfoTextInput width="200px" readOnly value={info.univ || ''} />
             <SearchUnivBtn
               onClick={() => {
                 setIsOpen(true);
@@ -331,14 +360,14 @@ const EventInfoInput = ({
             <InfoTextInput
               type="date"
               className="smallSize"
-              value={info.startDate}
+              value={info.startDate || ''}
               onChange={(e) => handleChangeInput(e, 'startDate')}
               ref={startDateRef}
             />
             <InfoTextInput
               type="date"
               className="smallSize"
-              value={info.endDate}
+              value={info.endDate || ''}
               onChange={(e) => handleChangeInput(e, 'endDate')}
               ref={endDateRef}
             />
@@ -356,13 +385,13 @@ const EventInfoInput = ({
             <InfoTextInput
               type="time"
               className="smallSize"
-              value={info.startTime}
+              value={info.startTime || ''}
               onChange={(e) => handleChangeInput(e, 'startTime')}
             />
             <InfoTextInput
               type="time"
               className="smallSize"
-              value={info.endTime}
+              value={info.endTime || ''}
               onChange={(e) => handleChangeInput(e, 'endTime')}
             />
           </InfoSmallBox>
@@ -371,7 +400,7 @@ const EventInfoInput = ({
           <InfoHeader>장소</InfoHeader>
           <InfoTextInput
             type="text"
-            value={info.location}
+            value={info.location || ''}
             onChange={(e) => handleChangeInput(e, 'location')}
           />
         </InfoContainer>

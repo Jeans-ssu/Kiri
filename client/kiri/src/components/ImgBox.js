@@ -1,12 +1,26 @@
 import { Icon } from '@iconify/react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setOcrMode, setOcrResult } from 'store/modules/ocrSlice';
 import styled from 'styled-components';
 
 const GoogleVisionApiKey = process.env.REACT_APP_API_KEY;
+const NodeServer = process.env.REACT_APP_NODE;
 
-const ImgBox = ({ el, idx, deleteImg, imageUrl }) => {
+const ImgBox = ({ el, idx, deleteImg, file }) => {
   const dispatch = useDispatch();
+
+  const [imageUrl, setImageUrl] = useState(null);
+
+  const targetfile = file[idx];
+  const reader = new FileReader();
+  reader.readAsDataURL(targetfile);
+  reader.onload = () => {
+    setImageUrl(reader.result);
+  };
+  reader.onerror = (error) => {
+    console.log(error);
+  };
 
   const analyzeImage = async () => {
     try {
@@ -32,17 +46,32 @@ const ImgBox = ({ el, idx, deleteImg, imageUrl }) => {
         }
       );
       const responseJson = await response.json();
-      //   setMessage(
-      //     responseJson.responses[0].fullTextAnnotation.text +
-      //       '\n여기서 주최, 장소, 일시, 대학교, 연락처, 시작시간, 끝나는 시간, 설명 을 JSON 형식으로 알려줘'
-      //   );
-      dispatch(
-        setOcrResult(
-          responseJson.responses[0].fullTextAnnotation.text +
-            '\n여기서 주최, 장소, 일시, 대학교, 연락처, 시작시간, 끝나는 시간, 설명 을 JSON 형식으로 알려줘'
-        )
+      console.log(
+        'responsetext',
+        responseJson.responses[0].fullTextAnnotation.text
       );
-      dispatch(setOcrMode(true));
+      const message =
+        responseJson.responses[0].fullTextAnnotation.text +
+        '\n여기서 제목, 이메일, 주최, 장소, 시작날짜, 끝나는날짜, 대학교, 연락처, 시작시간, 끝나는시간 을 JSON 형식으로 알려줘. 이때 키 값은 host, email, title, location, startDate, endDate, university, contact, startTime, endTime 이걸로 해야해. 날짜 형식은 "yyyy-MM-dd" 이 형식으로 줘야해.';
+
+      fetch(NodeServer, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log('before false');
+          dispatch(setOcrMode(false));
+          const first = data.message.indexOf('{');
+          const end = data.message.indexOf('}');
+          const obj = data.message.slice(first, end + 1);
+          dispatch(setOcrResult(obj));
+          dispatch(setOcrMode(true));
+          console.log('after true');
+        });
     } catch (error) {
       console.log(error);
     }
