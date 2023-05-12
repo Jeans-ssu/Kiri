@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 
 export const EventTagInput = () => {
-  const [tagList, setTagList] = useState(['인공지능', '강연']);
+  const [tagList, setTagList] = useState([]);
   const [tagInput, setTagInput] = useState('');
 
   const handleChangeTagInput = (e) => {
