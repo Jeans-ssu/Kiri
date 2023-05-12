@@ -15,6 +15,7 @@ import userReducer from './modules/userSlice';
 import authReducer from './modules/authSlice';
 import searchReducer from './modules/searchSlice';
 import tagReducer from './modules/tagSlice';
+import ocrReducer from './modules/ocrSlice';
 
 const persistConfig = {
   key: 'root',
@@ -28,6 +29,7 @@ export const rootReducer = combineReducers({
   auth: authReducer,
   search: searchReducer,
   tag: tagReducer,
+  ocr: ocrReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

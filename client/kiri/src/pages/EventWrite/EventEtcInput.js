@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
-import { Icon } from '@iconify/react';
+import { useRef, useState } from 'react';
 import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
+import ImgBox from 'components/ImgBox';
 
 const EventEtcInput = ({
   link,
@@ -18,6 +18,8 @@ const EventEtcInput = ({
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
+
+  const [imageUrl, setImageUrl] = useState(null);
 
   const uploadImg = (formData) => {
     axios
@@ -54,6 +56,15 @@ const EventEtcInput = ({
     } else {
       setImg(nowImageUrlList);
     }
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setImageUrl(reader.result);
+    };
+    reader.onerror = (error) => {
+      console.log(error);
+    };
   };
 
   const handleChangeInput = (e) => {
@@ -101,22 +112,24 @@ const EventEtcInput = ({
             ? img.length >= 6
               ? img.map((el, idx) => {
                   return (
-                    <GridBox key={idx}>
-                      <GridImagePreview key={idx} alt="img" src={el} />
-                      <GridRemoveBtn onClick={() => deleteImg(idx)}>
-                        <Icon className="X" icon="ic:round-close" />
-                      </GridRemoveBtn>
-                    </GridBox>
+                    <ImgBox
+                      key={idx}
+                      el={el}
+                      idx={idx}
+                      deleteImg={deleteImg}
+                      imageUrl={imageUrl}
+                    />
                   );
                 })
               : img.map((el, idx) => {
                   return (
-                    <GridBox key={idx}>
-                      <GridImagePreview key={idx} alt="img" src={el} />
-                      <GridRemoveBtn onClick={() => deleteImg(idx)}>
-                        <Icon className="X" icon="ic:round-close" />
-                      </GridRemoveBtn>
-                    </GridBox>
+                    <ImgBox
+                      key={idx}
+                      el={el}
+                      idx={idx}
+                      deleteImg={deleteImg}
+                      imageUrl={imageUrl}
+                    />
                   );
                 })
             : ''}
@@ -229,34 +242,6 @@ const GridImageBox = styled.div`
   @media screen and (max-width: 767px) {
     grid-gap: 18px 18px;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-`;
-
-const GridBox = styled.div`
-  display: flex;
-`;
-
-const GridImagePreview = styled.img`
-  width: 135px;
-  height: 135px;
-  transform: translate(50, 50);
-  object-fit: cover;
-  margin: auto;
-  @media screen and (max-width: 767px) {
-    width: 40px;
-    height: 40px;
-  }
-`;
-
-const GridRemoveBtn = styled.button`
-  border: none;
-  background: transparent;
-  display: flex;
-  cursor: pointer;
-  margin-left: 2px;
-  padding: 0;
-  @media screen and (max-width: 767px) {
-    margin-left: 0px;
   }
 `;
 
