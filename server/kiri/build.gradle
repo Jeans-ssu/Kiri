@@ -6,11 +6,11 @@ buildscript {
 }
 
 plugins {
- id 'java'
- id 'org.springframework.boot' version '2.7.7'
- id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+ 	id 'org.springframework.boot' version '2.7.7'
+ 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	//querydsl 추가
- id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+ 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id 'java'
 }
 
 group = 'com.ssu'
@@ -20,6 +20,9 @@ sourceCompatibility = '11'
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
+	}
+	querydsl {
+		extendsFrom compileClasspath
 	}
 }
 
@@ -43,6 +46,8 @@ dependencies {
 	//querydsl 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+//	implementation 'com.querydsl:querydsl-jpa' // 추가
+//	implementation 'com.querydsl:querydsl-apt' // 추가
 
 	// Cannot resolve class 'Driver' mysql 에러
 	// https://mvnrepository.com/artifact/mysql/mysql-connector-java
@@ -79,7 +84,11 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	// mapstruct
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+//	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+//	annotationProcessor 'com.querydsl:querydsl-apt' //추가
+	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
@@ -116,9 +125,9 @@ compileQuerydsl{
 	options.annotationProcessorPath = configurations.querydsl
 }
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+//	compileOnly {
+//		extendsFrom annotationProcessor
+//	}
 	querydsl.extendsFrom compileClasspath
 }
 //querydsl 추가 끝
