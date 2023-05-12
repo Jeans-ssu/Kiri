@@ -58,7 +58,7 @@ const ImgBox = ({ el, idx, deleteImg, imageUrl }) => {
       </TopBox>
       <BottomBox>
         <OcrBox>
-          <OcrBtn onClick={analyzeImage}>OCR 하기</OcrBtn>
+          <OcrBtn onClick={analyzeImage}>자동 입력 하기</OcrBtn>
         </OcrBox>
       </BottomBox>
     </GridBox>
@@ -71,9 +71,26 @@ const TopBox = styled.div`
 
 const BottomBox = styled.div``;
 
-const OcrBox = styled.div``;
+const OcrBox = styled.div`
+  width: 135px;
+  @media screen and (max-width: 767px) {
+    width: 100px;
+  }
+`;
 
-const OcrBtn = styled.div``;
+const OcrBtn = styled.div`
+  color: #759cff;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 10px;
+  &:hover {
+    cursor: pointer;
+    color: #4f80ff;
+  }
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
+`;
 
 const GridBox = styled.div`
   display: flex;
