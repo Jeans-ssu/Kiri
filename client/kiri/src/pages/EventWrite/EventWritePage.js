@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import EventTitleInput from './EventTitleInput';
 import EventInfoInput from './EventInfoInput';
 import EventExplainInput from './EventExplainInput';
+import { EventTagInput } from './EventTagInput';
 import EventEtcInput from './EventEtcInput';
 import axios from '../../api/axios';
 import { selectAccessToken } from 'store/modules/authSlice';
@@ -291,6 +292,7 @@ const EventWritePage = () => {
           explainRef={explainRef}
           errorMessage={errorMessage}
         />
+        <EventTagInput />
         <EventEtcInput
           link={link}
           setLink={setLink}
