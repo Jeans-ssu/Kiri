@@ -43,12 +43,13 @@ public class DetailPost {
     private boolean isScrap; // 해당 게시물을 사용자가 scrap했는지 여부
     private List<Long> imgIdList = new ArrayList<>();
 
+    private List<String> tagList = new ArrayList<>();
 
-    public static DetailPost ofWithImage(Post post, List<String> imageList, boolean isScrap, List<Long> imgIdList) {
+    public static DetailPost ofWithImage(Post post, List<String> imageList, boolean isScrap, List<Long> imgIdList, List<String> tagList) {
         DetailPost detailPost = new DetailPost(post.getId(), post.getMember().getId(), post.getTitle(), post.getScrap_count(),
                 post.getContent(), post.getEvent(), post.getLocal(), post.getSchool(), post.getOrganizer(),
                 post.getContactNumber(), post.getLink(), post.getPlace(), imageList,
-                post.getStartPostTime(), post.getFinishPostTime(), post.getEmail(), isScrap, imgIdList);
+                post.getStartPostTime(), post.getFinishPostTime(), post.getEmail(), isScrap, imgIdList, tagList);
 
         //System.out.println("Post 저장 후 반환할 DTO 의 imageList = " + imageList);
 

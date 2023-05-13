@@ -7,12 +7,9 @@ import lombok.Getter;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class MultipleResponseDto<T> {
-    private List<T> data1;
-    private List<T> data2;
+    private T data;
+    private List<T> dataList;
 
-    public MultipleResponseDto(List<T> data1, List<T> data2) {
-        this.data1 = data1;
-        this.data2 = data2;
-    }
 }

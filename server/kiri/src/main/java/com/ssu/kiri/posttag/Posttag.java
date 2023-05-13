@@ -1,6 +1,7 @@
-package com.ssu.kiri.tag;
+package com.ssu.kiri.posttag;
 
 import com.ssu.kiri.post.Post;
+import com.ssu.kiri.tag.Tag;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,12 @@ public class Posttag {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
+    public static void savePostTag(Post post, Tag tag) {
+        Posttag posttag = new Posttag();
+        posttag.post = post;
+        posttag.tag = tag;
+
+    }
+
 }
+

@@ -1,6 +1,7 @@
 package com.ssu.kiri.post;
 
 
+import com.ssu.kiri.common.dto.MultipleResponseDto;
 import com.ssu.kiri.member.Member;
 import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.post.dto.response.ClassifyPost;
@@ -37,10 +38,14 @@ public class PostController {
     public ResponseEntity detailPost(@PathVariable("post-id") Long post_id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Member member = principalDetails.getMember();
         if(member == null) {
-            DetailPost detailPost = postService.detailPost(post_id, null);
+//            DetailPost detailPost = postService.detailPost(post_id, null);
+            MultipleResponseDto multipleResponseDto = postService.detailPost(post_id, null);
         }
-        DetailPost detailPost = postService.detailPost(post_id, member);
-        return ResponseEntity.ok(detailPost);
+
+        MultipleResponseDto multipleResponseDto = postService.detailPost(post_id, member);
+        return ResponseEntity.ok(multipleResponseDto);
+//        DetailPost detailPost = postService.detailPost(post_id, member);
+//        return ResponseEntity.ok(detailPost);
     }
 
 
