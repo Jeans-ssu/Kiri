@@ -70,7 +70,9 @@ public class PostService {
         // ===== tag 관련
 
         // 추천 태그 글 관련
+        List<String> tagsByPost = new ArrayList<>();
         List<RecommendPost> recommendPostList = new ArrayList<>();
+        List<Long> recommendPostIdList = new ArrayList<>();
         List<Posttag> posttags = posttagRepository.findByPost(post);
         if(posttags!=null && !posttags.isEmpty()) {
             for (Posttag posttag : posttags) {
@@ -78,16 +80,20 @@ public class PostService {
                 List<Posttag> posttagbyTag = posttagRepository.findByTagId(tag_id);
                 for (Posttag posttagOne : posttagbyTag) {
                     Post postByPT = posttagOne.getPost();
-                    if(postByPT.getId() != id) {
-                        RecommendPost recommendPost = RecommendPost.of(postByPT);
+                    if(postByPT.getId() != id && !recommendPostIdList.contains(postByPT.getId())) {
+                        List<String> recoTagList = posttagService.findTagsByPost(postByPT);
+                        RecommendPost recommendPost = RecommendPost.of(postByPT, recoTagList);
+                        recommendPostIdList.add(postByPT.getId());
                         recommendPostList.add(recommendPost);
                         break;
                     }
                 }
+                tagsByPost.add(posttag.getTag().getTagname());
             }
         }
 
-        List<String> tagsByPost = posttagService.findTagsByPost(post); // tagList
+
+//        List<String> tagsByPost = posttagService.findTagsByPost(post); // tagList
         //==== tag 관련 끝
 
         // 회원가입을 안한 경우
@@ -135,16 +141,19 @@ public class PostService {
         //=============================================================
         // post와 tag 간의 관계인 PostTag 객체 생성해서 저장하기
         List<String> tagList = post.getTagList();
+
         if(tagList != null && !tagList.isEmpty()) {
             for (String tag : tagList) {
                 Optional<Tag> byTag = tagRepository.findByTagname(tag);
                 if(byTag.isEmpty()) {
                     // tag가 없으면 저장
                     Tag savedTag = tagService.saveTag(tag);
-                    Posttag.savePostTag(savedPost, savedTag);
+                    Posttag posttag = Posttag.savePostTag(savedPost, savedTag);
+                    posttagRepository.save(posttag);
                 }
                 else {
-                    Posttag.savePostTag(savedPost, byTag.get()); // tag가 존재하면 바로 저장
+                    Posttag posttag = Posttag.savePostTag(savedPost, byTag.get());// tag가 존재하면 바로 저장
+                    posttagRepository.save(posttag);
                 }
 
             }
@@ -153,6 +162,7 @@ public class PostService {
         // Posttag에서 Post를 이용해서 해당 Post의 tag 리스트들 가져오기
         List<String> tagsByPost = posttagService.findTagsByPost(savedPost);
 
+
         //=============================================================
 
         //System.out.println("등록할 이미지가 없는 경우 뭐라 나오냐 imageIdList = " + imageIdList);
@@ -160,6 +170,7 @@ public class PostService {
         if(imageIdList == null || imageIdList.isEmpty()) {
             //System.out.println("등록할 이미지가 없는 거 확인");
             SaveResPost saveResPost = SaveResPost.of(savedPost, tagsByPost);
+
             return saveResPost;
         }
 
@@ -188,17 +199,25 @@ public class PostService {
         Post savedPost = postRepository.save(findPost);
 
         // ===== tag 관련
+        // tag 다 삭제하고 다시 만들기
+
         List<String> tagList = savePost.getTagList();
+        List<Posttag> posttagList = posttagRepository.findByPost(savedPost);
+        for (Posttag posttag : posttagList) { // 다 삭제하고 tag 다시 설정하기
+            posttagService.deletePostTag(posttag.getId());
+        }
         if(tagList != null && !tagList.isEmpty()) {
             for (String tag : tagList) {
                 Optional<Tag> byTag = tagRepository.findByTagname(tag);
                 if(byTag.isEmpty()) {
                     // tag가 없으면 저장
                     Tag savedTag = tagService.saveTag(tag);
-                    Posttag.savePostTag(savedPost, savedTag);
+                    Posttag posttag = Posttag.savePostTag(savedPost, savedTag);
+                    posttagRepository.save(posttag);
                 }
                 else {
-                    Posttag.savePostTag(savedPost, byTag.get()); // tag가 존재하면 바로 저장
+                    Posttag posttag = Posttag.savePostTag(savedPost, byTag.get());// tag가 존재하면 바로 저장
+                    posttagRepository.save(posttag);
                 }
 
             }

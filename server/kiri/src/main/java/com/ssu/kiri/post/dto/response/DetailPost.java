@@ -51,6 +51,7 @@ public class DetailPost {
                 post.getContactNumber(), post.getLink(), post.getPlace(), imageList,
                 post.getStartPostTime(), post.getFinishPostTime(), post.getEmail(), isScrap, imgIdList, tagList);
 
+
         //System.out.println("Post 저장 후 반환할 DTO 의 imageList = " + imageList);
 
         return detailPost;

@@ -26,11 +26,12 @@ public class Posttag {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    public static void savePostTag(Post post, Tag tag) {
+    public static Posttag savePostTag(Post post, Tag tag) {
         Posttag posttag = new Posttag();
         posttag.post = post;
         posttag.tag = tag;
 
+        return posttag;
     }
 
 }

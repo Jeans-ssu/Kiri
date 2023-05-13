@@ -4,6 +4,9 @@ import com.ssu.kiri.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 public class RecommendPost {
@@ -23,9 +26,11 @@ public class RecommendPost {
     private String link; // 참고링크
     private String place; // 장소
 
-    public static RecommendPost of(Post post) {
+    private List<String> tagList = new ArrayList<>();
+
+    public static RecommendPost of(Post post, List<String> tagList) {
         return new RecommendPost(post.getId(), post.getMember().getId(), post.getTitle(), post.getScrap_count(),
                 post.getContent(), post.getEvent(), post.getLocal(), post.getSchool(), post.getOrganizer(),
-                post.getContactNumber(), post.getLink(), post.getPlace());
+                post.getContactNumber(), post.getLink(), post.getPlace(), tagList);
     }
 }
