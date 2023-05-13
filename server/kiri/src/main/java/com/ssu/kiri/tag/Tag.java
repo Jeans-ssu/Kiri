@@ -18,4 +18,11 @@ public class Tag {
 
     private String tagname;
 
+    public static Tag saveTag(String tagname) {
+        Tag tag = new Tag();
+        tag.tagname = tagname;
+
+        return tag;
+    }
+
 }
