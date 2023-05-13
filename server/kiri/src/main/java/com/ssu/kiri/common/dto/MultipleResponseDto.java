@@ -1,5 +1,7 @@
 package com.ssu.kiri.common.dto;
 
+import com.ssu.kiri.post.dto.response.DetailPost;
+import com.ssu.kiri.post.dto.response.RecommendPost;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -7,9 +9,13 @@ import lombok.Getter;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-public class MultipleResponseDto<T> {
-    private T data;
-    private List<T> dataList;
+public class MultipleResponseDto {
+    private DetailPost data;
+    private List<RecommendPost> dataList;
+
+    public MultipleResponseDto(DetailPost data, List<RecommendPost> dataList) {
+        this.data = data;
+        this.dataList = dataList;
+    }
 
 }
