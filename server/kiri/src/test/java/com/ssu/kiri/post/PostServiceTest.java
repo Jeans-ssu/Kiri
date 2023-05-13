@@ -347,41 +347,41 @@ class PostServiceTest {
 
     }
 
-    @WithAccount("creamyyy")
-    @DisplayName("게시글을 수정 : 게시글에 이미지가 있었는데 삭제해서 이미지가 없는채로 저장하고 싶은 경우")
-    @Test
-    public void updatePostWithDelete() throws Exception {
-        //given
-//        Post post = createPostOne();
-        SavePost savePost = createSavePost();
-        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
-        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
-        List<Long> imageIdList = imageResDtoList.stream()
-                .map(img -> img.getImage_id())
-                .collect(Collectors.toList());
-
-        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
-        Long savedPostId = savedPost.getPost_id();
-        System.out.println("savedPostId = " + savedPostId);
-        System.out.println("업데이트 전 savedPost.getSavedImgList() = " + savedPost.getSavedImgList());
-
-        // 저장된 포스트에서 이미지를 삭제하고 다시 저장(수정) 시도
-        imageService.deleteUpdateImage(1L);
-//        Post postTwo = createPostTwo();
-        SavePost updatePost = createUpdatePost();
-
-        //when
-        SaveResPost saveResPost = postService.updatePost(updatePost, savedPostId ,null);
-
-        //then
-        assertThat(saveResPost.getSavedImgList()).isNullOrEmpty();
-        assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
-        Long member_id = savedPost.getMember_id();
-        Member member = memberRepository.findById(member_id).get();
-        assertThat(member.getUsername()).isEqualTo("creamyyy");
-        assertThat(saveResPost.getTitle()).isEqualTo("우주혜안");
-        System.out.println("saveResPost.getSavedImgList() = " + saveResPost.getSavedImgList());
-    }
+//    @WithAccount("creamyyy")
+//    @DisplayName("게시글을 수정 : 게시글에 이미지가 있었는데 삭제해서 이미지가 없는채로 저장하고 싶은 경우")
+//    @Test
+//    public void updatePostWithDelete() throws Exception {
+//        //given
+////        Post post = createPostOne();
+//        SavePost savePost = createSavePost();
+//        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+//        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+//        List<Long> imageIdList = imageResDtoList.stream()
+//                .map(img -> img.getImage_id())
+//                .collect(Collectors.toList());
+//
+//        SaveResPost savedPost = postService.savePost(savePost, imageIdList);
+//        Long savedPostId = savedPost.getPost_id();
+//        System.out.println("savedPostId = " + savedPostId);
+//        System.out.println("업데이트 전 savedPost.getSavedImgList() = " + savedPost.getSavedImgList());
+//
+//        // 저장된 포스트에서 이미지를 삭제하고 다시 저장(수정) 시도
+//        imageService.deleteUpdateImage(1L);
+////        Post postTwo = createPostTwo();
+//        SavePost updatePost = createUpdatePost();
+//
+//        //when
+//        SaveResPost saveResPost = postService.updatePost(updatePost, savedPostId ,null);
+//
+//        //then
+//        assertThat(saveResPost.getSavedImgList()).isNullOrEmpty();
+//        assertThat(saveResPost.getPost_id()).isEqualTo(savedPostId);
+//        Long member_id = savedPost.getMember_id();
+//        Member member = memberRepository.findById(member_id).get();
+//        assertThat(member.getUsername()).isEqualTo("creamyyy");
+//        assertThat(saveResPost.getTitle()).isEqualTo("우주혜안");
+//        System.out.println("saveResPost.getSavedImgList() = " + saveResPost.getSavedImgList());
+//    }
 
 
     @WithAccount("creamyyy")

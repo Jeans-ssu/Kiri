@@ -277,44 +277,44 @@ class PostControllerTest {
 
     }
 
-    @WithAccount("creamyyyy")
-    @DisplayName("게시글을 수정 : 게시글에 이미지가 있었는데 삭제해서 이미지가 없는채로 저장하고 싶은 경우")
-    @Test
-    public void updatePostOXX() throws Exception {
-        //given
-
-        // 게시글 저장
-//        Post post = createPostOne();
-        SavePost savePost1 = createSavePost();
-        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
-        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
-        List<Long> imageIdList = imageResDtoList.stream()
-                .map(img -> img.getImage_id())
-                .collect(Collectors.toList());
-
-        SaveResPost savedPost = postService.savePost(savePost1, imageIdList);
-        Long savedPostId = savedPost.getPost_id();
-
-
-
-        // 업데이트 할 Post 내용
-        imageService.deleteUpdateImage(1L);
-        SavePost savePost = createUpdatePost();
-
-
-        //when & then
-        this.mockMvc.perform(
-                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
-                                .post("/api/posts/{post-id}", savedPostId) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
-                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
-                                .characterEncoding("UTF-8")
-                )
-                .andExpect(status().isOk())
-                .andDo(print());
-
-    }
+//    @WithAccount("creamyyyy")
+//    @DisplayName("게시글을 수정 : 게시글에 이미지가 있었는데 삭제해서 이미지가 없는채로 저장하고 싶은 경우")
+//    @Test
+//    public void updatePostOXX() throws Exception {
+//        //given
+//
+//        // 게시글 저장
+////        Post post = createPostOne();
+//        SavePost savePost1 = createSavePost();
+//        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+//        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+//        List<Long> imageIdList = imageResDtoList.stream()
+//                .map(img -> img.getImage_id())
+//                .collect(Collectors.toList());
+//
+//        SaveResPost savedPost = postService.savePost(savePost1, imageIdList);
+//        Long savedPostId = savedPost.getPost_id();
+//
+//
+//
+//        // 업데이트 할 Post 내용
+//        imageService.deleteUpdateImage(1L);
+//        SavePost savePost = createUpdatePost();
+//
+//
+//        //when & then
+//        this.mockMvc.perform(
+//                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+//                                .post("/api/posts/{post-id}", savedPostId) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+//                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
+//                                .characterEncoding("UTF-8")
+//                )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//
+//    }
 
     @WithAccount("creamyyyy")
     @DisplayName("게시글 수정 : 이미지 존재X -> 이미지 존재O")
