@@ -193,8 +193,6 @@ const EventInfoInput = ({
 
   useEffect(() => {
     if (ocrResult.length !== 0) {
-      console.log('true?', ocrMode);
-      console.log(ocrResult);
       setInfo({
         host: JSON.parse(ocrResult)?.host,
         tel: JSON.parse(ocrResult)?.contact,
@@ -206,7 +204,6 @@ const EventInfoInput = ({
         location: JSON.parse(ocrResult)?.location,
       });
       dispatch(setOcrMode(false));
-      console.log('after false');
     }
   }, [ocrMode]);
 

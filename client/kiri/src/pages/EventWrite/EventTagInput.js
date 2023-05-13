@@ -1,9 +1,20 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectOcrMode, selectOcrResult } from 'store/modules/ocrSlice';
 
 export const EventTagInput = () => {
   const [tagList, setTagList] = useState([]);
   const [tagInput, setTagInput] = useState('');
+
+  const ocrResult = useSelector(selectOcrResult);
+  const ocrMode = useSelector(selectOcrMode);
+
+  useEffect(() => {
+    if (ocrResult.length !== 0) {
+      setTagList(JSON.parse(ocrResult)?.keyword);
+    }
+  }, [ocrMode]);
 
   const handleChangeTagInput = (e) => {
     setTagInput(e.target.value);
