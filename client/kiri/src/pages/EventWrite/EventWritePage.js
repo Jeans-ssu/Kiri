@@ -12,6 +12,7 @@ import { setAuthHeader } from 'api/setAuthHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import PostModal from 'components/PostModal';
 import { setOcrResult } from 'store/modules/ocrSlice';
+import { Spinner } from 'components/spinner/spinner';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -55,6 +56,8 @@ const EventWritePage = () => {
   setAuthHeader(accessToken);
 
   const dispatch = useDispatch();
+
+  const [isOpenSpinner, setIsOpenSpinner] = useState(false);
 
   useEffect(() => {
     dispatch(setOcrResult(''));
@@ -276,6 +279,7 @@ const EventWritePage = () => {
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
       <EventWritePageContainer className="pagecontainer">
+        <Spinner isOpen={isOpenSpinner} />
         <EventTitleInput
           title={title}
           setTitle={setTitle}
@@ -308,6 +312,7 @@ const EventWritePage = () => {
           imgList={imgList}
           setImgList={setImgList}
           errorMessage={errorMessage}
+          setIsOpenSpinner={setIsOpenSpinner}
         />
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
