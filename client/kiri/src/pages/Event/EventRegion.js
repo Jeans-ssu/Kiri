@@ -153,16 +153,17 @@ const EventRegion = () => {
           </div>
         </SchoolRegionBox>
         <CheckboxDiv>
-          {field.map((el) => (
-            <>
+          {field.map((el, idx) => {
+            return (
               <EventTag
+                key={idx}
                 tag={el}
                 selectNavHandler={selectNavHandler}
                 result={result}
                 getEvent={getEvent}
               />
-            </>
-          ))}
+            );
+          })}
         </CheckboxDiv>
         <Bar />
         <EventOrderBox>
