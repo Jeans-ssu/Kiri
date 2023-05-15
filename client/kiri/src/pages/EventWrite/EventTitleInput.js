@@ -25,6 +25,9 @@ const TitleHeader = styled.div`
     color: ${({ theme }) => theme.colors.mainColor};
     font-size: 20px;
   }
+  @media screen and (max-width: 767px) {
+    font-size: 18px;
+  }
 `;
 
 const TitleInput = styled.input`

@@ -29,6 +29,7 @@ const EventInfoInputContainer = styled.div`
       margin-right: 5px;
     }
     margin: 15px auto;
+    padding: 10px 10px 0px 10px;
   }
 `;
 
@@ -70,6 +71,7 @@ const InfoHeader = styled.div`
     width: 85px;
     margin-bottom: 5px;
     margin-right: auto;
+    font-size: 13px;
   }
 `;
 

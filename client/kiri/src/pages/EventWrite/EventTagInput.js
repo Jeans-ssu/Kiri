@@ -27,7 +27,10 @@ export const EventTagInput = () => {
 
   return (
     <EventTagInputContainer>
-      <TagHeader>태그</TagHeader>
+      <TagHeader>
+        <div>태그</div>
+        <div className="maximum">(최대 5개)</div>
+      </TagHeader>
       <TagsContainer>
         <TagInput
           placeholder="태그를 입력하세요"
@@ -67,6 +70,17 @@ const TagHeader = styled.div`
   color: ${({ theme }) => theme.colors.dark};
   width: 70px;
   margin-top: 7px;
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
+  div.maximum {
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.gray};
+    font-size: 12px;
+    @media screen and (max-width: 767px) {
+      font-size: 10px;
+    }
+  }
 `;
 
 const TagsContainer = styled.div`
@@ -84,6 +98,9 @@ const TagInput = styled.input`
   }
   width: 120px;
   padding-bottom: 10px;
+  @media screen and (max-width: 767px) {
+    font-size: 12px;
+  }
 `;
 
 const Tag = styled.button`
