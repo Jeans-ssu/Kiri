@@ -14,6 +14,7 @@ const EventEtcInput = ({
   imgList,
   setImgList,
   errorMessage,
+  setIsOpenSpinner,
 }) => {
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
@@ -111,6 +112,7 @@ const EventEtcInput = ({
                       idx={idx}
                       deleteImg={deleteImg}
                       file={file}
+                      setIsOpenSpinner={setIsOpenSpinner}
                     />
                   );
                 })
@@ -122,6 +124,7 @@ const EventEtcInput = ({
                       idx={idx}
                       deleteImg={deleteImg}
                       file={file}
+                      setIsOpenSpinner={setIsOpenSpinner}
                     />
                   );
                 })

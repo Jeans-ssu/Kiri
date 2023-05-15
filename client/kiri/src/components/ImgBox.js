@@ -7,7 +7,7 @@ import styled from 'styled-components';
 const GoogleVisionApiKey = process.env.REACT_APP_API_KEY;
 const NodeServer = process.env.REACT_APP_NODE;
 
-const ImgBox = ({ el, idx, deleteImg, file }) => {
+const ImgBox = ({ el, idx, deleteImg, file, setIsOpenSpinner }) => {
   const dispatch = useDispatch();
 
   const [imageUrl, setImageUrl] = useState(null);
@@ -24,6 +24,7 @@ const ImgBox = ({ el, idx, deleteImg, file }) => {
 
   const analyzeImage = async () => {
     try {
+      setIsOpenSpinner(true);
       const body = JSON.stringify({
         requests: [
           {
@@ -69,8 +70,11 @@ const ImgBox = ({ el, idx, deleteImg, file }) => {
           const obj = data.message.slice(first, end + 1);
           dispatch(setOcrResult(obj));
           dispatch(setOcrMode(true));
+          setIsOpenSpinner(false);
+
         });
     } catch (error) {
+      setIsOpenSpinner(false);
       console.log(error);
     }
   };
