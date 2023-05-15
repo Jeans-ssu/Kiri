@@ -147,7 +147,7 @@ const EventPage = () => {
                   `}
                       onClick={() => selectFilterHandler(idx)}
                     >
-                      <h2>{el}</h2>
+                      <h2 className={el}>{el}</h2>
                     </FilterLi>
                   </Link>
                 );
@@ -289,6 +289,14 @@ const SchoolRegionBox = styled.div`
     padding-left: 30px;
     margin-bottom: 10px;
     margin-top: 0;
+    @media screen and (max-width: 767px) {
+      font-size: 20px;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    h2.지역 {
+      padding-left: 15px;
+    }
   }
 `;
 

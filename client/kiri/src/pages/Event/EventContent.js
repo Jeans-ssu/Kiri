@@ -167,11 +167,11 @@ const EventListMain = styled.main`
   @media screen and (max-width: 767px) {
     // << front/fix/mobileEvent
     min-width: 350px;
-    width: 90%;
+    width: 100%;
 
     // dev-front
-    width: 90vw;
-    justify-content: space-between;
+    //width: 90vw;
+    //justify-content: space-between;
   }
 `;
 
@@ -194,12 +194,14 @@ const EventContainer = styled.div`
     margin: auto;
     width: 100%;
     min-width: 350px;
+    padding: 0;
   }
 
   @media screen and (max-width: 395px) {
     min-width: 350px;
     justify-content: center;
     margin: auto;
+    padding: 0;
   }
   // dev-front
   //  @media screen and (max-width: 767px) {
@@ -251,8 +253,8 @@ const EventList = styled.div`
 
   // mobileEvent
   @media screen and (max-width: 395px) {
-    width: 40%;
-    margin-left: -15px;
+    width: 50%;
+    margin-left: 0;
     // dev-front
     //  @media screen and (max-width: 767px) {
     //   h4 {
