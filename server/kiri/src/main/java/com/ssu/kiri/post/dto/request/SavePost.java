@@ -58,4 +58,6 @@ public class SavePost {
     @NotNull
     private LocalDateTime finishPostTime;
 
+    private List<String> tagList; // 태그 리스트
+
 }

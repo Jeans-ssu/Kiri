@@ -1,6 +1,7 @@
 package com.ssu.kiri.post;
 
 
+import com.ssu.kiri.common.dto.MultipleResponseDto;
 import com.ssu.kiri.image.Image;
 import com.ssu.kiri.image.ImageRepository;
 import com.ssu.kiri.image.ImageService;
@@ -8,17 +9,18 @@ import com.ssu.kiri.member.Member;
 import com.ssu.kiri.member.MemberRepository;
 import com.ssu.kiri.post.dto.request.SavePost;
 import com.ssu.kiri.post.dto.response.*;
+import com.ssu.kiri.posttag.Posttag;
+import com.ssu.kiri.posttag.PosttagRepository;
+import com.ssu.kiri.posttag.PosttagService;
 import com.ssu.kiri.scrap.Scrap;
 import com.ssu.kiri.scrap.ScrapRepository;
 import com.ssu.kiri.scrap.ScrapService;
-import com.ssu.kiri.scrap.dto.ScrapResCal;
 import com.ssu.kiri.security.auth.PrincipalDetails;
+import com.ssu.kiri.tag.Tag;
+import com.ssu.kiri.tag.TagRepository;
+import com.ssu.kiri.tag.TagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,10 @@ public class PostService {
     private final ScrapRepository scrapRepository;
     private final ScrapService scrapService;
     private final MemberRepository memberRepository;
+    private final PosttagService posttagService;
+    private final PosttagRepository posttagRepository;
+    private final TagRepository tagRepository;
+    private final TagService tagService;
 
     public ResponseEntity<?> home() {
         // 최근 이벤트 16개, 관심있는 이벤트 10개, 인기있는 이벤트 10개
@@ -48,7 +54,7 @@ public class PostService {
     }
 
     // 게시글 상세보기
-    public DetailPost detailPost(Long id, Member member) {
+    public MultipleResponseDto detailPost(Long id, Member member) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 포스트를 상세보기할 수 없습니다."));
 
@@ -61,10 +67,40 @@ public class PostService {
                 .map(img -> img.getId())
                 .collect(Collectors.toList());
 
+        // ===== tag 관련
+
+        // 추천 태그 글 관련
+        List<String> tagsByPost = new ArrayList<>();
+        List<RecommendPost> recommendPostList = new ArrayList<>();
+        List<Long> recommendPostIdList = new ArrayList<>();
+        List<Posttag> posttags = posttagRepository.findByPost(post);
+        if(posttags!=null && !posttags.isEmpty()) {
+            for (Posttag posttag : posttags) {
+                Long tag_id = posttag.getTag().getId();
+                List<Posttag> posttagbyTag = posttagRepository.findByTagId(tag_id);
+                for (Posttag posttagOne : posttagbyTag) {
+                    Post postByPT = posttagOne.getPost();
+                    if(postByPT.getId() != id && !recommendPostIdList.contains(postByPT.getId())) {
+                        List<String> recoTagList = posttagService.findTagsByPost(postByPT);
+                        RecommendPost recommendPost = RecommendPost.of(postByPT, recoTagList);
+                        recommendPostIdList.add(postByPT.getId());
+                        recommendPostList.add(recommendPost);
+                        break;
+                    }
+                }
+                tagsByPost.add(posttag.getTag().getTagname());
+            }
+        }
+
+
+//        List<String> tagsByPost = posttagService.findTagsByPost(post); // tagList
+        //==== tag 관련 끝
+
         // 회원가입을 안한 경우
         if(member == null) {
-            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList,false, imgIdList);
-            return detailPost;
+            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList,false, imgIdList, tagsByPost);
+            return new MultipleResponseDto(detailPost, recommendPostList);
+//            return detailPost;
         }
         else {
             Long member_id = member.getId();
@@ -73,9 +109,10 @@ public class PostService {
             Optional<Scrap> scrapOptional = scrapRepository.findByMemberAndPost(findMember, post);
             boolean isScrap = scrapOptional.isPresent();
             //System.out.println("isScrap 값을 출력 = " + isScrap);
-            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList, isScrap, imgIdList);
+            DetailPost detailPost = DetailPost.ofWithImage(post, imgUrlList, isScrap, imgIdList, tagsByPost);
 
-            return detailPost;
+            return new MultipleResponseDto(detailPost, recommendPostList);
+//            return detailPost;
         }
 
 
@@ -101,11 +138,39 @@ public class PostService {
         // post 저장
         Post savedPost = postRepository.save(newPost);
 
+        //=============================================================
+        // post와 tag 간의 관계인 PostTag 객체 생성해서 저장하기
+        List<String> tagList = post.getTagList();
+
+        if(tagList != null && !tagList.isEmpty()) {
+            for (String tag : tagList) {
+                Optional<Tag> byTag = tagRepository.findByTagname(tag);
+                if(byTag.isEmpty()) {
+                    // tag가 없으면 저장
+                    Tag savedTag = tagService.saveTag(tag);
+                    Posttag posttag = Posttag.savePostTag(savedPost, savedTag);
+                    posttagRepository.save(posttag);
+                }
+                else {
+                    Posttag posttag = Posttag.savePostTag(savedPost, byTag.get());// tag가 존재하면 바로 저장
+                    posttagRepository.save(posttag);
+                }
+
+            }
+        }
+
+        // Posttag에서 Post를 이용해서 해당 Post의 tag 리스트들 가져오기
+        List<String> tagsByPost = posttagService.findTagsByPost(savedPost);
+
+
+        //=============================================================
+
         //System.out.println("등록할 이미지가 없는 경우 뭐라 나오냐 imageIdList = " + imageIdList);
         // post에 이미지가 있는 경우
         if(imageIdList == null || imageIdList.isEmpty()) {
             //System.out.println("등록할 이미지가 없는 거 확인");
-            SaveResPost saveResPost = SaveResPost.of(savedPost);
+            SaveResPost saveResPost = SaveResPost.of(savedPost, tagsByPost);
+
             return saveResPost;
         }
 
@@ -115,7 +180,7 @@ public class PostService {
         // image 에 post 저장
         List<String> savedImageUrlList = imageService.savePost(savedPost, imageIdList);
 
-        SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, savedImageUrlList);
+        SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, savedImageUrlList, tagsByPost);
 
         return saveResPost;
     }
@@ -133,6 +198,36 @@ public class PostService {
         findPost.updatePost(savePost);
         Post savedPost = postRepository.save(findPost);
 
+        // ===== tag 관련
+        // tag 다 삭제하고 다시 만들기
+
+        List<String> tagList = savePost.getTagList();
+        List<Posttag> posttagList = posttagRepository.findByPost(savedPost);
+        for (Posttag posttag : posttagList) { // 다 삭제하고 tag 다시 설정하기
+            posttagService.deletePostTag(posttag.getId());
+        }
+        if(tagList != null && !tagList.isEmpty()) {
+            for (String tag : tagList) {
+                Optional<Tag> byTag = tagRepository.findByTagname(tag);
+                if(byTag.isEmpty()) {
+                    // tag가 없으면 저장
+                    Tag savedTag = tagService.saveTag(tag);
+                    Posttag posttag = Posttag.savePostTag(savedPost, savedTag);
+                    posttagRepository.save(posttag);
+                }
+                else {
+                    Posttag posttag = Posttag.savePostTag(savedPost, byTag.get());// tag가 존재하면 바로 저장
+                    posttagRepository.save(posttag);
+                }
+
+            }
+        }
+
+        // Posttag에서 Post를 이용해서 해당 Post의 tag 리스트들 가져오기
+        List<String> tagsByPost = posttagService.findTagsByPost(savedPost);
+
+        // ===== tag 관련 끝
+
 
         // ====== 이미지 수정하기
 
@@ -141,17 +236,17 @@ public class PostService {
              List<String> existedImageUrlList = imageService.findImageUrlsByPostId(savedPost.getId());
              // 원래 포스트에 이미지가 존재하지 않은 경우
              if(existedImageUrlList == null || existedImageUrlList.isEmpty()) {
-                 SaveResPost saveResPost = SaveResPost.of(savedPost);
+                 SaveResPost saveResPost = SaveResPost.of(savedPost, tagsByPost);
                  return saveResPost;
              }
              // 원래 포스트에 이미지가 존재하지만 수정하지 않는 경우
-             SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, existedImageUrlList);
+             SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, existedImageUrlList, tagsByPost);
              return saveResPost;
          }
 
         // 게시글을 수정할때 이미지를 수정하는 경우,
         List<String> savedImageUrlList = imageService.savePost(savedPost, imageIdList);
-        SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, savedImageUrlList);
+        SaveResPost saveResPost = SaveResPost.ofWithImage(savedPost, savedImageUrlList, tagsByPost);
 
         return saveResPost;
 
@@ -160,6 +255,12 @@ public class PostService {
 
 
     public void deletePost(Long id) {
+        // 관련 tag 관계 삭제
+        List<Posttag> posttagList = posttagRepository.findByPostId(id);
+        for (Posttag posttag : posttagList) {
+            posttagService.deletePostTag(posttag.getId());
+        }
+
         // 1. 관련 이미지 삭제하기
         List<Image> imageList = imageRepository.findUrlByPostId(id);
         for (Image image : imageList) {

@@ -106,10 +106,12 @@ dependencies {
 	testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.1.0'
 }
 
-tasks.named('test') {
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}
+test {
 	useJUnitPlatform()
 }
-
 
 //querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
