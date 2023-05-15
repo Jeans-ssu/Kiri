@@ -290,7 +290,7 @@ const SchoolRegionBox = styled.div`
     margin-bottom: 10px;
     margin-top: 0;
     @media screen and (max-width: 767px) {
-      font-size: 20px;
+      font-size: 18px;
     }
   }
   @media screen and (max-width: 767px) {
@@ -368,6 +368,7 @@ const SearchInput = styled.input`
   @media screen and (max-width: 767px) {
     margin-top: 0;
     width: 90%;
+    height: 13px;
   }
 `;
 

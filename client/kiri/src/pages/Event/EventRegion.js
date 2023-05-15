@@ -207,6 +207,10 @@ const OrderInput = styled.select`
   &:focus {
     outline: none;
   }
+  @media screen and (max-width: 767px) {
+    font-size: 12px;
+    width: 70px;
+  }
 `;
 
 const EventFieldPageContainer = styled.div`
@@ -254,7 +258,7 @@ const SchoolRegionBox = styled.div`
     h2 {
       margin-bottom: 0px;
       @media screen and (max-width: 767px) {
-        font-size: 20px;
+        font-size: 18px;
       }
     }
     h2.지역 {
@@ -303,6 +307,11 @@ const SelectInput = styled.select`
   padding-left: 3px;
   &:focus {
     outline: none;
+  }
+  @media screen and (max-width: 767px) {
+    width: 55px;
+    height: 24px;
+    font-size: 11px;
   }
 `;
 
