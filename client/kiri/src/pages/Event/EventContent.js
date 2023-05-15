@@ -106,8 +106,13 @@ const EventTagBox = styled.div`
   width: 35px;
   height: 22px;
   display: flex;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   border-radius: 10px;
+  @media screen and (max-width: 767px) {
+    width: 30px;
+    height: 18px;
+    font-size: 10px;
+  }
 `;
 
 const EventTagSpan = styled.span`
@@ -222,6 +227,9 @@ const EventList = styled.div`
     margin-bottom: 0px;
     cursor: pointer;
     color: ${({ theme }) => theme.colors.dark};
+    @media screen and (max-width: 767px) {
+      font-size: 13px;
+    }
   }
 
   div.info {
@@ -231,24 +239,39 @@ const EventList = styled.div`
   .host {
     font-size: 14px;
     color: #636363;
+    @media screen and (max-width: 767px) {
+      font-size: 12px;
+    }
   }
 
   .dday {
     margin-top: 0;
     font-size: 12px;
     color: #59b89d;
+    @media screen and (max-width: 767px) {
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
   }
 
   .watch {
-    margin-top: 0;
+    margin-top: 1px;
     font-size: 12px;
     color: #737373;
     margin-left: 3px;
+    @media screen and (max-width: 767px) {
+      font-size: 11px;
+      margin-top: 2px;
+    }
   }
 
   .eyeicon {
     margin-left: 10px;
     color: #737373;
+    @media screen and (max-width: 767px) {
+      width: 20px;
+      margin-left: 5px;
+    }
   }
 
   // mobileEvent
