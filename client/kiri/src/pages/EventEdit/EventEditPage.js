@@ -10,6 +10,7 @@ import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { useSelector } from 'react-redux';
 import PostModal from 'components/PostModal';
+import { EventTagInput } from 'pages/EventWrite/EventTagInput';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -326,6 +327,7 @@ const EventEditPage = () => {
           explainRef={explainRef}
           errorMessage={errorMessage}
         />
+        <EventTagInput />
         <EventEtcInput
           link={link}
           setLink={setLink}
