@@ -57,6 +57,9 @@ const EventKeywordPageContainer = styled.div`
     margin-top: 0;
     font-size: 14px;
     color: ${({ theme }) => theme.colors.gray};
+    @media screen and (max-width: 767px) {
+      padding-left: 15px;
+    }
   }
 
   .titlesearch {

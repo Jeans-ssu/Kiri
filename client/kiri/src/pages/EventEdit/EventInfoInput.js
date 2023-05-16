@@ -7,7 +7,8 @@ import { FiSearch } from 'react-icons/fi';
 
 const MobileContainer = styled.div`
   @media screen and (max-width: 767px) {
-    margin-left: -10px;
+    margin: 0 auto;
+    width: 90%;
   }
 `;
 
@@ -16,7 +17,6 @@ const EventInfoInputContainer = styled.div`
   margin: 15px 0;
   padding: 15px 15px 5px 15px;
   @media screen and (max-width: 767px) {
-    width: 87%;
     .smallSize {
       display: flex;
       flex-direction: row;
@@ -205,7 +205,7 @@ const EventInfoInput = ({
           </ErrorMessageMobileBox>
           <InfoTextInput
             type="text"
-            value={info.host}
+            value={info?.host}
             onChange={(e) => handleChangeInput(e, 'host')}
             ref={hostRef}
           />
@@ -344,13 +344,13 @@ const EventInfoInput = ({
             <InfoTextInput
               type="time"
               className="smallSize"
-              value={info.startTime}
+              value={info?.startTime}
               onChange={(e) => handleChangeInput(e, 'startTime')}
             />
             <InfoTextInput
               type="time"
               className="smallSize"
-              value={info.endTime}
+              value={info?.endTime}
               onChange={(e) => handleChangeInput(e, 'endTime')}
             />
           </InfoSmallBox>
@@ -359,7 +359,7 @@ const EventInfoInput = ({
           <InfoHeader>장소</InfoHeader>
           <InfoTextInput
             type="text"
-            value={info.location}
+            value={info?.location}
             onChange={(e) => handleChangeInput(e, 'location')}
           />
         </InfoContainer>

@@ -1,15 +1,18 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PageContainer from 'containers/PageContainer';
 import styled from 'styled-components';
 import EventTitleInput from './EventTitleInput';
 import EventInfoInput from './EventInfoInput';
 import EventExplainInput from './EventExplainInput';
+import { EventTagInput } from './EventTagInput';
 import EventEtcInput from './EventEtcInput';
 import axios from '../../api/axios';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PostModal from 'components/PostModal';
+import { setOcrResult } from 'store/modules/ocrSlice';
+import { Spinner } from 'components/spinner/spinner';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -21,7 +24,7 @@ const EventWritePageContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 10px;
+    padding: 0px;
     margin: auto;
   }
 `;
@@ -51,6 +54,14 @@ const WriteBtn = styled.button`
 const EventWritePage = () => {
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
+
+  const dispatch = useDispatch();
+
+  const [isOpenSpinner, setIsOpenSpinner] = useState(false);
+
+  useEffect(() => {
+    dispatch(setOcrResult(''));
+  }, []);
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [title, setTitle] = useState('');
@@ -268,6 +279,7 @@ const EventWritePage = () => {
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
       <EventWritePageContainer className="pagecontainer">
+        <Spinner isOpen={isOpenSpinner} />
         <EventTitleInput
           title={title}
           setTitle={setTitle}
@@ -291,6 +303,7 @@ const EventWritePage = () => {
           explainRef={explainRef}
           errorMessage={errorMessage}
         />
+        <EventTagInput />
         <EventEtcInput
           link={link}
           setLink={setLink}
@@ -299,6 +312,7 @@ const EventWritePage = () => {
           imgList={imgList}
           setImgList={setImgList}
           errorMessage={errorMessage}
+          setIsOpenSpinner={setIsOpenSpinner}
         />
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>

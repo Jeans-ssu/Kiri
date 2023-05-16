@@ -3,6 +3,10 @@ import styled from 'styled-components';
 const EventTitleInputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 767px) {
+    margin: 0 auto;
+    width: 90%;
+  }
 `;
 
 const TitleHeader = styled.div`
@@ -34,7 +38,6 @@ const TitleInput = styled.input`
     border: 1px solid ${({ theme }) => theme.colors.mainColor};
   }
   @media screen and (max-width: 767px) {
-    width: 93vw;
   }
 `;
 
@@ -58,7 +61,11 @@ const EventTitleInput = ({ title, setTitle, titleRef, errorMessage }) => {
         <span className="green">*</span>
         <ErrorMessageBox> {errorMessage.titleErrorMessage}</ErrorMessageBox>
       </TitleHeader>
-      <TitleInput value={title} onChange={handleChangeInput} ref={titleRef} />
+      <TitleInput
+        value={title || ''}
+        onChange={handleChangeInput}
+        ref={titleRef}
+      />
     </EventTitleInputContainer>
   );
 };

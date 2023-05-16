@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
-import { Icon } from '@iconify/react';
+import { useRef, useState } from 'react';
 import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
+import ImgBox from 'components/ImgBox';
 
 const EventEtcInput = ({
   link,
@@ -14,10 +14,13 @@ const EventEtcInput = ({
   imgList,
   setImgList,
   errorMessage,
+  setIsOpenSpinner,
 }) => {
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
+
+  const [file, setFile] = useState();
 
   const uploadImg = (formData) => {
     axios
@@ -54,6 +57,8 @@ const EventEtcInput = ({
     } else {
       setImg(nowImageUrlList);
     }
+
+    setFile(e.target.files);
   };
 
   const handleChangeInput = (e) => {
@@ -101,22 +106,26 @@ const EventEtcInput = ({
             ? img.length >= 6
               ? img.map((el, idx) => {
                   return (
-                    <GridBox key={idx}>
-                      <GridImagePreview key={idx} alt="img" src={el} />
-                      <GridRemoveBtn onClick={() => deleteImg(idx)}>
-                        <Icon className="X" icon="ic:round-close" />
-                      </GridRemoveBtn>
-                    </GridBox>
+                    <ImgBox
+                      key={idx}
+                      el={el}
+                      idx={idx}
+                      deleteImg={deleteImg}
+                      file={file}
+                      setIsOpenSpinner={setIsOpenSpinner}
+                    />
                   );
                 })
               : img.map((el, idx) => {
                   return (
-                    <GridBox key={idx}>
-                      <GridImagePreview key={idx} alt="img" src={el} />
-                      <GridRemoveBtn onClick={() => deleteImg(idx)}>
-                        <Icon className="X" icon="ic:round-close" />
-                      </GridRemoveBtn>
-                    </GridBox>
+                    <ImgBox
+                      key={idx}
+                      el={el}
+                      idx={idx}
+                      deleteImg={deleteImg}
+                      file={file}
+                      setIsOpenSpinner={setIsOpenSpinner}
+                    />
                   );
                 })
             : ''}
@@ -138,6 +147,10 @@ const ErrorMessageBox = styled.div`
 const EventEtcInputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 767px) {
+    margin: 15px auto;
+    width: 90%;
+  }
 `;
 
 const EtcContainer = styled.div`
@@ -161,6 +174,11 @@ const EtcContainer = styled.div`
     &:hover {
       cursor: pointer;
     }
+    @media screen and (max-width: 767px) {
+      width: 60px;
+      height: 24px;
+      font-size: 11px;
+    }
   }
 `;
 const EtcHeader = styled.div`
@@ -171,6 +189,9 @@ const EtcHeader = styled.div`
     color: ${({ theme }) => theme.colors.mainColor};
     font-size: 18px;
     margin-left: 3px;
+  }
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
   }
 `;
 const LinkInput = styled.input`
@@ -225,34 +246,6 @@ const GridImageBox = styled.div`
   @media screen and (max-width: 767px) {
     grid-gap: 18px 18px;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-`;
-
-const GridBox = styled.div`
-  display: flex;
-`;
-
-const GridImagePreview = styled.img`
-  width: 135px;
-  height: 135px;
-  transform: translate(50, 50);
-  object-fit: cover;
-  margin: auto;
-  @media screen and (max-width: 767px) {
-    width: 40px;
-    height: 40px;
-  }
-`;
-
-const GridRemoveBtn = styled.button`
-  border: none;
-  background: transparent;
-  display: flex;
-  cursor: pointer;
-  margin-left: 2px;
-  padding: 0;
-  @media screen and (max-width: 767px) {
-    margin-left: 0px;
   }
 `;
 

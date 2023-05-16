@@ -5,7 +5,8 @@ const EventExplainInputContainer = styled.div`
   flex-direction: column;
   margin-bottom: 15px;
   @media screen and (max-width: 767px) {
-    width: 93vw;
+    margin: 0 auto;
+    width: 90%;
   }
 `;
 
@@ -20,6 +21,9 @@ const ExplainHeader = styled.div`
     margin-left: 3px;
   }
   display: flex;
+  @media screen and (max-width: 767px) {
+    font-size: 18px;
+  }
 `;
 
 const ExplainInput = styled.textarea`
