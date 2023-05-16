@@ -71,7 +71,6 @@ const ImgBox = ({ el, idx, deleteImg, file, setIsOpenSpinner }) => {
           dispatch(setOcrResult(obj));
           dispatch(setOcrMode(true));
           setIsOpenSpinner(false);
-
         });
     } catch (error) {
       setIsOpenSpinner(false);
