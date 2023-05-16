@@ -16,11 +16,15 @@ jobs:
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
           echo "REACT_APP_OPEN_API=${{ secrets.REACT_APP_OPEN_API }}" >> .env
+          echo "REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }}" >> .env
+          echo "REACT_APP_NODE=${{ secrets.REACT_APP_NODE }}" >> .env
           cat .env
         working-directory: ./client/kiri
         env:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           REACT_APP_OPEN_API: ${{ secrets.REACT_APP_OPEN_API }}
+          REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
+          REACT_APP_NODE: ${{ secrets.REACT_APP_NODE }}
       - name: Build
         run: npm run build
         working-directory: ./client/kiri
