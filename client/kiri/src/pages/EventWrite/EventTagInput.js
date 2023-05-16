@@ -69,7 +69,7 @@ export const EventTagInput = () => {
 
 const EventTagInputContainer = styled.div`
   display: flex;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   @media screen and (max-width: 767px) {
     margin: 15px auto 5px;
     width: 90%;

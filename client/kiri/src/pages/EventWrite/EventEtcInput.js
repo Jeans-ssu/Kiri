@@ -156,7 +156,7 @@ const EventEtcInputContainer = styled.div`
 const EtcContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 
   .label {
     display: flex;
@@ -201,6 +201,7 @@ const LinkInput = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 3px;
   outline: none;
+
   @media screen and (max-width: 767px) {
     width: 65vw;
   }
