@@ -174,6 +174,11 @@ const EtcContainer = styled.div`
     &:hover {
       cursor: pointer;
     }
+    @media screen and (max-width: 767px) {
+      width: 60px;
+      height: 24px;
+      font-size: 11px;
+    }
   }
 `;
 const EtcHeader = styled.div`
@@ -184,6 +189,9 @@ const EtcHeader = styled.div`
     color: ${({ theme }) => theme.colors.mainColor};
     font-size: 18px;
     margin-left: 3px;
+  }
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
   }
 `;
 const LinkInput = styled.input`

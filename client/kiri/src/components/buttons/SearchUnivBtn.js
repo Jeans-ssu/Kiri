@@ -12,4 +12,8 @@ export const SearchUnivBtn = styled.button`
   &:hover {
     cursor: pointer;
   }
+  @media screen and (max-width: 767px) {
+    font-size: 12px;
+    width: 70px;
+  }
 `;

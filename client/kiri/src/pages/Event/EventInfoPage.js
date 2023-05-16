@@ -311,6 +311,9 @@ const DeleteBtn = styled.button`
 
 const EventInfoContainer = styled.div`
   padding: 0 40px 0 40px;
+  @media screen and (max-width: 767px) {
+    padding: 0 15px;
+  }
 `;
 
 const EventTopdiv = styled.div``;
@@ -329,6 +332,12 @@ const EventUpdiv = styled.div`
 const EventTitlediv = styled.div`
   h1 {
     margin: 0;
+    @media screen and (max-width: 767px) {
+      font-size: 20px;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    width: 260px;
   }
 `;
 
@@ -344,6 +353,9 @@ const EventBookmarkdiv = styled.div`
   align-items: center;
   cursor: pointer;
   margin-left: auto;
+  @media screen and (max-width: 767px) {
+    margin-left: 5px;
+  }
 `;
 
 const EventPerioddiv = styled.div`
@@ -352,6 +364,7 @@ const EventPerioddiv = styled.div`
   margin-top: 10px;
   @media screen and (max-width: 767px) {
     flex-direction: column;
+    font-size: 14px;
   }
 `;
 
@@ -410,13 +423,18 @@ const EventPosterdiv = styled.div`
 
 const EventInfodiv = styled.div`
   margin-left: 40px;
+  hr {
+    width: 504px;
+  }
+
   @media screen and (max-width: 767px) {
     margin-top: 35px;
     margin-left: 0;
-  }
-
-  hr {
-    width: 504px;
+    font-size: 14px;
+    hr {
+      margin-left: 0;
+      width: 100%;
+    }
   }
 `;
 
@@ -447,6 +465,15 @@ const InfoBox = styled.div`
 
   p {
     margin-top: 5px;
+  }
+  @media screen and (max-width: 767px) {
+    span {
+      font-size: 16px;
+    }
+    p {
+      font-size: 12px;
+      margin-top: 10px;
+    }
   }
 `;
 

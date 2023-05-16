@@ -133,7 +133,7 @@ const EventRegion = () => {
                   `}
                   onClick={() => selectFilterHandler(idx)}
                 >
-                  <h2>{el}</h2>
+                  <h2 className={el}>{el}</h2>
                 </FilterLi>
               </Link>
             );
@@ -153,16 +153,17 @@ const EventRegion = () => {
           </div>
         </SchoolRegionBox>
         <CheckboxDiv>
-          {field.map((el) => (
-            <>
+          {field.map((el, idx) => {
+            return (
               <EventTag
+                key={idx}
                 tag={el}
                 selectNavHandler={selectNavHandler}
                 result={result}
                 getEvent={getEvent}
               />
-            </>
-          ))}
+            );
+          })}
         </CheckboxDiv>
         <Bar />
         <EventOrderBox>
@@ -206,6 +207,10 @@ const OrderInput = styled.select`
   font-size: 14px;
   &:focus {
     outline: none;
+  }
+  @media screen and (max-width: 767px) {
+    font-size: 12px;
+    width: 70px;
   }
 `;
 
@@ -253,6 +258,15 @@ const SchoolRegionBox = styled.div`
     margin-left: -15px;
     h2 {
       margin-bottom: 0px;
+      @media screen and (max-width: 767px) {
+        font-size: 18px;
+      }
+    }
+    h2.지역 {
+      padding-left: 15px;
+    }
+    div.dropdown {
+      margin-left: 15px;
     }
   }
 `;
@@ -294,6 +308,11 @@ const SelectInput = styled.select`
   padding-left: 3px;
   &:focus {
     outline: none;
+  }
+  @media screen and (max-width: 767px) {
+    width: 55px;
+    height: 24px;
+    font-size: 11px;
   }
 `;
 

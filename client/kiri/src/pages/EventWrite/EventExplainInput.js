@@ -21,6 +21,9 @@ const ExplainHeader = styled.div`
     margin-left: 3px;
   }
   display: flex;
+  @media screen and (max-width: 767px) {
+    font-size: 18px;
+  }
 `;
 
 const ExplainInput = styled.textarea`
