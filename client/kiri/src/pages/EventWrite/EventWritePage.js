@@ -81,6 +81,7 @@ const EventWritePage = () => {
   });
   const [postid, setPostID] = useState();
   const [explain, setExplain] = useState('');
+  const [tag, setTag] = useState();
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
   const [imgList, setImgList] = useState([]);
@@ -224,6 +225,10 @@ const EventWritePage = () => {
     } else {
       const imgarr = getImageID();
       const formData = new FormData();
+      const tagstring = tag.toString();
+      console.log(typeof tagstring);
+      const tagarr = tagstring.split(',');
+      console.log(tagarr);
       formData.append('title', title);
       formData.append('scrap_count', 0);
       formData.append('email', info.email);
@@ -233,6 +238,9 @@ const EventWritePage = () => {
       formData.append('school', info.univ);
       formData.append('place', info.location);
       formData.append('organizer', info.host);
+      for (let i = 0; i < tagarr.length; i++) {
+        formData.append('tagList[]', tagarr[i]);
+      }
       formData.append('link', link);
       if (imgarr.length === 1) {
         formData.append('imageIdList[]', [Number(imgarr)]);
@@ -303,7 +311,7 @@ const EventWritePage = () => {
           explainRef={explainRef}
           errorMessage={errorMessage}
         />
-        <EventTagInput />
+        <EventTagInput setTag={setTag} />
         <EventEtcInput
           link={link}
           setLink={setLink}
