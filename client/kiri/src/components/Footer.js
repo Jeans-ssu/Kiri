@@ -81,7 +81,7 @@ const Footer = () => {
         <br />
         <span>Copyright 2023. Kiri. All rights reserved.</span>
       </p>
-      <div className="version">version 1.0.1</div>
+      <div className="version">version 2.0.0</div>
     </Foot>
   );
 };
