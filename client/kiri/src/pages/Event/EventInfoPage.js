@@ -64,7 +64,7 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
-      setData(resdata);
+      setData(resdata.data);
       setMark(resdata.scrap);
     } catch (error) {
       console.error('Error: ', error);
