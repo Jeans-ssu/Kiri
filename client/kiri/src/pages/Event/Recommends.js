@@ -22,6 +22,26 @@ export const Recommends = ({ recommended }) => {
       {events?.length === 0 ? null : (
         <>
           <RecommendsHeader>이런 이벤트는 어때요?</RecommendsHeader>
+          <MobileRecommendsContainer>
+            {events?.map((el) => {
+              return (
+                <MobileEventContainer
+                  key={el.post_id}
+                  onClick={() => {
+                    handleClickEventContainer(el.post_id);
+                  }}
+                >
+                  <EventTag
+                    style={{ backgroundColor: eventColorMatcher(el.event) }}
+                  >
+                    {el.event}
+                  </EventTag>
+                  <div className="school">{el.school}</div>
+                  <div className="title">{el.title}</div>
+                </MobileEventContainer>
+              );
+            })}
+          </MobileRecommendsContainer>
           <RecommendsContainer>
             {events?.map((el) => {
               return (
@@ -59,12 +79,18 @@ const RecommendsHeader = styled.div`
   font-size: 20px;
   color: ${({ theme }) => theme.colors.dark};
   padding-bottom: 10px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.mainColor};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
 `;
 
 const RecommendsContainer = styled.div`
   width: 100%;
   display: flex;
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
 `;
 
 const EventContainer = styled.div`
@@ -93,6 +119,7 @@ const Title = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  color: ${({ theme }) => theme.colors.dark};
 `;
 
 const EtcInfo = styled.div`
@@ -106,10 +133,51 @@ const EventTag = styled.span`
   color: white;
   font-weight: 600;
   margin-right: 5px;
+  @media screen and (max-width: 767px) {
+    font-size: 8px;
+    font-weight: 500;
+  }
 `;
 
 const School = styled.span`
   font-size: 14px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.dark};
+`;
+
+//모바일 버전
+const MobileRecommendsContainer = styled.div``;
+
+const MobileEventContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+
+  div.school,
+  div.title {
+    font-size: 12px;
+    color: ${({ theme }) => theme.colors.dark};
+  }
+
+  div.school {
+    font-weight: 600;
+    margin-right: 5px;
+  }
+
+  div.title {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
 `;
