@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { selectUserInfo } from 'store/modules/userSlice';
 import PostRemoveModal from 'components/PostRemoveModal';
 import theme from 'styles/theme';
+import { Recommends } from './Recommends';
 
 const { yellow, blue, pink, orange, purple2, green_1 } = theme.colors;
 
@@ -41,6 +42,7 @@ const EventInfoPage = () => {
     startPostTime: '',
     finishPostTime: '',
   });
+  const [recommended, setRecommended] = useState([]);
 
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
@@ -66,6 +68,7 @@ const EventInfoPage = () => {
       const resdata = response.data;
       setData(resdata.data);
       setMark(resdata.scrap);
+      setRecommended(response.data.dataList);
     } catch (error) {
       console.error('Error: ', error);
     }
@@ -248,6 +251,7 @@ const EventInfoPage = () => {
         ) : (
           ''
         )}
+        <Recommends recommended={recommended} />
       </EventInfoContainer>
     </PageContainer>
   );
