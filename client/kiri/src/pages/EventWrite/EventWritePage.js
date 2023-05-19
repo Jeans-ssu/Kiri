@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostModal from 'components/PostModal';
 import { setOcrResult } from 'store/modules/ocrSlice';
 import { Spinner } from 'components/spinner/spinner';
+import EventImg from './EventImg';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -293,6 +294,14 @@ const EventWritePage = () => {
           setTitle={setTitle}
           titleRef={titleRef}
           errorMessage={errorMessage}
+        />
+        <EventImg
+          img={img}
+          setImg={setImg}
+          imgList={imgList}
+          setImgList={setImgList}
+          errorMessage={errorMessage}
+          setIsOpenSpinner={setIsOpenSpinner}
         />
         <EventInfoInput
           info={info}
