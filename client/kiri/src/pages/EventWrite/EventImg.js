@@ -155,6 +155,7 @@ const ImgInput = styled.input`
 const PreviewBox = styled.div`
   display: flex;
   margin-left: 70px;
+  margin-top: 15px;
 
   .X {
     font-size: 17px;
