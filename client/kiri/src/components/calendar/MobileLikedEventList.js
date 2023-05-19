@@ -144,9 +144,7 @@ const EventContainer = styled.div`
     display: flex;
     align-items: center;
     width: 20px;
-    color: ${({ theme }) => theme.colors.dark};
     img {
-      fill: ${({ theme }) => theme.colors.darkgray};
       width: 15px;
     }
     &:hover {
