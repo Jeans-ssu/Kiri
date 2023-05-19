@@ -167,10 +167,7 @@ const EventRegion = () => {
         </CheckboxDiv>
         <Bar />
         <EventOrderBox>
-          <OrderInput onChange={handleChangeOrder} value={order}>
-            <option value="최신순">최신순</option>
-            <option value="좋아요순">좋아요순</option>
-          </OrderInput>
+          <OrderInput onChange={handleChangeOrder} value={order}></OrderInput>
         </EventOrderBox>
         <EventContent data={postsData(data)} />
       </EventFieldPageContainer>
@@ -195,7 +192,7 @@ const EventOrderBox = styled.div`
   margin-bottom: 10px;
 `;
 
-const OrderInput = styled.select`
+const OrderInput = styled.div`
   width: 85px;
   height: 30px;
   border: none;
