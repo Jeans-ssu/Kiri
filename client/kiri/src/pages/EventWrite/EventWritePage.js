@@ -14,6 +14,8 @@ import PostModal from 'components/PostModal';
 import { setOcrResult } from 'store/modules/ocrSlice';
 import { Spinner } from 'components/spinner/spinner';
 import EventImg from './EventImg';
+import { selectIsLogin } from 'store/modules/userSlice';
+import NeedLoginModal from 'components/NeedLoginModal';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -58,7 +60,10 @@ const EventWritePage = () => {
 
   const dispatch = useDispatch();
 
+  const isLogin = useSelector(selectIsLogin);
+
   const [isOpenSpinner, setIsOpenSpinner] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     dispatch(setOcrResult(''));
@@ -282,7 +287,10 @@ const EventWritePage = () => {
           setPostID(res.data.post_id);
           setIsSuccess(true);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          setIsOpen(true);
+          console.error(err);
+        });
     }
   };
   return (
@@ -334,12 +342,16 @@ const EventWritePage = () => {
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
         </BtnContainer>
-        <PostModal
-          text={'등록'}
-          postid={postid}
-          isOpen={isSuccess}
-          setIsOpen={setIsSuccess}
-        />
+        {isLogin ? (
+          <PostModal
+            text={'등록'}
+            postid={postid}
+            isOpen={isSuccess}
+            setIsOpen={setIsSuccess}
+          />
+        ) : (
+          <NeedLoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        )}
       </EventWritePageContainer>
     </PageContainer>
   );
