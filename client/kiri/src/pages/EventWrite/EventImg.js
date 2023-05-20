@@ -155,13 +155,12 @@ const ImgInput = styled.input`
 const PreviewBox = styled.div`
   display: flex;
   margin-left: 70px;
-  margin-top: 15px;
 
   .X {
     font-size: 17px;
   }
   @media screen and (max-width: 767px) {
-    margin-left: 10px;
+    margin-left: 0px;
     width: 82vw;
     .X {
       font-size: 15px;
@@ -174,14 +173,18 @@ const GridImageBox = styled.div`
   grid-template-columns: repeat(5, minmax(0, 1fr));
   grid-gap: 18px 18px;
   @media screen and (max-width: 767px) {
-    grid-gap: 18px 18px;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-gap: 10px 10px;
+    grid-template-columns: repeat(4, 100px);
+  }
+  @media screen and (max-width: 440px) {
+    grid-template-columns: repeat(3, 100px);
   }
 `;
 
 const EtcContainer = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 15px;
 
   .label {
     display: flex;

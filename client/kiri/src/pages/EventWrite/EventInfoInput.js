@@ -20,7 +20,7 @@ const MobileContainer = styled.div`
 
 const EventInfoInputContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.mainColor};
-  margin: 15px 0;
+  margin: 0 0 15px;
   padding: 15px 15px 5px 15px;
   @media screen and (max-width: 767px) {
     .smallSize {
@@ -28,7 +28,7 @@ const EventInfoInputContainer = styled.div`
       flex-direction: row;
       margin-right: 5px;
     }
-    margin: 15px auto;
+    margin: 0 auto 15px;
     padding: 10px 10px 0px 10px;
   }
 `;

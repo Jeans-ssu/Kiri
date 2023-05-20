@@ -102,7 +102,9 @@ const TopBox = styled.div`
 const BottomBox = styled.div``;
 
 const OcrBox = styled.div`
-  width: 135px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
   @media screen and (max-width: 767px) {
     width: 100px;
   }
@@ -113,12 +115,14 @@ const OcrBtn = styled.div`
   font-weight: 600;
   text-align: center;
   margin-top: 10px;
+  margin-right: 17px;
+
   &:hover {
     cursor: pointer;
     color: #4f80ff;
   }
   @media screen and (max-width: 767px) {
-    font-size: 14px;
+    font-size: 12px;
   }
 `;
 
@@ -134,8 +138,8 @@ const GridImagePreview = styled.img`
   object-fit: cover;
   margin: auto;
   @media screen and (max-width: 767px) {
-    width: 40px;
-    height: 40px;
+    width: 100px;
+    height: 100px;
   }
 `;
 
