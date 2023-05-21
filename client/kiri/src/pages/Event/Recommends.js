@@ -8,6 +8,7 @@ export const Recommends = ({ recommended }) => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
+    console.log(recommended);
     setEvents(recommended);
   }, []);
 
@@ -52,7 +53,7 @@ export const Recommends = ({ recommended }) => {
                   }}
                 >
                   <ImgContainer>
-                    <img src={''} alt="이벤트 포스터" />
+                    <img src={el.imgUrl} alt="이벤트 포스터" />
                   </ImgContainer>
                   <EtcInfo>
                     <EventTag
