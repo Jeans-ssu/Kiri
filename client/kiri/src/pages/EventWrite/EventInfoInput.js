@@ -20,7 +20,7 @@ const MobileContainer = styled.div`
 
 const EventInfoInputContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.mainColor};
-  margin: 15px 0;
+  margin: 0 0 15px;
   padding: 15px 15px 5px 15px;
   @media screen and (max-width: 767px) {
     .smallSize {
@@ -28,7 +28,7 @@ const EventInfoInputContainer = styled.div`
       flex-direction: row;
       margin-right: 5px;
     }
-    margin: 15px auto;
+    margin: 0 auto 15px;
     padding: 10px 10px 0px 10px;
   }
 `;
@@ -198,12 +198,15 @@ const EventInfoInput = ({
       setInfo({
         host: JSON.parse(ocrResult)?.host,
         tel: JSON.parse(ocrResult)?.contact,
-        univ: JSON.parse(ocrResult)?.university,
         startDate: JSON.parse(ocrResult)?.startDate,
         endDate: JSON.parse(ocrResult)?.endDate,
-        startTime: JSON.parse(ocrResult)?.startTime,
-        endTime: JSON.parse(ocrResult)?.endTime,
+        startTime: JSON.parse(ocrResult)?.startTime || '00:00',
+        endTime: JSON.parse(ocrResult)?.endTime || '00:00',
         location: JSON.parse(ocrResult)?.location,
+        email: '',
+        region: '선택',
+        univ: '',
+        type: '선택',
       });
       dispatch(setOcrMode(false));
     }
@@ -274,7 +277,7 @@ const EventInfoInput = ({
             ref={regionRef}
           >
             <option value="선택">선택</option>
-            {Regions.map((el, idx) => {
+            {Regions?.map((el, idx) => {
               return (
                 <option value={el} key={idx}>
                   {el}
@@ -331,7 +334,7 @@ const EventInfoInput = ({
             ref={typeRef}
           >
             <option value="선택">선택</option>
-            {EventCategory.map((el, idx) => {
+            {EventCategory?.map((el, idx) => {
               return (
                 <option value={el} key={idx}>
                   {el}

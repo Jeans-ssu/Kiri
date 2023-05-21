@@ -111,7 +111,7 @@ const MypageInput = ({ type, userInfo, setUserInfo }) => {
                 onChange={handleChangeInterestSelect}
               >
                 {type === 'region'
-                  ? Regions.map((el, idx) => {
+                  ? Regions?.map((el, idx) => {
                       return (
                         <option value={el} key={idx}>
                           {el}

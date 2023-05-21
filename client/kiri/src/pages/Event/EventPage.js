@@ -134,7 +134,7 @@ const EventPage = () => {
         <TopBox>
           <MobileFlex>
             <SchoolRegionBox>
-              {filter.map((el, idx) => {
+              {filter?.map((el, idx) => {
                 return (
                   <Link
                     className="filterLink"
@@ -184,7 +184,7 @@ const EventPage = () => {
           </MobileFlex>
         </TopBox>
         <CheckboxDiv className="tagbox">
-          {field.map((el, idx) => {
+          {field?.map((el, idx) => {
             return (
               <EventTag
                 key={idx}
@@ -198,10 +198,7 @@ const EventPage = () => {
         </CheckboxDiv>
         <Bar />
         <EventOrderBox>
-          <SelectInput onChange={handleChangeOrder} value={order}>
-            <option value="최신순">최신순</option>
-            <option value="좋아요순">좋아요순</option>
-          </SelectInput>
+          <SelectInput onChange={handleChangeOrder} value={order}></SelectInput>
         </EventOrderBox>
         <EventContent data={postsData(data)} />
       </EventFieldPageContainer>
@@ -235,7 +232,8 @@ const EventOrderBox = styled.div`
   margin-bottom: 10px;
 `;
 
-const SelectInput = styled.select`
+const SelectInput = styled.div`
+  display: visible;
   width: 85px;
   height: 30px;
   border: none;

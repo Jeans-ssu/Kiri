@@ -36,7 +36,7 @@ const ModalHeader = styled.div`
     }
   }
   div {
-    margin-top: 25px;
+    margin-top: 40px;
     font-weight: 600;
   }
 `;

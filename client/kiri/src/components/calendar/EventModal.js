@@ -3,7 +3,6 @@ import { IoMdClose } from 'react-icons/io';
 import { useNavigate } from 'react-router';
 import eventColorMatcher from 'util/eventColorMatcher';
 import { parseISO, format, addDays } from 'date-fns';
-import { AiOutlineExport } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
@@ -78,7 +77,10 @@ const EventModal = ({
                 자세히 보기
               </button>
               <button className="export">
-                <AiOutlineExport />
+                <img
+                  src={process.env.PUBLIC_URL + '/img/calendar_export_icon.svg'}
+                  alt="캘린더 내보내기"
+                />
                 <a
                   href={CreateIcsFile(
                     format(parseISO(startTime), 'yyyyMMdd'),
@@ -220,10 +222,11 @@ const EventBtnsContainer = styled.div`
       text-decoration: none;
       text-decoration-color: ${({ theme }) => theme.colors.darkgray};
     }
-    svg {
+    img {
       margin: 2px;
-      width: 15px;
-      height: 15px;
+      width: 18px;
+      height: 18px;
+      fill: ${({ theme }) => theme.colors.darkgray};
     }
     color: ${({ theme }) => theme.colors.darkgray};
   }

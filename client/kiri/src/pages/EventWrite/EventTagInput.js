@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectOcrMode, selectOcrResult } from 'store/modules/ocrSlice';
 
-export const EventTagInput = () => {
+export const EventTagInput = ({ setTag }) => {
   const [tagList, setTagList] = useState([]);
   const [tagInput, setTagInput] = useState('');
 
@@ -13,6 +13,7 @@ export const EventTagInput = () => {
   useEffect(() => {
     if (ocrResult.length !== 0) {
       setTagList(JSON.parse(ocrResult)?.keyword);
+      setTag(JSON.parse(ocrResult)?.keyword);
     }
   }, [ocrMode]);
 
@@ -24,6 +25,7 @@ export const EventTagInput = () => {
     if (e.key === 'Enter' && tagList.length <= 4) {
       if (tagInput !== '') {
         setTagList([...tagList, tagInput]);
+        setTag([...tagList, tagInput]);
         setTagInput('');
       }
     }
@@ -34,6 +36,7 @@ export const EventTagInput = () => {
       return el !== item;
     });
     setTagList(filteredTagList);
+    setTag(filteredTagList);
   };
 
   return (
@@ -50,7 +53,7 @@ export const EventTagInput = () => {
           onChange={handleChangeTagInput}
           onKeyPress={handleOnKeyPress}
         />
-        {tagList.map((el, idx) => {
+        {tagList?.map((el, idx) => {
           return (
             <Tag
               key={idx}

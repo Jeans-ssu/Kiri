@@ -13,6 +13,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostModal from 'components/PostModal';
 import { setOcrResult } from 'store/modules/ocrSlice';
 import { Spinner } from 'components/spinner/spinner';
+import EventImg from './EventImg';
+import { selectIsLogin } from 'store/modules/userSlice';
+import NeedLoginModal from 'components/NeedLoginModal';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -57,7 +60,10 @@ const EventWritePage = () => {
 
   const dispatch = useDispatch();
 
+  const isLogin = useSelector(selectIsLogin);
+
   const [isOpenSpinner, setIsOpenSpinner] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     dispatch(setOcrResult(''));
@@ -81,6 +87,7 @@ const EventWritePage = () => {
   });
   const [postid, setPostID] = useState();
   const [explain, setExplain] = useState('');
+  const [tag, setTag] = useState();
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
   const [imgList, setImgList] = useState([]);
@@ -224,6 +231,8 @@ const EventWritePage = () => {
     } else {
       const imgarr = getImageID();
       const formData = new FormData();
+      const tagstring = tag?.toString();
+      const tagarr = tagstring?.split(',');
       formData.append('title', title);
       formData.append('scrap_count', 0);
       formData.append('email', info.email);
@@ -233,6 +242,9 @@ const EventWritePage = () => {
       formData.append('school', info.univ);
       formData.append('place', info.location);
       formData.append('organizer', info.host);
+      for (let i = 0; i < tagarr?.length; i++) {
+        formData.append('tagList[]', tagarr[i]);
+      }
       formData.append('link', link);
       if (imgarr.length === 1) {
         formData.append('imageIdList[]', [Number(imgarr)]);
@@ -273,7 +285,10 @@ const EventWritePage = () => {
           setPostID(res.data.post_id);
           setIsSuccess(true);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          setIsOpen(true);
+          console.error(err);
+        });
     }
   };
   return (
@@ -285,6 +300,14 @@ const EventWritePage = () => {
           setTitle={setTitle}
           titleRef={titleRef}
           errorMessage={errorMessage}
+        />
+        <EventImg
+          img={img}
+          setImg={setImg}
+          imgList={imgList}
+          setImgList={setImgList}
+          errorMessage={errorMessage}
+          setIsOpenSpinner={setIsOpenSpinner}
         />
         <EventInfoInput
           info={info}
@@ -303,7 +326,7 @@ const EventWritePage = () => {
           explainRef={explainRef}
           errorMessage={errorMessage}
         />
-        <EventTagInput />
+        <EventTagInput setTag={setTag} />
         <EventEtcInput
           link={link}
           setLink={setLink}
@@ -317,12 +340,16 @@ const EventWritePage = () => {
         <BtnContainer>
           <WriteBtn onClick={handleClickWriteBtn}>글쓰기</WriteBtn>
         </BtnContainer>
-        <PostModal
-          text={'등록'}
-          postid={postid}
-          isOpen={isSuccess}
-          setIsOpen={setIsSuccess}
-        />
+        {isLogin ? (
+          <PostModal
+            text={'등록'}
+            postid={postid}
+            isOpen={isSuccess}
+            setIsOpen={setIsSuccess}
+          />
+        ) : (
+          <NeedLoginModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        )}
       </EventWritePageContainer>
     </PageContainer>
   );

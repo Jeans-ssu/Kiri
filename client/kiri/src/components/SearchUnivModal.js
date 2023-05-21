@@ -161,7 +161,7 @@ const SearchUnivModal = ({
               <FiSearch />
             </UnivSearchbarContainer>
             <UnivListContainer>
-              {univlist.map((el, idx) => {
+              {univlist?.map((el, idx) => {
                 return (
                   <UnivBox
                     key={idx}

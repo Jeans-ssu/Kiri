@@ -124,7 +124,7 @@ export const MobileHeader = ({
       </LogoContainer>
       <Divider />
       <StyledDrawerList>
-        {navItems.map((item, idx) => {
+        {navItems?.map((item, idx) => {
           return (
             <ListItem
               key={idx}
@@ -150,7 +150,7 @@ export const MobileHeader = ({
         <StyledToolbar>
           <MobileMenuIcon onClick={handleDrawerToggle} />
           <MiddleMenuList>
-            {navItems.map((el, idx) => {
+            {navItems?.map((el, idx) => {
               return (
                 <MiddleMenuBtn
                   key={idx}
