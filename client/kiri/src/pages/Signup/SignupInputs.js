@@ -291,7 +291,7 @@ const SignupInputs = () => {
         <InputContainer>
           <InputHeader>지역</InputHeader>
           <SelectInput onChange={handleChangeRegion} value={userInput.region}>
-            {Regions.map((el, idx) => {
+            {Regions?.map((el, idx) => {
               return (
                 <option key={idx} value={el}>
                   {el}

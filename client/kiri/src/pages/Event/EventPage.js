@@ -134,7 +134,7 @@ const EventPage = () => {
         <TopBox>
           <MobileFlex>
             <SchoolRegionBox>
-              {filter.map((el, idx) => {
+              {filter?.map((el, idx) => {
                 return (
                   <Link
                     className="filterLink"
@@ -184,7 +184,7 @@ const EventPage = () => {
           </MobileFlex>
         </TopBox>
         <CheckboxDiv className="tagbox">
-          {field.map((el, idx) => {
+          {field?.map((el, idx) => {
             return (
               <EventTag
                 key={idx}

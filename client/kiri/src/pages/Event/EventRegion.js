@@ -120,7 +120,7 @@ const EventRegion = () => {
     <PageContainer header footer>
       <EventFieldPageContainer>
         <SchoolRegionBox>
-          {filter.map((el, idx) => {
+          {filter?.map((el, idx) => {
             return (
               <Link
                 className="filterLink"
@@ -141,7 +141,7 @@ const EventRegion = () => {
           <div className="dropdown">
             <SelectInput onChange={handleChangeInterest} value={region}>
               <option value="">전체</option>
-              {Regions.map((el, idx) => {
+              {Regions?.map((el, idx) => {
                 return (
                   <option key={idx} value={el}>
                     {el}
@@ -153,7 +153,7 @@ const EventRegion = () => {
           </div>
         </SchoolRegionBox>
         <CheckboxDiv>
-          {field.map((el, idx) => {
+          {field?.map((el, idx) => {
             return (
               <EventTag
                 key={idx}

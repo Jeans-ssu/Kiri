@@ -274,7 +274,7 @@ const EventInfoInput = ({
             ref={regionRef}
           >
             <option value="선택">선택</option>
-            {Regions.map((el, idx) => {
+            {Regions?.map((el, idx) => {
               return (
                 <option value={el} key={idx}>
                   {el}
@@ -331,7 +331,7 @@ const EventInfoInput = ({
             ref={typeRef}
           >
             <option value="선택">선택</option>
-            {EventCategory.map((el, idx) => {
+            {EventCategory?.map((el, idx) => {
               return (
                 <option value={el} key={idx}>
                   {el}

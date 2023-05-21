@@ -60,7 +60,7 @@ const Header = () => {
           <Logo>
             <Link to="/">끼리끼리</Link>
           </Logo>
-          {menuArr.map((el, idx) => {
+          {menuArr?.map((el, idx) => {
             return (
               <Link className="menulink" key={idx} to={`/` + `${menu[idx]}`}>
                 <SubMenu

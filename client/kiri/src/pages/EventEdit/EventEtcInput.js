@@ -126,7 +126,7 @@ const EventEtcInput = ({
         <GridImageBox>
           {img.length > 0
             ? img.length >= 6
-              ? img.map((el, idx) => {
+              ? img?.map((el, idx) => {
                   return (
                     <GridBox key={idx}>
                       <GridImagePreview key={idx} alt="img" src={el} />
@@ -136,7 +136,7 @@ const EventEtcInput = ({
                     </GridBox>
                   );
                 })
-              : img.map((el, idx) => {
+              : img?.map((el, idx) => {
                   return (
                     <GridBox key={idx}>
                       <GridImagePreview key={idx} alt="img" src={el} />

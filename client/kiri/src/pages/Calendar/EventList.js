@@ -38,7 +38,7 @@ const EventList = () => {
             <DayListBox>이번주 일정 모아보기</DayListBox>
           </DayLineBox>
         </EventListBox>
-        {day.map((el, idx) => {
+        {day?.map((el, idx) => {
           return (
             <EventListBox
               key={idx}

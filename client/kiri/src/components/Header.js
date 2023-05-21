@@ -83,7 +83,7 @@ const Header = ({ page }) => {
             </Link>
           </Logo>
           <div className="menuscontainer">
-            {menuArr.map((el, idx) => {
+            {menuArr?.map((el, idx) => {
               return (
                 <Link
                   className={`menulink ${pageidx === idx ? 'focused' : ''}`}

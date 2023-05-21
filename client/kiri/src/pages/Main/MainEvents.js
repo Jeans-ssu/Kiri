@@ -133,7 +133,7 @@ const MainEvents = () => {
     <MainEventsContainer>
       <MainHeader>요즘 학교 축제 어때요?</MainHeader>
       <MainContents>
-        {data.map((el) => {
+        {data?.map((el) => {
           return (
             <MainEvent
               key={el.eventId}

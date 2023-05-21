@@ -94,7 +94,7 @@ const EventImg = ({
         <GridImageBox>
           {img.length > 0
             ? img.length >= 6
-              ? img.map((el, idx) => {
+              ? img?.map((el, idx) => {
                   return (
                     <ImgBox
                       key={idx}
@@ -106,7 +106,7 @@ const EventImg = ({
                     />
                   );
                 })
-              : img.map((el, idx) => {
+              : img?.map((el, idx) => {
                   return (
                     <ImgBox
                       key={idx}

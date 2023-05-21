@@ -53,7 +53,7 @@ export const EventTagInput = ({ setTag }) => {
           onChange={handleChangeTagInput}
           onKeyPress={handleOnKeyPress}
         />
-        {tagList.map((el, idx) => {
+        {tagList?.map((el, idx) => {
           return (
             <Tag
               key={idx}

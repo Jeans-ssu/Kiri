@@ -231,8 +231,8 @@ const EventWritePage = () => {
     } else {
       const imgarr = getImageID();
       const formData = new FormData();
-      const tagstring = tag.toString();
-      const tagarr = tagstring.split(',');
+      const tagstring = tag?.toString();
+      const tagarr = tagstring?.split(',');
       formData.append('title', title);
       formData.append('scrap_count', 0);
       formData.append('email', info.email);
@@ -242,7 +242,7 @@ const EventWritePage = () => {
       formData.append('school', info.univ);
       formData.append('place', info.location);
       formData.append('organizer', info.host);
-      for (let i = 0; i < tagarr.length; i++) {
+      for (let i = 0; i < tagarr?.length; i++) {
         formData.append('tagList[]', tagarr[i]);
       }
       formData.append('link', link);

@@ -65,7 +65,7 @@ const CalendarSelect = ({ calType, setCalType, setRegion }) => {
       </button>
       {calType === 'region' ? (
         <select name="region" onChange={handleChagneRegionSelect}>
-          {Regions.map((el, idx) => {
+          {Regions?.map((el, idx) => {
             return (
               <option key={idx} value={el}>
                 {el}

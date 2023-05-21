@@ -25,7 +25,7 @@ export const MobileLikedEventsList = ({
         Days[getDay(today)]
       })`}</ListHeader>
       <EventsBox>
-        {likedEvents.map((el) => {
+        {likedEvents?.map((el) => {
           return (
             <EventContainer key={el.post_id}>
               <div

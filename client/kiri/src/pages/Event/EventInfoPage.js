@@ -169,7 +169,7 @@ const EventInfoPage = () => {
           <EventPosterdiv>
             {/** Todo: 이미지 넣기 */}
             <Slider {...settings}>
-              {data.savedImgList.map((el, idx) => {
+              {data?.savedImgList?.map((el, idx) => {
                 return (
                   <div key={idx}>
                     <img alt="poster" key={idx} src={el}></img>
