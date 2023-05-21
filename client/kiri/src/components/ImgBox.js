@@ -47,10 +47,6 @@ const ImgBox = ({ el, idx, deleteImg, file, setIsOpenSpinner }) => {
         }
       );
       const responseJson = await response.json();
-      console.log(
-        'responsetext',
-        responseJson.responses[0].fullTextAnnotation.text
-      );
       const message =
         responseJson.responses[0].fullTextAnnotation.text +
         '\n여기서 제목, 이메일, 주최, 장소, 시작날짜, 끝나는날짜, 연락처, 시작시간, 끝나는시간, 핵심키워드5개를 JSON 형식으로 알려줘. 이때 키 값은 host, email, title, location, startDate, endDate, contact, startTime, endTime, keyword 이걸로 해야해. 날짜 형식은 "yyyy-MM-dd" 이 형식으로 줘야해.';

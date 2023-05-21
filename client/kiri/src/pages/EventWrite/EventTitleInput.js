@@ -63,7 +63,6 @@ const EventTitleInput = ({ title, setTitle, titleRef, errorMessage }) => {
   useEffect(() => {
     if (ocrResult.length !== 0) {
       setTitle(JSON.parse(ocrResult)?.title);
-      console.log('title', JSON.parse(ocrResult)?.title);
     }
   }, [ocrMode]);
 
