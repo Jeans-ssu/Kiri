@@ -81,8 +81,10 @@ public class PostService {
                 for (Posttag posttagOne : posttagbyTag) {
                     Post postByPT = posttagOne.getPost();
                     if(postByPT.getId() != id && !recommendPostIdList.contains(postByPT.getId())) {
+                        Long postByPTId = postByPT.getId();
+                        String thumbnail = imageService.getThumbnail(postByPTId);
                         List<String> recoTagList = posttagService.findTagsByPost(postByPT);
-                        RecommendPost recommendPost = RecommendPost.of(postByPT, recoTagList);
+                        RecommendPost recommendPost = RecommendPost.of(postByPT, recoTagList, thumbnail);
                         recommendPostIdList.add(postByPT.getId());
                         recommendPostList.add(recommendPost);
                         break;

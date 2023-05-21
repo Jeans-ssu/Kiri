@@ -28,9 +28,11 @@ public class RecommendPost {
 
     private List<String> tagList = new ArrayList<>();
 
-    public static RecommendPost of(Post post, List<String> tagList) {
+    private String imgUrl;
+
+    public static RecommendPost of(Post post, List<String> tagList, String imgUrl) {
         return new RecommendPost(post.getId(), post.getMember().getId(), post.getTitle(), post.getScrap_count(),
                 post.getContent(), post.getEvent(), post.getLocal(), post.getSchool(), post.getOrganizer(),
-                post.getContactNumber(), post.getLink(), post.getPlace(), tagList);
+                post.getContactNumber(), post.getLink(), post.getPlace(), tagList, imgUrl);
     }
 }
