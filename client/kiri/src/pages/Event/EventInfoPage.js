@@ -67,8 +67,9 @@ const EventInfoPage = () => {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
       setData(resdata.data);
-      setMark(resdata.scrap);
+      setMark(resdata.data.scrap);
       setRecommended(response.data.dataList);
+      console.log('scrap', resdata.data.scrap);
     } catch (error) {
       console.error('Error: ', error);
     }
@@ -129,9 +130,6 @@ const EventInfoPage = () => {
               <EventTagBox tag={data.event}>
                 <EventTagSpan>{data.event}</EventTagSpan>
               </EventTagBox>
-              {/* <EventSharediv>
-                <FiShare2 size="27" />
-              </EventSharediv> */}
             </div>
             <EventBookmarkdiv onClick={() => markHandler()}>
               {mark ? (
