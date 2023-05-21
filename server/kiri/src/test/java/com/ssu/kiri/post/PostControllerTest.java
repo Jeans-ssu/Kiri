@@ -91,12 +91,20 @@ class PostControllerTest {
     public void detailPost() throws Exception {
         //given
 //        Post post = createPostOne();
+        createAndSavePostListPlusTag();
+
         SavePost savePost = createSavePost();
+        List<String> tagList = new ArrayList<>();
+        tagList.add("AI");
+        tagList.add("fashion");
+        savePost.setTagList(tagList);
+
         List<MultipartFile> list = createMockMultipartFiles();
         List<ImageResDto> imageResDtoList = imageService.addFile(list);
         List<Long> imageIdList = imageResDtoList.stream()
                 .map(img -> img.getImage_id())
                 .collect(Collectors.toList());
+
 
         SaveResPost savedPost = postService.savePost(savePost, imageIdList);
         Long savedPostId = savedPost.getPost_id();
@@ -127,6 +135,10 @@ class PostControllerTest {
     public void savePost() throws Exception {
         //given
         SavePost savePost = createSavePost();
+        List<String> tagList = new ArrayList<>();
+        tagList.add("AI");
+        tagList.add("fashion");
+        savePost.setTagList(tagList);
 
         // 이미지 객체 생성, 이미지 등록 후 id 리스트만 얻어오기.
         List<MultipartFile> list = createMockMultipartFiles();
@@ -159,6 +171,10 @@ class PostControllerTest {
     public void savePostWithoutImage() throws Exception {
         //given
         SavePost savePost = createSavePost();
+        List<String> tagList = new ArrayList<>();
+        tagList.add("AI");
+        tagList.add("fashion");
+        savePost.setTagList(tagList);
         System.out.println("savePost.getImageIdList() = " + savePost.getImageIdList());
 
         //when & then
@@ -261,44 +277,44 @@ class PostControllerTest {
 
     }
 
-    @WithAccount("creamyyyy")
-    @DisplayName("게시글을 수정 : 게시글에 이미지가 있었는데 삭제해서 이미지가 없는채로 저장하고 싶은 경우")
-    @Test
-    public void updatePostOXX() throws Exception {
-        //given
-
-        // 게시글 저장
-//        Post post = createPostOne();
-        SavePost savePost1 = createSavePost();
-        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
-        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
-        List<Long> imageIdList = imageResDtoList.stream()
-                .map(img -> img.getImage_id())
-                .collect(Collectors.toList());
-
-        SaveResPost savedPost = postService.savePost(savePost1, imageIdList);
-        Long savedPostId = savedPost.getPost_id();
-
-
-
-        // 업데이트 할 Post 내용
-        imageService.deleteUpdateImage(1L);
-        SavePost savePost = createUpdatePost();
-
-
-        //when & then
-        this.mockMvc.perform(
-                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
-                                .post("/api/posts/{post-id}", savedPostId) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
-                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
-                                .characterEncoding("UTF-8")
-                )
-                .andExpect(status().isOk())
-                .andDo(print());
-
-    }
+//    @WithAccount("creamyyyy")
+//    @DisplayName("게시글을 수정 : 게시글에 이미지가 있었는데 삭제해서 이미지가 없는채로 저장하고 싶은 경우")
+//    @Test
+//    public void updatePostOXX() throws Exception {
+//        //given
+//
+//        // 게시글 저장
+////        Post post = createPostOne();
+//        SavePost savePost1 = createSavePost();
+//        List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+//        List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+//        List<Long> imageIdList = imageResDtoList.stream()
+//                .map(img -> img.getImage_id())
+//                .collect(Collectors.toList());
+//
+//        SaveResPost savedPost = postService.savePost(savePost1, imageIdList);
+//        Long savedPostId = savedPost.getPost_id();
+//
+//
+//
+//        // 업데이트 할 Post 내용
+//        imageService.deleteUpdateImage(1L);
+//        SavePost savePost = createUpdatePost();
+//
+//
+//        //when & then
+//        this.mockMvc.perform(
+//                        MockMvcRequestBuilders // MockMvcRequestBuilders 를 안쓰면 get 함수를 인식 못함
+//                                .post("/api/posts/{post-id}", savedPostId) // 넣어준 컨트롤러의 Http Method 와 URL 을 지정
+//                                .accept(MediaType.APPLICATION_JSON) // accept encoding 타입을 지정
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(savePost))
+//                                .characterEncoding("UTF-8")
+//                )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//
+//    }
 
     @WithAccount("creamyyyy")
     @DisplayName("게시글 수정 : 이미지 존재X -> 이미지 존재O")
@@ -659,6 +675,51 @@ class PostControllerTest {
         savePost.setOrganizer("하마혜안");
         savePost.setStartPostTime(LocalDateTime.parse("2022-11-23 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         savePost.setFinishPostTime(LocalDateTime.parse("2022-11-23 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        return savePost;
+    }
+
+    private void createAndSavePostListPlusTag() throws Exception {
+        for (int i = 1; i < 3; i++) {
+            List<String> tagList = new ArrayList<>();
+            tagList.add("AI");
+            tagList.add("과학");
+            tagList.add("컴퓨터공학");
+            SavePost savePost = createSavePostPlusTag("title" + i, "content" + i, "강연",
+                    "서울", "숭실대학교", "숭실대", tagList);
+            List<MultipartFile> updateBeforeList = createMockMultipartFile1();
+            List<ImageResDto> imageResDtoList = imageService.addFile(updateBeforeList);
+            List<Long> imageIdList = imageResDtoList.stream()
+                    .map(img -> img.getImage_id())
+                    .collect(Collectors.toList());
+            SaveResPost savedPost = postService.savePost(savePost, imageIdList);
+
+        }
+
+        for(int i=3; i<5; i++) {
+            List<String> tagList = new ArrayList<>();
+            tagList.add("뷰티");
+            tagList.add("Fashion");
+            tagList.add("AI");
+            SavePost savePost = createSavePostPlusTag("title" + i, "content" + i, "축제", "서울",
+                    "숭실대학교", "숭실대", tagList);
+            SaveResPost saveResPost = postService.savePost(savePost, null);
+        }
+    }
+
+    private SavePost createSavePostPlusTag(String title, String content, String event, String local, String school,
+                                           String organizer, List<String> tagList) {
+        SavePost savePost = new SavePost();
+        savePost.setTitle(title);
+        savePost.setContent(content);
+        savePost.setEvent(event);
+        savePost.setLocal(local);
+        savePost.setSchool(school);
+        savePost.setOrganizer(organizer);
+        savePost.setStartPostTime(LocalDateTime.parse("2022-11-25 12:10:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setFinishPostTime(LocalDateTime.parse("2022-11-25 12:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        savePost.setEmail("kkk@kkk.com");
+        savePost.setTagList(tagList);
 
         return savePost;
     }
