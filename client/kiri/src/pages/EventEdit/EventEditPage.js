@@ -78,10 +78,10 @@ const EventEditPage = () => {
         region: res.data.local, //지역
         univ: res.data.school, //학교
         type: res.data.event, //유형
-        startDate: res.data.startPostTime.slice(0, 10),
-        endDate: res.data.finishPostTime.slice(0, 10),
-        startTime: res.data.startPostTime.slice(11, 16),
-        endTime: res.data.finishPostTime.slice(11, 16),
+        startDate: res.data.startPostTime?.slice(0, 10),
+        endDate: res.data.finishPostTime?.slice(0, 10),
+        startTime: res.data.startPostTime?.slice(11, 16),
+        endTime: res.data.finishPostTime?.slice(11, 16),
         location: res.data.place,
       });
       setLink(res.data.link);
@@ -103,10 +103,10 @@ const EventEditPage = () => {
     region: base?.local,
     univ: base?.school,
     type: base?.event,
-    startDate: base?.startPostTime.slice(0, 10),
-    endDate: base?.finishPostTime.slice(0, 10),
-    startTime: base?.startPostTime.slice(11, 16),
-    endTime: base?.finishPostTime.slice(11, 16),
+    startDate: base?.startPostTime?.slice(0, 10),
+    endDate: base?.finishPostTime?.slice(0, 10),
+    startTime: base?.startPostTime?.slice(11, 16),
+    endTime: base?.finishPostTime?.slice(11, 16),
     location: base?.place,
   });
   const [explain, setExplain] = useState('');
