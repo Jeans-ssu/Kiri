@@ -8,7 +8,6 @@ export const Recommends = ({ recommended }) => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    console.log(recommended);
     setEvents(recommended);
   }, []);
 

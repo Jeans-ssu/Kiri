@@ -232,9 +232,7 @@ const EventWritePage = () => {
       const imgarr = getImageID();
       const formData = new FormData();
       const tagstring = tag.toString();
-      console.log(typeof tagstring);
       const tagarr = tagstring.split(',');
-      console.log(tagarr);
       formData.append('title', title);
       formData.append('scrap_count', 0);
       formData.append('email', info.email);
