@@ -201,9 +201,10 @@ const EventInfoInput = ({
         univ: JSON.parse(ocrResult)?.university,
         startDate: JSON.parse(ocrResult)?.startDate,
         endDate: JSON.parse(ocrResult)?.endDate,
-        startTime: JSON.parse(ocrResult)?.startTime,
-        endTime: JSON.parse(ocrResult)?.endTime,
+        startTime: JSON.parse(ocrResult)?.startTime || '00:00',
+        endTime: JSON.parse(ocrResult)?.endTime || '00:00',
         location: JSON.parse(ocrResult)?.location,
+        email: '',
       });
       dispatch(setOcrMode(false));
     }
