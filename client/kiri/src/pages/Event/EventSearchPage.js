@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 import PageContainer from 'containers/PageContainer';
-import {
-  selectSearchMode,
-  selectSearchWord,
-  setSearchMode,
-} from 'store/modules/searchSlice';
+import { selectSearchMode, setSearchMode } from 'store/modules/searchSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from '../../api/axios';
 import { useEffect, useState } from 'react';
@@ -13,7 +9,6 @@ import EventContent from './EventContent';
 
 const EventSearchPage = () => {
   const [data, setData] = useState([]);
-  const searchWord = useSelector(selectSearchWord);
   const searchMode = useSelector(selectSearchMode);
 
   const { searchWordParam } = useParams();
@@ -26,7 +21,7 @@ const EventSearchPage = () => {
 
   async function getSearch() {
     await axios
-      .get(`/posts/search?relation=${searchWord}`)
+      .get(`/posts/search?relation=${searchWordParam}`)
       .then((res) => {
         setData(res.data);
         dispatch(setSearchMode(false));
