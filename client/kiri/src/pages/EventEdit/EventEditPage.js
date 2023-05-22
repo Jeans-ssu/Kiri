@@ -69,25 +69,25 @@ const EventEditPage = () => {
   const [base, setBase] = useState();
   const BasePost = async () => {
     await axios.get(`/posts/read/${postID}`).then((res) => {
-      setBase(res.data);
-      setTitle(res.data.title);
+      setBase(res.data.data);
+      setTitle(res.data.data.title);
       setInfo({
-        host: res.data.organizer,
-        tel: res.data.contactNumber,
-        email: res.data.email,
-        region: res.data.local, //지역
-        univ: res.data.school, //학교
-        type: res.data.event, //유형
-        startDate: res.data.startPostTime?.slice(0, 10),
-        endDate: res.data.finishPostTime?.slice(0, 10),
-        startTime: res.data.startPostTime?.slice(11, 16),
-        endTime: res.data.finishPostTime?.slice(11, 16),
-        location: res.data.place,
+        host: res.data.data.organizer,
+        tel: res.data.data.contactNumber,
+        email: res.data.data.email,
+        region: res.data.data.local, //지역
+        univ: res.data.data.school, //학교
+        type: res.data.data.event, //유형
+        startDate: res.data.data.startPostTime?.slice(0, 10),
+        endDate: res.data.data.finishPostTime?.slice(0, 10),
+        startTime: res.data.data.startPostTime?.slice(11, 16),
+        endTime: res.data.data.finishPostTime?.slice(11, 16),
+        location: res.data.data.place,
       });
-      setLink(res.data.link);
-      setExplain(res.data.content);
-      setImg(res.data.savedImgList);
-      setImgList(res.data.imgIdList);
+      setLink(res.data.data.link);
+      setExplain(res.data.data.content);
+      setImg(res.data.data.savedImgList);
+      setImgList(res.data.data.imgIdList);
     });
   };
 
