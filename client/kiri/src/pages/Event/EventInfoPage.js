@@ -67,7 +67,6 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
-      console.log(resdata);
       setData(resdata.data);
       setMark(resdata.data.scrap);
       setRecommended(response.data.dataList);
