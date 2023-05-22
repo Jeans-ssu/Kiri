@@ -23,7 +23,7 @@ const EventInfoPage = () => {
   const preID = useLocation().pathname.substring(7);
   const loginID = useSelector(selectUserInfo);
 
-  const [tagList, setTagList] = useState();
+  const [tagList, setTagList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
@@ -67,10 +67,11 @@ const EventInfoPage = () => {
     try {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
+      console.log(resdata);
       setData(resdata.data);
       setMark(resdata.data.scrap);
       setRecommended(response.data.dataList);
-      setTagList(resdata.data.tagList.toString().split(','));
+      setTagList(resdata.data.tagList);
     } catch (error) {
       console.error('Error: ', error);
     }
