@@ -23,6 +23,7 @@ const EventInfoPage = () => {
   const preID = useLocation().pathname.substring(7);
   const loginID = useSelector(selectUserInfo);
 
+  const [tagList, setTagList] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [mark, setMark] = useState(false);
   const [data, setData] = useState({
@@ -67,8 +68,9 @@ const EventInfoPage = () => {
       const response = await axios.get(`/posts/read/${preID}`);
       const resdata = response.data;
       setData(resdata.data);
-      setMark(resdata.scrap);
+      setMark(resdata.data.scrap);
       setRecommended(response.data.dataList);
+      setTagList(resdata.data.tagList.toString().split(','));
     } catch (error) {
       console.error('Error: ', error);
     }
@@ -129,9 +131,6 @@ const EventInfoPage = () => {
               <EventTagBox tag={data.event}>
                 <EventTagSpan>{data.event}</EventTagSpan>
               </EventTagBox>
-              {/* <EventSharediv>
-                <FiShare2 size="27" />
-              </EventSharediv> */}
             </div>
             <EventBookmarkdiv onClick={() => markHandler()}>
               {mark ? (
@@ -207,6 +206,16 @@ const EventInfoPage = () => {
                     <td className="info">
                       {data.startPostTime.slice(11, 16)}&nbsp;~&nbsp;
                       {data.finishPostTime.slice(11, 16)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="title">태그</td>
+                    <td className="info">
+                      <TagsContainer>
+                        {tagList?.map((el, idx) => {
+                          return <Tag key={idx}>{el}</Tag>;
+                        })}
+                      </TagsContainer>
                     </td>
                   </tr>
                 </tbody>
@@ -449,9 +458,12 @@ const DetailInfoBox = styled.div`
 
   td.title {
     font-weight: 600;
+    width: 43.52px;
   }
   td {
     padding-bottom: 10px;
+    height: 27px;
+    margin: auto 0;
   }
 `;
 
@@ -478,6 +490,32 @@ const InfoBox = styled.div`
       font-size: 12px;
       margin-top: 10px;
     }
+  }
+`;
+
+const TagsContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 20px;
+  align-items: center;
+`;
+
+const Tag = styled.div`
+  background-color: ${({ theme }) => theme.colors.light};
+  color: ${({ theme }) => theme.colors.darkgray};
+  border: 1px solid ${({ theme }) => theme.colors.mainColor};
+
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 15px;
+  margin: 2px 8px 2px 0px;
+  &:hover {
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 767px) {
+    font-size: 12px;
   }
 `;
 

@@ -16,12 +16,11 @@ export const Recommends = ({ recommended }) => {
     window.location.reload();
   };
 
-  //TODO: 이미지 src 추가
   return (
     <>
+      <RecommendsHeader>이런 이벤트는 어때요?</RecommendsHeader>
       {events?.length === 0 ? null : (
         <>
-          <RecommendsHeader>이런 이벤트는 어때요?</RecommendsHeader>
           <MobileRecommendsContainer>
             {events?.map((el) => {
               return (
