@@ -106,8 +106,10 @@ const Pagination = ({ totalPosts, page, setPage }) => {
 
 const Container = styled.div`
   .page {
-    background-color: #d9d9d9;
-    border-radius: 50%;
+    //background-color: #d9d9d9;
+    //border-radius: 50%;
+    color: ${({ theme }) => theme.colors.mainColor};
+    font-weight: 700;
   }
 
   .numberbox {
@@ -141,7 +143,8 @@ const NumberButton = styled.button`
   border: none;
   cursor: pointer;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.gray};
 `;
 
 export default Pagination;

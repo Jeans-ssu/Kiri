@@ -375,6 +375,7 @@ const CheckboxDiv = styled.div`
   margin: 15px 0 15px 20px;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   .focused {
     color: #59b89d;
     width: 34px;
