@@ -128,9 +128,7 @@ const EventInfoPage = () => {
               <EventTitlediv>
                 <h1>{data.title}</h1>
               </EventTitlediv>
-              <EventTagBox tag={data.event}>
-                <EventTagSpan>{data.event}</EventTagSpan>
-              </EventTagBox>
+              <EventTagBox tag={data.event}>{data.event}</EventTagBox>
             </div>
             <EventBookmarkdiv onClick={() => markHandler()}>
               {mark ? (
@@ -282,17 +280,20 @@ const EventTagBox = styled.div`
   font-size: 12px;
   color: white;
   font-weight: 600;
-  width: 35px;
-  height: 22px;
-  display: flex;
+  width: 40px;
+  height: 24px;
+  line-height: 24px;
+  //height: 22px;
+  //display: flex;
+  text-align: center;
   margin-bottom: 5px;
-  border-radius: 10px;
+  border-radius: 12px;
   margin: auto 10px;
 `;
 
-const EventTagSpan = styled.span`
-  margin: auto;
-`;
+// const EventTagSpan = styled.span`
+//   margin: auto;
+// `;
 
 const EditBox = styled.div`
   display: flex;
@@ -333,6 +334,7 @@ const EventTopdiv = styled.div``;
 
 const EventUpdiv = styled.div`
   display: flex;
+  justify-content: space-between;
   .left {
     display: flex;
   }
@@ -343,14 +345,22 @@ const EventUpdiv = styled.div`
 `;
 
 const EventTitlediv = styled.div`
+  width: 90%;
   h1 {
     margin: 0;
     @media screen and (max-width: 767px) {
       font-size: 20px;
     }
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
   }
   @media screen and (max-width: 767px) {
-    width: 260px;
+    //width: 260px;
   }
 `;
 
