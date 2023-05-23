@@ -196,7 +196,7 @@ const EventContainer = styled.div`
   // << front/fix/mobileEvent
   @media screen and (max-width: 767px) {
     justify-content: center;
-    margin: auto;
+    margin: 0 auto 30px;
     width: 100%;
     min-width: 350px;
     padding: 0;
@@ -204,8 +204,7 @@ const EventContainer = styled.div`
 
   @media screen and (max-width: 395px) {
     min-width: 350px;
-    justify-content: center;
-    margin: auto;
+    margin: 0 auto 30px;
     padding: 0;
   }
   // dev-front
@@ -221,6 +220,10 @@ const EventContainer = styled.div`
 const EventList = styled.div`
   justify-content: row;
   width: 200px;
+
+  @media screen and (max-width: 767px) {
+    width: 150px;
+  }
 
   h4 {
     margin-top: 0px;
@@ -275,8 +278,8 @@ const EventList = styled.div`
   }
 
   // mobileEvent
-  @media screen and (max-width: 395px) {
-    width: 50%;
+  @media screen and (max-width: 767px) {
+    width: 150px;
     margin-left: 0;
     // dev-front
     //  @media screen and (max-width: 767px) {
@@ -295,11 +298,10 @@ const EventImg = styled.div`
   width: 150px;
   img {
     justify-content: column;
-    width: 100%;
+    width: 150px;
     top: 50%;
     left: 50%;
     position: absoulte;
-    padding: 0 10px;
     cursor: pointer;
   }
 `;
