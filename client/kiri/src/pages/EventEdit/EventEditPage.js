@@ -10,7 +10,7 @@ import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 import { useSelector } from 'react-redux';
 import PostModal from 'components/PostModal';
-import { EventTagInput } from 'pages/EventWrite/EventTagInput';
+import { EventEditTagInput } from './EventEditTagInput';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -88,6 +88,7 @@ const EventEditPage = () => {
       setExplain(res.data.data.content);
       setImg(res.data.data.savedImgList);
       setImgList(res.data.data.imgIdList);
+      setTagList(res.data.data.tagList);
     });
   };
 
@@ -124,6 +125,7 @@ const EventEditPage = () => {
     explainErrorMessage: '',
     imgErrorMessage: '',
   });
+  const [tagList, setTagList] = useState([]);
 
   const getImageID = () => {
     const imgarr = [];
@@ -291,6 +293,9 @@ const EventEditPage = () => {
         'finishPostTime',
         info.endDate + ' ' + info.endTime + ':00'
       );
+      for (let i = 0; i < tagList.length; i++) {
+        formData.append('tagList[]', tagList[i]);
+      }
       axios
         .post(`/api/posts/${postID}`, formData)
         .then((res) => {
@@ -327,7 +332,7 @@ const EventEditPage = () => {
           explainRef={explainRef}
           errorMessage={errorMessage}
         />
-        <EventTagInput />
+        <EventEditTagInput tagList={tagList} setTagList={setTagList} />
         <EventEtcInput
           link={link}
           setLink={setLink}

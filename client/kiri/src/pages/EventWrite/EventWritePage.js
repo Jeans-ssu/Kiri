@@ -87,7 +87,7 @@ const EventWritePage = () => {
   });
   const [postid, setPostID] = useState();
   const [explain, setExplain] = useState('');
-  const [tag, setTag] = useState();
+  const [tag, setTag] = useState([]);
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
   const [imgList, setImgList] = useState([]);
