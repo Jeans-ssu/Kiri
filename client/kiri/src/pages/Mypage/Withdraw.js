@@ -48,6 +48,7 @@ const WitdhdrawBtn = styled.button`
     height: 25px;
     font-size: 11px;
   }
+  white-space: nowrap;
 `;
 
 const Withdraw = () => {
