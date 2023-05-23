@@ -7,22 +7,21 @@ import styled from 'styled-components';
 const GoogleVisionApiKey = process.env.REACT_APP_API_KEY;
 const NodeServer = process.env.REACT_APP_NODE;
 
-const ImgBox = ({ el, idx, deleteImg, file, setIsOpenSpinner }) => {
+const ImgBox = ({ blob, el, idx, deleteImg, setIsOpenSpinner }) => {
   const dispatch = useDispatch();
 
   const [imageUrl, setImageUrl] = useState(null);
 
-  const targetfile = file[idx];
-  const reader = new FileReader();
-  reader.readAsDataURL(targetfile);
-  reader.onload = () => {
-    setImageUrl(reader.result);
-  };
-  reader.onerror = (error) => {
-    console.log(error);
-  };
-
   const analyzeImage = async () => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob[idx]);
+    reader.onload = () => {
+      setImageUrl(reader.result);
+    };
+    reader.onerror = (error) => {
+      console.log(error);
+    };
+
     try {
       setIsOpenSpinner(true);
       const body = JSON.stringify({
@@ -84,7 +83,9 @@ const ImgBox = ({ el, idx, deleteImg, file, setIsOpenSpinner }) => {
       </TopBox>
       <BottomBox>
         <OcrBox>
-          <OcrBtn onClick={analyzeImage}>자동 입력 하기</OcrBtn>
+          <OcrBtn value={idx} onClick={analyzeImage}>
+            자동 입력 하기
+          </OcrBtn>
         </OcrBox>
       </BottomBox>
     </GridBox>

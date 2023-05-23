@@ -14,6 +14,7 @@ const EventImg = ({
   errorMessage,
   setIsOpenSpinner,
 }) => {
+  const [blob, setBlob] = useState(new FormData());
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
@@ -44,16 +45,23 @@ const EventImg = ({
     uploadImg(formData);
 
     const nowSelectImageList = e.target.files;
+    console.log('nowselescs', img);
     const nowImageUrlList = [...img];
+    const blobList = [...blob];
     for (let i = 0; i < nowSelectImageList.length; i++) {
       const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
+      const blobUrl = document.querySelector('input[type=file]').files[i];
+      console.log('bloburl', blobUrl);
       nowImageUrlList.push(nowImageUrl);
+      blobList.push(blobUrl);
     }
     if (nowImageUrlList.length > 10) {
       setImg(nowImageUrlList.slice(0, 10));
+      setBlob(blobList.slice(0, 10));
       alert('이미지는 최대 10개만 첨부 가능합니다.');
     } else {
       setImg(nowImageUrlList);
+      setBlob(blobList);
     }
 
     setFile(e.target.files);
@@ -103,18 +111,21 @@ const EventImg = ({
                       deleteImg={deleteImg}
                       file={file}
                       setIsOpenSpinner={setIsOpenSpinner}
+                      imglength={img.length}
                     />
                   );
                 })
               : img?.map((el, idx) => {
                   return (
                     <ImgBox
+                      blob={blob}
                       key={idx}
                       el={el}
                       idx={idx}
                       deleteImg={deleteImg}
                       file={file}
                       setIsOpenSpinner={setIsOpenSpinner}
+                      imglength={img.length}
                     />
                   );
                 })
