@@ -13,7 +13,7 @@ const EventContent = ({ data }) => {
   };
 
   const DDay = (expiry_date) => {
-    const now = new Date(); // 2022-11-25
+    const now = new Date();
     const target = new Date(
       expiry_date.slice(0, 4),
       MakeDay(expiry_date.slice(5, 7)) - 1,
@@ -127,10 +127,7 @@ const NoEventContainer = styled.div`
   line-height: 400px;
   color: ${({ theme }) => theme.colors.gray};
   @media screen and (max-width: 767px) {
-    // front/fix/mobileEvent
     width: 100%;
-    // dev-front
-    // width: 90vw;
   }
 `;
 
@@ -170,13 +167,8 @@ const EventListMain = styled.main`
   }
 
   @media screen and (max-width: 767px) {
-    // << front/fix/mobileEvent
     min-width: 350px;
     width: 100%;
-
-    // dev-front
-    //width: 90vw;
-    //justify-content: space-between;
   }
 `;
 
@@ -193,7 +185,7 @@ const EventContainer = styled.div`
   &:hover {
     background-color: #f5f5f5;
   }
-  // << front/fix/mobileEvent
+
   @media screen and (max-width: 767px) {
     justify-content: center;
     margin: 0 auto 30px;
@@ -207,14 +199,6 @@ const EventContainer = styled.div`
     margin: 0 auto 30px;
     padding: 0;
   }
-  // dev-front
-  //  @media screen and (max-width: 767px) {
-  //  width: 40vw;
-  // margin: 0;
-  // }
-  //  @media screen and (max-width: 600px) {//
-  //   width: 90vw;
-  // }
 `;
 
 const EventList = styled.div`
@@ -277,20 +261,9 @@ const EventList = styled.div`
     }
   }
 
-  // mobileEvent
   @media screen and (max-width: 767px) {
     width: 150px;
     margin-left: 0;
-    // dev-front
-    //  @media screen and (max-width: 767px) {
-    //   h4 {
-    //    font-size: 13px;
-    //    margin-right: 5px;
-    //   }
-    // }
-    // @media screen and (max-width: 600px) {
-    //   flex: 1;
-    //
   }
 `;
 
