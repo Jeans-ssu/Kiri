@@ -127,7 +127,7 @@ const NoEventContainer = styled.div`
   line-height: 400px;
   color: ${({ theme }) => theme.colors.gray};
   @media screen and (max-width: 767px) {
-    width: 100%;
+    width: 90%;
   }
 `;
 
