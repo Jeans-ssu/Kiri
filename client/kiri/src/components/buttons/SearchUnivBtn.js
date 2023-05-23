@@ -16,4 +16,5 @@ export const SearchUnivBtn = styled.button`
     font-size: 12px;
     width: 70px;
   }
+  white-space: nowrap;
 `;
