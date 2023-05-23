@@ -293,15 +293,9 @@ const EventEditPage = () => {
         'finishPostTime',
         info.endDate + ' ' + info.endTime + ':00'
       );
-      // if (tagList.length === 1) {
-      //   formData.append('tagList[]', [tagList[0]]);
-      // } else {
-      //   for (let i = 0; i < tagList.length; i++) {
-      //     formData.append('tagList[]', tagList[i]);
-      //   }
-      // }
-      //TODO: formData에 배열로
-      formData.append('tagList', tagList);
+      for (let i = 0; i < tagList.length; i++) {
+        formData.append('tagList[]', tagList[i]);
+      }
       axios
         .post(`/api/posts/${postID}`, formData)
         .then((res) => {
