@@ -22,7 +22,7 @@ export const EventTagInput = ({ setTag }) => {
   };
 
   const handleOnKeyPress = (e) => {
-    if (e.key === 'Enter' && tagList?.length <= 4) {
+    if ((e.key === 'Enter' || e.charCode === 32) && tagList?.length <= 4) {
       if (tagInput !== '') {
         setTagList([...tagList, tagInput]);
         setTag([...tagList, tagInput]);
