@@ -13,7 +13,7 @@ const EventContent = ({ data }) => {
   };
 
   const DDay = (expiry_date) => {
-    const now = new Date(); // 2022-11-25
+    const now = new Date();
     const target = new Date(
       expiry_date.slice(0, 4),
       MakeDay(expiry_date.slice(5, 7)) - 1,
@@ -127,10 +127,7 @@ const NoEventContainer = styled.div`
   line-height: 400px;
   color: ${({ theme }) => theme.colors.gray};
   @media screen and (max-width: 767px) {
-    // front/fix/mobileEvent
-    width: 100%;
-    // dev-front
-    // width: 90vw;
+    width: 90%;
   }
 `;
 
@@ -170,13 +167,8 @@ const EventListMain = styled.main`
   }
 
   @media screen and (max-width: 767px) {
-    // << front/fix/mobileEvent
     min-width: 350px;
     width: 100%;
-
-    // dev-front
-    //width: 90vw;
-    //justify-content: space-between;
   }
 `;
 
@@ -193,10 +185,10 @@ const EventContainer = styled.div`
   &:hover {
     background-color: #f5f5f5;
   }
-  // << front/fix/mobileEvent
+
   @media screen and (max-width: 767px) {
     justify-content: center;
-    margin: auto;
+    margin: 0 auto 30px;
     width: 100%;
     min-width: 350px;
     padding: 0;
@@ -204,23 +196,18 @@ const EventContainer = styled.div`
 
   @media screen and (max-width: 395px) {
     min-width: 350px;
-    justify-content: center;
-    margin: auto;
+    margin: 0 auto 30px;
     padding: 0;
   }
-  // dev-front
-  //  @media screen and (max-width: 767px) {
-  //  width: 40vw;
-  // margin: 0;
-  // }
-  //  @media screen and (max-width: 600px) {//
-  //   width: 90vw;
-  // }
 `;
 
 const EventList = styled.div`
   justify-content: row;
   width: 200px;
+
+  @media screen and (max-width: 767px) {
+    width: 150px;
+  }
 
   h4 {
     margin-top: 0px;
@@ -274,20 +261,9 @@ const EventList = styled.div`
     }
   }
 
-  // mobileEvent
-  @media screen and (max-width: 395px) {
-    width: 50%;
+  @media screen and (max-width: 767px) {
+    width: 150px;
     margin-left: 0;
-    // dev-front
-    //  @media screen and (max-width: 767px) {
-    //   h4 {
-    //    font-size: 13px;
-    //    margin-right: 5px;
-    //   }
-    // }
-    // @media screen and (max-width: 600px) {
-    //   flex: 1;
-    //
   }
 `;
 
@@ -295,11 +271,10 @@ const EventImg = styled.div`
   width: 150px;
   img {
     justify-content: column;
-    width: 100%;
+    width: 150px;
     top: 50%;
     left: 50%;
     position: absoulte;
-    padding: 0 10px;
     cursor: pointer;
   }
 `;
