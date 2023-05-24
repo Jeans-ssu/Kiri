@@ -205,7 +205,7 @@ const EventInfoInput = ({
           </ErrorMessageMobileBox>
           <InfoTextInput
             type="text"
-            value={info?.host}
+            value={info?.host || ''}
             onChange={(e) => handleChangeInput(e, 'host')}
             ref={hostRef}
           />
@@ -215,7 +215,7 @@ const EventInfoInput = ({
           <InfoHeader>이메일</InfoHeader>
           <InfoTextInput
             type="email"
-            value={info?.email}
+            value={info?.email || ''}
             onChange={(e) => handleChangeInput(e, 'email')}
           />
         </InfoContainer>
@@ -223,7 +223,7 @@ const EventInfoInput = ({
           <InfoHeader>연락처</InfoHeader>
           <InfoTextInput
             type="tel"
-            value={info?.tel}
+            value={info?.tel || ''}
             onChange={(e) => handleChangeInput(e, 'tel')}
           />
         </InfoContainer>
@@ -235,7 +235,7 @@ const EventInfoInput = ({
             {errorMessage.regionErrorMessage}
           </ErrorMessageMobileBox>
           <InfoSelectInput
-            value={info?.region}
+            value={info?.region || ''}
             onChange={(e) => {
               handleChangeInput(e, 'region');
             }}
@@ -244,7 +244,7 @@ const EventInfoInput = ({
             <option value="선택">{info?.region}</option>
             {Regions?.map((el, idx) => {
               return (
-                <option value={el} key={idx}>
+                <option value={el || ''} key={idx}>
                   {el}
                 </option>
               );
@@ -260,7 +260,7 @@ const EventInfoInput = ({
             {errorMessage.univErrorMessage}
           </ErrorMessageMobileBox>
           <SchoolBox>
-            <InfoTextInput width="200px" readOnly value={info?.univ} />
+            <InfoTextInput width="200px" readOnly value={info?.univ || ''} />
             <SearchUnivBtn
               onClick={() => {
                 setIsOpen(true);
@@ -288,7 +288,7 @@ const EventInfoInput = ({
             {errorMessage.typeErrorMessage}
           </ErrorMessageMobileBox>
           <InfoSelectInput
-            value={info?.type}
+            value={info?.type || ''}
             onChange={(e) => {
               handleChangeInput(e, 'type');
             }}
@@ -321,14 +321,14 @@ const EventInfoInput = ({
             <InfoTextInput
               type="date"
               className="smallSize"
-              value={info?.startDate}
+              value={info?.startDate || ''}
               onChange={(e) => handleChangeInput(e, 'startDate')}
               ref={startDateRef}
             />
             <InfoTextInput
               type="date"
               className="smallSize"
-              value={info?.endDate}
+              value={info?.endDate || ''}
               onChange={(e) => handleChangeInput(e, 'endDate')}
               ref={endDateRef}
             />
@@ -344,13 +344,13 @@ const EventInfoInput = ({
             <InfoTextInput
               type="time"
               className="smallSize"
-              value={info?.startTime}
+              value={info?.startTime || ''}
               onChange={(e) => handleChangeInput(e, 'startTime')}
             />
             <InfoTextInput
               type="time"
               className="smallSize"
-              value={info?.endTime}
+              value={info?.endTime || ''}
               onChange={(e) => handleChangeInput(e, 'endTime')}
             />
           </InfoSmallBox>
@@ -359,7 +359,7 @@ const EventInfoInput = ({
           <InfoHeader>장소</InfoHeader>
           <InfoTextInput
             type="text"
-            value={info?.location}
+            value={info?.location || ''}
             onChange={(e) => handleChangeInput(e, 'location')}
           />
         </InfoContainer>

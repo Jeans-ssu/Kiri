@@ -64,7 +64,7 @@ const EventExplainInput = ({
       </ExplainHeader>
       <ExplainInput
         type="text"
-        value={explain}
+        value={explain || ''}
         onChange={handleChangeInput}
         ref={explainRef}
       />

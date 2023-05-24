@@ -11,6 +11,8 @@ import { setAuthHeader } from 'api/setAuthHeader';
 import { useSelector } from 'react-redux';
 import PostModal from 'components/PostModal';
 import { EventEditTagInput } from './EventEditTagInput';
+import { Spinner } from 'components/spinner/spinner';
+import EventImgEdit from './EventImgEdit';
 
 const EventWritePageContainer = styled.div`
   display: flex;
@@ -50,6 +52,8 @@ const WriteBtn = styled.button`
 `;
 
 const EventEditPage = () => {
+  const [isOpenSpinner, setIsOpenSpinner] = useState(false);
+
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
 
@@ -113,7 +117,7 @@ const EventEditPage = () => {
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
-  const [imgList, setImgList] = useState();
+  const [imgList, setImgList] = useState('');
   const [errorMessage, setErrorMessage] = useState({
     titleErrorMessage: '',
     hostErrorMessage: '',
@@ -132,9 +136,7 @@ const EventEditPage = () => {
     for (let i = 0; imgList.length > i; i++) {
       const type = typeof imgList[i];
       if (type === 'object') {
-        for (let j = 0; j < imgList[i].length; j++) {
-          imgarr.push(imgList[i][j].image_id);
-        }
+        imgarr.push(imgList[i].image_id);
       } else {
         imgarr.push(imgList[i]);
       }
@@ -265,7 +267,6 @@ const EventEditPage = () => {
           .delete(`/api/posts/image/update/${remove.current[i]}`)
           .catch((err) => console.log('Delete ERROR: ', err));
       }
-
       const formData = new FormData();
       formData.append('title', title);
       formData.append('scrap_count', 0);
@@ -309,12 +310,24 @@ const EventEditPage = () => {
   return (
     <PageContainer header footer margin_bottom={false} page={'event/write'}>
       <EventWritePageContainer>
+        <Spinner isOpen={isOpenSpinner} />
         <EventTitleInput
           title={title}
           setTitle={setTitle}
           titleRef={titleRef}
           errorMessage={errorMessage}
         />
+        <EventImgEdit
+          img={img}
+          setImg={setImg}
+          imgList={imgList}
+          setImgList={setImgList}
+          errorMessage={errorMessage}
+          setRemoveIdx={setRemoveIdx}
+          remove={remove}
+          setIsOpenSpinner={setIsOpenSpinner}
+        />
+
         <EventInfoInput
           info={info}
           setInfo={setInfo}
@@ -336,12 +349,6 @@ const EventEditPage = () => {
         <EventEtcInput
           link={link}
           setLink={setLink}
-          img={img}
-          setImg={setImg}
-          imgList={imgList}
-          setImgList={setImgList}
-          setRemoveIdx={setRemoveIdx}
-          remove={remove}
           errorMessage={errorMessage}
         />
         <BtnContainer>
