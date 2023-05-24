@@ -229,7 +229,6 @@ const PaginationBox = styled.div`
 
 const EventOrderBox = styled.div`
   display: flex;
-  margin-bottom: 10px;
 `;
 
 const SelectInput = styled.div`
