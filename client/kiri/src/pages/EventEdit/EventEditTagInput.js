@@ -46,7 +46,7 @@ export const EventEditTagInput = ({ tagList, setTagList }) => {
         <TagInput
           placeholder="태그를 입력하세요"
           maxLength={15}
-          value={tagInput}
+          value={tagInput || ''}
           onChange={handleChangeTagInput}
           onKeyPress={handleOnKeyPress}
         />

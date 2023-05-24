@@ -36,7 +36,7 @@ const EventEtcInput = ({ link, setLink }) => {
     <EventEtcInputContainer>
       <EtcContainer>
         <EtcHeader>참고링크</EtcHeader>
-        <LinkInput type="url" value={link} onChange={handleChangeInput} />
+        <LinkInput type="url" value={link || ''} onChange={handleChangeInput} />
       </EtcContainer>
     </EventEtcInputContainer>
   );

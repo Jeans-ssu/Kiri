@@ -117,7 +117,7 @@ const EventEditPage = () => {
   const [explain, setExplain] = useState('');
   const [link, setLink] = useState('');
   const [img, setImg] = useState(new FormData());
-  const [imgList, setImgList] = useState();
+  const [imgList, setImgList] = useState('');
   const [errorMessage, setErrorMessage] = useState({
     titleErrorMessage: '',
     hostErrorMessage: '',
