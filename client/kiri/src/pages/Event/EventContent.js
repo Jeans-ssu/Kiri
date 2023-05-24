@@ -168,7 +168,7 @@ const EventListMain = styled.main`
 
   @media screen and (max-width: 767px) {
     min-width: 350px;
-    width: 100%;
+    width: 90%;
   }
 `;
 
@@ -189,15 +189,15 @@ const EventContainer = styled.div`
   @media screen and (max-width: 767px) {
     justify-content: center;
     margin: 0 auto 30px;
-    width: 100%;
+    width: 90%;
     min-width: 350px;
     padding: 0;
   }
 
   @media screen and (max-width: 395px) {
     min-width: 350px;
-    margin: 0 auto 30px;
-    padding: 0;
+    margin: 0 auto 15px;
+    padding: 15px 0;
   }
 `;
 
@@ -262,7 +262,7 @@ const EventList = styled.div`
   }
 
   @media screen and (max-width: 767px) {
-    width: 150px;
+    width: 65%;
     margin-left: 0;
   }
 `;
