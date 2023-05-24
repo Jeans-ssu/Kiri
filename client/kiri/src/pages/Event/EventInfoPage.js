@@ -337,6 +337,7 @@ const EventUpdiv = styled.div`
   justify-content: space-between;
   .left {
     display: flex;
+    flex: 1;
   }
 
   .icon {

@@ -63,10 +63,12 @@ const Header = ({ page }) => {
         purge();
         dispatch(DELETE_TOKEN);
         dispatch(DELETE_USER);
+        navigate('/');
       })
       .catch((err) => {
         purge();
         console.log('ERROR: 로그아웃 실패', err);
+        navigate('/');
       });
   };
 

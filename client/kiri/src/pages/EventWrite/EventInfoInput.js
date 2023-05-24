@@ -305,7 +305,7 @@ const EventInfoInput = ({
               }}
               ref={univRef}
             >
-              <FiSearch />
+              <FiSearch size="12" />
               찾아보기
             </SearchUnivBtn>
           </SchoolBox>
