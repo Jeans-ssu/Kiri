@@ -41,7 +41,7 @@ const MainPage = () => {
         </MainPageHeader> */}
         <ImgContainer>
           <img
-            src={process.env.PUBLIC_URL + '/img/kiri_main.avif'}
+            src={process.env.PUBLIC_URL + '/img/kiri_main.png'}
             alt="메인 이미지"
           />
         </ImgContainer>
