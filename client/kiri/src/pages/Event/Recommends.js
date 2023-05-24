@@ -1,15 +1,9 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import eventColorMatcher from 'util/eventColorMatcher';
 
 export const Recommends = ({ recommended }) => {
   const navigate = useNavigate();
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    setEvents(recommended);
-  }, []);
 
   const handleClickEventContainer = (eventId) => {
     navigate(`/event/${eventId}`);
@@ -19,10 +13,10 @@ export const Recommends = ({ recommended }) => {
   return (
     <>
       <RecommendsHeader>이런 이벤트는 어때요?</RecommendsHeader>
-      {events?.length === 0 ? null : (
+      {recommended?.length === 0 ? null : (
         <>
           <MobileRecommendsContainer>
-            {events?.map((el) => {
+            {recommended?.map((el) => {
               return (
                 <MobileEventContainer
                   key={el.post_id}
@@ -42,7 +36,7 @@ export const Recommends = ({ recommended }) => {
             })}
           </MobileRecommendsContainer>
           <RecommendsContainer>
-            {events?.map((el) => {
+            {recommended?.map((el) => {
               return (
                 <EventContainer
                   key={el.post_id}

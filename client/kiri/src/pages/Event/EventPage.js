@@ -383,8 +383,8 @@ const CheckboxDiv = styled.div`
     color: white;
   }
   @media screen and (max-width: 767px) {
-    margin-bottom: 0;
-    margin-left: 5px;
+    margin: 0;
+    margin: 10px 0 5px 0;
   }
 `;
 
