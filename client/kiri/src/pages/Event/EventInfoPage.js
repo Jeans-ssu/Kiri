@@ -492,6 +492,7 @@ const InfoBox = styled.div`
 
   p {
     margin-top: 5px;
+    word-break: break-all;
   }
   @media screen and (max-width: 767px) {
     span {
