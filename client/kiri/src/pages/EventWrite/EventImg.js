@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
@@ -15,6 +15,7 @@ const EventImg = ({
   errorMessage,
   setIsOpenSpinner,
 }) => {
+  const [event, setEvent] = useState();
   const [modal, setModal] = useState(false);
   const [blob, setBlob] = useState(new FormData());
   const result = useRef(false);
@@ -25,6 +26,8 @@ const EventImg = ({
   const [file, setFile] = useState();
 
   const uploadImg = (formData) => {
+    result.current = false;
+
     axios
       .post('/api/posts/image', formData, {
         headers: {
@@ -32,32 +35,37 @@ const EventImg = ({
         },
       })
       .then((res) => {
-        setImgList(res.data);
         result.current = true;
+
+        setImgList(res.data);
         console.log('result success', result.current);
       })
       .catch((err) => {
-        // setModal(true);  // 디자인 변경 필요
+        setModal(true); // 디자인 변경 필요
         console.log('ERROR: ', err);
-        alert('이미지를 업로드할 수 없습니다.');
         result.current = false;
+        imgArr.current.pop();
       });
   };
 
+  useEffect(() => {
+    console.log('reuslt', result.current);
+
+    previewSet(event);
+  }, [result.current]);
+
   const addImage = (e) => {
     const formData = new FormData();
+    console.log('event target', e.target.files);
     for (let i = 0; i < e.target.files.length; i++) {
       imgArr.current.push(e.target.files[i]);
     }
     for (let i = 0; i < imgArr.current.length; i++) {
       formData.append('files', imgArr.current[i]);
     }
+    setEvent(e);
+    console.log('imgArr', imgArr.current);
     uploadImg(formData);
-    setTimeout(function () {
-      console.log('reuslt', result.current);
-
-      previewSet(e);
-    }, 500);
   };
 
   const previewSet = (e) => {
