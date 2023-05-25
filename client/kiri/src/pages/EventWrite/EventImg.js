@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from '../../api/axios';
 import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 import ImgBox from 'components/ImgBox';
+import ImageErrorModal from 'components/ImageErrorModal';
 
 const EventImg = ({
   img,
@@ -14,7 +15,10 @@ const EventImg = ({
   errorMessage,
   setIsOpenSpinner,
 }) => {
+  const [event, setEvent] = useState();
+  const [modal, setModal] = useState(false);
   const [blob, setBlob] = useState(new FormData());
+  const result = useRef(false);
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
@@ -22,6 +26,8 @@ const EventImg = ({
   const [file, setFile] = useState();
 
   const uploadImg = (formData) => {
+    result.current = false;
+
     axios
       .post('/api/posts/image', formData, {
         headers: {
@@ -29,40 +35,61 @@ const EventImg = ({
         },
       })
       .then((res) => {
+        result.current = true;
+
         setImgList(res.data);
+        console.log('result success', result.current);
       })
-      .catch((err) => console.log('ERROR: ', err));
+      .catch((err) => {
+        setModal(true); // 디자인 변경 필요
+        console.log('ERROR: ', err);
+        result.current = false;
+        imgArr.current.pop();
+      });
   };
+
+  useEffect(() => {
+    console.log('reuslt', result.current);
+
+    previewSet(event);
+  }, [result.current]);
 
   const addImage = (e) => {
     const formData = new FormData();
+    console.log('event target', e.target.files);
     for (let i = 0; i < e.target.files.length; i++) {
       imgArr.current.push(e.target.files[i]);
     }
     for (let i = 0; i < imgArr.current.length; i++) {
       formData.append('files', imgArr.current[i]);
     }
+    setEvent(e);
+    console.log('imgArr', imgArr.current);
     uploadImg(formData);
+  };
 
-    const nowSelectImageList = e.target.files;
-    const nowImageUrlList = [...img];
-    const blobList = [...blob];
-    for (let i = 0; i < nowSelectImageList.length; i++) {
-      const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
-      const blobUrl = document.querySelector('input[type=file]').files[i];
-      nowImageUrlList.push(nowImageUrl);
-      blobList.push(blobUrl);
-    }
-    if (nowImageUrlList.length > 10) {
-      setImg(nowImageUrlList.slice(0, 10));
-      setBlob(blobList.slice(0, 10));
-      alert('이미지는 최대 10개만 첨부 가능합니다.');
-    } else {
-      setImg(nowImageUrlList);
-      setBlob(blobList);
-    }
+  const previewSet = (e) => {
+    if (result.current) {
+      const nowSelectImageList = e.target.files;
+      const nowImageUrlList = [...img];
+      const blobList = [...blob];
+      for (let i = 0; i < nowSelectImageList.length; i++) {
+        const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
+        const blobUrl = document.querySelector('input[type=file]').files[i];
+        nowImageUrlList.push(nowImageUrl);
+        blobList.push(blobUrl);
+      }
+      if (nowImageUrlList.length > 10) {
+        setImg(nowImageUrlList.slice(0, 10));
+        setBlob(blobList.slice(0, 10));
+        alert('이미지는 최대 10개만 첨부 가능합니다.');
+      } else {
+        setImg(nowImageUrlList);
+        setBlob(blobList);
+      }
 
-    setFile(e.target.files);
+      setFile(e.target.files);
+    }
   };
 
   const fileInput = useRef(null);
@@ -130,6 +157,7 @@ const EventImg = ({
             : ''}
         </GridImageBox>
       </PreviewBox>
+      {modal ? <ImageErrorModal modal={modal} setModal={setModal} /> : ''}
     </EventEtcInputContainer>
   );
 };
