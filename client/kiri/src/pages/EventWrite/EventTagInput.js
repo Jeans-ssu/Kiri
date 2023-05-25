@@ -12,9 +12,10 @@ export const EventTagInput = ({ setTag }) => {
 
   useEffect(() => {
     if (ocrResult.length !== 0) {
-      setTagList(JSON.parse(ocrResult)?.keywords);
-      setTag(JSON.parse(ocrResult)?.keywords);
+      setTagList(JSON.parse(ocrResult)?.keyword);
+      setTag(JSON.parse(ocrResult)?.keyword);
     }
+    console.log('useEffect', ocrResult);
   }, [ocrMode]);
 
   const handleChangeTagInput = (e) => {
