@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectAccessToken } from 'store/modules/authSlice';
 import { setAuthHeader } from 'api/setAuthHeader';
 import ImgBox from 'components/ImgBox';
+import ImageErrorModal from 'components/ImageErrorModal';
 
 const EventImg = ({
   img,
@@ -14,7 +15,9 @@ const EventImg = ({
   errorMessage,
   setIsOpenSpinner,
 }) => {
+  const [modal, setModal] = useState(false);
   const [blob, setBlob] = useState(new FormData());
+  const result = useRef(false);
   const imgArr = useRef([]);
   const accessToken = useSelector(selectAccessToken);
   setAuthHeader(accessToken);
@@ -30,8 +33,15 @@ const EventImg = ({
       })
       .then((res) => {
         setImgList(res.data);
+        result.current = true;
+        console.log('result success', result.current);
       })
-      .catch((err) => console.log('ERROR: ', err));
+      .catch((err) => {
+        // setModal(true);  // 디자인 변경 필요
+        console.log('ERROR: ', err);
+        alert('이미지를 업로드할 수 없습니다.');
+        result.current = false;
+      });
   };
 
   const addImage = (e) => {
@@ -43,26 +53,35 @@ const EventImg = ({
       formData.append('files', imgArr.current[i]);
     }
     uploadImg(formData);
+    setTimeout(function () {
+      console.log('reuslt', result.current);
 
-    const nowSelectImageList = e.target.files;
-    const nowImageUrlList = [...img];
-    const blobList = [...blob];
-    for (let i = 0; i < nowSelectImageList.length; i++) {
-      const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
-      const blobUrl = document.querySelector('input[type=file]').files[i];
-      nowImageUrlList.push(nowImageUrl);
-      blobList.push(blobUrl);
-    }
-    if (nowImageUrlList.length > 10) {
-      setImg(nowImageUrlList.slice(0, 10));
-      setBlob(blobList.slice(0, 10));
-      alert('이미지는 최대 10개만 첨부 가능합니다.');
-    } else {
-      setImg(nowImageUrlList);
-      setBlob(blobList);
-    }
+      previewSet(e);
+    }, 500);
+  };
 
-    setFile(e.target.files);
+  const previewSet = (e) => {
+    if (result.current) {
+      const nowSelectImageList = e.target.files;
+      const nowImageUrlList = [...img];
+      const blobList = [...blob];
+      for (let i = 0; i < nowSelectImageList.length; i++) {
+        const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
+        const blobUrl = document.querySelector('input[type=file]').files[i];
+        nowImageUrlList.push(nowImageUrl);
+        blobList.push(blobUrl);
+      }
+      if (nowImageUrlList.length > 10) {
+        setImg(nowImageUrlList.slice(0, 10));
+        setBlob(blobList.slice(0, 10));
+        alert('이미지는 최대 10개만 첨부 가능합니다.');
+      } else {
+        setImg(nowImageUrlList);
+        setBlob(blobList);
+      }
+
+      setFile(e.target.files);
+    }
   };
 
   const fileInput = useRef(null);
@@ -130,6 +149,7 @@ const EventImg = ({
             : ''}
         </GridImageBox>
       </PreviewBox>
+      {modal ? <ImageErrorModal modal={modal} setModal={setModal} /> : ''}
     </EventEtcInputContainer>
   );
 };
