@@ -217,6 +217,8 @@ const EventList = styled.div`
     @media screen and (max-width: 767px) {
       font-size: 13px;
     }
+    padding-right: 10px;
+    word-break: break-all;
   }
 
   div.info {

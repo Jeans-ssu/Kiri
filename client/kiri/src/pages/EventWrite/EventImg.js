@@ -45,13 +45,11 @@ const EventImg = ({
     uploadImg(formData);
 
     const nowSelectImageList = e.target.files;
-    console.log('nowselescs', img);
     const nowImageUrlList = [...img];
     const blobList = [...blob];
     for (let i = 0; i < nowSelectImageList.length; i++) {
       const nowImageUrl = URL.createObjectURL(nowSelectImageList[i]);
       const blobUrl = document.querySelector('input[type=file]').files[i];
-      console.log('bloburl', blobUrl);
       nowImageUrlList.push(nowImageUrl);
       blobList.push(blobUrl);
     }
