@@ -218,6 +218,7 @@ const EventList = styled.div`
       font-size: 13px;
     }
     padding-right: 10px;
+    word-break: break-all;
   }
 
   div.info {
