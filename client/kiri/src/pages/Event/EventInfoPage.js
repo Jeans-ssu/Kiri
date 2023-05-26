@@ -469,7 +469,7 @@ const DetailInfoBox = styled.div`
 
   td.title {
     font-weight: 600;
-    width: 43.52px;
+    width: 47px;
   }
   td {
     padding-bottom: 10px;
