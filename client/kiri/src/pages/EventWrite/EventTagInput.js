@@ -17,7 +17,6 @@ export const EventTagInput = ({ setTag }) => {
       );
       setTag(JSON.parse(ocrResult)?.keyword || JSON.parse(ocrResult)?.keywords);
     }
-    console.log('useEffect', ocrResult);
   }, [ocrMode]);
 
   const handleChangeTagInput = (e) => {
