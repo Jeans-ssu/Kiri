@@ -38,10 +38,9 @@ const EventImg = ({
         result.current = true;
 
         setImgList(res.data);
-        console.log('result success', result.current);
       })
       .catch((err) => {
-        setModal(true); // 디자인 변경 필요
+        setModal(true);
         console.log('ERROR: ', err);
         result.current = false;
         imgArr.current.pop();
@@ -49,14 +48,11 @@ const EventImg = ({
   };
 
   useEffect(() => {
-    console.log('reuslt', result.current);
-
     previewSet(event);
   }, [result.current]);
 
   const addImage = (e) => {
     const formData = new FormData();
-    console.log('event target', e.target.files);
     for (let i = 0; i < e.target.files.length; i++) {
       imgArr.current.push(e.target.files[i]);
     }
@@ -64,7 +60,6 @@ const EventImg = ({
       formData.append('files', imgArr.current[i]);
     }
     setEvent(e);
-    console.log('imgArr', imgArr.current);
     uploadImg(formData);
   };
 
