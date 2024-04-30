@@ -19,6 +19,10 @@
 <img src="https://img.shields.io/badge/GoogleCloud-4285F4?style=flat-square&logo=GoogleCloud&logoColor=white"/> <img src="https://img.shields.io/badge/OpenAI-412991?style=flat-square&logo=OpenAI&logoColor=white"/> 
 
 
+https://github.com/Jeans-ssu/Kiri/assets/70098708/2308c230-5db4-44f0-8349-035e8a6d74a2
+
+
+
 ![끼리끼리_포스터](https://github.com/Jeans-ssu/Kiri/assets/70098708/63a9ba9c-bc7e-44fd-9d5a-e6c8213fa1ec)
 
 
